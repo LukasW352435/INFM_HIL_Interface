@@ -1,0 +1,8 @@
+# CLion stuff
+.idea/
+
+# CMake
+cmake-build-*/
+
+# IntelliJ
+out/
