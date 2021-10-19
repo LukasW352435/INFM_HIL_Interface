@@ -3,4 +3,4 @@ project(Sim_To_DuT_Interface)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Sim_To_DuT_Interface main.cpp)
+add_executable(Sim_To_DuT_Interface main.cpp DuT_Connectors/DuT_Connector.cpp DuT_Connectors/DuT_Connector.h Sim_Communication/Sim_Com_Handler.cpp Sim_Communication/Sim_Com_Handler.h Sim_To_DuT_Interface.cpp Sim_To_DuT_Interface.h DuT_Connectors/Rest_Dummy_Connector/Rest_Dummy_Connector.cpp DuT_Connectors/Rest_Dummy_Connector/Rest_Dummy_Connector.h DuT_Connectors/PCAN_USB_FD_Connector/PCAN_USB_FD_Connector.cpp DuT_Connectors/PCAN_USB_FD_Connector/PCAN_USB_FD_Connector.h DuT_Connectors/DuT_Info.cpp DuT_Connectors/DuT_Info.h)
