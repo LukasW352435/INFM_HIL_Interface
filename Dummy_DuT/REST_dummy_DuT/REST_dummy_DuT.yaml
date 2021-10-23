@@ -1,0 +1,142 @@
+openapi: 3.0.1
+info:
+  title: HIL - REST Dummy DuT
+  description: This is a sample component description for a REST server as dummy DuT
+  license:
+    name: GNU GPL v2
+    url: https://www.gnu.org/licenses/gpl-2.0.html
+  version: 1.0.0
+servers:
+- url: https://localhost:9090
+paths:
+  /dashboard:
+    get:
+      summary: Load messages to view received messages and send from DuT
+      operationId: messages
+      responses:
+        200:
+          description: HTML web page
+          content:
+            text/html:
+              schema:
+                type: string
+    post:
+      summary: Produce a message (from Dummy DuT) which will be sent back to interface
+      operationId: produceMessage
+      requestBody:
+        description: Message to produce from DuT
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Message'
+        required: true
+      responses:
+        201:
+          description: Message accepted
+          content: {}
+        400:
+          description: Invalid message supplied
+          content: {}
+  /messages:
+    get:
+      summary: Open message stream to receive new messages continuously
+      operationId: dashboardMessages
+      responses:
+        200:
+          description: Messages as printable strings
+          headers:
+            Connection:
+              schema:
+                type: string
+              description: keep-alive
+            Cache-Control:
+              schema:
+                type: string
+              description: no-cache
+          content:
+            text/event-stream:
+              schema: 
+                type: string
+  /send:
+    put:
+      summary: Send a message to the dummy DuT
+      operationId: sendMessage
+      requestBody:
+        description: Message to be send to DuT
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Message'
+        required: true
+      responses:
+        200:
+          description: Message accepted
+          content: {}
+        400:
+          description: Invalid message supplied
+          content: {}
+  /read:
+    post:
+      parameters:
+        - in: query
+          name: clientUrl
+          schema:
+            type: string
+          required: true
+          description: Endpoint the messages should be sent to
+      summary: Subscribe client to receive messages from dummy DuT
+      description: Messages will be in the same format as for the /send endpoint (see <a href="#model-Messages">Messages</a>)
+      operationId: subscribeMessages
+      responses:
+        200:
+          description: Subscription registered
+          content: {}
+        208:
+          description: Subscription already registered
+          content: {}
+        400:
+          description: Not a valid client URL
+          content: {}
+    delete:
+      parameters:
+        - in: query
+          name: clientUrl
+          schema:
+            type: string
+          required: true
+          description: Endpoint the messages should no longer be sent to
+      summary: Unsubscribe client to receive messages from dummy DuT
+      operationId: unsubscribeMessages
+      responses:
+        200:
+          description: Unsubscription successful
+          content: {}
+        400:
+          description: Not a valid client URL
+          content: {}
+        404:
+          description: Client ID not found
+          content: {}
+
+components:
+  schemas:
+    Message:
+      required:
+      - name
+      - photoUrls
+      type: object
+      properties:
+        key:
+          type: string
+          example: turn-light_left
+        status:
+          type: string
+          example: on
+      xml:
+        name: Message
