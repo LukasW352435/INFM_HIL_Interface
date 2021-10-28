@@ -1,0 +1,8 @@
+.gitignore
+.openapi-generator-ignore
+README.md
+api/DefaultApi.cpp
+api/DefaultApi.h
+git_push.sh
+model/Message.cpp
+model/Message.h

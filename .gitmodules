@@ -1,0 +1,3 @@
+[submodule "Dummy_DuT/REST_Dummy_DuT/restbed"]
+	path = Dummy_DuT/REST_Dummy_DuT/restbed
+	url = https://github.com/Corvusoft/restbed.git
