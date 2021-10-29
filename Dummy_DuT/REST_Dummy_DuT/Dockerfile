@@ -8,6 +8,7 @@ RUN cmake --build build
 
 FROM gcc AS run
 COPY --from=build /tmp/build/REST_dummy_DuT /opt
+COPY config /opt/config
 
 EXPOSE 9090
 
