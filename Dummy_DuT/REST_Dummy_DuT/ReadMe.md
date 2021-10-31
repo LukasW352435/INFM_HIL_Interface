@@ -1,10 +1,12 @@
 # REST Dummy DuT
+
 This dummy provides the possibility to send and receive messages.
 
-To build and execute you can use docker.
+To build and execute you can use docker (optionally mount config file).
+
 ```shell
 docker build -t your-image-name .
-docker run -it --rm -p 9090:9090 your-image-name
+docker run -it --rm -p 9090:9090 -v $(pwd)/config:/opt/config your-image-name:ro
 ```
 
 If you want to compile locally the following libraries are needed:

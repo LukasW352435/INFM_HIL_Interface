@@ -24,22 +24,39 @@
  */
 
 #include <iostream>
+#include <iterator>
+#include <fstream>
+#include <filesystem>
 
 #include <cstdlib>
 #include <restbed>
 #include "apiImpl/DefaultApiImpl.h"
 
-using namespace std;
 using namespace restbed;
 using namespace thi::dummy_dut;
 
 #define PORT 9090
 
-int main( const int, const char** )
-{
-    cout << "Starting on port " << PORT << endl;
-    // TODO: Load operations from config file?
-    std::set<std::string> operations = {"Indicator Left", "Indicator Right"};
+struct Line {
+    std::string data;
+
+    explicit operator std::string const &() const { return data; }
+
+    friend std::istream &operator>>(std::istream &stream, Line &line) {
+        return std::getline(stream, line.data);
+    }
+};
+
+int main(const int, const char **) {
+    auto path = std::filesystem::canonical("/proc/self/exe").parent_path().string();
+    std::cout << "Reading config from " << path << std::endl;
+    std::ifstream file(path + "/config");
+    std::set<std::string> operations(std::istream_iterator<Line>{file}, std::istream_iterator<Line>{});
+    for (auto op: operations) {
+        std::cout << "OP: " << op << std::endl;
+    }
+
+    std::cout << "Starting on port " << PORT << std::endl;
     auto defaultAPI = new api_impl::DefaultApiImpl(PORT, operations);
 
     return EXIT_SUCCESS;
