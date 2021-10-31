@@ -2,8 +2,12 @@
 #include "Sim_To_DuT_Interface.h"
 #include "DuT_Connectors/DuT_Connector.h"
 #include "DuT_Connectors/DuT_Info.h"
+#include "DuTLogger/DuTLogger.h"
 
 int main() {
+
+    DuTLogger::logMessage("Test for Logging", LOG_LEVEL::INFO);
+
     Sim_To_DuT_Interface interface;
     // TODO Init Sim_Com_Handler
     // TODO Read Config and Create Connectors
