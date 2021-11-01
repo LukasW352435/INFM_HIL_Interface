@@ -10,9 +10,13 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
+      - name: Extract commit hash (short)
+        id: commitHash
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       - name: Build REST_Dummy_DuT
-        run: docker build Dummy_DuT/REST_Dummy_DuT --file Dummy_DuT/REST_Dummy_DuT/Dockerfile --tag rest-dummy-dut:$(git rev-parse --short "$GITHUB_SHA")
+        run: docker build Dummy_DuT/REST_Dummy_DuT --file Dummy_DuT/REST_Dummy_DuT/Dockerfile --tag rest-dummy-dut:${{steps.commitHash.outputs.sha_short}}
       - name: Upload image
         uses: ishworkh/docker-image-artifact-upload@v1
         with:
-          image: rest-dummy-dut
+          image: rest-dummy-dut:${{steps.commitHash.outputs.sha_short}}
+          artifact_name: rest-dummy-dut:${{steps.commitHash.outputs.sha_short}}
