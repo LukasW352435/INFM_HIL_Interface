@@ -10,8 +10,8 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      #- name: Install dependencies
-      #  run: sudo apt-get update && sudo apt-get install -yq {your-dep}
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -yq libasio-dev libssl-dev
       - name: Preparation
         run: mkdir build
       - name: CMake Build
