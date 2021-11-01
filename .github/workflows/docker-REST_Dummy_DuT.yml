@@ -9,4 +9,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build REST_Dummy_DuT
-        run: docker build Dummy_DuT/REST-Dummy_DuT --file Dummy_DuT/REST_Dummy_DuT/Dockerfile --tag rest-dummy-dut:$(git rev-parse --short "$GITHUB_SHA")
+        run: docker build Dummy_DuT/REST_Dummy_DuT --file Dummy_DuT/REST_Dummy_DuT/Dockerfile --tag rest-dummy-dut:$(git rev-parse --short "$GITHUB_SHA")
