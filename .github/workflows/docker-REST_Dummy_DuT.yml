@@ -2,7 +2,7 @@ name: Docker build REST_Dummy_DuT
 on:
   push:
     paths:
-      - "Dummy_DuT/REST_Dummy_DuT"
+      - "Dummy_DuT/REST_Dummy_DuT/**"
 jobs:
   build:
     runs-on: ubuntu-latest

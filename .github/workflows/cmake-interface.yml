@@ -2,7 +2,7 @@ name: CMake build interface
 on:
   push:
     paths-ignore:
-      - "Dummy_DuT/REST_Dummy_DuT"
+      - "Dummy_DuT/REST_Dummy_DuT/**"
 jobs:
   build:
     runs-on: ubuntu-latest
