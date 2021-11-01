@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -yq libboost1.65-dev
+      #- name: Install dependencies
+      #  run: sudo apt-get update && sudo apt-get install -yq {your-dep}
       - name: Preparation
         run: mkdir build
       - name: CMake Build
