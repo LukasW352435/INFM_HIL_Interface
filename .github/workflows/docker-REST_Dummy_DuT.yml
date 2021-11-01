@@ -1,0 +1,12 @@
+name: Docker build REST_Dummy_DuT
+on:
+  push:
+    paths:
+      - "Dummy_DuT/REST_Dummy_DuT"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build REST_Dummy_DuT
+        run: docker build Dummy_DuT/REST-Dummy_DuT --file Dummy_DuT/REST_Dummy_DuT/Dockerfile --tag rest-dummy-DuT:$(git rev-parse --short "$GITHUB_SHA")
