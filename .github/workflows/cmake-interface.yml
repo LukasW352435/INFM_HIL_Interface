@@ -11,7 +11,7 @@ jobs:
         with:
           submodules: true
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -yq libasio-dev libssl-dev libcurl-dev
+        run: sudo apt-get update && sudo apt-get install -yq libasio-dev libssl-dev libcurl4-openssl-dev
       - name: Preparation
         run: mkdir build
       - name: CMake Build
