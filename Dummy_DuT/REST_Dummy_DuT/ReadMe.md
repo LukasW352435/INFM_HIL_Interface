@@ -20,3 +20,4 @@ use `git submodule update` or `git clone --recursive` in order to checkout with 
 
 The generated stub (from [OpenApi Spec](REST_Dummy_DuT.yaml)) has to be slightly modified,
 see [generatedAPI/README.md](generatedAPI/README.md).
+

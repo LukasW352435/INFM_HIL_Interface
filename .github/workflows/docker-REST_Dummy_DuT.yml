@@ -15,4 +15,4 @@ jobs:
       - name: Upload image
         uses: ishworkh/docker-image-artifact-upload@v1
         with:
-          image: rest-dummy-dut:$(git rev-parse --short "$GITHUB_SHA")
+          image: rest-dummy-dut
