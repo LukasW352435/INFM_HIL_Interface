@@ -19,4 +19,3 @@ jobs:
         uses: ishworkh/docker-image-artifact-upload@v1
         with:
           image: rest-dummy-dut:${{steps.commitHash.outputs.sha_short}}
-          artifact_name: rest-dummy-dut:${{steps.commitHash.outputs.sha_short}}

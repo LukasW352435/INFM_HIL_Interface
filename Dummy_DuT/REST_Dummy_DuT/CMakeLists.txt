@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 project(REST_dummy_DuT CXX)
-set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -pthread -lcurl")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lcurl -pthread")
 
 find_package(CURL REQUIRED)
 set(CMAKE_CXX_STANDARD 20)
