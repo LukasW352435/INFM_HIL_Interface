@@ -1,0 +1,28 @@
+name: CMake build interface
+on:
+  push:
+    paths-ignore:
+      - "Dummy_DuT/REST_Dummy_DuT/**"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Install dependencies
+        run: sudo apt-get update -qq && sudo apt-get install -yq libasio-dev libssl-dev libcurl4-openssl-dev
+      - name: Preparation
+        run: mkdir build
+      - name: CMake Build
+        run: cmake -S . -B build
+      - name: CMake Make
+        run: cmake --build build
+      - name: Archive built applications
+        uses: actions/upload-artifact@v2
+        with:
+          name: Binaries
+          path: |
+            build/Dummy_DuT/Dummy_CAN_DuT/Dummy_CAN_DuT
+            build/Dummy_DuT/REST_Dummy_DuT/REST_Dummy_DuT
+            build/Sim_To_DuT_Interface/Sim_To_DuT_Interface

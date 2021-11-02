@@ -7,9 +7,9 @@ RUN mkdir build && cmake -S . -B build
 RUN cmake --build build
 
 FROM gcc AS run
-COPY --from=build /tmp/build/REST_dummy_DuT /opt
+COPY --from=build /tmp/build/REST_Dummy_DuT /opt
 COPY config /opt/config
 
 EXPOSE 9090
 
-ENTRYPOINT /opt/REST_dummy_DuT
+ENTRYPOINT /opt/REST_Dummy_DuT
