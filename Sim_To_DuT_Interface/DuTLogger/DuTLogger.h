@@ -28,15 +28,13 @@ enum LOG_LEVEL_CHANGE_ON {
 static const quill::LogLevel DEFAULT_CONSOLE_LOG_LEVEL = quill::LogLevel::Info;
 static const quill::LogLevel DEFAULT_FILE_LOG_LEVEL = quill::LogLevel::Info;
 
-static bool enableConsoleToFile = true;
 static bool startedQuillEngine = false;
 
 
 class DuTLogger {
 
 public:
-    static void logMessage(std::string msg, LOG_LEVEL level);
-    static void disableConsoleToFileLogging(bool disable);
+    static void logMessage(std::string msg, LOG_LEVEL level, bool writeToFile);
     static void changeLogLevel(LOG_LEVEL_CHANGE_ON typ, LOG_LEVEL level);
 
 private:

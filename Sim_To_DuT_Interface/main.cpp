@@ -6,7 +6,8 @@
 
 int main() {
 
-    DuTLogger::logMessage("Test for Logging", LOG_LEVEL::INFO);
+    DuTLogger::logMessage("Test for Logging", LOG_LEVEL::INFO, false);
+    DuTLogger::logMessage("Test for Logging File", LOG_LEVEL::INFO, true);
 
     Sim_To_DuT_Interface interface;
     // TODO Init Sim_Com_Handler

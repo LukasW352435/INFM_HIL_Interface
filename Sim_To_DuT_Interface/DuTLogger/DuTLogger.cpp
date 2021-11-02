@@ -110,10 +110,6 @@ void DuTLogger::createDirectoryIfNecessary(const std::string path) {
     std::filesystem::create_directories(path);
 }
 
-void DuTLogger::disableConsoleToFileLogging(bool disable) {
-    enableConsoleToFile = !disable;
-}
-
 void DuTLogger::changeLogLevel(LOG_LEVEL_CHANGE_ON typ, LOG_LEVEL level) {
     quill::Handler* handler = DuTLogger::getHandlerTyp(typ);
 
@@ -143,7 +139,7 @@ void DuTLogger::changeLogLevel(LOG_LEVEL_CHANGE_ON typ, LOG_LEVEL level) {
             break;
 
         default:
-            logMessage("Can not change LogLevel! Invalid argument!", LOG_LEVEL::ERROR);
+            logMessage("Can not change LogLevel! Invalid argument!", LOG_LEVEL::ERROR, true);
             handler->set_log_level(quill::LogLevel::TraceL3);
             break;
     }
@@ -168,17 +164,13 @@ quill::Handler* DuTLogger::getHandlerTyp(LOG_LEVEL_CHANGE_ON typ) {
     return handler;
 }
 
-void DuTLogger::logMessage(std::string msg, LOG_LEVEL level) {
-    // check for the right logger
-    quill::Logger* log;
-    if (enableConsoleToFile) {
-        log = consoleFileLogger;
+void DuTLogger::logMessage(std::string msg, LOG_LEVEL level, bool writeToFile) {
+    // check if we have to write the message to the LogFile
+    if (writeToFile) {
+        logWithLevel(consoleFileLogger, msg, level);
     } else {
-        log = consoleLogger;
+        logWithLevel(consoleLogger, msg, level);
     }
-
-    // log the msg with the specific logger
-    logWithLevel(log, msg, level);
 }
 
 void DuTLogger::logWithLevel(quill::Logger* log, std::string msg, LOG_LEVEL level) {
