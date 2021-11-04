@@ -13,6 +13,14 @@ quill::Logger* DuTLogger::consoleLogger = DuTLogger::createConsoleLogger("consol
 quill::Logger* DuTLogger::consoleFileLogger = DuTLogger::createConsoleLogger("consoleFileLog", true);
 quill::Logger* DuTLogger::dataLogger = DuTLogger::createDataLogger();
 
+/**
+ * Builds a logger for the console. If necessary it the logger will be build with a additional handler for
+ * files. This will be configured by the second argument.
+ *
+ * @param name the name for the logger
+ * @param withFileHandler true if the logger also needs a handler for logfiles
+ * @return the created logger
+ */
 quill::Logger* DuTLogger::createConsoleLogger(const char* name, bool withFileHandler) {
     // check if the quill engine is started
     startEngine();
@@ -32,6 +40,9 @@ quill::Logger* DuTLogger::createConsoleLogger(const char* name, bool withFileHan
     return newLogger;
 }
 
+/**
+ * Starts the quill engine. Won't start it twice.
+ */
 void DuTLogger::startEngine() {
     // start the quill engine if it hasn't been started yet
     if (!startedQuillEngine) {
@@ -56,7 +67,7 @@ quill::Handler* DuTLogger::buildConsoleHandler() {
 
 quill::Handler* DuTLogger::buildFileHandler() {
     // get the path to the log file or create the directory if necessary
-    std::string path = DuTLogger::getLoggingPath(LOGGER_TYP::CONSOLE);
+    std::string path = DuTLogger::getLoggingPath(LOGGER_TYPE::CONSOLE);
     createDirectoryIfNecessary(path);
 
     // a second handler for the file is needed
@@ -66,13 +77,13 @@ quill::Handler* DuTLogger::buildFileHandler() {
     // modify the pattern for the logger
     newHandler->set_pattern(QUILL_STRING("%(ascii_time)  %(level_name): %(message)"),
                             "%D %H:%M:%S.%Qms");
-
+    // return the new handler
     return newHandler;
 }
 
 quill::Logger* DuTLogger::createDataLogger() {
     // get the path to the log file or create the directory if necessary
-    std::string path = DuTLogger::getLoggingPath(LOGGER_TYP::DATA);
+    std::string path = DuTLogger::getLoggingPath(LOGGER_TYPE::DATA);
     createDirectoryIfNecessary(path);
 
     // create a file handler to connect quill to a logfile
@@ -88,7 +99,13 @@ quill::Logger* DuTLogger::createDataLogger() {
     return createdLogger;
 }
 
-std::string DuTLogger::getLoggingPath(LOGGER_TYP typ) {
+/**
+ * Identifies the path to the log file for the specific typ of logger
+ *
+ * @param type type of logger
+ * @return path to the logfile
+ */
+std::string DuTLogger::getLoggingPath(LOGGER_TYPE type) {
     // get the path, where this program is running
     std::string path = std::filesystem::current_path();
 
@@ -96,7 +113,7 @@ std::string DuTLogger::getLoggingPath(LOGGER_TYP typ) {
     std::string result = path.substr(0, path.find_last_of("/"));
 
     // get the right path for the logger
-    if (typ == LOGGER_TYP::DATA) {
+    if (type == LOGGER_TYPE::DATA) {
         result.append(PATH_DATA_LOG);
     } else {
         result.append(PATH_CONSOLE_LOG);
@@ -110,8 +127,14 @@ void DuTLogger::createDirectoryIfNecessary(const std::string path) {
     std::filesystem::create_directories(path);
 }
 
-void DuTLogger::changeLogLevel(LOG_LEVEL_CHANGE_ON typ, LOG_LEVEL level) {
-    quill::Handler* handler = DuTLogger::getHandlerTyp(typ);
+/**
+ * Change the logging level for a logger. Because there are multiple loggers you have to
+ * select for which type of logger you want to change the level.
+ * @param type the type of logger
+ * @param level new level for logging
+ */
+void DuTLogger::changeLogLevel(LOG_LEVEL_CHANGE_ON type, LOG_LEVEL level) {
+    quill::Handler* handler = DuTLogger::getHandlerType(type);
 
     switch (level) {
         case LOG_LEVEL::NONE:
@@ -145,10 +168,15 @@ void DuTLogger::changeLogLevel(LOG_LEVEL_CHANGE_ON typ, LOG_LEVEL level) {
     }
 }
 
-quill::Handler* DuTLogger::getHandlerTyp(LOG_LEVEL_CHANGE_ON typ) {
+/**
+ * Returns the right quill handler for the given type of logger
+ * @param type type of logger
+ * @return connected handler
+ */
+quill::Handler* DuTLogger::getHandlerType(LOG_LEVEL_CHANGE_ON type) {
     quill::Handler* handler;
 
-    switch (typ) {
+    switch (type) {
         case LOG_LEVEL_CHANGE_ON::CONSOLE_LOG:
             handler = consoleHandler;
             break;
@@ -164,6 +192,29 @@ quill::Handler* DuTLogger::getHandlerTyp(LOG_LEVEL_CHANGE_ON typ) {
     return handler;
 }
 
+/**
+ * Logs the message with consideration of the log level. Please notice that this function will also log the message
+ * into a logfile if the file logger accepts the log level. If you explicitly don't want to log this message into the
+ * logfile, please use another function.
+ * @param msg message that should be logged
+ * @param level the logging level for this message
+ */
+void DuTLogger::logMessage(std::string msg, LOG_LEVEL level) {
+    // hand the message with the right level to the quill framework
+    // the user didn't choose if it has to be logged in the logfile
+    // -> try to log it with the level to the file, the level on the fileLogger will decide if the msg will be written
+    logWithLevel(consoleFileLogger, msg, level);
+}
+
+/**
+ * Logs the message with consideration of the log level. This function gives you additionally the possibility
+ * to choose with the 3rd parameter if you want to log the message into the logfile or explicitly not.
+ * Please notice that there will be no file logging if the logger won't support the log level, even if you
+ * parse 'true' on the 3rd argument.
+ * @param msg message that should be logged
+ * @param level the logging level for this message
+ * @param writeToFile false, if you don't want to log into file
+ */
 void DuTLogger::logMessage(std::string msg, LOG_LEVEL level, bool writeToFile) {
     // check if we have to write the message to the LogFile
     if (writeToFile) {

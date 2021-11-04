@@ -15,7 +15,7 @@ enum LOG_LEVEL{
     NONE, DEBUG, INFO, WARNING, ERROR, CRITICAL
 };
 
-enum LOGGER_TYP {
+enum LOGGER_TYPE {
     CONSOLE, DATA
 };
 
@@ -34,6 +34,7 @@ static bool startedQuillEngine = false;
 class DuTLogger {
 
 public:
+    static void logMessage(std::string msg, LOG_LEVEL level);
     static void logMessage(std::string msg, LOG_LEVEL level, bool writeToFile);
     static void changeLogLevel(LOG_LEVEL_CHANGE_ON typ, LOG_LEVEL level);
 
@@ -55,10 +56,10 @@ private:
     static void startEngine();
 
     // help functions
-    static std::string getLoggingPath(LOGGER_TYP typ);
+    static std::string getLoggingPath(LOGGER_TYPE type);
     static void createDirectoryIfNecessary(const std::string path);
     static void logWithLevel(quill::Logger* log, std::string msg, LOG_LEVEL level);
-    static quill::Handler* getHandlerTyp(LOG_LEVEL_CHANGE_ON typ);
+    static quill::Handler* getHandlerType(LOG_LEVEL_CHANGE_ON type);
 };
 
 
