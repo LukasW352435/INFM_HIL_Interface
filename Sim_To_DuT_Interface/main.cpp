@@ -1,18 +1,32 @@
 #include <iostream>
-#include "Sim_To_DuT_Interface.h"
-#include "DuT_Connectors/DuT_Connector.h"
-#include "DuT_Connectors/DuT_Info.h"
+#include "SimToDuTInterface.h"
+#include <thread>
+#include "Sim_Communication/SimComHandler.h"
+#include "DuT_Connectors/DuTInfo.h"
+#include "Utility/SharedQueue.h"
 
 int main() {
-    Sim_To_DuT_Interface interface;
-    // TODO Init Sim_Com_Handler
-    // TODO Read Config and Create Connectors
-    DuT_Connector duTConnector;
-    DuT_Info info = duTConnector.get_DuT_Info();
+    // Create interface
+    SimToDuTInterface interface;
+    // Create simComHandler
+    SimComHandler simComHandler(interface.getQueueSimToInterface());
+    interface.setSimComHandler(&simComHandler);
 
-    // add DuT to the interface
-    interface.add_Connector(&duTConnector);
+    // Create DuT Devices
+    DuTConnector duTConnector1(interface.getQueueDuTToSim());
+    DuTConnector duTConnector2(interface.getQueueDuTToSim());
+    interface.addConnector(&duTConnector1);
+    interface.addConnector(&duTConnector2);
+
     std::cout << interface << std::endl;
 
+    // Start simComHandler to receive events from the simulation
+    simComHandler.run();
+
+    // Start interface to receive/send events
+    interface.run();
+
+    std::string s;
+    std::cin >> s;
     return 0;
 }

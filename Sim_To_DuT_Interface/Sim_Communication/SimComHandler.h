@@ -2,23 +2,28 @@
 // Created by Lukas on 19.10.2021.
 //
 
-#ifndef SIM_TO_DUT_INTERFACE_SIM_COM_HANDLER_H
-#define SIM_TO_DUT_INTERFACE_SIM_COM_HANDLER_H
+#ifndef SIM_TO_DUT_INTERFACE_SIMCOMHANDLER_H
+#define SIM_TO_DUT_INTERFACE_SIMCOMHANDLER_H
 
 #include <memory>
 #include "../Events/SimEvent.h"
-#include "../Sim_To_DuT_Interface.h"
 #include <string>
 #include "../Utility/SharedQueue.h"
+#include <thread>
+#include <chrono>
 
-class Sim_Com_Handler {
+class SimComHandler {
 public:
-    Sim_Com_Handler();
-    void send_Event_to_Sim(SimEvent &event);
+    SimComHandler(SharedQueue<SimEvent> &queueSimToInterface);
+    // async send event to simulation
+    void sendEventToSim(SimEvent &event);
+    // run async receive incoming events
     void run();
 private:
-    void send_Event_to_Interface(SimEvent &event);
-    std::shared_ptr<SharedQueue<SimEvent>> queueEventToInterface;
+    // send an event to the interface
+    void sendEventToInterface(SimEvent &event);
+    // used by sendEventToInterface
+    SharedQueue<SimEvent> &queueSimToInterface;
 };
 
-#endif //SIM_TO_DUT_INTERFACE_SIM_COM_HANDLER_H
+#endif //SIM_TO_DUT_INTERFACE_SIMCOMHANDLER_H

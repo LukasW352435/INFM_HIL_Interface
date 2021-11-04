@@ -2,33 +2,67 @@
 // Created by Lukas on 19.10.2021.
 //
 
-#include "Sim_To_DuT_Interface.h"
+#include "SimToDuTInterface.h"
 
-Sim_To_DuT_Interface::Sim_To_DuT_Interface(Sim_Com_Handler simComHandler) : simComHandler(simComHandler) {
+SimToDuTInterface::SimToDuTInterface() {
 
 }
 
-void Sim_To_DuT_Interface::add_Connector(DuT_Connector* duTConnector) {
+void SimToDuTInterface::addConnector(DuTConnector* duTConnector) {
     duTConnectors.push_back(duTConnector);
 }
 
-void Sim_To_DuT_Interface::send_Event_To_Connector(SimEvent &event) {
+void SimToDuTInterface::sendEventToConnector(SimEvent &event) {
     for(auto it = duTConnectors.begin(); it != duTConnectors.end(); it++){
         (*it)->handleEvent(event);
     }
 }
 
-std::ostream& operator << (std::ostream& os, const Sim_To_DuT_Interface& interface){
+std::ostream& operator << (std::ostream& os, const SimToDuTInterface& interface){
+    int count = 0;
     for (auto it = interface.duTConnectors.begin(); it != interface.duTConnectors.end(); ++it){
-        os << (*it)->get_DuT_Info();
+        os << count++ << ". ";
+        os << (*it)->getDuTInfo();
     }
     return os;
 }
 
-void Sim_To_DuT_Interface::run() {
-
+void SimToDuTInterface::run() {
+    std::thread threadSimToInterface(&SimToDuTInterface::handleEventsFromSim, this);
+    threadSimToInterface.detach();
+    std::thread threadDuTToSim(&SimToDuTInterface::handleEventsFromDuT, this);
+    threadDuTToSim.detach();
 }
 
-void Sim_To_DuT_Interface::send_Event_To_Sim(SimEvent &event) {
-
+SharedQueue<SimEvent> &SimToDuTInterface::getQueueDuTToSim() {
+    return queueDuTToSim;
 }
+
+SharedQueue<SimEvent> &SimToDuTInterface::getQueueSimToInterface() {
+    return queueSimToInterface;
+}
+
+[[noreturn]] void SimToDuTInterface::handleEventsFromSim() {
+    while (true){
+        SimEvent simEvent;
+        if(queueSimToInterface.pop(simEvent)){
+            sendEventToConnector(simEvent);
+        }
+    }
+}
+
+[[noreturn]] void SimToDuTInterface::handleEventsFromDuT() {
+    while (true){
+        SimEvent simEvent;
+        if(queueDuTToSim.pop(simEvent)){
+            if(simComHandler != nullptr){
+                simComHandler->sendEventToSim(simEvent);
+            }
+        }
+    }
+}
+
+void SimToDuTInterface::setSimComHandler(SimComHandler *simComHandler) {
+    SimToDuTInterface::simComHandler = simComHandler;
+}
+

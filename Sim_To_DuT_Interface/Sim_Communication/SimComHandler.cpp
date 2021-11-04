@@ -2,26 +2,24 @@
 // Created by Lukas on 19.10.2021.
 //
 
-#include "Sim_Com_Handler.h"
+#include "SimComHandler.h"
 
-Sim_Com_Handler::Sim_Com_Handler()
+SimComHandler::SimComHandler(SharedQueue<SimEvent> &queueSimToInterface) : queueSimToInterface(queueSimToInterface)
 {
 
 }
 
-void Sim_Com_Handler::send_Event_to_Sim(SimEvent &event) {
-    std::cout << "Async Sending of Event..." << std::endl;
+void SimComHandler::run() {
+    // TODO async receive events from the Simulation and send them to the interface
+    SimEvent event("Test","Test","Test");
+    sendEventToInterface(event);
+}
+
+void SimComHandler::sendEventToSim(SimEvent &event) {
     // TODO implementation of sending an event to the simulation
+    std::cout << "Async Sending of Event..." << std::endl;
 }
 
-void Sim_Com_Handler::send_Event_to_Interface(SimEvent &event) {
-    queueEventToInterface->push(event);
-}
-
-void Sim_Com_Handler::run() {
-    // TODO start thread and get events from the simulation
-    // TODO send SimEvents to the interface
-    // TODO check for events in the queue and send them to the simulation
-    SimEvent event("Turn Light Right", "On", "Car 1");
-    send_Event_to_Interface(event);
+void SimComHandler::sendEventToInterface(SimEvent &event) {
+    queueSimToInterface.push(event);
 }
