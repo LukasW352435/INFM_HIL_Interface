@@ -4,9 +4,9 @@
 
 #ifndef SIM_TO_DUT_INTERFACE_REST_DUMMY_CONNECTOR_H
 #define SIM_TO_DUT_INTERFACE_REST_DUMMY_CONNECTOR_H
-#include "../DuT_Connector.h"
+#include "../DuTConnector.h"
 
-class Rest_Dummy_Connector : DuT_Connector{
+class Rest_Dummy_Connector : DuTConnector{
 
 };
 

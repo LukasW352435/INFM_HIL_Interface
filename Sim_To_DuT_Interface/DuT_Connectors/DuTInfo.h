@@ -6,6 +6,7 @@
 #define SIM_TO_DUT_INTERFACE_DUT_INFO_H
 
 #include <string>
+#include <iostream>
 
 class DuT_Info {
 public:

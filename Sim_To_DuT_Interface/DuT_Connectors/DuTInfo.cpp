@@ -2,7 +2,6 @@
 // Created by Lukas on 19.10.2021.
 //
 
-#include <iostream>
 #include "DuT_Info.h"
 
 DuT_Info::DuT_Info(std::string name, int version, std::string description) :
