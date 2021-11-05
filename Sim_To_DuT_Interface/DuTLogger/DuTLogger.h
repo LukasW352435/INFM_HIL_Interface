@@ -24,6 +24,9 @@ static const std::string FILE_MODE_CONSOLE = "w";
  */
 static const std::string FILE_MODE_DATA = "w";
 
+/**
+ * Defines the level of logging
+ */
 enum LOG_LEVEL{
     NONE, DEBUG, INFO, WARNING, ERROR, CRITICAL
 };
@@ -32,6 +35,9 @@ enum LOGGER_TYPE {
     CONSOLE, DATA
 };
 
+/**
+ * This enum collects all types of logger whose level can be changed
+ */
 enum LOG_LEVEL_CHANGE_ON {
     CONSOLE_LOG, FILE_LOG
 };
