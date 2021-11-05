@@ -4,7 +4,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 find_package(CURL REQUIRED)
 link_directories(CURL::libcurl)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(BUILD_TESTS OFF CACHE BOOL "Build unit tests.")
 include_directories(restbed/source generatedAPI/api generatedAPI/model)
 add_subdirectory(restbed)
