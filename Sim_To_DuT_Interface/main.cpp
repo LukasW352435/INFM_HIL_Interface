@@ -5,6 +5,8 @@
 #include "DuTLogger/DuTLogger.h"
 
 int main() {
+    DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
+
     Sim_To_DuT_Interface interface;
     // TODO Init Sim_Com_Handler
     // TODO Read Config and Create Connectors

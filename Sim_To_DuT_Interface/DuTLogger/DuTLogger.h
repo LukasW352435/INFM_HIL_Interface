@@ -42,11 +42,17 @@ enum LOG_LEVEL_CHANGE_ON {
     CONSOLE_LOG, FILE_LOG
 };
 
-// pre-settings
-// feel free to change the default level for logging
+/**
+ * This constant stores the default level for console logging.
+ */
 static const quill::LogLevel DEFAULT_CONSOLE_LOG_LEVEL = quill::LogLevel::Info;
+
+/**
+ * This constant stores the default level for console file logging.
+ */
 static const quill::LogLevel DEFAULT_FILE_LOG_LEVEL = quill::LogLevel::Info;
 
+// Little variable to remember that the quill engine has been started.
 static bool startedQuillEngine = false;
 
 
