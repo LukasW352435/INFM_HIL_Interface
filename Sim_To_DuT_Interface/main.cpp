@@ -5,7 +5,6 @@
 #include "DuTLogger/DuTLogger.h"
 
 int main() {
-    
     Sim_To_DuT_Interface interface;
     // TODO Init Sim_Com_Handler
     // TODO Read Config and Create Connectors
