@@ -11,6 +11,19 @@
 static const std::string PATH_CONSOLE_LOG = "/logs/console";
 static const std::string PATH_DATA_LOG = "/logs/data";
 
+/**
+ * This constant defines the mode how the logger will open the logfile of the console logging.
+ * Mode "w" creates a new file or overwrite the existing file at every start of the application.
+ * In mode "a" the logger tries to append it's content on an existing file.
+ */
+static const std::string FILE_MODE_CONSOLE = "w";
+/**
+ * This constant defines the mode how the logger will open the logfile of the data logging.
+ * Mode "w" creates a new file or overwrite the existing file at every start of the application.
+ * In mode "a" the logger tries to append it's content on an existing file.
+ */
+static const std::string FILE_MODE_DATA = "w";
+
 enum LOG_LEVEL{
     NONE, DEBUG, INFO, WARNING, ERROR, CRITICAL
 };

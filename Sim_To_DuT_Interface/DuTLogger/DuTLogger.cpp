@@ -71,7 +71,7 @@ quill::Handler* DuTLogger::buildFileHandler() {
     createDirectoryIfNecessary(path);
 
     // a second handler for the file is needed
-    quill::Handler* newHandler = quill::file_handler(path.append("/Logfile.log"), "w");
+    quill::Handler* newHandler = quill::file_handler(path.append("/Logfile.log"), FILE_MODE_CONSOLE);
     newHandler->set_log_level(DEFAULT_FILE_LOG_LEVEL);
 
     // modify the pattern for the logger
@@ -87,7 +87,7 @@ quill::Logger* DuTLogger::createDataLogger() {
     createDirectoryIfNecessary(path);
 
     // create a file handler to connect quill to a logfile
-    quill::Handler* file_handler = quill::file_handler(path.append("/Logfile.log"), "w");
+    quill::Handler* file_handler = quill::file_handler(path.append("/Logfile.log"), FILE_MODE_DATA);
 
     // configure the pattern of a line
     file_handler->set_pattern(QUILL_STRING("%(ascii_time) %(logger_name) - %(message)"),
