@@ -15,18 +15,18 @@
 
 class DuTConnector {
 public:
-    DuTConnector(SharedQueue<SimEvent> &queueDuTToSim);
+    explicit DuTConnector(std::shared_ptr<SharedQueue<std::shared_ptr<SimEvent>>> queueDuTToSim);
     // return some basic information from the connector
     virtual DuTInfo getDuTInfo();
     // handle event from the simulation async
-    virtual void handleEvent(SimEvent &simEvent);
+    virtual void handleEvent(std::shared_ptr<SimEvent> simEvent);
 private:
     std::set<std::string> processableOperations;
     // determine if an event needs to be processed
-    bool canHandleSimEvent(SimEvent &simEvent);
+    bool canHandleSimEvent(std::shared_ptr<SimEvent> simEvent);
     // send the event to the simulation
-    void sendEventToSim(SimEvent &simEvent);
-    SharedQueue<SimEvent>& queueDuTToSim;
+    void sendEventToSim(std::shared_ptr<SimEvent> simEvent);
+    std::shared_ptr<SharedQueue<std::shared_ptr<SimEvent>>> queueDuTToSim;
 };
 
 #endif //SIM_TO_DUT_INTERFACE_DUTCONNECTOR_H

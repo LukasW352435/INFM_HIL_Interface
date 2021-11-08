@@ -19,15 +19,15 @@ public:
     void run();
 
     friend std::ostream& operator << (std::ostream& os, const SimToDuTInterface& interface);
-    SharedQueue<SimEvent> &getQueueDuTToSim();
-    SharedQueue<SimEvent> &getQueueSimToInterface();
+    std::shared_ptr<SharedQueue<std::shared_ptr<SimEvent>>> getQueueDuTToSim();
+    std::shared_ptr<SharedQueue<std::shared_ptr<SimEvent>>> getQueueSimToInterface();
 private:
-    SharedQueue<SimEvent> queueDuTToSim;
-    SharedQueue<SimEvent> queueSimToInterface;
+    std::shared_ptr<SharedQueue<std::shared_ptr<SimEvent>>> queueDuTToSim;
+    std::shared_ptr<SharedQueue<std::shared_ptr<SimEvent>>> queueSimToInterface;
     SimComHandler* simComHandler = nullptr;
     std::list<DuTConnector*> duTConnectors;
 
-    void sendEventToConnector(SimEvent &event);
+    void sendEventToConnector(std::shared_ptr<SimEvent> event);
 
     [[noreturn]] void handleEventsFromSim();
 

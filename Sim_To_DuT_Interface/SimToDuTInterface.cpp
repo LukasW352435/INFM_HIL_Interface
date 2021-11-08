@@ -5,16 +5,17 @@
 #include "SimToDuTInterface.h"
 
 SimToDuTInterface::SimToDuTInterface() {
-
+    queueDuTToSim = std::make_shared<SharedQueue<std::shared_ptr<SimEvent>>>();
+    queueSimToInterface = std::make_shared<SharedQueue<std::shared_ptr<SimEvent>>>();
 }
 
 void SimToDuTInterface::addConnector(DuTConnector* duTConnector) {
     duTConnectors.push_back(duTConnector);
 }
 
-void SimToDuTInterface::sendEventToConnector(SimEvent &event) {
+void SimToDuTInterface::sendEventToConnector(std::shared_ptr<SimEvent> simEvent) {
     for(auto it = duTConnectors.begin(); it != duTConnectors.end(); it++){
-        (*it)->handleEvent(event);
+        (*it)->handleEvent(simEvent);
     }
 }
 
@@ -34,18 +35,18 @@ void SimToDuTInterface::run() {
     threadDuTToSim.detach();
 }
 
-SharedQueue<SimEvent> &SimToDuTInterface::getQueueDuTToSim() {
+std::shared_ptr<SharedQueue<std::shared_ptr<SimEvent>>> SimToDuTInterface::getQueueDuTToSim() {
     return queueDuTToSim;
 }
 
-SharedQueue<SimEvent> &SimToDuTInterface::getQueueSimToInterface() {
+std::shared_ptr<SharedQueue<std::shared_ptr<SimEvent>>> SimToDuTInterface::getQueueSimToInterface() {
     return queueSimToInterface;
 }
 
 [[noreturn]] void SimToDuTInterface::handleEventsFromSim() {
     while (true){
-        SimEvent simEvent;
-        if(queueSimToInterface.pop(simEvent)){
+        std::shared_ptr<SimEvent> simEvent;
+        if(queueSimToInterface->pop(simEvent)){
             sendEventToConnector(simEvent);
         }
     }
@@ -53,8 +54,8 @@ SharedQueue<SimEvent> &SimToDuTInterface::getQueueSimToInterface() {
 
 [[noreturn]] void SimToDuTInterface::handleEventsFromDuT() {
     while (true){
-        SimEvent simEvent;
-        if(queueDuTToSim.pop(simEvent)){
+        std::shared_ptr<SimEvent> simEvent;
+        if(queueDuTToSim->pop(simEvent)){
             if(simComHandler != nullptr){
                 simComHandler->sendEventToSim(simEvent);
             }

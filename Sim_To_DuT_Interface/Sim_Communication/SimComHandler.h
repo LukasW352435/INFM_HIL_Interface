@@ -14,16 +14,16 @@
 
 class SimComHandler {
 public:
-    SimComHandler(SharedQueue<SimEvent> &queueSimToInterface);
+    SimComHandler(std::shared_ptr<SharedQueue<std::shared_ptr<SimEvent>>> queueSimToInterface);
     // async send event to simulation
-    void sendEventToSim(SimEvent &event);
+    void sendEventToSim(std::shared_ptr<SimEvent> simEvent);
     // run async receive incoming events
     void run();
 private:
     // send an event to the interface
-    void sendEventToInterface(SimEvent &event);
+    void sendEventToInterface(std::shared_ptr<SimEvent> simEvent);
     // used by sendEventToInterface
-    SharedQueue<SimEvent> &queueSimToInterface;
+    std::shared_ptr<SharedQueue<std::shared_ptr<SimEvent>>> queueSimToInterface;
 };
 
 #endif //SIM_TO_DUT_INTERFACE_SIMCOMHANDLER_H

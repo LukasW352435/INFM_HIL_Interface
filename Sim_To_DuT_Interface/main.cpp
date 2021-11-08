@@ -8,6 +8,7 @@
 int main() {
     // Create interface
     SimToDuTInterface interface;
+
     // Create simComHandler
     SimComHandler simComHandler(interface.getQueueSimToInterface());
     interface.setSimComHandler(&simComHandler);
