@@ -2,10 +2,10 @@ name: CMake build interface
 on:
   push:
     paths-ignore:
-      - "Dummy_DuT/**"
+      - "Sim_To_DuT_Interface/**"
 defaults:
   run:
-    working-directory: ./Dummy_DuT
+    working-directory: ./Sim_To_DuT_Interface
 jobs:
   build:
     runs-on: ubuntu-latest

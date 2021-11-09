@@ -19,5 +19,5 @@ Logging of the communication is included in the interface.
 
 - libasio-dev
 - libssl-dev
-- libcurl (present on most unix systems)
+- libcurl4-openssl-dev
 - restbed (is built from source)
