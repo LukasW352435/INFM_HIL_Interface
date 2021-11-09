@@ -5,7 +5,7 @@ on:
       - "Dummy_DuT/**"
 defaults:
   run:
-    working-directory: ./Dummy_DuT
+    working-directory: ./Sim_To_DuT_Interface
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,4 +26,4 @@ jobs:
         with:
           name: Binaries
           path: |
-            build/Sim_To_DuT_Interface
+            Sim_To_DuT_Interface/build/Sim_To_DuT_Interface

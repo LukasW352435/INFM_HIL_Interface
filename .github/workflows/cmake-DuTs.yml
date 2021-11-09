@@ -1,11 +1,11 @@
-name: CMake build interface
+name: CMake build DuTs
 on:
   push:
     paths-ignore:
       - "Sim_To_DuT_Interface/**"
 defaults:
   run:
-    working-directory: ./Sim_To_DuT_Interface
+    working-directory: ./Dummy_DuT
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,5 +26,5 @@ jobs:
         with:
           name: Binaries
           path: |
-            build/Dummy_CAN_DuT/Dummy_CAN_DuT
-            build/REST_Dummy_DuT/REST_Dummy_DuT
+            Dummy_DuT/build/Dummy_CAN_DuT/Dummy_CAN_DuT
+            Dummy_DuT/build/REST_Dummy_DuT/REST_Dummy_DuT
