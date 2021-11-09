@@ -33,6 +33,12 @@
 #include <boost/property_tree/json_parser.hpp>
 
 namespace thi::dut_connector::rest_dummy {
+    /**
+     * Constructs the restbed service and runs it on given port
+     *
+     * @param port Port to start webservice to receive DuT messages on
+     * @param function callback to call with received SimEvent
+     */
     void ReceiveEndpoint::startService(int const &port, std::function<void(const SimEvent &)> function) {
         if (!m_spReceiveApiResource)
             m_spReceiveApiResource = std::make_shared<ReceiveApiResource>(std::move(function));
@@ -45,18 +51,29 @@ namespace thi::dut_connector::rest_dummy {
         this->start(settings);
     }
 
+    /**
+     * Stop webservice
+     */
     void ReceiveEndpoint::stopService() {
         this->stop();
     }
 
+    /**
+     * Create endpoint for REST service on path /rest/DuT and method PUT
+     *
+     * @param function callback to call with received SimEvent
+     */
     ReceiveApiResource::ReceiveApiResource(std::function<void(const SimEvent &)> function) : eventToSimCallback(
             std::move(function)) {
         this->set_path("/rest/DuT");
         this->set_method_handler("PUT", [this](auto &&PH1) { PUT_method_handler(std::forward<decltype(PH1)>(PH1)); });
     }
 
-    ReceiveApiResource::~ReceiveApiResource() = default;
-
+    /**
+     * Parse body and extract SimEvent and provide it to callback
+     *
+     * @param session HTTP session on which the request was received
+     */
     void ReceiveApiResource::PUT_method_handler(const std::shared_ptr<restbed::Session> &session) {
 
         const auto request = session->get_request();
@@ -73,6 +90,12 @@ namespace thi::dut_connector::rest_dummy {
                        });
     }
 
+    /**
+     * Extract the SimEvent from given json
+     *
+     * @param json JSON encoded string
+     * @return SimEvent based on json
+     */
     SimEvent ReceiveApiResource::JsonToSimEvent(const std::string &json) {
         std::stringstream ss(json);
         boost::property_tree::ptree pt;

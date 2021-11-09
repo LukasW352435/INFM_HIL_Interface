@@ -29,7 +29,12 @@
 #include "ReceiveEndpoint.h"
 
 namespace thi::dut_connector::rest_dummy {
-
+    /**
+     * Construct a connector to the REST Dummy DuT with given config, init curl lib for use
+     *
+     * @param queueDuTToSim queue to write received SimEvents to
+     * @param config Configuration of connector containing urls, port and (TODO) supported operations
+     */
     RESTDummyConnector::RESTDummyConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
                                            const RESTConfig &config)
             : DuTConnector(std::move(queueDuTToSim)) {
@@ -42,17 +47,30 @@ namespace thi::dut_connector::rest_dummy {
         curlJsonHeader = curl_slist_append(curlJsonHeader, "Content-Type: application/json");
     }
 
+    /**
+     * Deconstructur freeing curl resource
+     */
     RESTDummyConnector::~RESTDummyConnector() {
         curl_slist_free_all(curlJsonHeader);
         curl_global_cleanup();
     }
 
+    /**
+     * Process the given event
+     *
+     * @param e SimEvent to handle
+     */
     void RESTDummyConnector::handleEvent(const SimEvent &e) {
         if (canHandleSimEvent(e)) {
             sendEventToDuT(e);
         }
     }
 
+    /**
+     * Return some basic information like name, version and a short description of this connector
+     *
+     * @return DuTInfo containing information about this DuT connector
+     */
     DuTInfo RESTDummyConnector::getDuTInfo() {
         DuTInfo info(
                 "REST Dummy Connector",
@@ -61,6 +79,11 @@ namespace thi::dut_connector::rest_dummy {
         return info;
     }
 
+    /**
+     * Send the given event to the configured REST DuT
+     *
+     * @param e SimEvent to send
+     */
     void RESTDummyConnector::sendEventToDuT(const SimEvent &e) {
         auto handle = curl_easy_init();
 
@@ -84,6 +107,10 @@ namespace thi::dut_connector::rest_dummy {
         }
     }
 
+    /**
+     * Enable receiving events from the DuT by sending the HTTP URL to post it to to the DuT
+     * Starts the receiving HTTP endpoint and runs it a separate thread
+     */
     void RESTDummyConnector::enableReceiveFromDuT() {
         if (!receiveEndpoint) {
             receiveEndpoint = std::make_unique<ReceiveEndpoint>();
@@ -113,6 +140,10 @@ namespace thi::dut_connector::rest_dummy {
         }
     }
 
+    /**
+     * Disable receiving events from the DuT by removing the HTTP URL from the DuT
+     * Stop the receiving HTTP endpoint
+     */
     void RESTDummyConnector::disableReceiveFromDuT() {
         receiveEndpoint->stopService();
         auto handle = curl_easy_init();
@@ -134,6 +165,12 @@ namespace thi::dut_connector::rest_dummy {
         }
     }
 
+    /**
+     * Transform given event to json string for DuT
+     *
+     * @param e SimEvent to transform
+     * @return json string with key=operation and status=value
+     */
     std::string RESTDummyConnector::EventToRESTMessage(const SimEvent &e) {
         return R"({"key":")" + e.operation + R"(","status":")" + e.value + R"("})";
     }

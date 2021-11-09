@@ -37,8 +37,6 @@ namespace thi::dut_connector::rest_dummy {
     public:
         explicit ReceiveApiResource(std::function<void(const SimEvent &)> function);
 
-        ~ReceiveApiResource() override;
-
         void PUT_method_handler(const std::shared_ptr<restbed::Session> &session);
 
     private:
