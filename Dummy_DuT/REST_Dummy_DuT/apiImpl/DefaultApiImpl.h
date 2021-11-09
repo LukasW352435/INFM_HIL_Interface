@@ -34,7 +34,7 @@
 #include "DefaultApi.h"
 #include "../messages/MessageWithTimestamp.h"
 #include "../messages/InterfaceMessages.h"
-#include "../messages/RegisteredInterface.h"
+#include "RegisteredInterface.h"
 
 namespace thi::dummy_dut::api_impl {
     class DefaultApiImpl : thi::dummy_dut::api::DefaultApi {

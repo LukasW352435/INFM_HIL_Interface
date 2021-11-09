@@ -178,7 +178,7 @@ namespace thi::dummy_dut::api_impl {
         }
         std::cout << "Received message from interface: " << message->getKey() << ": " << message->getStatus()
                   << std::endl;
-        if (instance->operations.find(message->getKey())->empty()) {
+        if (instance->operations.find(message->getKey()) == instance->operations.end()) {
             return {404, "Key not found"};
         }
 
