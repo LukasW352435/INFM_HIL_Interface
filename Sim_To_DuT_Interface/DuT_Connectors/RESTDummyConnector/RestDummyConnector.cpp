@@ -23,13 +23,8 @@
  * @version 1.0
  */
 
-#ifndef SIM_TO_DUT_INTERFACE_REST_DUMMY_CONNECTOR_H
-#define SIM_TO_DUT_INTERFACE_REST_DUMMY_CONNECTOR_H
-#include "../DuT_Connector.h"
+#include "RestDummyConnector.h"
 
-class Rest_Dummy_Connector : DuT_Connector {
-
-};
-
-
-#endif //SIM_TO_DUT_INTERFACE_REST_DUMMY_CONNECTOR_H
+RestDummyConnector::RestDummyConnector(std::shared_ptr<SharedQueue<std::shared_ptr<SimEvent>>> queue)
+        : DuTConnector(queue) {
+}
