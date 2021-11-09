@@ -20,8 +20,6 @@ void SimComHandler::run() {
 void SimComHandler::sendEventToSim(std::shared_ptr<SimEvent> simEvent) {
     // TODO implementation of sending an event to the simulation
     std::cout << "Async Sending of Event..." << std::endl;
-    auto l = simEvent.get();
-    std::cout << l << "lol";
 }
 
 void SimComHandler::sendEventToInterface(std::shared_ptr<SimEvent> simEvent) {

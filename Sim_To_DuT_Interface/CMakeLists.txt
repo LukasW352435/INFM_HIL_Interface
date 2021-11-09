@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 project(Sim_To_DuT_Interface)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS -pthread)
 
 add_executable(Sim_To_DuT_Interface main.cpp
         DuT_Connectors/DuTConnector.cpp DuT_Connectors/DuTConnector.h

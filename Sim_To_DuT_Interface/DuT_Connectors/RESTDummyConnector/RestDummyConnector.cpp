@@ -24,3 +24,7 @@
  */
 
 #include "RestDummyConnector.h"
+
+RestDummyConnector::RestDummyConnector(std::shared_ptr<SharedQueue<std::shared_ptr<SimEvent>>> queue)
+        : DuTConnector(queue) {
+}

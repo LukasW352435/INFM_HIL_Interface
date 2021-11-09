@@ -14,16 +14,16 @@ void SimToDuTInterface::addConnector(DuTConnector* duTConnector) {
 }
 
 void SimToDuTInterface::sendEventToConnector(std::shared_ptr<SimEvent> simEvent) {
-    for(auto it = duTConnectors.begin(); it != duTConnectors.end(); it++){
-        (*it)->handleEvent(simEvent);
+    for(auto & duTConnector : duTConnectors){
+        duTConnector->handleEvent(simEvent);
     }
 }
 
 std::ostream& operator << (std::ostream& os, const SimToDuTInterface& interface){
     int count = 0;
-    for (auto it = interface.duTConnectors.begin(); it != interface.duTConnectors.end(); ++it){
+    for (auto duTConnector : interface.duTConnectors){
         os << count++ << ". ";
-        os << (*it)->getDuTInfo();
+        os << duTConnector->getDuTInfo();
     }
     return os;
 }
