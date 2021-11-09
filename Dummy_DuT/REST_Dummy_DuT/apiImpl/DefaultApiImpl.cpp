@@ -136,7 +136,7 @@ namespace thi::dummy_dut::api_impl {
      */
     std::pair<int, std::string>
     DefaultApiImpl::addCallbackHandler(DefaultApiImpl *instance, const std::string &callback) {
-        if (callback.empty() || !(callback.starts_with("http://") || callback.starts_with("https://"))) {
+        if (callback.empty() || !(callback.compare(0, 8, "http://") || callback.compare(0, 9, "https://"))) {
             return {400, ""};
         }
         if (instance->registeredInterfaces.addInterfaceCallback(callback)) {
@@ -154,7 +154,7 @@ namespace thi::dummy_dut::api_impl {
      */
     std::pair<int, std::string>
     DefaultApiImpl::removeCallbackHandler(DefaultApiImpl *instance, const std::string &callback) {
-        if (callback.empty() || !(callback.starts_with("http://") || callback.starts_with("https://"))) {
+        if (callback.empty() || !(callback.compare(0, 8, "http://") || callback.compare(0, 9, "https://"))) {
             return {400, ""};
         }
         if (instance->registeredInterfaces.removeInterfaceCallback(callback)) {
