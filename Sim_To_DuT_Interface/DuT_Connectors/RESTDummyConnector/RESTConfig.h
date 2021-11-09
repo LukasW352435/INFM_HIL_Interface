@@ -23,13 +23,18 @@
  * @version 1.0
  */
 
-#ifndef SIM_TO_DUT_INTERFACE_REST_DUMMY_CONNECTOR_H
-#define SIM_TO_DUT_INTERFACE_REST_DUMMY_CONNECTOR_H
-#include "../DuTConnector.h"
+#ifndef SIM_TO_DUT_INTERFACE_RESTCONFIG_H
+#define SIM_TO_DUT_INTERFACE_RESTCONFIG_H
 
-class Rest_Dummy_Connector : DuTConnector {
+#include <string>
 
-};
+namespace thi::dut_connector::rest_dummy {
+    class RESTConfig {
+    public:
+        std::string baseUrlDuT;
+        std::string baseCallbackUrl;
+        int port;
+    };
+}
 
-
-#endif //SIM_TO_DUT_INTERFACE_REST_DUMMY_CONNECTOR_H
+#endif //SIM_TO_DUT_INTERFACE_RESTCONFIG_H
