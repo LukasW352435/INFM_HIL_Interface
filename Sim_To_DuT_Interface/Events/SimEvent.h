@@ -12,13 +12,16 @@
 class SimEvent {
 public:
     SimEvent();
+
     SimEvent(std::string operation, std::string value, std::string origin);
+
     // change operation string to enum?
     std::string operation;
     std::string value;
     std::time_t current;
     std::string origin;
-    friend std::ostream& operator << (std::ostream& os, const SimEvent& simEvent);
+
+    friend std::ostream &operator<<(std::ostream &os, const SimEvent &simEvent);
 };
 
 

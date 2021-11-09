@@ -4,17 +4,18 @@
 
 #include "DuTInfo.h"
 
+#include <utility>
+
 DuTInfo::DuTInfo(std::string name, int version, std::string description) :
-        name(name),
+        name(std::move(name)),
         version(version),
-        description(description)
-{
+        description(std::move(description)) {
 
 }
 
-std::ostream& operator << (std::ostream& os, const DuTInfo& duTInfo){
+std::ostream &operator<<(std::ostream &os, const DuTInfo &duTInfo) {
     os << duTInfo.name << std::endl
-    << "Version: " << std::hex << duTInfo.version << std::endl
-    << std::dec << duTInfo.description << std::endl;
+       << "Version: " << std::hex << duTInfo.version << std::endl
+       << std::dec << duTInfo.description << std::endl;
     return os;
 }
