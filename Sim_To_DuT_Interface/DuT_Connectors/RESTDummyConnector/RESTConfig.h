@@ -23,8 +23,18 @@
  * @version 1.0
  */
 
-#include "RestDummyConnector.h"
+#ifndef SIM_TO_DUT_INTERFACE_RESTCONFIG_H
+#define SIM_TO_DUT_INTERFACE_RESTCONFIG_H
 
-RestDummyConnector::RestDummyConnector(std::shared_ptr<SharedQueue<std::shared_ptr<SimEvent>>> queue)
-        : DuTConnector(queue) {
+#include <string>
+
+namespace thi::dut_connector::rest_dummy {
+    class RESTConfig {
+    public:
+        std::string baseUrlDuT;
+        std::string baseCallbackUrl;
+        int port;
+    };
 }
+
+#endif //SIM_TO_DUT_INTERFACE_RESTCONFIG_H

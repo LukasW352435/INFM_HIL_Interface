@@ -6,22 +6,23 @@
 
 #include <utility>
 
-SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<std::shared_ptr<SimEvent>>> queueSimToInterface) : queueSimToInterface(std::move(queueSimToInterface))
-{
+SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface)
+        : queueSimToInterface(std::move(queueSimToInterface)) {
 
 }
 
 void SimComHandler::run() {
     // TODO async receive events from the Simulation and send them to the interface
-    SimEvent event("Test","Test","Test");
-    sendEventToInterface(std::make_shared<SimEvent>(event));
+    SimEvent event("Test", "Test", "Test");
+    sendEventToInterface(event);
 }
 
-void SimComHandler::sendEventToSim(std::shared_ptr<SimEvent> simEvent) {
+void SimComHandler::sendEventToSim(const SimEvent &simEvent) {
     // TODO implementation of sending an event to the simulation
     std::cout << "Async Sending of Event..." << std::endl;
+    std::cout << simEvent << "lol";
 }
 
-void SimComHandler::sendEventToInterface(std::shared_ptr<SimEvent> simEvent) {
+void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
     queueSimToInterface->push(simEvent);
 }
