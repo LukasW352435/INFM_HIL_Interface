@@ -27,9 +27,10 @@
 #define SIM_TO_DUT_INTERFACE_RESTCONFIG_H
 
 #include <string>
+#include "../ConnectorConfig.h"
 
 namespace thi::dut_connector::rest_dummy {
-    class RESTConfig {
+    class RESTConfig : public ConnectorConfig {
     public:
         std::string baseUrlDuT;
         std::string baseCallbackUrl;

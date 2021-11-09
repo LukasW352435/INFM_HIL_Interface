@@ -37,7 +37,7 @@ namespace thi::dut_connector::rest_dummy {
      */
     RESTDummyConnector::RESTDummyConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
                                            const RESTConfig &config)
-            : DuTConnector(std::move(queueDuTToSim)) {
+            : DuTConnector(std::move(queueDuTToSim), config) {
         sendCallbackDuT = config.baseUrlDuT + "/send";
         readCallbackDuT = config.baseUrlDuT + "/read?clientUrl=";
         port = config.port;

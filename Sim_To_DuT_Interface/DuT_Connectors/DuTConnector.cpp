@@ -6,8 +6,9 @@
 
 #include <utility>
 
-DuTConnector::DuTConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTEventToSim)
-        : queueDuTToSim(std::move(queueDuTEventToSim)) {
+DuTConnector::DuTConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTEventToSim,
+                           const thi::dut_connector::ConnectorConfig &config)
+        : queueDuTToSim(std::move(queueDuTEventToSim)), processableOperations(config.operations) {
 }
 
 DuTInfo DuTConnector::getDuTInfo() {
@@ -26,8 +27,7 @@ void DuTConnector::handleEvent(const SimEvent &simEvent) {
 }
 
 bool DuTConnector::canHandleSimEvent(const SimEvent &simEvent) {
-    // TODO check the operation of the event and config and determine if the event needs to be processed
-    return true;
+    return processableOperations.find(simEvent.operation) != processableOperations.end();
 }
 
 void DuTConnector::sendEventToSim(const SimEvent &simEvent) {
