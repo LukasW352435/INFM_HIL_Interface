@@ -32,7 +32,7 @@ namespace thi::dummy_dut::messages {
      * @return State of operation
      */
     bool RegisteredInterface::addInterfaceCallback(const std::string &callback) {
-        if (callbacks.find(callback) == callbacks.end()) {
+        if (callbacks.find(callback) != callbacks.end()) {
             return false;
         }
         callbacks.insert(callback);
@@ -45,7 +45,7 @@ namespace thi::dummy_dut::messages {
      * @return State of operation
      */
     bool RegisteredInterface::removeInterfaceCallback(const std::string &callback) {
-        if (callbacks.find(callback) == callbacks.end()) {
+        if (callbacks.find(callback) != callbacks.end()) {
             callbacks.erase(callback);
             return true;
         }

@@ -17,15 +17,18 @@ int main() {
     config.baseUrlDuT = "http://localhost:9090";
     config.baseCallbackUrl = "http://172.17.0.1";
     config.port = 9091;
+    config.operations = {"Left Abc"};
 
     thi::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);
     auto event = SimEvent();
     event.operation = "Left Abc";
     event.value = "xyz";
     restDummyConnector.handleEvent(event);
-    DuTConnector duTConnector2(interface.getQueueDuTToSim());
+    auto event2 = SimEvent();
+    event.operation = "Left Abc2";
+    event.value = "xyz";
+    restDummyConnector.handleEvent(event);
     interface.addConnector(&restDummyConnector);
-    interface.addConnector(&duTConnector2);
 
     std::cout << interface << std::endl;
 

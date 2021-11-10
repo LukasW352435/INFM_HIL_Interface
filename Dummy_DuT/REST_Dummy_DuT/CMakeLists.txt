@@ -14,5 +14,5 @@ add_executable(${PROJECT_NAME} main.cpp
         apiImpl/DefaultApiImpl.cpp apiImpl/DefaultApiImpl.h
         messages/InterfaceMessages.cpp messages/InterfaceMessages.h
         messages/MessageWithTimestamp.cpp messages/MessageWithTimestamp.h
-        messages/RegisteredInterface.cpp messages/RegisteredInterface.h)
+        apiImpl/RegisteredInterface.cpp apiImpl/RegisteredInterface.h)
 target_link_libraries(${PROJECT_NAME} PRIVATE restbed-static PRIVATE CURL::libcurl)

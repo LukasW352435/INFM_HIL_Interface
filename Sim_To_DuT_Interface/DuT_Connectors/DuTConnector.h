@@ -12,10 +12,12 @@
 #include "../DuT_Connectors/DuTInfo.h"
 #include "../Events/SimEvent.h"
 #include "../Utility/SharedQueue.h"
+#include "ConnectorConfig.h"
 
 class DuTConnector {
 public:
-    explicit DuTConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim);
+    explicit DuTConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
+                          const thi::dut_connector::ConnectorConfig &config);
 
     // return some basic information from the connector
     virtual DuTInfo getDuTInfo();
