@@ -15,7 +15,7 @@
 
 class SimComHandler {
 public:
-    SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, std::string socketSimAdress, zmq::context_t &context_sub);
+    SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, std::string socketSimAddress, zmq::context_t &context_sub);
 
     // async send event to simulation
     void sendEventToSim(const SimEvent &simEvent);

@@ -9,9 +9,9 @@ int main() {
     // Create interface
     SimToDuTInterface interface;
     // Create simComHandler
-    std::string socketSimAdress = "tcp://localhost:4242";
+    std::string socketSimAddress = "tcp://localhost:7777";
     zmq::context_t context_sub(1);
-    SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAdress, context_sub);
+    SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddress, context_sub);
     //interface.setSimComHandler(&simComHandler);
 
     // Create DuT Devices
@@ -22,12 +22,7 @@ int main() {
     config.operations = {"Left Abc"};
 
 
-    /*
-
-
-     */
-
-    simComHandler.getMessageFromSim();
+    std::string Test = simComHandler.getMessageFromSim();
     thi::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);
     auto event = SimEvent();
     event.operation = "Left Abc";

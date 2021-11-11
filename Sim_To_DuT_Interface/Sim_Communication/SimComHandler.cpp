@@ -7,9 +7,9 @@
 #include <utility>
 #include <zmq.hpp>
 
-SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, std::string socketSimAdress, zmq::context_t &context_sub)
+SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, std::string socketSimAddress, zmq::context_t &context_sub)
         : queueSimToInterface(std::move(queueSimToInterface)),  socketSim_(context_sub, zmq::socket_type::sub) {
-    std::cout << "Constructor?" << socketSimAdress << std::endl;
+
     //create a subscriber socket
    // zmq::context_t context_sub(1);
   //  zmq::socket_type type_sub = zmq::socket_type::sub;
@@ -18,9 +18,9 @@ SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToIn
     socketSim_.setsockopt(ZMQ_SUBSCRIBE, "" ,0);
 
     // Connect to publisher
-    std::cout << "Connecting to " << socketSimAdress << " . . ." << std::endl;
+    std::cout << "Connecting to " << socketSimAddress << " . . ." << std::endl;
   //  socket_sub.connect(socketSimAdress);
-    socketSim_.connect(socketSimAdress);
+    socketSim_.connect(socketSimAddress);
    // socketSim_ = socket_sub;
   //  std::string t =  SimComHandler::getMessageFromSim(socketSim_);
 
@@ -68,29 +68,9 @@ void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
          zmq::message_t message_sub;
 
      socketSim_.recv( message_sub, zmq::recv_flags::none);
-     std::cout << message_sub.to_string() << "!!!" << std::endl;
+     std::cout<< "Empfangene Nachricht: " << message_sub.to_string()  << std::endl;
         return message_sub.to_string();
 }
-/*
-SimComHandler::SimComHandler(std::string socketSimAdress) {
-    std::cout << "Constructor?" << socketSimAdress << std::endl;
-    //create a subscriber socket
-    zmq::context_t context_sub(1);
-    zmq::socket_type type_sub = zmq::socket_type::sub;
-    zmq::socket_t socket_sub(context_sub,type_sub);
-    socket_sub.setsockopt(ZMQ_SUBSCRIBE, "" ,0);
-
-
-    // Connect to publisher
-    std::cout << "Connecting to " << socketSimAdress << " . . ." << std::endl;
-    socket_sub.connect(socketSimAdress);
-    socketSim_ = &socket_sub;
-   // std::string t =  SimComHandler::getMessageFromSim(socketSim_);
-
-
-  //  std::cout << "Wuhhh " + t <<  std::endl;
-}
-*/
 
 
 
