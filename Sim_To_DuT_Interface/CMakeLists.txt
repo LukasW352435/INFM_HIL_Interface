@@ -14,3 +14,4 @@ add_executable(${PROJECT_NAME} main.cpp
         Sim_Communication/SimComHandler.cpp Sim_Communication/SimComHandler.h
         Utility/SharedQueue.h)
 target_link_libraries(${PROJECT_NAME} libs)
+target_link_libraries(${PROJECT_NAME}  zmq)
