@@ -13,24 +13,24 @@ int main() {
     zmq::context_t context_sub(1);
     sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddress, context_sub);
 
-    //interface.setSimComHandler(&simComHandler);
+    interface.setSimComHandler(&simComHandler);
 
     // Create DuT Devices
     sim_interface::dut_connector::rest_dummy::RESTConfig config;
     config.baseUrlDuT = "http://localhost:9090";
     config.baseCallbackUrl = "http://172.17.0.1";
     config.port = 9091;
-    config.operations = {"Left Abc"};
+    config.operations = {"Test"};
 
     std::string Test = simComHandler.getMessageFromSim();
-    
+    std::cout << "Test:: " << Test << std::endl;
     sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);
     auto event = sim_interface::SimEvent();
-    event.operation = "Left Abc";
-    event.value = "xyz";
+    event.operation = "Test";
+    event.value = Test;
     restDummyConnector.handleEvent(event);
     auto event2 = sim_interface::SimEvent();
-    event.operation = "Left Abc2";
+    event.operation = "Indicator Right";
     event.value = "xyz";
     restDummyConnector.handleEvent(event);
     interface.addConnector(&restDummyConnector);

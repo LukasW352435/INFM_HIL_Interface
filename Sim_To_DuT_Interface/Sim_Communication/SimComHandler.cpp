@@ -36,6 +36,7 @@ namespace sim_interface {
     }
 
     void SimComHandler::sendEventToSim(const SimEvent &simEvent) {
+        //BOYS hier müssen wir hin
         // TODO implementation of sending an event to the simulation
         std::cout << "Async Sending of Event..." << std::endl;
         std::cout << simEvent << "lol";
