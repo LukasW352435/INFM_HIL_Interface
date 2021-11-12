@@ -6,6 +6,7 @@
 #define TESTLOGGER_DUTLOGGER_H
 #include <string>
 #include "quill/Quill.h"
+#include <list>
 #include <filesystem>
 
 static const std::string PATH_CONSOLE_LOG = "/logs/console";
@@ -16,13 +17,15 @@ static const std::string PATH_DATA_LOG = "/logs/data";
  * Mode "w" creates a new file or overwrite the existing file at every start of the application.
  * In mode "a" the logger tries to append it's content on an existing file.
  */
-static const std::string FILE_MODE_CONSOLE = "w";
+static const std::string FILE_MODE_CONSOLE = "a";
 /**
  * This constant defines the mode how the logger will open the logfile of the data logging.
  * Mode "w" creates a new file or overwrite the existing file at every start of the application.
  * In mode "a" the logger tries to append it's content on an existing file.
  */
-static const std::string FILE_MODE_DATA = "w";
+static const std::string FILE_MODE_DATA = "a";
+
+static const int FILE_BACKUP_COUNT = 10;
 
 /**
  * Defines the level of logging
@@ -68,6 +71,8 @@ private:
     static quill::Logger* consoleLogger;
     static quill::Logger* consoleFileLogger;
     static quill::Logger* dataLogger;
+    static std::string currentLogpathConsole;
+    static std::string currentLogpathData;
 
     // handlers (important to change the log_level
     static quill::Handler* consoleHandler;
@@ -81,10 +86,14 @@ private:
     static void startEngine();
 
     // help functions
-    static std::string getLoggingPath(LOGGER_TYPE type);
-    static void createDirectoryIfNecessary(const std::string path);
     static void logWithLevel(quill::Logger* log, std::string msg, LOG_LEVEL level);
     static quill::Handler* getHandlerType(LOG_LEVEL_CHANGE_ON type);
+
+    // file management
+    static std::string getLoggingPath(LOGGER_TYPE type);
+    static std::string initializeLoggingPath(LOGGER_TYPE type);
+    static void createDirectoryIfNecessary(const std::string path);
+    static void removeOldLogfiles(std::string directory);
 };
 
 

@@ -4,6 +4,10 @@
 
 #include "DuTLogger.h"
 
+// initialize the logging paths
+std::string DuTLogger::currentLogpathConsole = initializeLoggingPath(LOGGER_TYPE::CONSOLE);
+std::string DuTLogger::currentLogpathData = initializeLoggingPath(LOGGER_TYPE::DATA);
+
 // initialize the static handlers
 quill::Handler* DuTLogger::consoleHandler = DuTLogger::buildConsoleHandler();
 quill::Handler* DuTLogger::consoleFileHandler = DuTLogger::buildFileHandler();
@@ -12,6 +16,46 @@ quill::Handler* DuTLogger::consoleFileHandler = DuTLogger::buildFileHandler();
 quill::Logger* DuTLogger::consoleLogger = DuTLogger::createConsoleLogger("consoleLog", false);
 quill::Logger* DuTLogger::consoleFileLogger = DuTLogger::createConsoleLogger("consoleFileLog", true);
 quill::Logger* DuTLogger::dataLogger = DuTLogger::createDataLogger();
+
+
+/**
+ * Starts the quill engine. Won't start it twice.
+ */
+void DuTLogger::startEngine() {
+    // initialize everything if it hasn't been done yet
+    if (!startedQuillEngine) {
+        // start the quill engine
+        quill::start();
+
+        // remember that we started the engine and checked everything
+        startedQuillEngine = true;
+    }
+}
+
+quill::Handler* DuTLogger::buildConsoleHandler() {
+    // build a handler for the console
+    quill::Handler* newHandler = consoleHandler = quill::stdout_handler("consoleHandler");
+    newHandler->set_log_level(DEFAULT_CONSOLE_LOG_LEVEL);
+
+    // modify the pattern for the logger
+    newHandler->set_pattern(QUILL_STRING("%(ascii_time)  %(level_name): %(message)"),
+                                "%D %H:%M:%S.%Qms");
+    return newHandler;
+}
+
+quill::Handler* DuTLogger::buildFileHandler() {
+    // a second handler for the file is needed
+    std::string basicPath = currentLogpathConsole + "/Logfile.log";
+    quill::Handler* newHandler = quill::file_handler(basicPath, FILE_MODE_CONSOLE,
+                                                     quill::FilenameAppend::Date);
+    newHandler->set_log_level(DEFAULT_FILE_LOG_LEVEL);
+
+    // modify the pattern for the logger
+    newHandler->set_pattern(QUILL_STRING("%(ascii_time)  %(level_name): %(message)"),
+                            "%D %H:%M:%S.%Qms");
+    // return the new handler
+    return newHandler;
+}
 
 /**
  * Builds a logger for the console. If necessary it the logger will be build with a additional handler for
@@ -30,6 +74,9 @@ quill::Logger* DuTLogger::createConsoleLogger(const char* name, bool withFileHan
     quill::Logger* newLogger;
     if (withFileHandler) {
         newLogger = quill::create_logger(name, {consoleHandler, consoleFileHandler});
+
+        // check if we might have to delete old logging folders
+        removeOldLogfiles(currentLogpathConsole);
     } else {
         newLogger = quill::create_logger(name, consoleHandler);
     }
@@ -40,54 +87,10 @@ quill::Logger* DuTLogger::createConsoleLogger(const char* name, bool withFileHan
     return newLogger;
 }
 
-/**
- * Starts the quill engine. Won't start it twice.
- */
-void DuTLogger::startEngine() {
-    // start the quill engine if it hasn't been started yet
-    if (!startedQuillEngine) {
-        quill::enable_console_colours();
-        quill::start();
-
-        // remember that we started the engine
-        startedQuillEngine = true;
-    }
-}
-
-quill::Handler* DuTLogger::buildConsoleHandler() {
-    // build a handler for the console
-    quill::Handler* newHandler = consoleHandler = quill::stdout_handler("consoleHandler");
-    newHandler->set_log_level(DEFAULT_CONSOLE_LOG_LEVEL);
-
-    // modify the pattern for the logger
-    newHandler->set_pattern(QUILL_STRING("%(ascii_time)  %(level_name): %(message)"),
-                                "%D %H:%M:%S.%Qms");
-    return newHandler;
-}
-
-quill::Handler* DuTLogger::buildFileHandler() {
-    // get the path to the log file or create the directory if necessary
-    std::string path = DuTLogger::getLoggingPath(LOGGER_TYPE::CONSOLE);
-    createDirectoryIfNecessary(path);
-
-    // a second handler for the file is needed
-    quill::Handler* newHandler = quill::file_handler(path.append("/Logfile.log"), FILE_MODE_CONSOLE);
-    newHandler->set_log_level(DEFAULT_FILE_LOG_LEVEL);
-
-    // modify the pattern for the logger
-    newHandler->set_pattern(QUILL_STRING("%(ascii_time)  %(level_name): %(message)"),
-                            "%D %H:%M:%S.%Qms");
-    // return the new handler
-    return newHandler;
-}
-
 quill::Logger* DuTLogger::createDataLogger() {
-    // get the path to the log file or create the directory if necessary
-    std::string path = DuTLogger::getLoggingPath(LOGGER_TYPE::DATA);
-    createDirectoryIfNecessary(path);
-
     // create a file handler to connect quill to a logfile
-    quill::Handler* file_handler = quill::file_handler(path.append("/Logfile.log"), FILE_MODE_DATA);
+    std::string basicPath = currentLogpathData + "/Logfile.log";
+    quill::Handler* file_handler = quill::file_handler(basicPath, FILE_MODE_DATA,quill::FilenameAppend::Date);
 
     // configure the pattern of a line
     file_handler->set_pattern(QUILL_STRING("%(ascii_time) %(logger_name) - %(message)"),
@@ -96,7 +99,19 @@ quill::Logger* DuTLogger::createDataLogger() {
     // finally, create the logger and return it
     quill::Logger* createdLogger = quill::create_logger("dataLog", file_handler);
 
+    // check if we might have to delete old logging folders
+    removeOldLogfiles(currentLogpathData);
+
     return createdLogger;
+}
+
+std::string DuTLogger::initializeLoggingPath(LOGGER_TYPE type) {
+    // get the wished logging path for this type of logger
+    std::string path = getLoggingPath(type);
+
+    // create the log directory if it doesn't exist
+    createDirectoryIfNecessary(path);
+    return path;
 }
 
 /**
@@ -125,6 +140,32 @@ std::string DuTLogger::getLoggingPath(LOGGER_TYPE type) {
 void DuTLogger::createDirectoryIfNecessary(const std::string path) {
     // check if the directory is created in the file system
     std::filesystem::create_directories(path);
+}
+
+void DuTLogger::removeOldLogfiles(std::string directory) {
+    // collect all files under this directory in a list
+    std::list<std::string> allLogFiles;
+    for (const auto & entry : std::filesystem::directory_iterator(directory)) {
+        allLogFiles.push_back(entry.path());
+    }
+
+    // check if we have more files than allowed by the backup count
+    if (allLogFiles.size() > FILE_BACKUP_COUNT) {
+        // sort the list alphabetically so the oldest file will be the first one
+        allLogFiles.sort();
+
+        // get the iterator for the list and search for old files to remove them
+        // remove so much files until we have the accepted number again
+        std::list<std::string>::iterator iter = allLogFiles.begin();
+        for (int i = 0; i < (allLogFiles.size() - FILE_BACKUP_COUNT); i++) {
+            // get the path to the file and remove it
+            std::string file = *iter;
+            std::remove(file.c_str());          // cast to const char*
+
+            // set the iterator on the next object for the next iteration
+            std::advance(iter, 1);
+        }
+    }
 }
 
 /**

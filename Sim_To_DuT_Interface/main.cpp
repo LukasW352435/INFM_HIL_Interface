@@ -17,5 +17,7 @@ int main() {
     interface.add_Connector(&duTConnector);
     std::cout << interface << std::endl;
 
+    DuTLogger::logMessage("Shut down application", LOG_LEVEL::INFO);
+
     return 0;
 }
