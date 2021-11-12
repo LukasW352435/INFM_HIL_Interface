@@ -6,20 +6,22 @@
 
 #include <utility>
 
-SimEvent::SimEvent() : SimEvent("", "", "") {
-}
+namespace sim_interface {
+    SimEvent::SimEvent() : SimEvent("", "", "") {
+    }
 
-SimEvent::SimEvent(std::string operation, std::string value, std::string origin) :
-        operation(std::move(operation)),
-        value(std::move(value)),
-        origin(std::move(origin)) {
-    current = std::time(nullptr);
-}
+    SimEvent::SimEvent(std::string operation, std::string value, std::string origin) :
+            operation(std::move(operation)),
+            value(std::move(value)),
+            origin(std::move(origin)) {
+        current = std::time(nullptr);
+    }
 
-std::ostream &operator<<(std::ostream &os, const SimEvent &simEvent) {
-    os << "Operation: " << simEvent.operation << std::endl;
-    os << "Value: " << simEvent.value << std::endl;
-    os << "Origin: " << simEvent.origin << std::endl;
-    os << "Current: " << std::ctime(&simEvent.current) << std::endl;
-    return os;
+    std::ostream &operator<<(std::ostream &os, const SimEvent &simEvent) {
+        os << "Operation: " << simEvent.operation << std::endl;
+        os << "Value: " << simEvent.value << std::endl;
+        os << "Origin: " << simEvent.origin << std::endl;
+        os << "Current: " << std::ctime(&simEvent.current) << std::endl;
+        return os;
+    }
 }

@@ -19,9 +19,9 @@
 
 #include "DefaultApi.h"
 
-namespace thi::dummy_dut::api {
+namespace dummy_dut::rest::api {
 
-    using namespace thi::dummy_dut::model;
+    using namespace dummy_dut::rest::model;
 
     DefaultApi::DefaultApi() {
     }

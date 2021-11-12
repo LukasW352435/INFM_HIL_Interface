@@ -28,7 +28,7 @@
 #include "RESTDummyConnector.h"
 #include "ReceiveEndpoint.h"
 
-namespace thi::dut_connector::rest_dummy {
+namespace sim_interface::dut_connector::rest_dummy {
     /**
      * Construct a connector to the REST Dummy DuT with given config, init curl lib for use
      *
@@ -69,10 +69,10 @@ namespace thi::dut_connector::rest_dummy {
     /**
      * Return some basic information like name, version and a short description of this connector
      *
-     * @return DuTInfo containing information about this DuT connector
+     * @return ConnectorInfo containing information about this DuT connector
      */
-    DuTInfo RESTDummyConnector::getDuTInfo() {
-        DuTInfo info(
+    ConnectorInfo RESTDummyConnector::getConnectorInfo() {
+        ConnectorInfo info(
                 "REST Dummy Connector",
                 0x0000001,
                 "Sample dummy connector to mirror messages to a REST API with the ability to view in the browser");

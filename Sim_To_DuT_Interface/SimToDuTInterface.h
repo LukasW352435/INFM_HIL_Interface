@@ -10,33 +10,35 @@
 #include <list>
 #include <iterator>
 
-class SimToDuTInterface {
-public:
-    SimToDuTInterface();
+namespace sim_interface {
+    class SimToDuTInterface {
+    public:
+        SimToDuTInterface();
 
-    void addConnector(DuTConnector *duTConnector);
+        void addConnector(dut_connector::DuTConnector *duTConnector);
 
-    void setSimComHandler(SimComHandler *simComHandler);
+        void setSimComHandler(SimComHandler *simComHandler);
 
-    void run();
+        void run();
 
-    friend std::ostream &operator<<(std::ostream &os, const SimToDuTInterface &interface);
+        friend std::ostream &operator<<(std::ostream &os, const SimToDuTInterface &interface);
 
-    std::shared_ptr<SharedQueue<SimEvent>> getQueueDuTToSim();
+        std::shared_ptr<SharedQueue<SimEvent>> getQueueDuTToSim();
 
-    std::shared_ptr<SharedQueue<SimEvent>> getQueueSimToInterface();
+        std::shared_ptr<SharedQueue<SimEvent>> getQueueSimToInterface();
 
-private:
-    std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim;
-    std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface;
-    SimComHandler *simComHandler = nullptr;
-    std::list<DuTConnector *> duTConnectors;
+    private:
+        std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim;
+        std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface;
+        SimComHandler *simComHandler = nullptr;
+        std::list<dut_connector::DuTConnector *> duTConnectors;
 
-    void sendEventToConnector(const SimEvent &event);
+        void sendEventToConnector(const SimEvent &event);
 
-    [[noreturn]] void handleEventsFromSim();
+        [[noreturn]] void handleEventsFromSim();
 
-    [[noreturn]] void handleEventsFromDuT();
-};
+        [[noreturn]] void handleEventsFromDuT();
+    };
+}
 
 #endif //SIM_TO_DUT_INTERFACE_SIMTODUTINTERFACE_H

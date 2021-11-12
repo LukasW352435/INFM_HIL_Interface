@@ -24,7 +24,7 @@ using boost::property_tree::ptree;
 using boost::property_tree::read_json;
 using boost::property_tree::write_json;
 
-namespace thi::dummy_dut::model {
+namespace dummy_dut::rest::model {
 
     Message::Message() {
         m_Key = "";

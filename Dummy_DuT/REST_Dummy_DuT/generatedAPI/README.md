@@ -19,8 +19,8 @@ restbed
 
 
 ## Namespaces
-thi::dummy_dut::api
-thi::dummy_dut::model
+dummy_dut::rest::api
+dummy_dut::rest::model
 
 ## Generation
 Perform request [here](http://api.openapi-generator.tech/index.html), framework `cpp-restbed-server`
@@ -28,8 +28,8 @@ Perform request [here](http://api.openapi-generator.tech/index.html), framework 
 {
   "openAPIUrl": "https://cdn.discordapp.com/attachments/900032368671350794/900425969381302312/REST_dummy_DuT.yaml",
   "options": {
-    "apiPackage": "thi::dummy_dut::api",
-    "modelPackage": "thi::dummy_dut::model"
+    "apiPackage": "dummy_dut::rest::api",
+    "modelPackage": "dummy_dut::rest::model"
   }
 }
 ```

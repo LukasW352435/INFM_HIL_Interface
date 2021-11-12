@@ -33,7 +33,6 @@
 #include "apiImpl/DefaultApiImpl.h"
 
 using namespace restbed;
-using namespace thi::dummy_dut;
 
 #define PORT 9090
 
@@ -52,12 +51,12 @@ int main(const int, const char **) {
     std::cout << "Reading config from " << path << std::endl;
     std::ifstream file(path + "/config");
     std::set<std::string> operations(std::istream_iterator<Line>{file}, std::istream_iterator<Line>{});
-    for (auto op: operations) {
+    for (const auto& op: operations) {
         std::cout << "OP: " << op << std::endl;
     }
 
     std::cout << "Starting on port " << PORT << std::endl;
-    auto defaultAPI = new api_impl::DefaultApiImpl(PORT, operations);
+    auto defaultAPI = new dummy_dut::rest::impl::DefaultApiImpl(PORT, operations);
 
     return EXIT_SUCCESS;
 }

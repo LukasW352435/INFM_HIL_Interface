@@ -32,7 +32,7 @@
 #include <curl/curl.h>
 #include <thread>
 
-namespace thi::dut_connector::rest_dummy {
+namespace sim_interface::dut_connector::rest_dummy {
     class RESTDummyConnector : public DuTConnector {
 
     public:
@@ -42,7 +42,7 @@ namespace thi::dut_connector::rest_dummy {
 
         void handleEvent(const SimEvent &e) override;
 
-        DuTInfo getDuTInfo() override;
+        ConnectorInfo getConnectorInfo() override;
 
     private:
         std::unique_ptr<ReceiveEndpoint> receiveEndpoint;

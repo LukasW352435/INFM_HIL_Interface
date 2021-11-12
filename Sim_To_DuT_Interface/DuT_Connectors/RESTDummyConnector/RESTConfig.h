@@ -29,7 +29,7 @@
 #include <string>
 #include "../ConnectorConfig.h"
 
-namespace thi::dut_connector::rest_dummy {
+namespace sim_interface::dut_connector::rest_dummy {
     class RESTConfig : public ConnectorConfig {
     public:
         std::string baseUrlDuT;
