@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Sim_To_DuT_Interface.h"
+#include "SimToDuTInterface.h"
 #include <thread>
 #include "DuT_Connectors/RESTDummyConnector/RESTDummyConnector.h"
 #include "DuT_Connectors/RESTDummyConnector/RESTConfig.h"
