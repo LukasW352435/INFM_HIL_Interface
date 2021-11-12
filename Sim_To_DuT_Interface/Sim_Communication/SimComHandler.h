@@ -12,12 +12,17 @@
 #include <thread>
 #include <chrono>
 #include <zmq.hpp>
-
+#include <boost/serialization/serialization.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
 namespace sim_interface {
     class SimComHandler {
     public:
-        SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, std::string socketSimAddress,
-                      zmq::context_t &context_sub);
+        SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const std::string& socketSimAddressSub,
+                      zmq::context_t &context_sub , const std::string& socketSimAddressPub,
+                      zmq::context_t &context_pub);
 
         // async send event to simulation
         void sendEventToSim(const SimEvent &simEvent);
@@ -31,7 +36,8 @@ namespace sim_interface {
         // send an event to the interface
         void sendEventToInterface(const SimEvent &simEvent);
 
-        zmq::socket_t socketSim_;
+        zmq::socket_t socketSimSub_;
+        zmq::socket_t socketSimPub_;
         zmq::context_t context_test;
 
         // used by sendEventToInterface

@@ -9,9 +9,11 @@ int main() {
     // Create interface
     sim_interface::SimToDuTInterface interface;
     // Create simComHandler
-    std::string socketSimAddress = "tcp://localhost:7777";
+    std::string socketSimAddressSub = "tcp://localhost:7777";
     zmq::context_t context_sub(1);
-    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddress, context_sub);
+    std::string socketSimAddressPub = "tcp://*:8888";
+    zmq::context_t context_pub(1);
+    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddressSub, context_sub, socketSimAddressPub , context_pub);
 
     interface.setSimComHandler(&simComHandler);
 
@@ -22,7 +24,9 @@ int main() {
     config.port = 9091;
     config.operations = {"Test"};
 
-    std::string Test = simComHandler.getMessageFromSim();
+
+    std::string Test = "Dies ist ein Test string";
+      //Test = simComHandler.getMessageFromSim();
     std::cout << "Test:: " << Test << std::endl;
     sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);
     auto event = sim_interface::SimEvent();
