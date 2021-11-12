@@ -17,5 +17,4 @@ add_executable(${PROJECT_NAME} main.cpp
         DuTLogger/DuTLogger.h
         DuTLogger/DuTLogger.cpp)
         
-target_link_libraries(${PROJECT_NAME} PRIVATE quill::quill)
-target_link_libraries(${PROJECT_NAME} libs)
+target_link_libraries(${PROJECT_NAME} libs quill::quill)
