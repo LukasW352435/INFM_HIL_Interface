@@ -14,21 +14,25 @@
 #include <zmq.hpp>
 
 namespace sim_interface {
-class SimComHandler {
-public:
-    SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, std::string socketSimAddress, zmq::context_t &context_sub);
+    class SimComHandler {
+    public:
+        SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, std::string socketSimAddress,
+                      zmq::context_t &context_sub);
 
         // async send event to simulation
         void sendEventToSim(const SimEvent &simEvent);
 
-    // run async receive incoming events
-    void run();
-     std::string getMessageFromSim();
-private:
-    // send an event to the interface
-    void sendEventToInterface(const SimEvent &simEvent);
-    zmq::socket_t socketSim_;
-    zmq::context_t context_test;
+        // run async receive incoming events
+        void run();
+
+        std::string getMessageFromSim();
+
+    private:
+        // send an event to the interface
+        void sendEventToInterface(const SimEvent &simEvent);
+
+        zmq::socket_t socketSim_;
+        zmq::context_t context_test;
 
         // used by sendEventToInterface
         std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface;

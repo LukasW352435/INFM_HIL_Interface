@@ -11,7 +11,7 @@ int main() {
     // Create simComHandler
     std::string socketSimAddress = "tcp://localhost:7777";
     zmq::context_t context_sub(1);
-    SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddress, context_sub);
+    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddress, context_sub);
 
     //interface.setSimComHandler(&simComHandler);
 
