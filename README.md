@@ -29,3 +29,4 @@ git clone git@github.com:LukasW352435/INFM_HIL_Interface.git && cd INFM_HIL_Inte
 - libssl-dev
 - libcurl4-openssl-dev
 - restbed (is built from source)
+- libzmq3-dev (ZeroMQ)
