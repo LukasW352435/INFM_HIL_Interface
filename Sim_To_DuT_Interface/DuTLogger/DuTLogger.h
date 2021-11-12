@@ -8,8 +8,8 @@
  * @version 1.0
  */
 
-#ifndef TESTLOGGER_DUTLOGGER_H
-#define TESTLOGGER_DUTLOGGER_H
+#ifndef SIM_TO_DUT_INTERFACE_DUTLOGGER_H
+#define SIM_TO_DUT_INTERFACE_DUTLOGGER_H
 #include <string>
 #include "quill/Quill.h"
 #include <list>
@@ -32,13 +32,14 @@ static const std::string PATH_DATA_LOG = "/logs/data";
  * Mode "w" creates a new file or overwrite the existing file at every start of the application.
  * In mode "a" the logger tries to append it's content on an existing file.
  */
-static const std::string FILE_MODE_CONSOLE = "a";
+static const std::string FILE_MODE_CONSOLE = "w";
+
 /**
  * This constant defines the mode how the logger will open the logfile of the data logging.
  * Mode "w" creates a new file or overwrite the existing file at every start of the application.
  * In mode "a" the logger tries to append it's content on an existing file.
  */
-static const std::string FILE_MODE_DATA = "a";
+static const std::string FILE_MODE_DATA = "w";
 
 /**
  * This constant defines the maximum number of files in a logging directory. If there are more
@@ -88,7 +89,7 @@ static bool startedQuillEngine = false;
  * In a future version of this logger it will be possible to log event objects. That funcion haven't been implemented
  * so far because the definition of these events is not finished yet.
  *
- * The logger will create files where necessary message will be stored. The message provider can choose if the
+ * The logger will create files if necessary in which the messages will be stored. The message provider can choose if the
  * message should be logged in the file or not. The logger notices old logfiles and will remove them if the real
  * number of logfiles is higher than the configured backup count.
  *
@@ -124,6 +125,7 @@ private:
     // help functions
     static void logWithLevel(quill::Logger* log, std::string msg, LOG_LEVEL level);
     static quill::Handler* getHandlerType(LOG_LEVEL_CHANGE_ON type);
+    static std::string getCurrentTimestamp();
 
     // file management
     static std::string getLoggingPath(LOGGER_TYPE type);
@@ -131,5 +133,4 @@ private:
     static void removeOldLogfiles(std::string directory);
 };
 
-
-#endif //TESTLOGGER_DUTLOGGER_H
+#endif //SIM_TO_DUT_INTERFACE_DUTLOGGER_H

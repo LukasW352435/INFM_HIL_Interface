@@ -19,7 +19,7 @@ quill::Logger* DuTLogger::dataLogger = DuTLogger::createDataLogger();
 
 
 /**
- * Starts the quill engine. Won't start it will the engine is already running.
+ * Starts the quill engine. Won't start the engine again if it's already running.
  */
 void DuTLogger::startEngine() {
     // initialize everything if it hasn't been done yet
@@ -34,13 +34,13 @@ void DuTLogger::startEngine() {
 
 /**
  * Creates a handler to write messages in the console.
- * This handler can be used to connect it to a logger.
+ * This handler can be connected to a logger.
  *
- * @return a hadler to log messages in the console
+ * @return a handler to log messages in the console
  */
 quill::Handler* DuTLogger::buildConsoleHandler() {
     // build a handler for the console
-    quill::Handler* newHandler = consoleHandler = quill::stdout_handler("consoleHandler");
+    quill::Handler* newHandler = quill::stdout_handler("consoleHandler");
     newHandler->set_log_level(DEFAULT_CONSOLE_LOG_LEVEL);
 
     // modify the pattern for the logger
@@ -50,11 +50,11 @@ quill::Handler* DuTLogger::buildConsoleHandler() {
 }
 
 /**
- * Creates a handler to write messages in a file.
- * This handler can be used to connect it to a logger.
- * It will create a file for this day, if it hasn't been done yet.
+ * Creates a handler to write messages into a file.
+ * This handler can be connected to a logger.
+ * Depending on the configuration the handler will create a new file for every start or try to append on the current one.
  *
- * @return a hadler to log messages in a file
+ * @return a handler to log messages in a file
  */
 quill::Handler* DuTLogger::buildFileHandler() {
     // a second handler for the file is needed
@@ -83,7 +83,7 @@ quill::Logger* DuTLogger::createConsoleLogger(const char* name, bool withFileHan
     startEngine();
 
     // check if the new logger needs to write the console log to a file
-    // if it needs it, we have to build the logger a different way
+    // if needed, we have to build the logger in a different way
     quill::Logger* newLogger;
     if (withFileHandler) {
         newLogger = quill::create_logger(name, {consoleHandler, consoleFileHandler});
@@ -103,7 +103,7 @@ quill::Logger* DuTLogger::createConsoleLogger(const char* name, bool withFileHan
 /**
  * Creates a logger to log a specific data object (like events; not normal messages!) into a file.
  * The logger will be build with all necessary handlers.
- * It will create a file for this day, if it hasn't been done yet.
+ * Depending on the configuration the handler will create a new file for every start or try to append on the current one.
  *
  * @return a logger to log data objects into a file
  */
@@ -168,9 +168,9 @@ std::string DuTLogger::getLoggingPath(LOGGER_TYPE type) {
  * It deletes old logfiles in the given logging directory.
  *
  * Which files will be deleted depends on the configured backup count. If the current number of files is higher
- * than the allowed number by the backup count, old files will be deleted util we have the allowed number again.
+ * than the allowed number by the backup count, old files will be deleted until we have the allowed number again.
  *
- * Please notice that on every start of the application the file handlers will be automatically create a new file,
+ * Please notice that on every start of the application the file handlers will automatically create a new file,
  * if there isn't already a file for the day.
  *
  * @param directory old logfiles will be deleted in this directory
@@ -275,9 +275,9 @@ quill::Handler* DuTLogger::getHandlerType(LOG_LEVEL_CHANGE_ON type) {
  * @param level the logging level for this message
  */
 void DuTLogger::logMessage(std::string msg, LOG_LEVEL level) {
-    // hand the message with the right level to the quill framework
-    // the user didn't choose if it has to be logged in the logfile
-    // -> try to log it with the level to the file, the level on the fileLogger will decide if the msg will be written
+    // hand the message with the right level to the quill framework.
+    // if the user didn't choose to log the message into the logfile -> try to log it with the level
+    // to the file, the level on the fileLogger will decide if the msg will be written
     logWithLevel(consoleFileLogger, msg, level);
 }
 
