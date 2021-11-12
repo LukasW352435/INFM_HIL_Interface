@@ -4,12 +4,15 @@
 #include "DuT_Connectors/RESTDummyConnector/RESTDummyConnector.h"
 #include "DuT_Connectors/RESTDummyConnector/RESTConfig.h"
 #include "Utility/SharedQueue.h"
-
+#include "Sim_Communication/SimComHandler.h"
 int main() {
     // Create interface
     sim_interface::SimToDuTInterface interface;
     // Create simComHandler
-    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface());
+    std::string socketSimAddress = "tcp://localhost:7777";
+    zmq::context_t context_sub(1);
+    SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddress, context_sub);
+
     //interface.setSimComHandler(&simComHandler);
 
     // Create DuT Devices
@@ -19,6 +22,8 @@ int main() {
     config.port = 9091;
     config.operations = {"Left Abc"};
 
+    std::string Test = simComHandler.getMessageFromSim();
+    
     sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);
     auto event = sim_interface::SimEvent();
     event.operation = "Left Abc";
