@@ -32,7 +32,7 @@
 #include <memory>
 #include "../../Events/SimEvent.h"
 
-namespace thi::dut_connector::rest_dummy {
+namespace sim_interface::dut_connector::rest_dummy {
     class ReceiveApiResource : public restbed::Resource {
     public:
         explicit ReceiveApiResource(std::function<void(const SimEvent &)> function);

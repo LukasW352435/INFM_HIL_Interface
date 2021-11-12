@@ -28,10 +28,10 @@
 
 #include "Message.h"
 
-namespace thi::dummy_dut::messages {
-    class MessageWithTimestamp : thi::dummy_dut::model::Message {
+namespace dummy_dut::rest::messages {
+    class MessageWithTimestamp : dummy_dut::rest::model::Message {
     public:
-        explicit MessageWithTimestamp(thi::dummy_dut::model::Message *message);
+        explicit MessageWithTimestamp(dummy_dut::rest::model::Message *message);
 
         std::string toTableEntry();
 

@@ -7,41 +7,42 @@
 #include <utility>
 #include <zmq.hpp>
 
-SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, std::string socketSimAddress, zmq::context_t &context_sub)
-        : queueSimToInterface(std::move(queueSimToInterface)),  socketSim_(context_sub, zmq::socket_type::sub) {
+namespace sim_interface {
+  SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, std::string socketSimAddress, zmq::context_t &context_sub)
+          : queueSimToInterface(std::move(queueSimToInterface)),  socketSim_(context_sub, zmq::socket_type::sub) {
+            //create a subscriber socket
+            // zmq::context_t context_sub(1);
+            //  zmq::socket_type type_sub = zmq::socket_type::sub;
+            //  zmq::socket_t socket_sub(context_sub,type_sub);
+            // socket_sub.setsockopt(ZMQ_SUBSCRIBE, "" ,0);
+            socketSim_.setsockopt(ZMQ_SUBSCRIBE, "" ,0);
+            
+            // Connect to publisher
+            std::cout << "Connecting to " << socketSimAddress << " . . ." << std::endl;
+            //  socket_sub.connect(socketSimAdress);
+            socketSim_.connect(socketSimAddress);
+            // socketSim_ = socket_sub;
+            //  std::string t =  SimComHandler::getMessageFromSim(socketSim_);
+            
+            //  std::cout << "Wuhhh " + t <<  std::endl;
+          }
 
-    //create a subscriber socket
-   // zmq::context_t context_sub(1);
-  //  zmq::socket_type type_sub = zmq::socket_type::sub;
-  //  zmq::socket_t socket_sub(context_sub,type_sub);
-   // socket_sub.setsockopt(ZMQ_SUBSCRIBE, "" ,0);
-    socketSim_.setsockopt(ZMQ_SUBSCRIBE, "" ,0);
 
-    // Connect to publisher
-    std::cout << "Connecting to " << socketSimAddress << " . . ." << std::endl;
-  //  socket_sub.connect(socketSimAdress);
-    socketSim_.connect(socketSimAddress);
-   // socketSim_ = socket_sub;
-  //  std::string t =  SimComHandler::getMessageFromSim(socketSim_);
+    void SimComHandler::run() {
+        // TODO async receive events from the Simulation and send them to the interface
+        SimEvent event("Test", "Test", "Test");
+        sendEventToInterface(event);
+    }
 
+    void SimComHandler::sendEventToSim(const SimEvent &simEvent) {
+        // TODO implementation of sending an event to the simulation
+        std::cout << "Async Sending of Event..." << std::endl;
+        std::cout << simEvent << "lol";
+    }
 
-    //  std::cout << "Wuhhh " + t <<  std::endl;
-}
-
-void SimComHandler::run() {
-    // TODO async receive events from the Simulation and send them to the interface
-    SimEvent event("Test", "Test", "Test");
-    sendEventToInterface(event);
-}
-
-void SimComHandler::sendEventToSim(const SimEvent &simEvent) {
-    // TODO implementation of sending an event to the simulation
-    std::cout << "Async Sending of Event..." << std::endl;
-    std::cout << simEvent << "lol";
-}
-
-void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
-    queueSimToInterface->push(simEvent);
+    void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
+        queueSimToInterface->push(simEvent);
+    }
 }
 
 

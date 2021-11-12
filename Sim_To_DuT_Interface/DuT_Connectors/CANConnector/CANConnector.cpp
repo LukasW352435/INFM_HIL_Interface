@@ -3,3 +3,7 @@
 //
 
 #include "CANConnector.h"
+
+namespace sim_interface::dut_connector::can {
+
+}

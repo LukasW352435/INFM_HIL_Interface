@@ -13,12 +13,13 @@
 #include <chrono>
 #include <zmq.hpp>
 
+namespace sim_interface {
 class SimComHandler {
 public:
     SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, std::string socketSimAddress, zmq::context_t &context_sub);
 
-    // async send event to simulation
-    void sendEventToSim(const SimEvent &simEvent);
+        // async send event to simulation
+        void sendEventToSim(const SimEvent &simEvent);
 
     // run async receive incoming events
     void run();
@@ -29,8 +30,9 @@ private:
     zmq::socket_t socketSim_;
     zmq::context_t context_test;
 
-    // used by sendEventToInterface
-    std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface;
-};
+        // used by sendEventToInterface
+        std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface;
+    };
+}
 
 #endif //SIM_TO_DUT_INTERFACE_SIMCOMHANDLER_H

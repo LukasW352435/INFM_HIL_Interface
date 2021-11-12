@@ -6,10 +6,10 @@ add_subdirectory(RESTDummyConnector)
 target_sources(libs
         PRIVATE
         DuTConnector.cpp
-        DuTInfo.cpp
+        ConnectorInfo.cpp
         PUBLIC
         DuTConnector.h
-        DuTInfo.h
+        ConnectorInfo.h
         ConnectorConfig.h)
 
 target_include_directories(libs PUBLIC ${CMAKE_CURRENT_LIST_DIR})

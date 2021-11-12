@@ -19,7 +19,7 @@
 #include <memory>
 #include <boost/property_tree/ptree.hpp>
 
-namespace thi::dummy_dut::model {
+namespace dummy_dut::rest::model {
 
 /// <summary>
 /// 

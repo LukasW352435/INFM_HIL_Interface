@@ -7,28 +7,29 @@
 #include "Sim_Communication/SimComHandler.h"
 int main() {
     // Create interface
-    SimToDuTInterface interface;
+    sim_interface::SimToDuTInterface interface;
     // Create simComHandler
     std::string socketSimAddress = "tcp://localhost:7777";
     zmq::context_t context_sub(1);
     SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddress, context_sub);
+
     //interface.setSimComHandler(&simComHandler);
 
     // Create DuT Devices
-    thi::dut_connector::rest_dummy::RESTConfig config;
+    sim_interface::dut_connector::rest_dummy::RESTConfig config;
     config.baseUrlDuT = "http://localhost:9090";
     config.baseCallbackUrl = "http://172.17.0.1";
     config.port = 9091;
     config.operations = {"Left Abc"};
 
-
     std::string Test = simComHandler.getMessageFromSim();
-    thi::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);
-    auto event = SimEvent();
+    
+    sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);
+    auto event = sim_interface::SimEvent();
     event.operation = "Left Abc";
     event.value = "xyz";
     restDummyConnector.handleEvent(event);
-    auto event2 = SimEvent();
+    auto event2 = sim_interface::SimEvent();
     event.operation = "Left Abc2";
     event.value = "xyz";
     restDummyConnector.handleEvent(event);

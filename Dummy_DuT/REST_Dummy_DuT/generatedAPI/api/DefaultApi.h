@@ -30,9 +30,9 @@
 #include "Message.h"
 #include <string>
 
-namespace thi::dummy_dut::api {
+namespace dummy_dut::rest::api {
 
-using namespace thi::dummy_dut::model;
+using namespace dummy_dut::rest::model;
 
 /// <summary>
 /// Load messages to view received messages and send from DuT

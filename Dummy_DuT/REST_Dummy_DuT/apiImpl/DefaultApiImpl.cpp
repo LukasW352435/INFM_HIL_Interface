@@ -29,10 +29,10 @@
 #include <iostream>
 #include <curl/curl.h>
 
-using namespace thi::dummy_dut;
+using namespace dummy_dut::rest;
 
 
-namespace thi::dummy_dut::api_impl {
+namespace dummy_dut::rest::impl {
     /**
      * Construct all ApiResources and publish them on the restbed service.
      * Register all handlers with their ApiResources.
