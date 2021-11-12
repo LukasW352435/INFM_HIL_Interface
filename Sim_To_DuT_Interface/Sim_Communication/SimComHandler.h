@@ -30,7 +30,7 @@ namespace sim_interface {
         // run async receive incoming events
         void run();
 
-        std::string getMessageFromSim();
+
 
     private:
         // send an event to the interface

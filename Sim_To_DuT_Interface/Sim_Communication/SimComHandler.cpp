@@ -49,32 +49,6 @@ namespace sim_interface {
 
     void SimComHandler::run() {
         // TODO async receive events from the Simulation and send them to the interface
-        SimEvent event("Test", "SONNTAG", "Test");
-        sendEventToInterface(event);
-    }
-
-    void SimComHandler::sendEventToSim(const SimEvent &simEvent) {
-        //BOYS hier müssen wir hin
-        // TODO implementation of sending an event to the simulation
-        std::cout << "Async Sending of Event..." << std::endl;
-        std::cout << simEvent << "lol";
-            // Send it off to any subscribers
-        std::cout << "Waiting to Send " << std::endl;
-        socketSimPub_.send(zmq::buffer("Value: " + simEvent.value + " Operation: " + simEvent.operation));
-    }
-
-    void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
-        queueSimToInterface->push(simEvent);
-    }
-
-    std::string SimComHandler::getMessageFromSim() {
-
-
-
-     //   zmq::message_t message_sub;
-
-     //   socketSimSub_.recv(message_sub, zmq::recv_flags::none);
-
 
 
         zmq::message_t reply;
@@ -97,9 +71,44 @@ namespace sim_interface {
         } catch (int e) {
             std::cout << "EXCEPTION " << e << std::endl;
         }
-        std::cout << receiveMap.at("Speed")<< std::endl;
+        std::cout << "Value " << receiveMap["Speed"]<< std::endl;
+      //  std::string test  = receiveMap["Speed"].which();
+        std::vector<std::string> keyVektor;
+        std::vector<boost::variant<int, double, std::string>> valueVektor;
+        for (auto const& element: receiveMap) {
+            keyVektor.push_back(element.first);
+            valueVektor.push_back(element.second);
+            std::string keyAsString = element.first;
 
+            auto valueAsAny =   element.second;
+            std::stringstream stringStreamValue ;
+            stringStreamValue <<  valueAsAny;
+
+            std::cout << "value: " << stringStreamValue.str() << std::endl;
+            SimEvent event(keyAsString, stringStreamValue.str(), "Simulation");
+        }
+
+
+
+
+        sendEventToInterface(event);
     }
+
+    void SimComHandler::sendEventToSim(const SimEvent &simEvent) {
+        //BOYS hier müssen wir hin
+        // TODO implementation of sending an event to the simulation
+        std::cout << "Async Sending of Event..." << std::endl;
+        std::cout << simEvent << "lol";
+            // Send it off to any subscribers
+        std::cout << "Waiting to Send " << std::endl;
+
+        socketSimPub_.send(zmq::buffer("Value: " + simEvent.value + " Operation: " + simEvent.operation));
+    }
+
+    void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
+        queueSimToInterface->push(simEvent);
+    }
+
 
 
 

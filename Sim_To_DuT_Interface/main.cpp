@@ -25,10 +25,8 @@ int main() {
     config.operations = {"Test"};
 
 
-    std::string Test = "Dies ist ein Test string";
-      //Test = simComHandler.getMessageFromSim();
-    std::cout << "Test:: " << Test << std::endl;
     sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);
+    /*
     auto event = sim_interface::SimEvent();
     event.operation = "Test";
     event.value = Test;
@@ -37,6 +35,7 @@ int main() {
     event.operation = "Indicator Right";
     event.value = "xyz";
     restDummyConnector.handleEvent(event);
+*/
     interface.addConnector(&restDummyConnector);
 
     std::cout << interface << std::endl;
