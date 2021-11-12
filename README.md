@@ -21,3 +21,4 @@ Logging of the communication is included in the interface.
 - libssl-dev
 - libcurl4-openssl-dev
 - restbed (is built from source)
+- libzmq3-dev (ZeroMQ)
