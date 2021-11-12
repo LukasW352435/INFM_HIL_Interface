@@ -1,6 +1,12 @@
-//
-// Created by marco on 26.10.21.
-//
+/**
+ * DuT-Logger
+ *
+ * Contains the class DuTLogger and all necessary variables.
+ * For better documentation see the class "DuTLogger" and it's functions.
+ *
+ * @author Marco Keul
+ * @version 1.0
+ */
 
 #ifndef TESTLOGGER_DUTLOGGER_H
 #define TESTLOGGER_DUTLOGGER_H
@@ -9,7 +15,16 @@
 #include <list>
 #include <filesystem>
 
+/**
+ * Defines the relative path where the logfiles will be created.
+ * In this path the log messages will be logged.
+ */
 static const std::string PATH_CONSOLE_LOG = "/logs/console";
+
+/**
+ * Defines the relative path where the logfiles will be created.
+ * In this path the data objects will be logged.
+ */
 static const std::string PATH_DATA_LOG = "/logs/data";
 
 /**
@@ -25,6 +40,10 @@ static const std::string FILE_MODE_CONSOLE = "a";
  */
 static const std::string FILE_MODE_DATA = "a";
 
+/**
+ * This constant defines the maximum number of files in a logging directory. If there are more
+ * logfiles under the underlying path, old ones will be deleted. (like a date based file rotation)
+ */
 static const int FILE_BACKUP_COUNT = 10;
 
 /**
@@ -34,6 +53,9 @@ enum LOG_LEVEL{
     NONE, DEBUG, INFO, WARNING, ERROR, CRITICAL
 };
 
+/**
+ * Defines the type and so the task for the logger.
+ */
 enum LOGGER_TYPE {
     CONSOLE, DATA
 };
@@ -58,7 +80,21 @@ static const quill::LogLevel DEFAULT_FILE_LOG_LEVEL = quill::LogLevel::Info;
 // Little variable to remember that the quill engine has been started.
 static bool startedQuillEngine = false;
 
-
+/**
+ * This logger is a tool with specialized functions to log and store messages for all elements of the
+ * Sim_To_DuT_Interface. The logger and all of it's functions are static so it's not necessary to create instances
+ * of the logger to write a message.
+ *
+ * In a future version of this logger it will be possible to log event objects. That funcion haven't been implemented
+ * so far because the definition of these events is not finished yet.
+ *
+ * The logger will create files where necessary message will be stored. The message provider can choose if the
+ * message should be logged in the file or not. The logger notices old logfiles and will remove them if the real
+ * number of logfiles is higher than the configured backup count.
+ *
+ * @author Marco Keul
+ * @version 1.0
+ */
 class DuTLogger {
 
 public:
@@ -92,7 +128,6 @@ private:
     // file management
     static std::string getLoggingPath(LOGGER_TYPE type);
     static std::string initializeLoggingPath(LOGGER_TYPE type);
-    static void createDirectoryIfNecessary(const std::string path);
     static void removeOldLogfiles(std::string directory);
 };
 
