@@ -3,6 +3,7 @@
 
 # CMake
 cmake-build-*/
+build
 
 # IntelliJ
 out/

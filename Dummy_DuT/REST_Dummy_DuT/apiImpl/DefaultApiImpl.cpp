@@ -103,8 +103,9 @@ namespace thi::dummy_dut::api_impl {
         std::cout << "Received message from dummy DuT: " << message->getKey() << ": " << message->getStatus()
                   << std::endl;
         auto messageJson = message->toJsonString(true);
-        for (auto callback: instance->registeredInterfaces.getCallbacks()) {
-            instance->curlThreads.emplace_back([&] { instance->callUrl(callback, messageJson); });
+        for (const auto &callback: instance->registeredInterfaces.getCallbacks()) {
+            instance->curlThreads.emplace_back(
+                    [instance, callback, messageJson] { instance->callUrl(callback, messageJson); });
         }
         return {201, ""};
     }
@@ -135,7 +136,7 @@ namespace thi::dummy_dut::api_impl {
      */
     std::pair<int, std::string>
     DefaultApiImpl::addCallbackHandler(DefaultApiImpl *instance, const std::string &callback) {
-        if (callback.empty() || !(callback.starts_with("http://") || callback.starts_with("https://"))) {
+        if (callback.empty() || !(callback.compare(0, 8, "http://") || callback.compare(0, 9, "https://"))) {
             return {400, ""};
         }
         if (instance->registeredInterfaces.addInterfaceCallback(callback)) {
@@ -153,7 +154,7 @@ namespace thi::dummy_dut::api_impl {
      */
     std::pair<int, std::string>
     DefaultApiImpl::removeCallbackHandler(DefaultApiImpl *instance, const std::string &callback) {
-        if (callback.empty() || !(callback.starts_with("http://") || callback.starts_with("https://"))) {
+        if (callback.empty() || !(callback.compare(0, 8, "http://") || callback.compare(0, 9, "https://"))) {
             return {400, ""};
         }
         if (instance->registeredInterfaces.removeInterfaceCallback(callback)) {
@@ -177,7 +178,7 @@ namespace thi::dummy_dut::api_impl {
         }
         std::cout << "Received message from interface: " << message->getKey() << ": " << message->getStatus()
                   << std::endl;
-        if (instance->operations.find(message->getKey())->empty()) {
+        if (instance->operations.find(message->getKey()) == instance->operations.end()) {
             return {404, "Key not found"};
         }
 
@@ -201,7 +202,7 @@ namespace thi::dummy_dut::api_impl {
             curl_easy_setopt(handle, CURLOPT_USERAGENT, "REST_Dummy_DuT");
             curl_easy_setopt(handle, CURLOPT_POSTFIELDS, message.c_str());
             curl_easy_setopt(handle, CURLOPT_HTTPHEADER, curlJsonHeader);
-            curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, "PUT");
             curl_easy_setopt(handle, CURLOPT_TIMEOUT, 5);
 
             curl_easy_perform(handle);

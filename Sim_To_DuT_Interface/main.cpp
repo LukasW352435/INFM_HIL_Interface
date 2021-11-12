@@ -1,23 +1,49 @@
 #include <iostream>
 #include "Sim_To_DuT_Interface.h"
-#include "DuT_Connectors/DuT_Connector.h"
-#include "DuT_Connectors/DuT_Info.h"
+#include <thread>
+#include "DuT_Connectors/RESTDummyConnector/RESTDummyConnector.h"
+#include "DuT_Connectors/RESTDummyConnector/RESTConfig.h"
+#include "Utility/SharedQueue.h"
 #include "DuTLogger/DuTLogger.h"
 
 int main() {
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
+    
+    // Create interface
+    SimToDuTInterface interface;
+    // Create simComHandler
+    SimComHandler simComHandler(interface.getQueueSimToInterface());
+    //interface.setSimComHandler(&simComHandler);
 
-    Sim_To_DuT_Interface interface;
-    // TODO Init Sim_Com_Handler
-    // TODO Read Config and Create Connectors
-    DuT_Connector duTConnector;
-    DuT_Info info = duTConnector.get_DuT_Info();
+    // Create DuT Devices
+    thi::dut_connector::rest_dummy::RESTConfig config;
+    config.baseUrlDuT = "http://localhost:9090";
+    config.baseCallbackUrl = "http://172.17.0.1";
+    config.port = 9091;
+    config.operations = {"Left Abc"};
 
-    // add DuT to the interface
-    interface.add_Connector(&duTConnector);
+    thi::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);
+    auto event = SimEvent();
+    event.operation = "Left Abc";
+    event.value = "xyz";
+    restDummyConnector.handleEvent(event);
+    auto event2 = SimEvent();
+    event.operation = "Left Abc2";
+    event.value = "xyz";
+    restDummyConnector.handleEvent(event);
+    interface.addConnector(&restDummyConnector);
+
     std::cout << interface << std::endl;
 
-    DuTLogger::logMessage("Shut down application", LOG_LEVEL::INFO);
+    // Start simComHandler to receive events from the simulation
+    simComHandler.run();
 
+    // Start interface to receive/send events
+    interface.run();
+    
+    std::string s;
+    std::cin >> s;
+    
+    DuTLogger::logMessage("Shut down application", LOG_LEVEL::INFO);
     return 0;
 }

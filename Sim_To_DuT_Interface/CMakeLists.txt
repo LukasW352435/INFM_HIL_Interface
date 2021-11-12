@@ -2,18 +2,20 @@ cmake_minimum_required(VERSION 3.20)
 project(Sim_To_DuT_Interface)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS -pthread)
+
+add_library(libs "")
 
 add_subdirectory(DuTLogger/quill/quill)
-
-add_executable(Sim_To_DuT_Interface main.cpp
-        DuT_Connectors/DuT_Connector.cpp DuT_Connectors/DuT_Connector.h
-        Sim_Communication/Sim_Com_Handler.cpp Sim_Communication/Sim_Com_Handler.h
-        Sim_To_DuT_Interface.cpp Sim_To_DuT_Interface.h
-        DuT_Connectors/REST_Dummy_Connector/Rest_Dummy_Connector.cpp
-        DuT_Connectors/REST_Dummy_Connector/Rest_Dummy_Connector.h
-        DuT_Connectors/CAN_Connector/CAN_Connector.cpp DuT_Connectors/CAN_Connector/CAN_Connector.h
-        DuT_Connectors/DuT_Info.cpp DuT_Connectors/DuT_Info.h
+    
+add_subdirectory(DuT_Connectors)
+add_executable(${PROJECT_NAME} main.cpp
+        SimToDuTInterface.cpp SimToDuTInterface.h
+        Events/SimEvent.cpp Events/SimEvent.h
+        Sim_Communication/SimComHandler.cpp Sim_Communication/SimComHandler.h
+        Utility/SharedQueue.h
         DuTLogger/DuTLogger.h
         DuTLogger/DuTLogger.cpp)
-
+        
 target_link_libraries(${PROJECT_NAME} PRIVATE quill::quill)
+target_link_libraries(${PROJECT_NAME} libs)
