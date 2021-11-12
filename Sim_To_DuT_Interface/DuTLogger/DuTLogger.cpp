@@ -58,9 +58,9 @@ quill::Handler* DuTLogger::buildConsoleHandler() {
  */
 quill::Handler* DuTLogger::buildFileHandler() {
     // a second handler for the file is needed
-    std::string basicPath = currentLogpathConsole + "/Logfile.log";
+    std::string basicPath = currentLogpathConsole + "/Logfile_" + getCurrentTimestamp() + ".log";
     quill::Handler* newHandler = quill::file_handler(basicPath, FILE_MODE_CONSOLE,
-                                                     quill::FilenameAppend::Date);
+                                                     quill::FilenameAppend::None);
     newHandler->set_log_level(DEFAULT_FILE_LOG_LEVEL);
 
     // modify the pattern for the logger
@@ -109,8 +109,8 @@ quill::Logger* DuTLogger::createConsoleLogger(const char* name, bool withFileHan
  */
 quill::Logger* DuTLogger::createDataLogger() {
     // create a file handler to connect quill to a logfile
-    std::string basicPath = currentLogpathData + "/Logfile.log";
-    quill::Handler* file_handler = quill::file_handler(basicPath, FILE_MODE_DATA,quill::FilenameAppend::Date);
+    std::string basicPath = currentLogpathData + "/Logfile_" + getCurrentTimestamp() + ".log";
+    quill::Handler* file_handler = quill::file_handler(basicPath, FILE_MODE_DATA,quill::FilenameAppend::None);
 
     // configure the pattern of a line
     file_handler->set_pattern(QUILL_STRING("%(ascii_time) %(logger_name) - %(message)"),
@@ -336,4 +336,20 @@ void DuTLogger::logWithLevel(quill::Logger* log, std::string msg, LOG_LEVEL leve
         default:
             throw std::invalid_argument("Parsed unknown LOG_LEVEL <" + msg + ">");
     }
+}
+
+/**
+ * This function returns a string with the current time. This string can be used to name files.
+ *
+ * @return the current time as string
+ */
+std::string DuTLogger::getCurrentTimestamp() {
+    // look up the local time
+    auto t = std::time(nullptr);
+    auto timer = *std::localtime(&t);
+
+    // write it formatted in a stream and convert that to a string so we can return it
+    std::ostringstream oss;
+    oss << std::put_time(&timer, "%Y-%m-%d_%H-%M-%S");
+    return oss.str();
 }

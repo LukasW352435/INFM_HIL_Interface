@@ -45,7 +45,7 @@ static const std::string FILE_MODE_DATA = "w";
  * This constant defines the maximum number of files in a logging directory. If there are more
  * logfiles under the underlying path, old ones will be deleted. (like a date based file rotation)
  */
-static const int FILE_BACKUP_COUNT = 10;
+static const int FILE_BACKUP_COUNT = 4;
 
 /**
  * Defines the level of logging
