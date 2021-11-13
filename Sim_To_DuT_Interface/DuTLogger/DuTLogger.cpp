@@ -270,7 +270,9 @@ quill::Handler* DuTLogger::getHandlerType(LOG_LEVEL_CHANGE_ON type) {
 /**
  * Logs the message with consideration of the log level. Please notice that this function will also log the message
  * into a logfile if the file logger accepts the log level. If you explicitly don't want to log this message into the
- * logfile, please use another function.
+ * logfile, please use the function below.
+ *
+ * @see void DuTLogger::logMessage(std::string msg, LOG_LEVEL level, bool doNotWriteIntoFile)
  * @param msg message that should be logged
  * @param level the logging level for this message
  */
@@ -283,19 +285,19 @@ void DuTLogger::logMessage(std::string msg, LOG_LEVEL level) {
 
 /**
  * Logs the message with consideration of the log level. This function gives you additionally the possibility
- * to choose with the 3rd parameter if you want to log the message into the logfile or explicitly not.
- * Please notice that there will be no file logging if the logger won't support the log level, even if you
- * parse 'true' on the 3rd argument.
+ * to prevent that the logger will write your message into the logfile. So if you set the 3rd parameter to 'false'
+ * the logger won't log your message into the file even if the log level would have accepted it.
+ *
  * @param msg message that should be logged
  * @param level the logging level for this message
- * @param writeToFile false, if you don't want to log into file
+ * @param doNotWriteIntoFile true, if you don't want to log into the logfile
  */
-void DuTLogger::logMessage(std::string msg, LOG_LEVEL level, bool writeToFile) {
+void DuTLogger::logMessage(std::string msg, LOG_LEVEL level, bool doNotWriteIntoFile) {
     // check if we have to write the message to the LogFile
-    if (writeToFile) {
-        logWithLevel(consoleFileLogger, msg, level);
-    } else {
+    if (doNotWriteIntoFile) {
         logWithLevel(consoleLogger, msg, level);
+    } else {
+        logWithLevel(consoleFileLogger, msg, level);
     }
 }
 
