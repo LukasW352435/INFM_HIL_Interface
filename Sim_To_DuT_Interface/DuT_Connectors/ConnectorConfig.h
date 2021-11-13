@@ -26,7 +26,9 @@
 #ifndef SIM_TO_DUT_INTERFACE_CONNECTORCONFIG_H
 #define SIM_TO_DUT_INTERFACE_CONNECTORCONFIG_H
 
-namespace thi::dut_connector {
+#include <string>
+
+namespace sim_interface::dut_connector {
     class ConnectorConfig {
     public:
         std::set<std::string> operations{};

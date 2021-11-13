@@ -30,7 +30,7 @@
 #include <string>
 #include <set>
 
-namespace thi::dummy_dut::messages {
+namespace dummy_dut::rest::impl {
     class RegisteredInterface {
     public:
         bool addInterfaceCallback(const std::string &callback);

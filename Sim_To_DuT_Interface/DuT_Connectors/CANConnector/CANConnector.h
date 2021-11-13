@@ -6,9 +6,10 @@
 #define SIM_TO_DUT_INTERFACE_CANCONNECTOR_H
 #include "../DuTConnector.h"
 
-class CANConnector : DuTConnector {
+namespace sim_interface::dut_connector::can {
+    class CANConnector : DuTConnector {
 
-};
-
+    };
+}
 
 #endif //SIM_TO_DUT_INTERFACE_CANCONNECTOR_H

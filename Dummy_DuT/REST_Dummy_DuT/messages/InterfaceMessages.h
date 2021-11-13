@@ -29,10 +29,10 @@
 #include <vector>
 #include "MessageWithTimestamp.h"
 
-namespace thi::dummy_dut::messages {
+namespace dummy_dut::rest::messages {
     class InterfaceMessages {
     public:
-        void addMessage(thi::dummy_dut::messages::MessageWithTimestamp message);
+        void addMessage(MessageWithTimestamp message);
 
         std::vector<MessageWithTimestamp> getMessages();
 

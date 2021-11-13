@@ -25,7 +25,7 @@
 
 #include "RegisteredInterface.h"
 
-namespace thi::dummy_dut::messages {
+namespace dummy_dut::rest::impl {
     /**
      * Add the given URL to the list of callbacks, if not already present
      * @param callback URL to add

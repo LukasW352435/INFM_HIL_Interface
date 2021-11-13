@@ -32,7 +32,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
-namespace thi::dut_connector::rest_dummy {
+namespace sim_interface::dut_connector::rest_dummy {
     /**
      * Constructs the restbed service and runs it on given port
      *

@@ -36,8 +36,8 @@
 #include "../messages/InterfaceMessages.h"
 #include "RegisteredInterface.h"
 
-namespace thi::dummy_dut::api_impl {
-    class DefaultApiImpl : thi::dummy_dut::api::DefaultApi {
+namespace dummy_dut::rest::impl {
+    class DefaultApiImpl : dummy_dut::rest::api::DefaultApi {
     public:
         explicit DefaultApiImpl(int port, std::set<std::string> operations);
 
@@ -49,14 +49,14 @@ namespace thi::dummy_dut::api_impl {
         static std::pair<int, std::string>
         dashboardPostHandler(DefaultApiImpl *instance, const std::shared_ptr<model::Message> &message);
 
-        void dashboardMessageStreamHandler(thi::dummy_dut::messages::MessageWithTimestamp message);
+        void dashboardMessageStreamHandler(dummy_dut::rest::messages::MessageWithTimestamp message);
 
         static std::pair<int, std::string> addCallbackHandler(DefaultApiImpl *instance, const std::string &callback);
 
         static std::pair<int, std::string> removeCallbackHandler(DefaultApiImpl *instance, const std::string &callback);
 
         static std::pair<int, std::string>
-        sendMessageHandler(DefaultApiImpl *instance, const std::shared_ptr<thi::dummy_dut::model::Message> &message);
+        sendMessageHandler(DefaultApiImpl *instance, const std::shared_ptr<dummy_dut::rest::model::Message> &message);
 
         void callUrl(const std::string &url, const std::string &message);
 
@@ -67,8 +67,8 @@ namespace thi::dummy_dut::api_impl {
         std::string getDashboardPage();
 
         std::set<std::string> operations;
-        thi::dummy_dut::messages::InterfaceMessages interfaceMessages = {};
-        thi::dummy_dut::messages::RegisteredInterface registeredInterfaces = {};
+        dummy_dut::rest::messages::InterfaceMessages interfaceMessages = {};
+        dummy_dut::rest::impl::RegisteredInterface registeredInterfaces = {};
         struct curl_slist *curlJsonHeader = curl_slist_append(curlJsonHeader, "Content-Type: application/json");
         std::vector<std::thread> curlThreads = std::vector<std::thread>();
     };

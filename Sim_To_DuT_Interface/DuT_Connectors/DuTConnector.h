@@ -9,33 +9,35 @@
 #include <iostream>
 #include <set>
 #include <memory>
-#include "../DuT_Connectors/DuTInfo.h"
+#include "../DuT_Connectors/ConnectorInfo.h"
 #include "../Events/SimEvent.h"
 #include "../Utility/SharedQueue.h"
 #include "ConnectorConfig.h"
 
-class DuTConnector {
-public:
-    explicit DuTConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
-                          const thi::dut_connector::ConnectorConfig &config);
+namespace sim_interface::dut_connector {
+    class DuTConnector {
+    public:
+        explicit DuTConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
+                              const sim_interface::dut_connector::ConnectorConfig &config);
 
-    // return some basic information from the connector
-    virtual DuTInfo getDuTInfo();
+        // return some basic information from the connector
+        virtual ConnectorInfo getConnectorInfo();
 
-    // handle event from the simulation async
-    virtual void handleEvent(const SimEvent &simEvent);
+        // handle event from the simulation async
+        virtual void handleEvent(const SimEvent &simEvent);
 
 // send the event to the simulation
-    void sendEventToSim(const SimEvent &simEvent);
+        void sendEventToSim(const SimEvent &simEvent);
 
-protected:
-    // determine if an event needs to be processed
-    bool canHandleSimEvent(const SimEvent &simEvent);
+    protected:
+        // determine if an event needs to be processed
+        bool canHandleSimEvent(const SimEvent &simEvent);
 
-private:
-    std::set<std::string> processableOperations;
+    private:
+        std::set<std::string> processableOperations;
 
-    std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim;
-};
+        std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim;
+    };
+}
 
 #endif //SIM_TO_DUT_INTERFACE_DUTCONNECTOR_H

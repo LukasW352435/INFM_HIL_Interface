@@ -25,9 +25,9 @@
 
 #include "MessageWithTimestamp.h"
 
-using namespace thi::dummy_dut::model;
+using namespace dummy_dut::rest::model;
 
-namespace thi::dummy_dut::messages {
+namespace dummy_dut::rest::messages {
 
     /**
      * Create a MessageWithTimestamp from a Message object

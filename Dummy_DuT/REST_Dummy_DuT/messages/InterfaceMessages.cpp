@@ -25,12 +25,12 @@
 
 #include "InterfaceMessages.h"
 
-namespace thi::dummy_dut::messages {
+namespace dummy_dut::rest::messages {
     /**
      * Adds the given message to the end of the list
      * @param message Message to add to list
      */
-    void InterfaceMessages::addMessage(thi::dummy_dut::messages::MessageWithTimestamp message) {
+    void InterfaceMessages::addMessage(MessageWithTimestamp message) {
         InterfaceMessages::messages.emplace_back(message);
     }
 
