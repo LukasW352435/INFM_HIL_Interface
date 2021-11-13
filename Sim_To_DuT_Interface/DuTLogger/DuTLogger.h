@@ -29,15 +29,15 @@ static const std::string PATH_DATA_LOG = "/logs/data";
 
 /**
  * This constant defines the mode how the logger will open the logfile of the console logging.
- * Mode "w" creates a new file or overwrite the existing file at every start of the application.
- * In mode "a" the logger tries to append it's content on an existing file.
+ * Mode "w" creates a new file or overwrite the existing file with the same name on every start of the application.
+ * In mode "a" the logger tries to append it's content on an existing file with the same name.
  */
 static const std::string FILE_MODE_CONSOLE = "w";
 
 /**
  * This constant defines the mode how the logger will open the logfile of the data logging.
- * Mode "w" creates a new file or overwrite the existing file at every start of the application.
- * In mode "a" the logger tries to append it's content on an existing file.
+ * Mode "w" creates a new file or overwrite the existing file with the same name on every start of the application.
+ * In mode "a" the logger tries to append it's content on an existing file with the same name.
  */
 static const std::string FILE_MODE_DATA = "w";
 
@@ -45,7 +45,7 @@ static const std::string FILE_MODE_DATA = "w";
  * This constant defines the maximum number of files in a logging directory. If there are more
  * logfiles under the underlying path, old ones will be deleted. (like a date based file rotation)
  */
-static const int FILE_BACKUP_COUNT = 4;
+static const int FILE_BACKUP_COUNT = 10;
 
 /**
  * Defines the level of logging
@@ -62,7 +62,10 @@ enum LOGGER_TYPE {
 };
 
 /**
- * This enum collects all types of logger whose level can be changed
+ * This enum collects all types of logger whose level can be changed.
+ * So there is a log level for logging messages in the console and another one to log messages in a file.
+ * Please notice that you can't change the level of the data logging, because all data objects will be logged with
+ * the same level.
  */
 enum LOG_LEVEL_CHANGE_ON {
     CONSOLE_LOG, FILE_LOG
