@@ -14,12 +14,11 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/variant.hpp>
-zmq::context_t context_pubTest(1);
 namespace sim_interface {
     SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface,
                                  const std::string& socketSimAddressSub, zmq::context_t &context_sub,
                                  const std::string& socketSimAddressPub, zmq::context_t &context_pub)
-            : queueSimToInterface(std::move(queueSimToInterface)), socketSimSub_(context_sub, zmq::socket_type::sub) , socketSimPub_(context_pubTest, zmq::socket_type::pub)  {
+            : queueSimToInterface(std::move(queueSimToInterface)), socketSimSub_(context_sub, zmq::socket_type::sub) , socketSimPub_(context_pub, zmq::socket_type::pub)  {
         //create a subscriber socket
         // zmq::context_t context_sub(1);
         //  zmq::socket_type type_sub = zmq::socket_type::sub;
@@ -52,7 +51,14 @@ namespace sim_interface {
 
         while (1) {
             zmq::message_t reply;
-            socketSimSub_.recv(&reply);
+            try {
+                std::cout << "Receiving... " << std::endl;
+                socketSimSub_.recv(&reply);
+
+            } catch (zmq::error_t cantReceive) {
+                std::cerr << "Socket can't receive: " << cantReceive.what() << std::endl;
+                // TODO unbind
+            }
 
             const char *buf = static_cast<const char*>(reply.data());
             std::cout << "CHAR [" << buf << "]" << std::endl;
@@ -104,7 +110,25 @@ namespace sim_interface {
             // Send it off to any subscribers
         std::cout << "Waiting to Send " << std::endl;
 
-        socketSimPub_.send(zmq::buffer("Value: " + simEvent.value + " Operation: " + simEvent.operation));
+       // std::map<std::string , boost::variant<int, double, std::string, std::time_t>> simEventMap;
+       //Not working with curreent time
+        std::map<std::string , boost::variant<int, double, std::string>> simEventMap;
+        simEventMap["Opperation"] = simEvent.operation;
+        simEventMap["Value"]     = simEvent.value;
+        simEventMap["Origin"]    = simEvent.origin;
+        std::stringstream time;
+        time << simEvent.current;
+        // Time in Secondss
+       simEventMap["Currrent"]   = time.str();
+        //serialize map
+        std::ostringstream ss;
+        boost::archive::text_oarchive archive(ss);
+        archive << simEventMap;
+        std::string outbound_data = ss.str();
+        // create buffer size for message
+        zmq::message_t msgToSend(outbound_data);
+
+        socketSimPub_.send(msgToSend);
     }
 
     void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
