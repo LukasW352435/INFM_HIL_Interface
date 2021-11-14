@@ -119,7 +119,8 @@ namespace sim_interface {
         std::stringstream time;
         time << simEvent.current;
         // Time in Secondss
-       simEventMap["Currrent"]   = time.str();
+        // TODO Microsekunden
+        simEventMap["Currrent"]   = time.str();
         //serialize map
         std::ostringstream ss;
         boost::archive::text_oarchive archive(ss);

@@ -14,9 +14,8 @@ add_executable(${PROJECT_NAME} main.cpp
         Events/SimEvent.cpp Events/SimEvent.h
         Sim_Communication/SimComHandler.cpp Sim_Communication/SimComHandler.h
         Utility/SharedQueue.h
+        DuTLogger/DuTLogger.cpp
         DuTLogger/DuTLogger.h
-        DuTLogger/DuTLogger.cpp)
+        )
 
-target_link_libraries(${PROJECT_NAME} libs zmq quill)
-target_link_libraries(${PROJECT_NAME} libs zmq)
-target_link_libraries(${PROJECT_NAME} boost_serialization)
+target_link_libraries(${PROJECT_NAME} libs zmq quill boost_serialization stdc++fs)
