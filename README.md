@@ -15,9 +15,18 @@ Logging of the communication is included in the interface.
 
 [Artery simulation](https://github.com/riebl/artery)
 
+# Clone
+Clone the repository with submodules (but not all, as you dont want to compile openssl from scratch)
+```bash
+git clone https://github.com/LukasW352435/INFM_HIL_Interface.git && cd INFM_HIL_Interface && git submodule init && git submodule update --depth 1
+# or via ssh
+git clone git@github.com:LukasW352435/INFM_HIL_Interface.git && cd INFM_HIL_Interface && git submodule init && git submodule update --depth 1
+```
+
 ## Requirements for building
 
 - libasio-dev
 - libssl-dev
 - libcurl4-openssl-dev
 - restbed (is built from source)
+- libzmq3-dev (ZeroMQ)

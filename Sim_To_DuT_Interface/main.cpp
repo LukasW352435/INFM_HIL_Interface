@@ -5,7 +5,11 @@
 #include "DuT_Connectors/RESTDummyConnector/RESTConfig.h"
 #include "Utility/SharedQueue.h"
 #include "Sim_Communication/SimComHandler.h"
+#include "DuTLogger/DuTLogger.h"
+
 int main() {
+    DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
+    
     // Create interface
     sim_interface::SimToDuTInterface interface;
     // Create simComHandler
@@ -67,8 +71,10 @@ int main() {
     // Start interface to receive/send events
     std::cout  << "Nnach thread" << std::endl;
     interface.run();
-
+    
     std::string s;
     std::cin >> s;
+    
+    DuTLogger::logMessage("Shut down application", LOG_LEVEL::INFO);
     return 0;
 }
