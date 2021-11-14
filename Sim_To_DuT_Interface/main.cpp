@@ -1,3 +1,28 @@
+/**
+ * Sim To DuT Interface
+ *
+ * Copyright (C) 2021 Lukas Wagenlehner
+ *
+ * This file is part of "Sim To DuT Interface".
+ *
+ * "Sim To DuT Interface" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * "Sim To DuT Interface" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with "Sim To DuT Interface".  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Lukas Wagenlehner
+ * // TODO add all authors
+ * @version 1.0
+ */
+
 #include <iostream>
 #include "SimToDuTInterface.h"
 #include <thread>
@@ -69,12 +94,9 @@ int main() {
 
 
     // Start interface to receive/send events
-    std::cout  << "Nnach thread" << std::endl;
     interface.run();
     
-    std::string s;
-    std::cin >> s;
-    
+    std::cin.get();
     DuTLogger::logMessage("Shut down application", LOG_LEVEL::INFO);
     return 0;
 }
