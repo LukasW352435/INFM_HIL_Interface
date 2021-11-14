@@ -19,11 +19,7 @@ namespace sim_interface {
                                  const std::string& socketSimAddressSub, zmq::context_t &context_sub,
                                  const std::string& socketSimAddressPub, zmq::context_t &context_pub)
             : queueSimToInterface(std::move(queueSimToInterface)), socketSimSub_(context_sub, zmq::socket_type::sub) , socketSimPub_(context_pub, zmq::socket_type::pub)  {
-        //create a subscriber socket
-        // zmq::context_t context_sub(1);
-        //  zmq::socket_type type_sub = zmq::socket_type::sub;
-        //  zmq::socket_t socket_sub(context_sub,type_sub);
-        // socket_sub.setsockopt(ZMQ_SUBSCRIBE, "" ,0);
+
         socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
 
         // Connect to publisher
@@ -39,10 +35,7 @@ namespace sim_interface {
 
 
         socketSimSub_.connect(socketSimAddressSub);
-        // socketSimSub_ = socket_sub;
-        //  std::string t =  SimComHandler::getMessageFromSim(socketSimSub_);
 
-        //  std::cout << "Wuhhh " + t <<  std::endl;
     }
 
 
@@ -79,11 +72,11 @@ namespace sim_interface {
             }
             std::cout << "Value " << receiveMap["Speed"]<< std::endl;
             //  std::string test  = receiveMap["Speed"].which();
-            std::vector<std::string> keyVektor;
-            std::vector<boost::variant<int, double, std::string>> valueVektor;
+            std::vector<std::string> keyVector;
+            std::vector<boost::variant<int, double, std::string>> valueVector;
             for (auto const& element: receiveMap) {
-                keyVektor.push_back(element.first);
-                valueVektor.push_back(element.second);
+                keyVector.push_back(element.first);
+                valueVector.push_back(element.second);
                 std::string keyAsString = element.first;
 
                 auto valueAsAny =   element.second;
@@ -113,7 +106,7 @@ namespace sim_interface {
        // std::map<std::string , boost::variant<int, double, std::string, std::time_t>> simEventMap;
        //Not working with curreent time
         std::map<std::string , boost::variant<int, double, std::string>> simEventMap;
-        simEventMap["Opperation"] = simEvent.operation;
+        simEventMap["Operation"] = simEvent.operation;
         simEventMap["Value"]     = simEvent.value;
         simEventMap["Origin"]    = simEvent.origin;
         std::stringstream time;
