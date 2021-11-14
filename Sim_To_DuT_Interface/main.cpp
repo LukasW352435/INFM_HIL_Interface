@@ -22,7 +22,25 @@ int main() {
     config.baseUrlDuT = "http://localhost:9090";
     config.baseCallbackUrl = "http://172.17.0.1";
     config.port = 9091;
-    config.operations = {"Test"};
+    config.operations = {"Test","Angle",
+    "Acceleration",
+    "Decel",
+    "Distance",
+    "Height",
+    "LaneID",
+    "LaneIndex",
+    "LanePosition",
+    "Length",
+    "Position_X-Coordinate",
+    "Position_Y-Coordinate",
+    "Position_Z-Coordinate",
+    "RoadID",
+    "RouteIndex",
+    "Signals",
+    "Speed",
+    "Width",
+    "current",
+    "origin"};
 
 
     sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);
@@ -41,9 +59,13 @@ int main() {
     std::cout << interface << std::endl;
 
     // Start simComHandler to receive events from the simulation
-    simComHandler.run();
+    std::thread simComHandlerThread (&sim_interface::SimComHandler::run, &simComHandler);
+    simComHandlerThread.detach();
+
+
 
     // Start interface to receive/send events
+    std::cout  << "Nnach thread" << std::endl;
     interface.run();
 
     std::string s;
