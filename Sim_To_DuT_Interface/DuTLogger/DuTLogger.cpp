@@ -3,7 +3,7 @@
 //
 
 #include "DuTLogger.h"
-
+#include <iomanip>
 // initialize the logging paths
 std::string DuTLogger::currentLogpathConsole = initializeLoggingPath(LOGGER_TYPE::CONSOLE);
 std::string DuTLogger::currentLogpathData = initializeLoggingPath(LOGGER_TYPE::DATA);
@@ -352,6 +352,6 @@ std::string DuTLogger::getCurrentTimestamp() {
 
     // write it formatted in a stream and convert that to a string so we can return it
     std::ostringstream oss;
-    oss << std::put_time(&timer, "%Y-%m-%d_%H-%M-%S");
+   oss << std::put_time(&timer, "%Y-%m-%d_%H-%M-%S");
     return oss.str();
 }
