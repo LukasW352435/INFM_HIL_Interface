@@ -1,3 +1,28 @@
+/**
+ * Sim To DuT Interface
+ *
+ * Copyright (C) 2021 Lukas Wagenlehner
+ *
+ * This file is part of "Sim To DuT Interface".
+ *
+ * "Sim To DuT Interface" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * "Sim To DuT Interface" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with "Sim To DuT Interface".  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Lukas Wagenlehner
+ * // TODO add all authors
+ * @version 1.0
+ */
+
 #include <iostream>
 #include "SimToDuTInterface.h"
 #include <thread>
@@ -17,7 +42,7 @@ int main() {
     zmq::context_t context_sub(1);
     sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddress, context_sub);
 
-    //interface.setSimComHandler(&simComHandler);
+    interface.setSimComHandler(&simComHandler);
 
     // Create DuT Devices
     sim_interface::dut_connector::rest_dummy::RESTConfig config;
@@ -26,7 +51,7 @@ int main() {
     config.port = 9091;
     config.operations = {"Left Abc"};
 
-    std::string Test = simComHandler.getMessageFromSim();
+    //std::string Test = simComHandler.getMessageFromSim();
     
     sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);
     auto event = sim_interface::SimEvent();
@@ -49,6 +74,7 @@ int main() {
     
     std::string s;
     std::cin >> s;
+    interface.~SimToDuTInterface();
     
     DuTLogger::logMessage("Shut down application", LOG_LEVEL::INFO);
     return 0;
