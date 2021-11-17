@@ -72,10 +72,7 @@ int main() {
     // Start interface to receive/send events
     interface.run();
     
-    std::string s;
-    std::cin >> s;
-    interface.~SimToDuTInterface();
-    
+    std::cin.get();
     DuTLogger::logMessage("Shut down application", LOG_LEVEL::INFO);
     return 0;
 }
