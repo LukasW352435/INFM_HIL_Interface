@@ -1,0 +1,26 @@
+name: Generate doxyGen and publish to wiki
+on:
+  push:
+    branches:
+      - main
+defaults:
+  run:
+    working-directory: ./doxygen
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Preparation
+        run: mkdir build
+      - name: CMake Build
+        run: cmake -S . -B build
+      - name: CMake Make
+        run: cmake --build build
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: gh-pages
+          folder: doc_doxygen
