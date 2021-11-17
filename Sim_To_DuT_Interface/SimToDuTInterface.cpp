@@ -1,6 +1,26 @@
-//
-// Created by Lukas on 19.10.2021.
-//
+/**
+ * Sim To DuT Interface
+ *
+ * Copyright (C) 2021 Lukas Wagenlehner
+ *
+ * This file is part of "Sim To DuT Interface".
+ *
+ * "Sim To DuT Interface" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * "Sim To DuT Interface" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with "Sim To DuT Interface".  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Lukas Wagenlehner
+ * @version 1.0
+ */
 
 #include "SimToDuTInterface.h"
 
@@ -30,10 +50,8 @@ namespace sim_interface {
     }
 
     void SimToDuTInterface::run() {
-        std::thread threadSimToInterface(&SimToDuTInterface::handleEventsFromSim, this);
-        threadSimToInterface.detach();
-        std::thread threadDuTToSim(&SimToDuTInterface::handleEventsFromDuT, this);
-        threadDuTToSim.detach();
+        threadSimToInterface = std::thread(&SimToDuTInterface::handleEventsFromSim, this);
+        threadDuTToSim = std::thread(&SimToDuTInterface::handleEventsFromDuT, this);
     }
 
     std::shared_ptr<SharedQueue<SimEvent>> SimToDuTInterface::getQueueDuTToSim() {
@@ -44,8 +62,8 @@ namespace sim_interface {
         return queueSimToInterface;
     }
 
-    [[noreturn]] void SimToDuTInterface::handleEventsFromSim() {
-        while (true) {
+    void SimToDuTInterface::handleEventsFromSim() {
+        while (stopThreads) {
             SimEvent simEvent;
             if (queueSimToInterface->pop(simEvent)) {
                 sendEventToConnector(simEvent);
@@ -53,8 +71,8 @@ namespace sim_interface {
         }
     }
 
-    [[noreturn]] void SimToDuTInterface::handleEventsFromDuT() {
-        while (true) {
+    void SimToDuTInterface::handleEventsFromDuT() {
+        while (stopThreads) {
             SimEvent simEvent;
             if (queueDuTToSim->pop(simEvent)) {
                 if (simComHandler != nullptr) {
@@ -66,5 +84,13 @@ namespace sim_interface {
 
     void SimToDuTInterface::setSimComHandler(SimComHandler *simComHandler) {
         SimToDuTInterface::simComHandler = simComHandler;
+    }
+
+    SimToDuTInterface::~SimToDuTInterface() {
+        stopThreads = false;
+        queueDuTToSim->Stop();
+        queueSimToInterface->Stop();
+        threadSimToInterface.join();
+        threadDuTToSim.join();
     }
 }
