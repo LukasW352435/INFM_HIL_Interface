@@ -56,17 +56,6 @@ namespace sim_interface::dut_connector::rest_dummy {
     }
 
     /**
-     * Process the given event
-     *
-     * @param e SimEvent to handle
-     */
-    void RESTDummyConnector::handleEvent(const SimEvent &e) {
-        if (canHandleSimEvent(e)) {
-            sendEventToDuT(e);
-        }
-    }
-
-    /**
      * Return some basic information like name, version and a short description of this connector
      *
      * @return ConnectorInfo containing information about this DuT connector
@@ -84,7 +73,7 @@ namespace sim_interface::dut_connector::rest_dummy {
      *
      * @param e SimEvent to send
      */
-    void RESTDummyConnector::sendEventToDuT(const SimEvent &e) {
+    void RESTDummyConnector::handleEventSingle(const SimEvent &e) {
         auto handle = curl_easy_init();
 
         long responseCode = 500;

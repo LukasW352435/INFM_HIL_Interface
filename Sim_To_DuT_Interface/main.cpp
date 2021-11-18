@@ -32,11 +32,11 @@ int main() {
     auto event = sim_interface::SimEvent();
     event.operation = "Left Abc";
     event.value = "xyz";
-    restDummyConnector.handleEvent(event);
+    restDummyConnector.handleEventSingle(event);
     auto event2 = sim_interface::SimEvent();
     event.operation = "Left Abc2";
     event.value = "xyz";
-    restDummyConnector.handleEvent(event);
+    restDummyConnector.handleEventSingle(event);
     interface.addConnector(&restDummyConnector);
 
     std::cout << interface << std::endl;
