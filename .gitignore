@@ -4,6 +4,7 @@
 # CMake
 cmake-build-*/
 build
+doxygen/doc_doxygen
 
 # IntelliJ
 out/
