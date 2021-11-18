@@ -1,0 +1,4 @@
+<map id="dummy_dut::rest::api::DefaultApiDashboardMessagesResource" name="dummy_dut::rest::api::DefaultApiDashboardMessagesResource">
+<area shape="rect" id="node1" title="Open message stream to receive new messages continuously" alt="" coords="5,80,240,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="81,5,164,32"/>
+</map>
