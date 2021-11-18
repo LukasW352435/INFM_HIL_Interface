@@ -1,0 +1,8 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="dummy_dut::rest::messages\l::InterfaceMessages",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classdummy__dut_1_1rest_1_1messages_1_1InterfaceMessages.html",tooltip=" "];
+}
