@@ -352,6 +352,6 @@ std::string DuTLogger::getCurrentTimestamp() {
 
     // write it formatted in a stream and convert that to a string so we can return it
     std::ostringstream oss;
-   oss << std::put_time(&timer, "%Y-%m-%d_%H-%M-%S");
+    oss << std::put_time(&timer, "%Y-%m-%d_%H-%M-%S");
     return oss.str();
 }
