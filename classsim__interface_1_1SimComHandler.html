@@ -77,18 +77,15 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:acbee07b0f80103f91e96688a6b1939cb"><td class="memItemLeft" align="right" valign="top"><a id="acbee07b0f80103f91e96688a6b1939cb"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SimComHandler</b> (std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &gt;&gt; queueSimToInterface, std::string socketSimAddress, zmq::context_t &amp;context_sub)</td></tr>
-<tr class="separator:acbee07b0f80103f91e96688a6b1939cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e06e6def9fc959dbfab3adead56e908"><td class="memItemLeft" align="right" valign="top"><a id="a9e06e6def9fc959dbfab3adead56e908"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SimComHandler</b> (std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &gt;&gt; queueSimToInterface, const std::string &amp;socketSimAddressSub, zmq::context_t &amp;context_sub, const std::string &amp;socketSimAddressPub, zmq::context_t &amp;context_pub)</td></tr>
+<tr class="separator:a9e06e6def9fc959dbfab3adead56e908"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2064c6154aa11da9f9d0c815f45cd270"><td class="memItemLeft" align="right" valign="top"><a id="a2064c6154aa11da9f9d0c815f45cd270"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>sendEventToSim</b> (const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent)</td></tr>
 <tr class="separator:a2064c6154aa11da9f9d0c815f45cd270"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e3045aec9762d50b256b8c27058f9ab"><td class="memItemLeft" align="right" valign="top"><a id="a9e3045aec9762d50b256b8c27058f9ab"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>run</b> ()</td></tr>
 <tr class="separator:a9e3045aec9762d50b256b8c27058f9ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44d75f234a2e486061b802cdd87404c7"><td class="memItemLeft" align="right" valign="top"><a id="a44d75f234a2e486061b802cdd87404c7"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getMessageFromSim</b> ()</td></tr>
-<tr class="separator:a44d75f234a2e486061b802cdd87404c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -98,9 +95,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>sendEventToInterface<
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a9cdc0218fb64947d5baa9acfd8e32846"><td class="memItemLeft" align="right" valign="top"><a id="a9cdc0218fb64947d5baa9acfd8e32846"></a>
-zmq::socket_t&#160;</td><td class="memItemRight" valign="bottom"><b>socketSim_</b></td></tr>
-<tr class="separator:a9cdc0218fb64947d5baa9acfd8e32846"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62dea8cf8ea24560b7aa3248d3dc5a15"><td class="memItemLeft" align="right" valign="top"><a id="a62dea8cf8ea24560b7aa3248d3dc5a15"></a>
+zmq::socket_t&#160;</td><td class="memItemRight" valign="bottom"><b>socketSimSub_</b></td></tr>
+<tr class="separator:a62dea8cf8ea24560b7aa3248d3dc5a15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07c3fe9ba52e4af0bdf330f702712eb5"><td class="memItemLeft" align="right" valign="top"><a id="a07c3fe9ba52e4af0bdf330f702712eb5"></a>
+zmq::socket_t&#160;</td><td class="memItemRight" valign="bottom"><b>socketSimPub_</b></td></tr>
+<tr class="separator:a07c3fe9ba52e4af0bdf330f702712eb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3d5344c171af721686e6e936cb70d7a"><td class="memItemLeft" align="right" valign="top"><a id="ae3d5344c171af721686e6e936cb70d7a"></a>
 zmq::context_t&#160;</td><td class="memItemRight" valign="bottom"><b>context_test</b></td></tr>
 <tr class="separator:ae3d5344c171af721686e6e936cb70d7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
