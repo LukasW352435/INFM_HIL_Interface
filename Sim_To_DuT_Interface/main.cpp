@@ -38,9 +38,11 @@ int main() {
     // Create interface
     sim_interface::SimToDuTInterface interface;
     // Create simComHandler
-    std::string socketSimAddress = "tcp://localhost:7777";
+    std::string socketSimAddressSub = "tcp://localhost:7777";
     zmq::context_t context_sub(1);
-    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddress, context_sub);
+    std::string socketSimAddressPub = "tcp://*:7778";
+    zmq::context_t context_pub(1);
+    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddressSub, context_sub, socketSimAddressPub , context_pub);
 
     interface.setSimComHandler(&simComHandler);
 
@@ -49,25 +51,47 @@ int main() {
     config.baseUrlDuT = "http://localhost:9090";
     config.baseCallbackUrl = "http://172.17.0.1";
     config.port = 9091;
-    config.operations = {"Left Abc"};
+    config.operations = {"Test","Angle",
+    "Acceleration",
+    "Decel",
+    "Distance",
+    "Height",
+    "LaneID",
+    "LaneIndex",
+    "LanePosition",
+    "Length",
+    "Position_X-Coordinate",
+    "Position_Y-Coordinate",
+    "Position_Z-Coordinate",
+    "RoadID",
+    "RouteIndex",
+    "Signals",
+    "Speed",
+    "Width",
+    "current",
+    "origin"};
 
-    //std::string Test = simComHandler.getMessageFromSim();
-    
+
     sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);
+    /*
     auto event = sim_interface::SimEvent();
-    event.operation = "Left Abc";
-    event.value = "xyz";
+    event.operation = "Test";
+    event.value = Test;
     restDummyConnector.handleEvent(event);
     auto event2 = sim_interface::SimEvent();
-    event.operation = "Left Abc2";
+    event.operation = "Indicator Right";
     event.value = "xyz";
     restDummyConnector.handleEvent(event);
+*/
     interface.addConnector(&restDummyConnector);
 
     std::cout << interface << std::endl;
 
     // Start simComHandler to receive events from the simulation
-    simComHandler.run();
+    std::thread simComHandlerThread (&sim_interface::SimComHandler::run, &simComHandler);
+    simComHandlerThread.detach();
+
+
 
     // Start interface to receive/send events
     interface.run();
