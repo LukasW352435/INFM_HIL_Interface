@@ -14,7 +14,15 @@ add_executable(${PROJECT_NAME} main.cpp
         Events/SimEvent.cpp Events/SimEvent.h
         Sim_Communication/SimComHandler.cpp Sim_Communication/SimComHandler.h
         Utility/SharedQueue.h
-        DuTLogger/DuTLogger.h
-        DuTLogger/DuTLogger.cpp)
-        
-target_link_libraries(${PROJECT_NAME} libs zmq quill)
+        #DuTLogger/DuTLogger.h
+        #DuTLogger/DuTLogger.cpp
+        )
+
+find_package(Vanetza REQUIRED)
+target_link_libraries(${PROJECT_NAME} libs zmq quill
+        Vanetza::vanetza)
+
+
+
+
+
