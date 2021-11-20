@@ -27,70 +27,130 @@
 
 #include <utility>
 #include <zmq.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
 
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/serialization/variant.hpp>
 namespace sim_interface {
     SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface,
-                                 std::string socketSimAddress, zmq::context_t &context_sub)
-            : queueSimToInterface(std::move(queueSimToInterface)), socketSim_(context_sub, zmq::socket_type::sub) {
-        //create a subscriber socket
-        // zmq::context_t context_sub(1);
-        //  zmq::socket_type type_sub = zmq::socket_type::sub;
-        //  zmq::socket_t socket_sub(context_sub,type_sub);
-        // socket_sub.setsockopt(ZMQ_SUBSCRIBE, "" ,0);
-        socketSim_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
+                                 const std::string& socketSimAddressSub, zmq::context_t &context_sub,
+                                 const std::string& socketSimAddressPub, zmq::context_t &context_pub)
+            : queueSimToInterface(std::move(queueSimToInterface)), socketSimSub_(context_sub, zmq::socket_type::sub) , socketSimPub_(context_pub, zmq::socket_type::pub)  {
+
+        socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
 
         // Connect to publisher
-        std::cout << "Connecting to " << socketSimAddress << " . . ." << std::endl;
+        std::cout << "Connecting to " << socketSimAddressSub << " . . ." << std::endl;
         //  socket_sub.connect(socketSimAdress);
-        socketSim_.connect(socketSimAddress);
-        // socketSim_ = socket_sub;
-        //  std::string t =  SimComHandler::getMessageFromSim(socketSim_);
 
-        //  std::cout << "Wuhhh " + t <<  std::endl;
+        // Open the connection
+        std::cout << "Binding to " << socketSimAddressPub << " . . ." << std::endl;
+        socketSimPub_.bind(socketSimAddressPub);
+
+
+
+
+
+        socketSimSub_.connect(socketSimAddressSub);
+
     }
 
 
     void SimComHandler::run() {
         // TODO async receive events from the Simulation and send them to the interface
-        SimEvent event("Test", "Test", "Test");
-        sendEventToInterface(event);
+
+        while (1) {
+            zmq::message_t reply;
+            try {
+                std::cout << "Receiving... " << std::endl;
+                socketSimSub_.recv(&reply);
+
+            } catch (zmq::error_t cantReceive) {
+                std::cerr << "Socket can't receive: " << cantReceive.what() << std::endl;
+                // TODO unbind
+            }
+
+            const char *buf = static_cast<const char*>(reply.data());
+            std::cout << "CHAR [" << buf << "]" << std::endl;
+
+            std::string input_data_( buf, reply.size() );
+            std::istringstream archive_stream(input_data_);
+            boost::archive::text_iarchive archive(archive_stream);
+            std::map <std::string, boost::variant<int, double, std::string>> receiveMap;
+
+            try
+            {
+                archive >> receiveMap;
+            } catch (boost::archive::archive_exception& ex) {
+                std::cout << "Archive Exception during deserializing:" << std::endl;
+                std::cout << ex.what() << std::endl;
+            } catch (int e) {
+                std::cout << "EXCEPTION " << e << std::endl;
+            }
+            std::cout << "Value " << receiveMap["Speed"]<< std::endl;
+            //  std::string test  = receiveMap["Speed"].which();
+            std::vector<std::string> keyVector;
+            std::vector<boost::variant<int, double, std::string>> valueVector;
+            for (auto const& element: receiveMap) {
+                keyVector.push_back(element.first);
+                valueVector.push_back(element.second);
+                std::string keyAsString = element.first;
+
+                auto valueAsAny =   element.second;
+                std::stringstream stringStreamValue ;
+                stringStreamValue <<  valueAsAny;
+
+                std::cout << "value: " << stringStreamValue.str() << std::endl;
+                SimEvent event(keyAsString, stringStreamValue.str(), "Simulation");
+                sendEventToInterface(event);
+            }
+        }
+
+
+
+
+
     }
 
     void SimComHandler::sendEventToSim(const SimEvent &simEvent) {
+        //BOYS hier müssen wir hin
         // TODO implementation of sending an event to the simulation
         std::cout << "Async Sending of Event..." << std::endl;
         std::cout << simEvent << "lol";
+            // Send it off to any subscribers
+        std::cout << "Waiting to Send " << std::endl;
+
+       // std::map<std::string , boost::variant<int, double, std::string, std::time_t>> simEventMap;
+       //Not working with curreent time
+        std::map<std::string , boost::variant<int, double, std::string>> simEventMap;
+        simEventMap["Operation"] = simEvent.operation;
+        simEventMap["Value"]     = simEvent.value;
+        simEventMap["Origin"]    = simEvent.origin;
+        std::stringstream time;
+        time << simEvent.current;
+        // Time in Secondss
+        // TODO Microsekunden
+        simEventMap["Currrent"]   = time.str();
+        //serialize map
+        std::ostringstream ss;
+        boost::archive::text_oarchive archive(ss);
+        archive << simEventMap;
+        std::string outbound_data = ss.str();
+        // create buffer size for message
+        zmq::message_t msgToSend(outbound_data);
+
+        socketSimPub_.send(msgToSend);
     }
 
     void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
         queueSimToInterface->push(simEvent);
     }
 
-    std::string SimComHandler::getMessageFromSim() {
-
-        // create a subscriber socket
-        // zmq::context_t context_sub(1);
-        // zmq::socket_type type_sub = zmq::socket_type::sub;
-        //  zmq::socket_t socket_sub(context_sub,type_sub);
-        // socket_sub.setsockopt(ZMQ_SUBSCRIBE, "" ,0);
 
 
-        // Connect to publisher
-        // cout << "Connecting to " << PUBLISH_ENDPOINT << " . . ." << endl;
-        // socket_sub.connect(PUBLISH_ENDPOINT);
 
-
-        //Pause to connect
-        //  this_thread::sleep_for(chrono::milliseconds(1000));
-
-        zmq::message_t message_sub;
-
-        socketSim_.recv(message_sub, zmq::recv_flags::none);
-        std::cout << "Empfangene Nachricht: " << message_sub.to_string() << std::endl;
-        return message_sub.to_string();
-    }
-
-    SimComHandler::~SimComHandler() {
-        // TODO end all Communication, Close all Handles, End all Async operations, join all Threads
-    }
 }

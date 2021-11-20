@@ -3,7 +3,7 @@
 //
 
 #include "DuTLogger.h"
-
+#include <iomanip>
 // initialize the logging paths
 std::string DuTLogger::currentLogpathConsole = initializeLoggingPath(LOGGER_TYPE::CONSOLE);
 std::string DuTLogger::currentLogpathData = initializeLoggingPath(LOGGER_TYPE::DATA);

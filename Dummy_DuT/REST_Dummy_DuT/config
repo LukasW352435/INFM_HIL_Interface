@@ -1,2 +1,22 @@
 Indicator Left
 Indicator Right
+Test
+Angle
+Acceleration
+Decel
+Distance
+Height
+LaneID
+LaneIndex
+LanePosition
+Length
+Position_X-Coordinate
+Position_Y-Coordinate
+Position_Z-Coordinate
+RoadID
+RouteIndex
+Signals
+Speed
+Width
+current
+origin
