@@ -19,6 +19,7 @@
  * along with "Sim To DuT Interface".  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Lukas Wagenlehner
+ * @author Michael Schmitz
  * @version 1.0
  */
 
@@ -30,12 +31,21 @@
 namespace sim_interface::dut_connector {
     DuTConnector::DuTConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTEventToSim,
                                const sim_interface::dut_connector::ConnectorConfig &config)
-            : queueDuTToSim(std::move(queueDuTEventToSim)), processableOperations(config.operations) {
-        io = std::make_shared<boost::asio::io_service>();
-        for (const auto& operation : config.operations) {
-            enablePeriodicSending(operation, 100);
+            : queueDuTToSim(std::move(queueDuTEventToSim)), processableOperations(config.operations),
+              periodicTimerEnabled(config.periodicTimerEnabled) {
+        if (periodicTimerEnabled) {
+            io = std::make_shared<boost::asio::io_service>();
+
+            for (const auto &operation: config.periodicOperations) {
+                enablePeriodicSending(operation.first, operation.second);
+            }
+            // have one timer (doing nothing) running at any given time to avoid io->run() to return
+            aliveTimer = std::make_unique<PeriodicTimer>(io, 1000000000000, SimEvent(), [](const SimEvent &event) {});
+            aliveTimer->start();
+            timerRunner = std::thread([&]() {
+                this->io->run();
+            });
         }
-        timerRunner = std::thread([this]() {this->io->run();});
     }
 
     DuTConnector::~DuTConnector() {
@@ -53,7 +63,7 @@ namespace sim_interface::dut_connector {
 
     void DuTConnector::handleEvent(const SimEvent &simEvent) {
         if (canHandleSimEvent(simEvent)) {
-            if(isPeriodicEnabled(simEvent)) {
+            if (isPeriodicEnabled(simEvent)) {
                 setupTimer(simEvent);
             }
             handleEventSingle(simEvent);
@@ -69,21 +79,29 @@ namespace sim_interface::dut_connector {
     }
 
     bool DuTConnector::isPeriodicEnabled(const SimEvent &simEvent) {
-        return periodicIntervals.find(simEvent.operation) != periodicIntervals.end();
+        return periodicTimerEnabled && periodicIntervals.find(simEvent.operation) != periodicIntervals.end();
     }
 
     void DuTConnector::setupTimer(const SimEvent &simEvent) {
-        // stop timer if already running
-        if (periodicTimers.find(simEvent.operation) != periodicTimers.end()) {
-            periodicTimers.at(simEvent.operation).stop();
-            periodicTimers.erase(simEvent.operation);
+        if (periodicTimerEnabled) {
+            // stop timer if already running
+            if (periodicTimers.find(simEvent.operation) != periodicTimers.end()) {
+                periodicTimers.at(simEvent.operation)->stop();
+                periodicTimers.erase(simEvent.operation);
+            }
+            periodicTimers.emplace(simEvent.operation,
+                                   std::make_unique<PeriodicTimer>(io, periodicIntervals[simEvent.operation], simEvent,
+                                                                   [this](const SimEvent &event) {
+                                                                       this->handleEventSingle(event);
+                                                                   }));
+            periodicTimers[simEvent.operation]->start();
         }
-        periodicTimers.emplace(simEvent.operation, PeriodicTimer(io, periodicIntervals[simEvent.operation], simEvent, [this](const SimEvent& event){
-                                                                  this->handleEventSingle(event); }));
     }
 
-    void DuTConnector::enablePeriodicSending(const std::string& operation, int periodMs) {
-        periodicIntervals.emplace(operation, periodMs);
+    void DuTConnector::enablePeriodicSending(const std::string &operation, int periodMs) {
+        if (periodicTimerEnabled) {
+            periodicIntervals.emplace(operation, periodMs);
+        }
     }
 
 }

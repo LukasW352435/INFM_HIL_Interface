@@ -19,6 +19,7 @@
  * along with "Sim To DuT Interface".  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Lukas Wagenlehner
+ * @author Michael Schmitz
  * @version 1.0
  */
 
@@ -75,8 +76,10 @@ namespace sim_interface::dut_connector {
 
         std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim;
 
-        std::map<std::string, PeriodicTimer> periodicTimers;
+        std::map<std::string, std::unique_ptr<sim_interface::PeriodicTimer>> periodicTimers;
         std::map<std::string, int> periodicIntervals;
+        std::unique_ptr<PeriodicTimer> aliveTimer;
+        bool periodicTimerEnabled;
     };
 }
 

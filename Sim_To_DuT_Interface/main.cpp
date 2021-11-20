@@ -19,6 +19,7 @@
  * along with "Sim To DuT Interface".  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Lukas Wagenlehner
+ * @author Michael Schmitz
  * // TODO add all authors
  * @version 1.0
  */
@@ -50,6 +51,8 @@ int main() {
     config.baseCallbackUrl = "http://172.17.0.1";
     config.port = 9091;
     config.operations = {"Left Abc"};
+    config.periodicTimerEnabled = true;
+    config.periodicOperations = {{ "Left Abc", 1000 }};
 
     //std::string Test = simComHandler.getMessageFromSim();
     
@@ -57,17 +60,17 @@ int main() {
     auto event = sim_interface::SimEvent();
     event.operation = "Left Abc";
     event.value = "xyz";
-    restDummyConnector.handleEventSingle(event);
+    restDummyConnector.handleEvent(event);
     auto event2 = sim_interface::SimEvent();
-    event.operation = "Left Abc2";
+    event.operation = "Left Abc";
     event.value = "xyz";
-    restDummyConnector.handleEventSingle(event);
+    restDummyConnector.handleEvent(event);
     interface.addConnector(&restDummyConnector);
 
     std::cout << interface << std::endl;
 
     // Start simComHandler to receive events from the simulation
-    simComHandler.run();
+    //simComHandler.run();
 
     // Start interface to receive/send events
     interface.run();

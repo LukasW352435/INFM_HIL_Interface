@@ -36,10 +36,11 @@ namespace sim_interface {
         explicit PeriodicTimer(const std::shared_ptr<boost::asio::io_service> &io, int periodMs, const SimEvent &event,
                                std::function<void(const SimEvent &)> callback);
 
+        void start();
         void stop();
 
     private:
-        void restartTimer(const boost::system::error_code &e);
+        void tick(const boost::system::error_code &e);
 
         boost::asio::steady_timer timer;
         std::function<void(const SimEvent &)> callback;

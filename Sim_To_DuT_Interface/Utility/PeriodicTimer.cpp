@@ -31,16 +31,34 @@ namespace sim_interface {
     PeriodicTimer::PeriodicTimer(const std::shared_ptr<boost::asio::io_service> &io, int periodMs,
                                  const SimEvent &event, std::function<void(const SimEvent &)> callback) :
             periodMs(periodMs), event(event), callback(std::move(callback)),
-            timer(*io, boost::asio::chrono::milliseconds(periodMs)) {
-        timer.async_wait([this](boost::system::error_code e) { this->restartTimer(e); });
+            timer(*io) {
+        timer.expires_from_now(boost::asio::chrono::milliseconds(periodMs));
     }
 
+    /**
+     * Start the async waiting on the constructed timer with tick() as callback
+     */
+    void PeriodicTimer::start() {
+        timer.async_wait([&](boost::system::error_code e) { this->tick(e); });
+    }
+
+    /**
+     * Cancel the constructed timer
+     */
     void PeriodicTimer::stop() {
         timer.cancel();
     }
 
-    void PeriodicTimer::restartTimer(const boost::system::error_code &e) {
+    /**
+     * Called everytime the timer elapsed or an error is thrown
+     * Calls the callback given when this PeriodicTimer was constructed with given SimEvent
+     *
+     * @param e boost error code (aborted timer)
+     */
+    void PeriodicTimer::tick(const boost::system::error_code &e) {
+        if (e == boost::asio::error::operation_aborted) return;
         callback(event);
-        timer.expires_at(timer.expiry() + boost::asio::chrono::milliseconds(periodMs));
+        timer.expires_from_now(boost::asio::chrono::milliseconds(periodMs));
+        timer.async_wait([&](boost::system::error_code e) { this->tick(e); });
     }
 }
