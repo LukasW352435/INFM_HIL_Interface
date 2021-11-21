@@ -20,7 +20,21 @@
  ******************************************************************************/
 namespace sim_interface::dut_connector::can{
 
-    CANConnector::CANConnector() : ioContext(boost::make_shared<boost::asio::io_context>()), bcmSocket(createBcmSocket()){
+    /**
+     * CAN Connector constructor.
+     *
+     * @param queueDuTToSim - Queue to write received simulation events to
+     * @param config        - Configuration for the connector
+     */
+    CANConnector::CANConnector(
+            std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
+            const CANConnectorConfig &config
+            )
+    :
+    DuTConnector(std::move(queueDuTToSim), config),
+    ioContext(boost::make_shared<boost::asio::io_context>()),
+    bcmSocket(createBcmSocket(config))
+    {
 
         // Create the first receive operation
         receiveOnSocket();
@@ -31,9 +45,12 @@ namespace sim_interface::dut_connector::can{
         std::cout << "CAN Connector created" << std::endl;
     }
 
+    /**
+    * CAN Connector destructor.
+    */
     CANConnector::~CANConnector(){
 
-        // Stop the io context
+        // Stop the io context loop
         stopProcessing();
 
         std::cout << "CAN Connector destroyed" << std::endl;
@@ -44,7 +61,7 @@ namespace sim_interface::dut_connector::can{
     *
     * @return The BCM socket.
     */
-    boost::asio::generic::datagram_protocol::socket CANConnector::createBcmSocket() {
+    boost::asio::generic::datagram_protocol::socket CANConnector::createBcmSocket(const CANConnectorConfig &config){
 
         // Error code return value
         boost::system::error_code errorCode;
@@ -56,7 +73,7 @@ namespace sim_interface::dut_connector::can{
         boost::asio::generic::datagram_protocol::socket socket(*ioContext, bcmProtocol);
 
         // Create an I/O command and resolve the interface name to an interface index
-        InterfaceIndexIO interfaceIndexIO(INTERFACE);
+        InterfaceIndexIO interfaceIndexIO(config.interfaceName);
         socket.io_control(interfaceIndexIO, errorCode);
 
         // Check if we could resolve the interface correctly
@@ -119,6 +136,19 @@ namespace sim_interface::dut_connector::can{
     */
     void CANConnector::ioContextThreadFunction(const boost::shared_ptr<boost::asio::io_context>& context){
         context->run();
+    }
+
+    /**
+     * Gets information about the CAN Connector
+     *
+     * @return info - The connector information
+     */
+    ConnectorInfo CANConnector::getConnectorInfo(){
+        ConnectorInfo info(
+                "CAN Connector",
+                0x0000001,
+                "The CAN Connector enables the communication over a CAN/CANFD interface.");
+        return info;
     }
 
     /**
@@ -813,9 +843,11 @@ namespace sim_interface::dut_connector::can{
     }
 
     /**
-    * Decides what to do with the data we received from the simulation.
+    * Decides what to do with the event we received from the simulation.
+    *
+    * @param event - The event we received from the simulation.
     */
-    void CANConnector::handleSendingData(){
+    void CANConnector::handleEvent(const SimEvent &event){
 
         // Test CAN Frame
         struct can_frame canFrame1 = {0};

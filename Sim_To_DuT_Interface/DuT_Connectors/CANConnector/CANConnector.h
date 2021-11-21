@@ -83,19 +83,21 @@ struct bcmMsgMultipleFramesCanFD{
  ******************************************************************************/
 namespace sim_interface::dut_connector::can{
 
-    class CANConnector : DuTConnector{
+    class CANConnector : public DuTConnector{
 
     public:
         // Functions members
-        CANConnector();
+        CANConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim, const CANConnectorConfig &config);
         ~CANConnector();
 
+        ConnectorInfo getConnectorInfo() override;
+        void handleEvent(const SimEvent &event) override;
+
         // Data members
-        void handleSendingData();
 
     private:
         // Function members
-        boost::asio::generic::datagram_protocol::socket createBcmSocket();
+        boost::asio::generic::datagram_protocol::socket createBcmSocket(const CANConnectorConfig &config);
 
         void startProcessing();
         void stopProcessing();

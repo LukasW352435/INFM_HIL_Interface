@@ -17,6 +17,7 @@
 // Project includes
 
 // System includes
+#include <string>
 #include <cstring>
 #include <net/if.h>
 #include <sys/ioctl.h>
@@ -28,7 +29,7 @@
 class InterfaceIndexIO{
 
 public:
-    explicit InterfaceIndexIO(const char* interfaceName);
+    explicit InterfaceIndexIO(std::string interfaceName);
     static int name();
     void* data();
     int index() const;

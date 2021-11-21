@@ -11,11 +11,20 @@
 
 
 /*******************************************************************************
- * DEFINES
+ * CLASS DECLARATIONS
  ******************************************************************************/
 
-// The interface that should be used
-#define INTERFACE "vcan0"
+namespace sim_interface::dut_connector::can{
+
+    class CANConnectorConfig : public sim_interface::dut_connector::ConnectorConfig{
+
+    public:
+        // Data member
+        std::string interfaceName;
+
+    };
+
+}
 
 
 #endif //SIM_TO_DUT_INTERFACE_CANCONNECTORCONFIG_H

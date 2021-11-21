@@ -20,8 +20,8 @@
  * FUNCTION DEFINITIONS
  ******************************************************************************/
 
-InterfaceIndexIO::InterfaceIndexIO(const char* interfaceName) : ifr(){
-    std::strncpy(ifr.ifr_name, interfaceName, IF_NAMESIZE);
+InterfaceIndexIO::InterfaceIndexIO(std::string interfaceName) : ifr(){
+    std::strncpy(ifr.ifr_name, interfaceName.c_str(), IF_NAMESIZE);
 }
 
 /**
