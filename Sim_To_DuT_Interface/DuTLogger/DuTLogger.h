@@ -12,8 +12,10 @@
 #define SIM_TO_DUT_INTERFACE_DUTLOGGER_H
 #include <string>
 #include "quill/Quill.h"
+#include "../Events/SimEvent.h"
 #include <list>
 #include <filesystem>
+#include <fstream>
 
 /**
  * Defines the relative path where the logfiles will be created.
@@ -84,6 +86,9 @@ static const quill::LogLevel DEFAULT_FILE_LOG_LEVEL = quill::LogLevel::Info;
 // Little variable to remember that the quill engine has been started.
 static bool startedQuillEngine = false;
 
+// Boolean to check if the header has been printed to the data file yet.
+static bool csvHeaderPrinted = false;
+
 /**
  * This logger is a tool with specialized functions to log and store messages for all elements of the
  * Sim_To_DuT_Interface. The logger and all of it's functions are static so it's not necessary to create instances
@@ -105,6 +110,7 @@ public:
     static void logMessage(std::string msg, LOG_LEVEL level);
     static void logMessage(std::string msg, LOG_LEVEL level, bool writeToFile);
     static void changeLogLevel(LOG_LEVEL_CHANGE_ON typ, LOG_LEVEL level);
+    static void logEvent(sim_interface::SimEvent event);
 
 private:
     // define all required loggers

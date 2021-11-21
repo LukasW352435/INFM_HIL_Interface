@@ -113,8 +113,7 @@ quill::Logger* DuTLogger::createDataLogger() {
     quill::Handler* file_handler = quill::file_handler(basicPath, FILE_MODE_DATA,quill::FilenameAppend::None);
 
     // configure the pattern of a line
-    file_handler->set_pattern(QUILL_STRING("%(ascii_time) %(logger_name) - %(message)"),
-            "%D %H:%M:%S.%Qms");
+    file_handler->set_pattern(QUILL_STRING("%(message)"));
 
     // finally, create the logger and return it
     quill::Logger* createdLogger = quill::create_logger("dataLog", file_handler);
@@ -336,7 +335,7 @@ void DuTLogger::logWithLevel(quill::Logger* log, std::string msg, LOG_LEVEL leve
             break;
 
         default:
-            throw std::invalid_argument("Parsed unknown LOG_LEVEL <" + msg + ">");
+            throw std::invalid_argument("Parsed unknown LOG_LEVEL!");
     }
 }
 
@@ -354,4 +353,22 @@ std::string DuTLogger::getCurrentTimestamp() {
     std::ostringstream oss;
     oss << std::put_time(&timer, "%Y-%m-%d_%H-%M-%S");
     return oss.str();
+}
+
+/**
+ * This function logs the event to the data logfiles. There is no need to define a logging level for this operation.
+ *
+ * @param event This event will be logged.
+ */
+void DuTLogger::logEvent(sim_interface::SimEvent event) {
+    // check if we already printed the header to the file.
+    // Because of troubles with the quill engine we can't write the header in the file when we're building logger
+    if (!csvHeaderPrinted) {
+        // log the header
+        LOG_INFO(dataLogger, "{},{},{},{}", "Operation", "Value", "Origin", "Current");
+        // remember that we have logged the header
+        csvHeaderPrinted = true;
+    }
+    // log the data object in a csv format with the data logger
+    LOG_INFO(dataLogger, "{},{},{},{}", event.operation, event.value, event.origin, event.current);
 }
