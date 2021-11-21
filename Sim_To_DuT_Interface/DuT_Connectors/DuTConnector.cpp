@@ -49,6 +49,7 @@ namespace sim_interface::dut_connector {
     }
 
     DuTConnector::~DuTConnector() {
+        aliveTimer->stop();
         io->stop();
         timerRunner.join();
     }
