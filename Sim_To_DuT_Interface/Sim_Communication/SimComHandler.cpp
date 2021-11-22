@@ -38,11 +38,12 @@
 namespace sim_interface {
     SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface,
                                  const std::string& socketSimAddressSub, zmq::context_t &context_sub,
-                                 const std::string& socketSimAddressPub, zmq::context_t &context_pub)
-            : queueSimToInterface(std::move(queueSimToInterface)), socketSimSub_(context_sub, zmq::socket_type::sub) , socketSimPub_(context_pub, zmq::socket_type::pub)  {
+                                 const std::string& socketSimAddressPub, zmq::context_t &context_pub,
+                                 const std::string& socketSimAddressSubConfig, zmq::context_t &context_subConfig)
+            : queueSimToInterface(std::move(queueSimToInterface)), socketSimSub_(context_sub, zmq::socket_type::sub) , socketSimPub_(context_pub, zmq::socket_type::pub), socketSimSubConfig_(context_subConfig,zmq::socket_type::sub)  {
 
         socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
-
+        socketSimSubConfig_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
         // Connect to publisher
         std::cout << "Connecting to " << socketSimAddressSub << " . . ." << std::endl;
         //  socket_sub.connect(socketSimAdress);
@@ -54,11 +55,58 @@ namespace sim_interface {
 
 
 
-
         socketSimSub_.connect(socketSimAddressSub);
+        socketSimSubConfig_.connect(socketSimAddressSubConfig);
+
 
     }
 
+    void SimComHandler::getConfig()
+    {
+        zmq::message_t reply;
+        try {
+            std::cout << "Receiving...Config " << std::endl;
+            socketSimSubConfig_.recv(&reply);
+        } catch (zmq::error_t cantReceive) {
+            std::cerr << "Socket can't receive: " << cantReceive.what() << std::endl;
+            // TODO unbind
+        }
+
+        const char *buf = static_cast<const char*>(reply.data());
+        std::cout << "CHAR [" << buf << "]" << std::endl;
+
+        std::string input_data_( buf, reply.size() );
+        std::istringstream archive_stream(input_data_);
+        boost::archive::text_iarchive archive(archive_stream);
+        std::multimap <std::string, std::string> receiveMap;
+
+        try
+        {
+            archive >> receiveMap;
+        } catch (boost::archive::archive_exception& ex) {
+            std::cout << "Archive Exception during deserializing:" << std::endl;
+            std::cout << ex.what() << std::endl;
+        } catch (int e) {
+            std::cout << "EXCEPTION " << e << std::endl;
+        }
+
+        //  std::string test  = receiveMap["Speed"].which();
+        std::vector<std::string> keyVector;
+        std::vector<std::string> valueVector;
+        for (auto const& element: receiveMap) {
+            keyVector.push_back(element.first);
+            valueVector.push_back(element.second);
+            std::string keyAsString = element.first;
+
+            auto valueAsAny =   element.second;
+            std::stringstream stringStreamValue ;
+            stringStreamValue <<  valueAsAny;
+
+            std::cout << "value: " << stringStreamValue.str() << std::endl;
+            std::cout << "Key: " << keyAsString << std::endl;
+
+        }
+    }
 
     void SimComHandler::run() {
         // TODO async receive events from the Simulation and send them to the interface
@@ -80,19 +128,19 @@ namespace sim_interface {
             std::string input_data_( buf, reply.size() );
             std::istringstream archive_stream(input_data_);
             boost::archive::text_iarchive archive(archive_stream);
-            std::map <std::string, boost::variant<int, double, std::string>> receiveMap;
+            std::map <std::string, boost::variant<int, double, std::string>> receiveMap , receiveMapDynamics;
 
             try
             {
-                archive >> receiveMap;
+                archive >> receiveMap ;
+                archive >> receiveMapDynamics;
             } catch (boost::archive::archive_exception& ex) {
                 std::cout << "Archive Exception during deserializing:" << std::endl;
                 std::cout << ex.what() << std::endl;
             } catch (int e) {
                 std::cout << "EXCEPTION " << e << std::endl;
             }
-            std::cout << "Value " << receiveMap["Speed"]<< std::endl;
-            //  std::string test  = receiveMap["Speed"].which();
+
             std::vector<std::string> keyVector;
             std::vector<boost::variant<int, double, std::string>> valueVector;
             for (auto const& element: receiveMap) {
@@ -104,8 +152,20 @@ namespace sim_interface {
                 std::stringstream stringStreamValue ;
                 stringStreamValue <<  valueAsAny;
 
-                std::cout << "value: " << stringStreamValue.str() << std::endl;
-                SimEvent event(keyAsString, stringStreamValue.str(), "Simulation");
+                SimEvent event(keyAsString, stringStreamValue.str(), "Simulation Traci");
+                sendEventToInterface(event);
+            }
+            for (auto const& element: receiveMapDynamics) {
+                keyVector.push_back(element.first);
+                valueVector.push_back(element.second);
+                std::string keyAsString = element.first;
+
+                auto valueAsAny =   element.second;
+                std::stringstream stringStreamValue ;
+                stringStreamValue <<  valueAsAny;
+                // std::cout << "KEY: " << keyAsString << std::endl;
+                //std::cout << "value: " << stringStreamValue.str() << std::endl;
+                SimEvent event(keyAsString, stringStreamValue.str(), "Simulation Dynamics");
                 sendEventToInterface(event);
             }
         }

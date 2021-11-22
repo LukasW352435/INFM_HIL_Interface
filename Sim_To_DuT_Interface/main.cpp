@@ -42,8 +42,11 @@ int main() {
     zmq::context_t context_sub(1);
     std::string socketSimAddressPub = "tcp://*:7778";
     zmq::context_t context_pub(1);
-    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddressSub, context_sub, socketSimAddressPub , context_pub);
-
+    std::string socketSimAddressSubConfig = "tcp://localhost:7779";
+    zmq::context_t context_subConfig(1);
+    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddressSub, context_sub, socketSimAddressPub , context_pub,socketSimAddressSubConfig, context_subConfig);
+    std::thread simConfigHandlerThread (&sim_interface::SimComHandler::getConfig, &simComHandler);
+    simConfigHandlerThread.detach();
     interface.setSimComHandler(&simComHandler);
 
     // Create DuT Devices
@@ -69,7 +72,15 @@ int main() {
     "Speed",
     "Width",
     "current",
-    "origin"};
+    "origin",
+    "SpeedDynamics",
+    "YawRateDynamics",
+    "AccelerationDynamics",
+    "HeadingDynamics",
+    "LatitudeDynamics",
+    "LongitudeDynamics",
+    "PosXDynamics",
+    "PoYDynamics"};
 
 
     sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);

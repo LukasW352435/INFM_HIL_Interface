@@ -20,3 +20,11 @@ Speed
 Width
 current
 origin
+SpeedDynamics
+YawRateDynamics
+AccelerationDynamics
+HeadingDynamics
+LatitudeDynamics
+LongitudeDynamics
+PosXDynamics
+PoYDynamics
