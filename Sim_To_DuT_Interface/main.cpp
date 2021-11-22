@@ -75,7 +75,7 @@ int main() {
 
 
     sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);
-    ///*
+    /*
     auto event = sim_interface::SimEvent();
     event.operation = "Test";
     event.value = "Test";
@@ -84,7 +84,7 @@ int main() {
     event.operation = "Indicator Right";
     event.value = "xyz";
     restDummyConnector.handleEvent(event);
-    //*/
+    */
 
     interface.addConnector(&restDummyConnector);
 
