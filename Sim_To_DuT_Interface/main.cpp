@@ -78,7 +78,7 @@ int main() {
     /*
     auto event = sim_interface::SimEvent();
     event.operation = "Test";
-    event.value = Test;
+    event.value = "Test";
     restDummyConnector.handleEvent(event);
     auto event2 = sim_interface::SimEvent();
     event.operation = "Indicator Right";
