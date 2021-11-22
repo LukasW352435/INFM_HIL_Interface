@@ -10,24 +10,14 @@
 
 #ifndef SIM_TO_DUT_INTERFACE_DUTLOGGER_H
 #define SIM_TO_DUT_INTERFACE_DUTLOGGER_H
+
+#include "DuTLoggerConfig.h"
 #include <string>
 #include "quill/Quill.h"
 #include "../Events/SimEvent.h"
 #include <list>
 #include <filesystem>
 #include <fstream>
-
-/**
- * Defines the relative path where the logfiles will be created.
- * In this path the log messages will be logged.
- */
-static const std::string PATH_CONSOLE_LOG = "/logs/console";
-
-/**
- * Defines the relative path where the logfiles will be created.
- * In this path the data objects will be logged.
- */
-static const std::string PATH_DATA_LOG = "/logs/data";
 
 /**
  * This constant defines the mode how the logger will open the logfile of the console logging.
@@ -42,12 +32,6 @@ static const std::string FILE_MODE_CONSOLE = "w";
  * In mode "a" the logger tries to append it's content on an existing file with the same name.
  */
 static const std::string FILE_MODE_DATA = "w";
-
-/**
- * This constant defines the maximum number of files in a logging directory. If there are more
- * logfiles under the underlying path, old ones will be deleted. (like a date based file rotation)
- */
-static const int FILE_BACKUP_COUNT = 10;
 
 /**
  * Defines the level of logging
@@ -72,16 +56,6 @@ enum LOGGER_TYPE {
 enum LOG_LEVEL_CHANGE_ON {
     CONSOLE_LOG, FILE_LOG
 };
-
-/**
- * This constant stores the default level for console logging.
- */
-static const quill::LogLevel DEFAULT_CONSOLE_LOG_LEVEL = quill::LogLevel::Info;
-
-/**
- * This constant stores the default level for console file logging.
- */
-static const quill::LogLevel DEFAULT_FILE_LOG_LEVEL = quill::LogLevel::Info;
 
 // Little variable to remember that the quill engine has been started.
 static bool startedQuillEngine = false;
