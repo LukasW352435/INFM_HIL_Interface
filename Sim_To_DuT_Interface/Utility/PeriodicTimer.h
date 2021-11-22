@@ -33,7 +33,7 @@
 namespace sim_interface {
     class PeriodicTimer {
     public:
-        explicit PeriodicTimer(const std::shared_ptr<boost::asio::io_service> &io, int periodMs, const SimEvent &event,
+        explicit PeriodicTimer(const std::shared_ptr<boost::asio::io_service> &io, int periodMs, SimEvent event,
                                std::function<void(const SimEvent &)> callback);
 
         void start();
@@ -44,7 +44,7 @@ namespace sim_interface {
 
         boost::asio::steady_timer timer;
         std::function<void(const SimEvent &)> callback;
-        const SimEvent &event;
+        SimEvent event;
         int periodMs;
     };
 }

@@ -29,8 +29,8 @@
 
 namespace sim_interface {
     PeriodicTimer::PeriodicTimer(const std::shared_ptr<boost::asio::io_service> &io, int periodMs,
-                                 const SimEvent &event, std::function<void(const SimEvent &)> callback) :
-            periodMs(periodMs), event(event), callback(std::move(callback)),
+                                 SimEvent event, std::function<void(const SimEvent &)> callback) :
+            periodMs(periodMs), event(std::move(event)), callback(std::move(callback)),
             timer(*io) {
         timer.expires_from_now(boost::asio::chrono::milliseconds(periodMs));
     }
