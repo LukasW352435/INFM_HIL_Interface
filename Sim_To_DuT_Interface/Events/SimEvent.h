@@ -28,6 +28,7 @@
 #include <ctime>
 #include <string>
 #include <iostream>
+#include <boost/variant.hpp>
 
 namespace sim_interface {
     class SimEvent {
@@ -38,7 +39,7 @@ namespace sim_interface {
 
         // change operation string to enum?
         std::string operation;
-        std::string value;
+        boost::variant<int, double, std::string> value;
         std::time_t current;
         std::string origin;
 
