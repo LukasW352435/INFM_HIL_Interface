@@ -140,12 +140,23 @@ std::string DuTLogger::initializeLoggingPath(LOGGER_TYPE type) {
 }
 
 /**
- * Identifies the path to the log file for the specific typ of logger by using the underlying path configuration
+ * Identifies the path to the log file for the specific typ of logger by using the underlying path configuration.
+ * The function can handle absolute and relative paths from the configuration.
  *
- * @param type type of logger
+ * @param type  - type of logger
  * @return path to the logfile
  */
 std::string DuTLogger::getLoggingPath(LOGGER_TYPE type) {
+    // Check if the user provided an absolute path for logging
+    // If this is true -> remove the first identifier
+    if (type == LOGGER_TYPE::CONSOLE && PATH_CONSOLE_LOG.at(0) == '#') {
+        return PATH_CONSOLE_LOG.substr(1, PATH_CONSOLE_LOG.size()-1);
+    }
+    if (type == LOGGER_TYPE::DATA && PATH_DATA_LOG.at(0) == '#') {
+        return PATH_DATA_LOG.substr(1, PATH_DATA_LOG.size()-1);
+    }
+
+    // the user provided a relative path -> build the relative path
     // get the path, where this program is running
     std::string path = std::filesystem::current_path();
 

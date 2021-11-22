@@ -13,14 +13,20 @@
 #include "quill/Quill.h"
 
 /**
- * Defines the relative path where the logfiles will be created.
- * In this path the log messages will be logged.
+ * Defines the path where the console messages will be logged.
+ * It is possible to use a relative path. In this case the configured below will be appended on the path of
+ * application's execution. An example for a relative path is "/logs/console".
+ * If you rather want to define an absolute path please add an additional '#' in front of your absolute path.
+ * An example for an absolute path is "#/home/user/project/logs/console"
  */
 static const std::string PATH_CONSOLE_LOG = "/logs/console";
 
 /**
- * Defines the relative path where the logfiles will be created.
- * In this path the data objects will be logged.
+ * Defines the path where the data objects will be logged.
+ * It is possible to use a relative path. In this case the configured below will be appended on the path of
+ * application's execution. An example for a relative path is "/logs/data".
+ * If you rather want to define an absolute path please add an additional '#' in front of your absolute path.
+ * An example for an absolute path is "#/home/user/project/logs/data"
  */
 static const std::string PATH_DATA_LOG = "/logs/data";
 
@@ -32,11 +38,17 @@ static const int FILE_BACKUP_COUNT = 10;
 
 /**
  * This constant stores the default level for console logging.
+ * During the execution it can be manually changed by the function below.
+ *
+ * @see void changeLogLevel(LOG_LEVEL_CHANGE_ON typ, LOG_LEVEL level)
  */
 static const quill::LogLevel DEFAULT_CONSOLE_LOG_LEVEL = quill::LogLevel::Info;
 
 /**
  * This constant stores the default level for console file logging.
+ * During the execution it can be manually changed by the function below.
+ *
+ * @see void changeLogLevel(LOG_LEVEL_CHANGE_ON typ, LOG_LEVEL level)
  */
 static const quill::LogLevel DEFAULT_FILE_LOG_LEVEL = quill::LogLevel::Info;
 
