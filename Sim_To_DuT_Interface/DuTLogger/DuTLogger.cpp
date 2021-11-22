@@ -380,6 +380,24 @@ void DuTLogger::logEvent(sim_interface::SimEvent event) {
         // remember that we have logged the header
         csvHeaderPrinted = true;
     }
+
+    // because the value of the event can have different types, it is necessary to find out what type it is and
+    // cast it to string (so we can log the string)
+    std::string castedValue;
+    switch (event.value.which()) {
+        case 0:     // it's an int
+            castedValue = std::to_string(boost::get<int>(event.value));
+            break;
+        case 1:
+            castedValue = std::to_string(boost::get<double>(event.value));
+            break;
+        case 2:
+            castedValue = boost::get<std::string>(event.value);
+            break;
+        default:
+            logMessage("Unknown type for the value of the event", LOG_LEVEL::ERROR);
+    }
+
     // log the data object in a csv format with the data logger
-    LOG_INFO(dataLogger, "{},{},{},{}", event.operation, event.value, event.origin, event.current);
+    LOG_INFO(dataLogger, "{},{},{},{}", event.operation, castedValue, event.origin, event.current);
 }

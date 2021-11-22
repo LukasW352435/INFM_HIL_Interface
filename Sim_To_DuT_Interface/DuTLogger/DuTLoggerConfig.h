@@ -16,6 +16,7 @@
  * Defines the path where the console messages will be logged.
  * It is possible to use a relative path. In this case the configured below will be appended on the path of
  * application's execution. An example for a relative path is "/logs/console".
+ * Please notice that there is no '/' at the end.
  * If you rather want to define an absolute path please add an additional '#' in front of your absolute path.
  * An example for an absolute path is "#/home/user/project/logs/console"
  */
@@ -25,6 +26,7 @@ static const std::string PATH_CONSOLE_LOG = "/logs/console";
  * Defines the path where the data objects will be logged.
  * It is possible to use a relative path. In this case the configured below will be appended on the path of
  * application's execution. An example for a relative path is "/logs/data".
+ * Please notice that there is no '/' at the end.
  * If you rather want to define an absolute path please add an additional '#' in front of your absolute path.
  * An example for an absolute path is "#/home/user/project/logs/data"
  */
