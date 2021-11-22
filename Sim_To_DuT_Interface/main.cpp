@@ -28,6 +28,8 @@
 #include <thread>
 #include "DuT_Connectors/RESTDummyConnector/RESTDummyConnector.h"
 #include "DuT_Connectors/RESTDummyConnector/RESTConfig.h"
+#include "DuT_Connectors/CANConnector/CANConnector.h"
+#include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
 #include "Utility/SharedQueue.h"
 #include "Sim_Communication/SimComHandler.h"
 #include "DuTLogger/DuTLogger.h"
@@ -76,14 +78,29 @@ int main() {
     /*
     auto event = sim_interface::SimEvent();
     event.operation = "Test";
-    event.value = Test;
+    event.value = "Test";
     restDummyConnector.handleEvent(event);
     auto event2 = sim_interface::SimEvent();
     event.operation = "Indicator Right";
     event.value = "xyz";
     restDummyConnector.handleEvent(event);
-*/
+    */
+
     interface.addConnector(&restDummyConnector);
+
+    // Create a new CAN Connector config
+    sim_interface::dut_connector::can::CANConnectorConfig canConfig;
+    canConfig.interfaceName = "vcan0";
+
+    // Create a new CAN Connector and add it to the interface
+    sim_interface::dut_connector::can::CANConnector canConnector(interface.getQueueDuTToSim(), canConfig);
+    interface.addConnector(&canConnector);
+
+    // Test the CAN Connector
+    auto canEvent = sim_interface::SimEvent();
+    canEvent.operation = "Test";
+    canEvent.value     = "Value";
+    canConnector.handleEvent(canEvent);
 
     std::cout << interface << std::endl;
 
