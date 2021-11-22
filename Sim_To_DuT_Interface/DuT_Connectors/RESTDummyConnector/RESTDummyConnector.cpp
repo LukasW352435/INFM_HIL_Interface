@@ -25,6 +25,7 @@
 
 #include <iostream>
 #include <utility>
+#include <boost/lexical_cast.hpp>
 #include "RESTDummyConnector.h"
 #include "ReceiveEndpoint.h"
 
@@ -161,6 +162,6 @@ namespace sim_interface::dut_connector::rest_dummy {
      * @return json string with key=operation and status=value
      */
     std::string RESTDummyConnector::EventToRESTMessage(const SimEvent &e) {
-        return R"({"key":")" + e.operation + R"(","status":")" + e.value + R"("})";
+        return R"({"key":")" + e.operation + R"(","status":")" + boost::lexical_cast<std::string>(e.value).c_str() + R"("})";
     }
 }
