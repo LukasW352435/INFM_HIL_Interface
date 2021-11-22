@@ -1,7 +1,7 @@
 <map id="dummy_dut::rest::impl::DefaultApiImpl" name="dummy_dut::rest::impl::DefaultApiImpl">
-<area shape="rect" id="node1" title=" " alt="" coords="572,71,743,112"/>
-<area shape="rect" id="node2" href="$classdummy__dut_1_1rest_1_1api_1_1DefaultApi.html" title=" " alt="" coords="204,5,365,47"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,13,132,39"/>
-<area shape="rect" id="node4" href="$classdummy__dut_1_1rest_1_1impl_1_1RegisteredInterface.html" title=" " alt="" coords="199,71,370,112"/>
-<area shape="rect" id="node5" href="$classdummy__dut_1_1rest_1_1messages_1_1InterfaceMessages.html" title=" " alt="" coords="181,136,388,177"/>
+<area shape="rect" id="node1" title=" " alt="" coords="516,71,687,112"/>
+<area shape="rect" id="node2" href="$classdummy__dut_1_1rest_1_1api_1_1DefaultApi.html" title=" " alt="" coords="148,5,309,47"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,13,76,39"/>
+<area shape="rect" id="node4" href="$classdummy__dut_1_1rest_1_1impl_1_1RegisteredInterface.html" title=" " alt="" coords="143,71,314,112"/>
+<area shape="rect" id="node5" href="$classdummy__dut_1_1rest_1_1messages_1_1InterfaceMessages.html" title=" " alt="" coords="125,136,332,177"/>
 </map>

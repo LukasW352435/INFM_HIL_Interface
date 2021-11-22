@@ -1,8 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,159,88,185"/>
-<area shape="rect" id="node2" href="$classdummy__dut_1_1rest_1_1api_1_1DefaultApiDashboardMessagesResource.html" title="Open message stream to receive new messages continuously" alt="" coords="136,5,371,61"/>
-<area shape="rect" id="node3" href="$classdummy__dut_1_1rest_1_1api_1_1DefaultApiDashboardResource.html" title="Load messages to view received messages and send from DuT" alt="" coords="139,86,368,127"/>
-<area shape="rect" id="node4" href="$classdummy__dut_1_1rest_1_1api_1_1DefaultApiReadResource.html" title="Subscribe client to receive messages from dummy DuT" alt="" coords="157,151,349,193"/>
-<area shape="rect" id="node5" href="$classdummy__dut_1_1rest_1_1api_1_1DefaultApiSendResource.html" title="Send a message to the dummy DuT" alt="" coords="158,217,349,258"/>
-<area shape="rect" id="node6" href="$classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveApiResource.html" title=" " alt="" coords="162,283,345,339"/>
+<area shape="rect" id="node1" href="$structbcmMsgMultipleFramesCanFD.html" title=" " alt="" coords="5,5,227,32"/>
 </map>
