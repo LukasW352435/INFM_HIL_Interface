@@ -31,38 +31,56 @@
 #include <iterator>
 
 namespace sim_interface {
-    /// A Interface between a simulation and multiple DuT devices.
+    /**
+     * An interface between a simulation and multiple DuT devices.
+     */
     class SimToDuTInterface {
     public:
-        /// Create a new interface.
+        /**
+         * Create a new interface.
+         */
         SimToDuTInterface();
 
-        /// Destroys the interface, stops all threads and queues.
+        /**
+         * Destroys the interface, stops all threads and queues.
+         */
         ~SimToDuTInterface();
 
-        /// Add DuT connectors to the interface.
-        /// \param duTConnector A DuT connector that has derived form the DuTConnector class.
+        /**
+         * Add DuT connectors to the interface.
+         * @param duTConnector A DuT connector that has derived form the DuTConnector class.
+         */
         void addConnector(dut_connector::DuTConnector *duTConnector);
 
-        /// Sets the handler that connects to the Simulation.
-        /// \param simComHandler A communication handler to communicate with the simulation.
+        /**
+         * Sets the handler that connects to the Simulation.
+         * @param simComHandler A communication handler to communicate with the simulation.
+         */
         void setSimComHandler(SimComHandler *simComHandler);
 
-        /// Starts the interface.
+        /**
+         * Starts the interface.
+         */
         void run();
 
-        /// Returns a string representation for the interface.
-        /// \param os
-        /// \param interface
-        /// \return
+        /**
+         * Returns a string representation for the interface.
+         * @param os
+         * @param interface
+         * @return
+         */
         friend std::ostream &operator<<(std::ostream &os, const SimToDuTInterface &interface);
 
-        /// Queue used to "send" SimEvents from the DuT devices to the simulation.
-        /// \return A thread save SharedQueue.
+        /**
+         * Queue used to "send" SimEvents from the DuT devices to the simulation.
+         * @return A thread save SharedQueue.
+         */
         std::shared_ptr<SharedQueue<SimEvent>> getQueueDuTToSim();
 
-        /// Queue used to "send" SimEvents from the simulation to the interface.
-        /// \return A thread save SharedQueue.
+        /**
+         * Queue used to "send" SimEvents from the simulation to the interface.
+         * @return A thread save SharedQueue.
+         */
         std::shared_ptr<SharedQueue<SimEvent>> getQueueSimToInterface();
 
     private:

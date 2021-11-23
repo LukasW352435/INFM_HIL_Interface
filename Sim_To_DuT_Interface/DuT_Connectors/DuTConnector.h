@@ -38,39 +38,53 @@
 #include "ConnectorConfig.h"
 
 namespace sim_interface::dut_connector {
-    /// Connector implementing all kinds of DuT devices.
-    /// The different connectors should implement the protocol to communicate with a specific hardware DuT.
-    /// Used in the interface to send/receive events to/from the device.
+    /**
+     * Connector implementing all kinds of DuT devices.
+     * The different connectors should implement the protocol to communicate with a specific hardware DuT.
+     * Used in the interface to send/receive events to/from the device.
+     */
     class DuTConnector {
     public:
-        /// Create a new connector.
-        /// \param queueDuTToSim Queue to communicate with the interface.
-        /// \param config Config for the device.
+        /**
+         * Create a new connector.
+         * @param queueDuTToSim Queue to communicate with the interface.
+         * @param config Config for the device.
+         */
         explicit DuTConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
                               const sim_interface::dut_connector::ConnectorConfig &config);
 
-        /// Destroy the connector, stop all operations, end all threads.
+        /**
+         * Destroy the connector, stop all operations, end all threads.
+         */
         ~DuTConnector();
 
-        /// Some basic information from the connector.
-        /// Please override this methode!
-        /// \return Some information and version of the device.
+        /**
+         * Some basic information from the connector.
+         * Please override this methode!
+         * @return Some information and version of the device.
+         */
         virtual ConnectorInfo getConnectorInfo();
 
-        /// Handles an event asynchronously from the simulation.
-        /// Called by the interface.
+        /**
+         * Handles an event asynchronously from the simulation.
+         * Called by the interface.
+         */
         void handleEvent(const SimEvent &simEvent);
 
-        /// Send an event to the simulation. Creates multiple events from a single event if configured so.
-        /// Called by the DuT connector itself.
-        /// \param simEvent Event that should be send.
+        /**
+         * Send an event to the simulation. Creates multiple events from a single event if configured so.
+         * Called by the DuT connector itself.
+         * @param simEvent Event that should be send.
+         */
         void sendEventToSim(const SimEvent &simEvent);
 
     protected:
-        /// Handles an single event asynchronously from the simulation.
-        /// Called whenever a new event for the device arrives.
-        /// Please override this methode!
-        /// \param simEvent
+        /**
+         * Handles an single event asynchronously from the simulation.
+         * Called whenever a new event for the device arrives.
+         * Please override this methode!
+         * @param simEvent Event that should be processed by the device.
+         */
         virtual void handleEventSingle(const SimEvent &simEvent) {};
 
     private:

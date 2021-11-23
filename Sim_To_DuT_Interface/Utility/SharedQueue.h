@@ -30,19 +30,27 @@
 #include <condition_variable>
 
 namespace sim_interface {
-    /// A thread save shared queue to communicate between multiple threads.
-    /// The queue is a FIFO queue.
+    /**
+     * A thread save shared queue to communicate between multiple threads.
+     * The queue is a FIFO queue.
+     */
     template<class T>
     class SharedQueue {
     public:
-        /// Create a shared queue.
+        /**
+         * Create a shared queue.
+         */
         SharedQueue() = default;
 
-        /// Destroys the queue.
+        /**
+         * Destroys the queue.
+         */
         SharedQueue(const SharedQueue<T> &) = delete;
 
-        /// Push a element at the end of the queue.
-        /// \param elem Element to add to the queue.
+        /**
+         * Push a element at the end of the queue.
+         * @param elem Element to add to the queue.
+         */
         void push(T elem) {
             std::unique_lock<std::mutex> lock(mutex);
             if (enqueue) {
@@ -51,9 +59,11 @@ namespace sim_interface {
             }
         }
 
-        /// Get the first element in the queue.
-        /// \param elem Reverence to the first element.
-        /// \return Returns TRUE if the the element is valid and FALSE if not.
+        /**
+         * Get the first element in the queue.
+         * @param elem Reverence to the first element.
+         * @return Returns TRUE if the element is valid and FALSE if not.
+         */
         bool pop(T &elem) {
             std::unique_lock<std::mutex> lock(mutex);
             while (queue.empty() && !requestEnd) {
@@ -68,14 +78,18 @@ namespace sim_interface {
             return true;
         }
 
-        /// Stops the queue and enqueues all its elements.
+        /**
+         * Stops the queue and enqueues all its elements.
+         */
         void Stop() {
             std::unique_lock<std::mutex> lock(mutex);
             requestEnd = true;
             conditionVariable.notify_one();
         }
 
-        /// Destroys and stops the queue.
+        /**
+         * Destroys and stops the queue.
+         */
         virtual ~SharedQueue() {
             Stop();
         }

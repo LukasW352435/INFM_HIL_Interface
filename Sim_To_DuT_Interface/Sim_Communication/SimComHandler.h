@@ -38,28 +38,38 @@
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 namespace sim_interface {
-    /// Handler between interface and simulation.
-    /// Responsible for sending/receiving SimEvents to/from the simulation.
+    /**
+     * Handler between interface and simulation.
+     * Responsible for sending/receiving SimEvents to/from the simulation.
+     */
     class SimComHandler {
     public:
-        /// Create a new handler.
-        /// \param queueSimToInterface A queue to communicate with the interface.
-        /// \param socketSimAddressSub
-        /// \param context_sub
-        /// \param socketSimAddressPub
-        /// \param context_pub
+        /**
+         * Create a new handler.
+         * @param queueSimToInterface A queue to communicate with the interface.
+         * @param socketSimAddressSub
+         * @param context_sub
+         * @param socketSimAddressPub
+         * @param context_pub
+         */
         SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const std::string& socketSimAddressSub,
                       zmq::context_t &context_sub , const std::string& socketSimAddressPub,
                       zmq::context_t &context_pub);
 
-        /// Destroys the handler and stops all threads.
+        /**
+         * Destroys the handler and stops all threads.
+         */
         ~SimComHandler();
 
-        /// Asynchronous sending of events to simulation.
-        /// \param simEvent An event that should be send to the simulation.
+        /**
+         * Asynchronous sending of events to simulation.
+         * @param simEvent An event that should be sent to the simulation.
+         */
         void sendEventToSim(const SimEvent &simEvent);
 
-        /// Starts the handler to asynchronously receive incoming events.
+        /**
+         * Starts the handler to asynchronously receive incoming events.
+         */
         void run();
     private:
         // send an event to the interface

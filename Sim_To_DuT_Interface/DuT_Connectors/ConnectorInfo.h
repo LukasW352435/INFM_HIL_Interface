@@ -29,26 +29,38 @@
 #include <iostream>
 
 namespace sim_interface::dut_connector {
-    /// Some basic information about the connector device.
+    /**
+     * Some basic information about the connector device.
+     */
     class ConnectorInfo {
     public:
-        /// The name of the connector.
+        /**
+         * The name of the connector.
+         */
         std::string name;
-        /// The version of the connector.
+        /**
+         * The version of the connector.
+         */
         int version;
-        /// A description of the connector.
+        /**
+         * A description of the connector.
+         */
         std::string description;
 
-        /// Create a new connector info.
-        /// \param name The name of the connector.
-        /// \param version The version of the connector.
-        /// \param description A description of the connector.
+        /**
+         * Create a new connector info.
+         * @param name The name of the connector.
+         * @param version The version of the connector.
+         * @param description A description of the connector.
+         */
         ConnectorInfo(std::string name, int version, std::string description);
 
-        /// String representation of the connector info.
-        /// \param os
-        /// \param duTInfo
-        /// \return
+        /**
+         * String representation of the connector info.
+         * @param os
+         * @param duTInfo
+         * @return
+         */
         friend std::ostream &operator<<(std::ostream &os, const ConnectorInfo &duTInfo);
     };
 }
