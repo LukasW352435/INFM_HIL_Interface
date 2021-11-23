@@ -1,5 +1,5 @@
 # INFM HIL Interface
-Interface between the Artery V2X Simulation Framework and DUT (Device under Test).  
+Interface between the Artery V2X Simulation Framework and DuT (Device under Test).  
 The Interface should support standards like:
 
 - CAN
@@ -11,8 +11,9 @@ But most importantly, more standards can be added later on.
 
 Logging of the communication is included in the interface.
 
-## Useful links
 
+## Useful links
+[Doxygen documentation](https://lukasw352435.github.io/INFM_HIL_Interface)
 [Artery simulation](https://github.com/riebl/artery)
 
 # Clone
