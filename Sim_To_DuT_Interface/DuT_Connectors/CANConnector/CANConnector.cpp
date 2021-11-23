@@ -847,7 +847,7 @@ namespace sim_interface::dut_connector::can{
     *
     * @param event - The event we received from the simulation.
     */
-    void CANConnector::handleEvent(const SimEvent &event){
+    void CANConnector::handleEventSingle(const SimEvent &event){
 
         // Test CAN Frame
         struct can_frame canFrame1 = {0};

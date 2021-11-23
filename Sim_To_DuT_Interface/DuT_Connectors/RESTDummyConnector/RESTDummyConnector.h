@@ -40,7 +40,7 @@ namespace sim_interface::dut_connector::rest_dummy {
 
         ~RESTDummyConnector();
 
-        void handleEvent(const SimEvent &e) override;
+        void handleEventSingle(const SimEvent &e) override;
 
         ConnectorInfo getConnectorInfo() override;
 
@@ -52,8 +52,6 @@ namespace sim_interface::dut_connector::rest_dummy {
         int port;
         std::thread receiveThread;
 
-
-        void sendEventToDuT(const SimEvent &e);
 
         struct curl_slist *curlJsonHeader = nullptr;
 
