@@ -31,7 +31,14 @@
 namespace sim_interface::dut_connector {
     class ConnectorConfig {
     public:
+        /** Set of processable operations */
         std::set<std::string> operations{};
+
+        /** Map of operations to be periodically repeated with interval as value */
+        std::map<std::string, int> periodicOperations{};
+
+        /** Enable periodic timer on Connector level */
+        bool periodicTimerEnabled = false;
     };
 }
 

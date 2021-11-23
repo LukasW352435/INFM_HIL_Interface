@@ -30,7 +30,7 @@ namespace sim_interface {
     SimEvent::SimEvent() : SimEvent("", "", "") {
     }
 
-    SimEvent::SimEvent(std::string operation, std::string value, std::string origin) :
+    SimEvent::SimEvent(std::string operation, boost::variant<int, double, std::string> value, std::string origin) :
             operation(std::move(operation)),
             value(std::move(value)),
             origin(std::move(origin)) {

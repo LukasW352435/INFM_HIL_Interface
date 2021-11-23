@@ -19,6 +19,7 @@
  * along with "Sim To DuT Interface".  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Lukas Wagenlehner
+ * @author Michael Schmitz
  * // TODO add all authors
  * @version 1.0
  */
@@ -72,7 +73,8 @@ int main() {
     "Width",
     "current",
     "origin"};
-
+    config.periodicTimerEnabled = true;
+    config.periodicOperations = {{ "Test", 1000 }};
 
     sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);
     /*
@@ -85,7 +87,7 @@ int main() {
     event.value = "xyz";
     restDummyConnector.handleEvent(event);
     */
-
+  
     interface.addConnector(&restDummyConnector);
 
     // Create a new CAN Connector config
@@ -107,8 +109,6 @@ int main() {
     // Start simComHandler to receive events from the simulation
     std::thread simComHandlerThread (&sim_interface::SimComHandler::run, &simComHandler);
     simComHandlerThread.detach();
-
-
 
     // Start interface to receive/send events
     interface.run();

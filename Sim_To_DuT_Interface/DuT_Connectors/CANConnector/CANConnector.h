@@ -91,7 +91,7 @@ namespace sim_interface::dut_connector::can{
         ~CANConnector();
 
         ConnectorInfo getConnectorInfo() override;
-        void handleEvent(const SimEvent &event) override;
+        void handleEventSingle(const SimEvent &event) override;
 
         // Data members
 
