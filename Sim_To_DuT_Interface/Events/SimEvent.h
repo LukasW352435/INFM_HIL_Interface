@@ -35,7 +35,7 @@ namespace sim_interface {
     public:
         SimEvent();
 
-        SimEvent(std::string operation, std::string value, std::string origin);
+        SimEvent(std::string operation, boost::variant<int, double, std::string> value, std::string origin);
 
         // change operation string to enum?
         std::string operation;
