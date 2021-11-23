@@ -49,6 +49,8 @@ namespace sim_interface::dut_connector::v2x{
         void handleEvent(const SimEvent &e) override;
 
         ConnectorInfo getConnectorInfo() override;
+        void sendEventToDuT(const SimEvent &e);
+        void sendV2XEventToSim(const vanetza::geonet::MIB mib);
 
     private:
 
@@ -58,7 +60,7 @@ namespace sim_interface::dut_connector::v2x{
         std::thread receiveThread;
 
         void enableReceiveFromDuT();
-        void sendEventToDuT(const SimEvent &e);
+
 
 
     };

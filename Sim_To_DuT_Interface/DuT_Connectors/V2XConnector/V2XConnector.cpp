@@ -87,7 +87,7 @@ namespace sim_interface::dut_connector::v2x {
  * @param e SimEvent to send
  */
     void V2XConnector::sendEventToDuT(const SimEvent &e) {
-        const vanetza::geonet::DataIndication dataIndication;
+        vanetza::geonet::DataIndication dataIndication;
         std::unique_ptr<vanetza::UpPacket> upPacket;
         //TODO Mapping SimEvent <-> dataIndication, upPacket
 
@@ -96,6 +96,12 @@ namespace sim_interface::dut_connector::v2x {
 
     void V2XConnector::enableReceiveFromDuT() {
 
+    }
+
+    void V2XConnector::sendV2XEventToSim(const vanetza::geonet::MIB mib){
+    	const SimEvent e;
+    	//TODO Mapping mib <-> e
+    	this->sendEventSim(e);
     }
 
 }

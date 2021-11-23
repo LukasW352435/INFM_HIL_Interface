@@ -26,21 +26,7 @@
 #ifndef SIM_TO_DUT_INTERFACE_V2XCONFIG_H
 #define SIM_TO_DUT_INTERFACE_V2XCONFIG_H
 
-//TODO Add Cube Vanetza lib and delete this struct
-struct ContextParams
-{
-    std::string multicastIp;
-    int multicastPort;
-    std::string ccuIp;
-    int ccuPort;
-    // vanetza::security::HashedId8 pseudonym;
-    // vanetza::geonet::StationType stationType;
-    bool gatekeeper = true; /*< DCC gatekeeper at link layer */
-    bool softStateNeighbours = false; /*< enable soft-state neighbour state in location table (non standard) */
-    bool fadingCbfCounters = false; /* use fading Contention-Based Forwarding counters (non standard) */
-    bool publishLinkLayer = false; /* publish link layer messages (rx and tx) */
-    double defaultTxPower = std::numeric_limits<double>::quiet_NaN();
-};
+#include "cube-its/catkin_ws/src/vanetza/src/cube_context.hpp"
 
 namespace sim_interface::dut_connector::v2x{
     class V2XConfig : public ConnectorConfig {
