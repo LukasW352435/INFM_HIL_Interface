@@ -101,12 +101,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a59328868c6b0195083d3b331b28b29d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a38323c5110e12da04a941ced36b574"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsim__interface_1_1dut__connector_1_1ConnectorInfo.html">ConnectorInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#a3a38323c5110e12da04a941ced36b574">getConnectorInfo</a> () override</td></tr>
 <tr class="separator:a3a38323c5110e12da04a941ced36b574"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5dd87be8f75eccfff5ae8f93f707ae82"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#a5dd87be8f75eccfff5ae8f93f707ae82">handleEvent</a> (const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;event) override</td></tr>
-<tr class="separator:a5dd87be8f75eccfff5ae8f93f707ae82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0c07e6a52f017f1f927c0d3e9fa9b9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#ae0c07e6a52f017f1f927c0d3e9fa9b9a">handleEventSingle</a> (const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;event) override</td></tr>
+<tr class="separator:ae0c07e6a52f017f1f927c0d3e9fa9b9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classsim__interface_1_1dut__connector_1_1DuTConnector"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classsim__interface_1_1dut__connector_1_1DuTConnector')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classsim__interface_1_1dut__connector_1_1DuTConnector.html">sim_interface::dut_connector::DuTConnector</a></td></tr>
 <tr class="memitem:af3666830462f30db3077c5e436ce3af2 inherit pub_methods_classsim__interface_1_1dut__connector_1_1DuTConnector"><td class="memItemLeft" align="right" valign="top"><a id="af3666830462f30db3077c5e436ce3af2"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>DuTConnector</b> (std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &gt;&gt; queueDuTToSim, const <a class="el" href="classsim__interface_1_1dut__connector_1_1ConnectorConfig.html">sim_interface::dut_connector::ConnectorConfig</a> &amp;config)</td></tr>
 <tr class="separator:af3666830462f30db3077c5e436ce3af2 inherit pub_methods_classsim__interface_1_1dut__connector_1_1DuTConnector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abab260d7e4860b8826a1484a2248e7a1 inherit pub_methods_classsim__interface_1_1dut__connector_1_1DuTConnector"><td class="memItemLeft" align="right" valign="top"><a id="abab260d7e4860b8826a1484a2248e7a1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>handleEvent</b> (const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent)</td></tr>
+<tr class="separator:abab260d7e4860b8826a1484a2248e7a1 inherit pub_methods_classsim__interface_1_1dut__connector_1_1DuTConnector"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0333f023233d13481e0ef72a9245370b inherit pub_methods_classsim__interface_1_1dut__connector_1_1DuTConnector"><td class="memItemLeft" align="right" valign="top"><a id="a0333f023233d13481e0ef72a9245370b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>sendEventToSim</b> (const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent)</td></tr>
 <tr class="separator:a0333f023233d13481e0ef72a9245370b inherit pub_methods_classsim__interface_1_1dut__connector_1_1DuTConnector"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,10 +168,6 @@ std::thread&#160;</td><td class="memItemRight" valign="bottom"><b>ioContextThrea
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_methods_classsim__interface_1_1dut__connector_1_1DuTConnector"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classsim__interface_1_1dut__connector_1_1DuTConnector')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classsim__interface_1_1dut__connector_1_1DuTConnector.html">sim_interface::dut_connector::DuTConnector</a></td></tr>
-<tr class="memitem:ab65725c4e06b48622ff55eeb9731c8df inherit pro_methods_classsim__interface_1_1dut__connector_1_1DuTConnector"><td class="memItemLeft" align="right" valign="top"><a id="ab65725c4e06b48622ff55eeb9731c8df"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>canHandleSimEvent</b> (const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent)</td></tr>
-<tr class="separator:ab65725c4e06b48622ff55eeb9731c8df inherit pro_methods_classsim__interface_1_1dut__connector_1_1DuTConnector"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="adf87e0238e92e870a3284cc7e7d59f78"></a>
@@ -283,8 +282,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>canHandleSimEvent</b>
 
 </div>
 </div>
-<a id="a5dd87be8f75eccfff5ae8f93f707ae82"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5dd87be8f75eccfff5ae8f93f707ae82">&#9670;&nbsp;</a></span>handleEvent()</h2>
+<a id="ae0c07e6a52f017f1f927c0d3e9fa9b9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0c07e6a52f017f1f927c0d3e9fa9b9a">&#9670;&nbsp;</a></span>handleEventSingle()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -293,7 +292,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>canHandleSimEvent</b>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void sim_interface::dut_connector::can::CANConnector::handleEvent </td>
+          <td class="memname">void sim_interface::dut_connector::can::CANConnector::handleEventSingle </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;&#160;</td>
           <td class="paramname"><em>event</em></td><td>)</td>
