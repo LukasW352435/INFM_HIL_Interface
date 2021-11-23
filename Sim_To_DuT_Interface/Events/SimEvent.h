@@ -31,18 +31,32 @@
 #include <boost/variant.hpp>
 
 namespace sim_interface {
+    /// Event object used to communicate between simulation and DuTs.
     class SimEvent {
     public:
+        /// Create a new event.
         SimEvent();
 
+        /// Create a new event
+        /// \param operation The operation of the event. Used by the DuTConnectors to determent if the event is for
+        /// the corresponding DuT.
+        /// \param value The value of the event.
+        /// \param origin The origin of the event.
         SimEvent(std::string operation, std::string value, std::string origin);
 
-        // change operation string to enum?
+        /// Operation of the event.
         std::string operation;
+        /// Value of the event.
         boost::variant<int, double, std::string> value;
+        /// Time when the event was created.
         std::time_t current;
+        /// Origin of the event.
         std::string origin;
 
+        /// Returns a string representation of the event.
+        /// \param os
+        /// \param simEvent
+        /// \return
         friend std::ostream &operator<<(std::ostream &os, const SimEvent &simEvent);
     };
 }
