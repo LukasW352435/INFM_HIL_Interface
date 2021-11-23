@@ -376,35 +376,23 @@ void DuTLogger::logEvent(sim_interface::SimEvent event) {
     // Because of troubles with the quill engine we can't write the header in the file when we're building logger
     if (!csvHeaderPrinted) {
         // log the header
-        LOG_INFO(dataLogger, "{},{},{},{}", "Operation", "Value", "Origin", "Current");
+        LOG_INFO(dataLogger, "{},{},{},{}", "Operation", "Value", "Origin", "Timestamp");
         // remember that we have logged the header
         csvHeaderPrinted = true;
     }
 
-    // because the value of the event can have different types, it is necessary to find out what type it is and
-    // cast it to string (so we can log the string)
-    try {
-        std::string castedValue;
-        switch (event.value.which()) {
-            case 0:     // it's an int
-                castedValue = std::to_string(boost::get<int>(event.value));
-                break;
-            case 1:
-                castedValue = std::to_string(boost::get<double>(event.value));
-                break;
-            case 2:
-                castedValue = boost::get<std::string>(event.value);
-                break;
-            default:
-                logMessage("Unknown type for the value of the event", LOG_LEVEL::ERROR);
-        }
-
-        // log the data object in a csv format with the data logger
-        LOG_INFO(dataLogger, "{},{},{},{}", event.operation, castedValue, event.origin, event.current);
-
-    } catch (...) {
-        // a cast operation went wrong
-        // maybe the SimEvent object has been changed -> check definition
-        logMessage("Can't cast value of the event to string. Check definition of SimEvent!", LOG_LEVEL::ERROR);
+    // because the value of the event can have different types, it is necessary to find out what type it is.
+    // so test through all known cases in order. If you find the right one -> log it
+    if (event.value.type() == typeid(int)) {
+        int value = boost::get<int>(event.value);
+        LOG_INFO(dataLogger, "{},{},{},{}", event.operation, value, event.origin, event.current);
+    } else if (event.value.type() == typeid(double)) {
+        double value = boost::get<double>(event.value);
+        LOG_INFO(dataLogger, "{},{},{},{}", event.operation, value, event.origin, event.current);
+    } else if (event.value.type() == typeid(std::string)) {
+        std::string value = boost::get<std::string>(event.value);
+        LOG_INFO(dataLogger, "{},{},{},{}", event.operation, value, event.origin, event.current);
+    } else {
+        logMessage("Can't log event: Unknown type for the value of the event.", LOG_LEVEL::ERROR);
     }
 }
