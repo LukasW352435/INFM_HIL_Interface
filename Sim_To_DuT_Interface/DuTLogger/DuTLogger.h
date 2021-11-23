@@ -68,8 +68,7 @@ static bool csvHeaderPrinted = false;
  * Sim_To_DuT_Interface. The logger and all of it's functions are static so it's not necessary to create instances
  * of the logger to write a message.
  *
- * In a future version of this logger it will be possible to log event objects. That funcion haven't been implemented
- * so far because the definition of these events is not finished yet.
+ * With logger's functionality it's possible to log messages and events during the execution.
  *
  * The logger will create files if necessary in which the messages will be stored. The message provider can choose if the
  * message should be logged in the file or not. The logger notices old logfiles and will remove them if the real

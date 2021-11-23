@@ -13,6 +13,12 @@
 #include "quill/Quill.h"
 
 /**
+ * If this constant is true, the debug mode for logging is activated. In debug mode the console will show all
+ * debug messages and write all of them in the logfile. The default logging level will be ignored.
+ */
+static const bool ENABLE_DEBUG_MODE = false;
+
+/**
  * Defines the path where the console messages will be logged.
  * It is possible to use a relative path. In this case the configured below will be appended on the path of
  * application's execution. An example for a relative path is "/logs/console".
@@ -40,7 +46,10 @@ static const int FILE_BACKUP_COUNT = 10;
 
 /**
  * This constant stores the default level for console logging.
- * During the execution it can be manually changed by the function below.
+ * Please define here the start logging level you would like to log with.
+ * If the debug mode is on, this level will be ignored!
+ *
+ * During the execution the level can be manually changed by the function below.
  *
  * @see void changeLogLevel(LOG_LEVEL_CHANGE_ON typ, LOG_LEVEL level)
  */
@@ -48,7 +57,10 @@ static const quill::LogLevel DEFAULT_CONSOLE_LOG_LEVEL = quill::LogLevel::Info;
 
 /**
  * This constant stores the default level for console file logging.
- * During the execution it can be manually changed by the function below.
+ * Please define here the start logging level you would like to log with.
+ * If the debug mode is on, this level will be ignored!
+ *
+ * During the execution the level can be manually changed by the function below.
  *
  * @see void changeLogLevel(LOG_LEVEL_CHANGE_ON typ, LOG_LEVEL level)
  */

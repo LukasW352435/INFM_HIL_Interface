@@ -41,7 +41,13 @@ void DuTLogger::startEngine() {
 quill::Handler* DuTLogger::buildConsoleHandler() {
     // build a handler for the console
     quill::Handler* newHandler = quill::stdout_handler("consoleHandler");
-    newHandler->set_log_level(DEFAULT_CONSOLE_LOG_LEVEL);
+
+    // Check if debug mode is enabled. If not use the configured default level
+    if (ENABLE_DEBUG_MODE) {
+        newHandler->set_log_level(quill::LogLevel::Debug);
+    } else {
+        newHandler->set_log_level(DEFAULT_CONSOLE_LOG_LEVEL);
+    }
 
     // modify the pattern for the logger
     newHandler->set_pattern(QUILL_STRING("%(ascii_time)  %(level_name): %(message)"),
@@ -61,11 +67,18 @@ quill::Handler* DuTLogger::buildFileHandler() {
     std::string basicPath = currentLogpathConsole + "/Logfile_" + getCurrentTimestamp() + ".log";
     quill::Handler* newHandler = quill::file_handler(basicPath, FILE_MODE_CONSOLE,
                                                      quill::FilenameAppend::None);
-    newHandler->set_log_level(DEFAULT_FILE_LOG_LEVEL);
 
-    // modify the pattern for the logger
+    // Check if debug mode is enabled. If not use the configured default level
+    if (ENABLE_DEBUG_MODE) {
+        newHandler->set_log_level(quill::LogLevel::Debug);
+    } else {
+        newHandler->set_log_level(DEFAULT_FILE_LOG_LEVEL);
+    }
+
+    // modify the pattern for the logger.
     newHandler->set_pattern(QUILL_STRING("%(ascii_time)  %(level_name): %(message)"),
                             "%D %H:%M:%S.%Qms");
+
     // return the new handler
     return newHandler;
 }
@@ -94,8 +107,10 @@ quill::Logger* DuTLogger::createConsoleLogger(const char* name, bool withFileHan
         newLogger = quill::create_logger(name, consoleHandler);
     }
 
-    // Set the LogLevel (L3 for everything)
-    newLogger->set_log_level(quill::LogLevel::TraceL3);
+    // Define the deepest possible log_level for this logger
+    // the handlers can log higher than him. So if we want to change the level, we change the level of the handlers
+    // a handler can't log deeper than the logger
+    newLogger->set_log_level(quill::LogLevel::Debug);
 
     return newLogger;
 }
@@ -109,7 +124,7 @@ quill::Logger* DuTLogger::createConsoleLogger(const char* name, bool withFileHan
  */
 quill::Logger* DuTLogger::createDataLogger() {
     // create a file handler to connect quill to a logfile
-    std::string basicPath = currentLogpathData + "/Logfile_" + getCurrentTimestamp() + ".log";
+    std::string basicPath = currentLogpathData + "/Logfile_" + getCurrentTimestamp() + ".csv";
     quill::Handler* file_handler = quill::file_handler(basicPath, FILE_MODE_DATA,quill::FilenameAppend::None);
 
     // configure the pattern of a line
@@ -220,6 +235,9 @@ void DuTLogger::removeOldLogfiles(std::string directory) {
  */
 void DuTLogger::changeLogLevel(LOG_LEVEL_CHANGE_ON type, LOG_LEVEL level) {
     quill::Handler* handler = DuTLogger::getHandlerType(type);
+
+    // log all messages before changing the level
+    quill::flush();
 
     switch (level) {
         case LOG_LEVEL::NONE:
@@ -393,6 +411,8 @@ void DuTLogger::logEvent(sim_interface::SimEvent event) {
         std::string value = boost::get<std::string>(event.value);
         LOG_INFO(dataLogger, "{},{},{},{}", event.operation, value, event.origin, event.current);
     } else {
+        // an unknown type appeared!! -> can't handle it
+        // log an error instead of an event
         logMessage("Can't log event: Unknown type for the value of the event.", LOG_LEVEL::ERROR);
     }
 }
