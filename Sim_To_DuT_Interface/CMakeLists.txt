@@ -3,11 +3,14 @@ project(Sim_To_DuT_Interface)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS -pthread)
+set(CMAKE_C_FLAGS -pthread)
 
 add_library(libs "")
 
 add_subdirectory(DuTLogger/quill)
 add_subdirectory(DuT_Connectors)
+
+option(V2X_ENABLED "V2X enable" ON)
 
 add_executable(${PROJECT_NAME} main.cpp
         SimToDuTInterface.cpp SimToDuTInterface.h
