@@ -4,3 +4,7 @@
 [submodule "Sim_To_DuT_Interface/DuTLogger/quill"]
 	path = Sim_To_DuT_Interface/DuTLogger/quill
 	url = https://github.com/odygrd/quill.git
+[submodule "Sim_To_DuT_Interface/DuT_Connectors/V2XConnector/cube-its"]
+	path = Sim_To_DuT_Interface/DuT_Connectors/V2XConnector/cube-its
+	url = git@bitbucket.org:nfiniity/cube-its.git
+
