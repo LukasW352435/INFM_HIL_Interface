@@ -48,7 +48,7 @@ namespace sim_interface {
          * @param value The value of the event.
          * @param origin The origin of the event.
          */
-        SimEvent(std::string operation, std::string value, std::string origin);
+        SimEvent(std::string operation, boost::variant<int, double, std::string> value, std::string origin);
 
         /**
          * Operation of the event.
