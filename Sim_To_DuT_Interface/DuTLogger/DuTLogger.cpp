@@ -3,7 +3,7 @@
 //
 
 #include "DuTLogger.h"
-#include <iomanip>
+
 // initialize the logging paths
 std::string DuTLogger::currentLogpathConsole = initializeLoggingPath(LOGGER_TYPE::CONSOLE);
 std::string DuTLogger::currentLogpathData = initializeLoggingPath(LOGGER_TYPE::DATA);
@@ -41,7 +41,13 @@ void DuTLogger::startEngine() {
 quill::Handler* DuTLogger::buildConsoleHandler() {
     // build a handler for the console
     quill::Handler* newHandler = quill::stdout_handler("consoleHandler");
-    newHandler->set_log_level(DEFAULT_CONSOLE_LOG_LEVEL);
+
+    // Check if debug mode is enabled. If not use the configured default level
+    if (ENABLE_DEBUG_MODE) {
+        newHandler->set_log_level(quill::LogLevel::Debug);
+    } else {
+        newHandler->set_log_level(DEFAULT_CONSOLE_LOG_LEVEL);
+    }
 
     // modify the pattern for the logger
     newHandler->set_pattern(QUILL_STRING("%(ascii_time)  %(level_name): %(message)"),
@@ -61,11 +67,18 @@ quill::Handler* DuTLogger::buildFileHandler() {
     std::string basicPath = currentLogpathConsole + "/Logfile_" + getCurrentTimestamp() + ".log";
     quill::Handler* newHandler = quill::file_handler(basicPath, FILE_MODE_CONSOLE,
                                                      quill::FilenameAppend::None);
-    newHandler->set_log_level(DEFAULT_FILE_LOG_LEVEL);
 
-    // modify the pattern for the logger
+    // Check if debug mode is enabled. If not use the configured default level
+    if (ENABLE_DEBUG_MODE) {
+        newHandler->set_log_level(quill::LogLevel::Debug);
+    } else {
+        newHandler->set_log_level(DEFAULT_FILE_LOG_LEVEL);
+    }
+
+    // modify the pattern for the logger.
     newHandler->set_pattern(QUILL_STRING("%(ascii_time)  %(level_name): %(message)"),
                             "%D %H:%M:%S.%Qms");
+
     // return the new handler
     return newHandler;
 }
@@ -94,8 +107,10 @@ quill::Logger* DuTLogger::createConsoleLogger(const char* name, bool withFileHan
         newLogger = quill::create_logger(name, consoleHandler);
     }
 
-    // Set the LogLevel (L3 for everything)
-    newLogger->set_log_level(quill::LogLevel::TraceL3);
+    // Define the deepest possible log_level for this logger
+    // the handlers can log higher than him. So if we want to change the level, we change the level of the handlers
+    // a handler can't log deeper than the logger
+    newLogger->set_log_level(quill::LogLevel::Debug);
 
     return newLogger;
 }
@@ -109,12 +124,11 @@ quill::Logger* DuTLogger::createConsoleLogger(const char* name, bool withFileHan
  */
 quill::Logger* DuTLogger::createDataLogger() {
     // create a file handler to connect quill to a logfile
-    std::string basicPath = currentLogpathData + "/Logfile_" + getCurrentTimestamp() + ".log";
+    std::string basicPath = currentLogpathData + "/Logfile_" + getCurrentTimestamp() + ".csv";
     quill::Handler* file_handler = quill::file_handler(basicPath, FILE_MODE_DATA,quill::FilenameAppend::None);
 
     // configure the pattern of a line
-    file_handler->set_pattern(QUILL_STRING("%(ascii_time) %(logger_name) - %(message)"),
-            "%D %H:%M:%S.%Qms");
+    file_handler->set_pattern(QUILL_STRING("%(message)"));
 
     // finally, create the logger and return it
     quill::Logger* createdLogger = quill::create_logger("dataLog", file_handler);
@@ -141,12 +155,23 @@ std::string DuTLogger::initializeLoggingPath(LOGGER_TYPE type) {
 }
 
 /**
- * Identifies the path to the log file for the specific typ of logger by using the underlying path configuration
+ * Identifies the path to the log file for the specific typ of logger by using the underlying path configuration.
+ * The function can handle absolute and relative paths from the configuration.
  *
- * @param type type of logger
+ * @param type  - type of logger
  * @return path to the logfile
  */
 std::string DuTLogger::getLoggingPath(LOGGER_TYPE type) {
+    // Check if the user provided an absolute path for logging
+    // If this is true -> remove the first identifier
+    if (type == LOGGER_TYPE::CONSOLE && PATH_CONSOLE_LOG.at(0) == '#') {
+        return PATH_CONSOLE_LOG.substr(1, PATH_CONSOLE_LOG.size()-1);
+    }
+    if (type == LOGGER_TYPE::DATA && PATH_DATA_LOG.at(0) == '#') {
+        return PATH_DATA_LOG.substr(1, PATH_DATA_LOG.size()-1);
+    }
+
+    // the user provided a relative path -> build the relative path
     // get the path, where this program is running
     std::string path = std::filesystem::current_path();
 
@@ -210,6 +235,9 @@ void DuTLogger::removeOldLogfiles(std::string directory) {
  */
 void DuTLogger::changeLogLevel(LOG_LEVEL_CHANGE_ON type, LOG_LEVEL level) {
     quill::Handler* handler = DuTLogger::getHandlerType(type);
+
+    // log all messages before changing the level
+    quill::flush();
 
     switch (level) {
         case LOG_LEVEL::NONE:
@@ -336,7 +364,7 @@ void DuTLogger::logWithLevel(quill::Logger* log, std::string msg, LOG_LEVEL leve
             break;
 
         default:
-            throw std::invalid_argument("Parsed unknown LOG_LEVEL <" + msg + ">");
+            throw std::invalid_argument("Parsed unknown LOG_LEVEL!");
     }
 }
 
@@ -354,4 +382,37 @@ std::string DuTLogger::getCurrentTimestamp() {
     std::ostringstream oss;
     oss << std::put_time(&timer, "%Y-%m-%d_%H-%M-%S");
     return oss.str();
+}
+
+/**
+ * This function logs the event to the data logfiles. There is no need to define a logging level for this operation.
+ *
+ * @param event This event will be logged.
+ */
+void DuTLogger::logEvent(sim_interface::SimEvent event) {
+    // check if we already printed the header to the file.
+    // Because of troubles with the quill engine we can't write the header in the file when we're building logger
+    if (!csvHeaderPrinted) {
+        // log the header
+        LOG_INFO(dataLogger, "{},{},{},{}", "Operation", "Value", "Origin", "Timestamp");
+        // remember that we have logged the header
+        csvHeaderPrinted = true;
+    }
+
+    // because the value of the event can have different types, it is necessary to find out what type it is.
+    // so test through all known cases in order. If you find the right one -> log it
+    if (event.value.type() == typeid(int)) {
+        int value = boost::get<int>(event.value);
+        LOG_INFO(dataLogger, "{},{},{},{}", event.operation, value, event.origin, event.current);
+    } else if (event.value.type() == typeid(double)) {
+        double value = boost::get<double>(event.value);
+        LOG_INFO(dataLogger, "{},{},{},{}", event.operation, value, event.origin, event.current);
+    } else if (event.value.type() == typeid(std::string)) {
+        std::string value = boost::get<std::string>(event.value);
+        LOG_INFO(dataLogger, "{},{},{},{}", event.operation, value, event.origin, event.current);
+    } else {
+        // an unknown type appeared!! -> can't handle it
+        // log an error instead of an event
+        logMessage("Can't log event: Unknown type for the value of the event.", LOG_LEVEL::ERROR);
+    }
 }
