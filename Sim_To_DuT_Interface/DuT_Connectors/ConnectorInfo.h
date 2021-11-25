@@ -57,9 +57,9 @@ namespace sim_interface::dut_connector {
 
         /**
          * String representation of the connector info.
-         * @param os
-         * @param duTInfo
-         * @return
+         * @param os Output stream object reference.
+         * @param duTInfo Instance reference of this class.
+         * @return Output stream object reference.
          */
         friend std::ostream &operator<<(std::ostream &os, const ConnectorInfo &duTInfo);
     };

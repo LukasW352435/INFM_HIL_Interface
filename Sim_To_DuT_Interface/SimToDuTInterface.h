@@ -65,9 +65,9 @@ namespace sim_interface {
 
         /**
          * Returns a string representation for the interface.
-         * @param os
-         * @param interface
-         * @return
+         * @param os Output stream object reference.
+         * @param interface Instance reference of this class.
+         * @return Output stream object reference.
          */
         friend std::ostream &operator<<(std::ostream &os, const SimToDuTInterface &interface);
 
