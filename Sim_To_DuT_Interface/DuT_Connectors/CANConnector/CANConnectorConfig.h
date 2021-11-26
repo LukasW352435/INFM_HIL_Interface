@@ -1,3 +1,5 @@
+#include <utility>
+
 /*******************************************************************************
  \project   INFM_HIL_Interface
  \file      CANConnectorConfig.h
@@ -14,11 +16,17 @@
  * CLASS DECLARATIONS
  ******************************************************************************/
 
-namespace sim_interface::dut_connector::can{
+namespace sim_interface::dut_connector::can {
 
-    class CANConnectorConfig : public sim_interface::dut_connector::ConnectorConfig{
+    class CANConnectorConfig : public ConnectorConfig {
 
     public:
+        explicit CANConnectorConfig(std::set<std::string> operations,
+                                    std::map<std::string, int> periodicOperations = {},
+                                    bool periodicTimerEnabled = false) : ConnectorConfig(std::move(operations),
+                                                                                         std::move(periodicOperations),
+                                                                                         periodicTimerEnabled) {}
+
         // Data member
         std::string interfaceName;
 

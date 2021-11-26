@@ -28,12 +28,6 @@
 using namespace dummy_dut::rest::model;
 
 namespace dummy_dut::rest::messages {
-
-    /**
-     * Create a MessageWithTimestamp from a Message object
-     * Key and value are used and the current UTC time is used as timestamp.
-     * @param message Data to create object from
-     */
     MessageWithTimestamp::MessageWithTimestamp(Message *message) {
         this->m_Key = message->getKey();
         this->m_Status = message->getStatus();
@@ -41,10 +35,6 @@ namespace dummy_dut::rest::messages {
         this->timestamp = std::localtime(&res);
     }
 
-    /**
-     * Convert the message to a table entry for the dashboard (with indentation)
-     * @return string representation of object
-     */
     std::string MessageWithTimestamp::toTableEntry() {
         return R"(
                 <tr>
@@ -54,10 +44,6 @@ namespace dummy_dut::rest::messages {
                 </tr>)";
     }
 
-    /**
-     * Convert the message to a table entry without any indentation or newlines for the SSE stream
-     * @return string representation of object in a single line
-     */
     std::string MessageWithTimestamp::toTableEntryWithoutNewline() {
         return "<tr><td>" + this->m_Key + "</td><td>" + this->m_Status + "</td><td>" + std::asctime(this->timestamp) +
                "</td></tr>";

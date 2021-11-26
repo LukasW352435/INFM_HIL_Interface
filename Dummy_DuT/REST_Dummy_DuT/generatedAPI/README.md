@@ -11,16 +11,16 @@ You need to complete the server stub, as it needs to be connected to a source.
 
 
 ## Libraries required
-boost_system
-ssl (if Restbed was built with SSL Support)
-crypto
-pthread
-restbed
+- boost_system
+- ssl (if Restbed was built with SSL Support)
+- crypto
+- pthread
+- restbed
 
 
 ## Namespaces
-dummy_dut::rest::api
-dummy_dut::rest::model
+- dummy_dut::rest::api
+- dummy_dut::rest::model
 
 ## Generation
 Perform request [here](http://api.openapi-generator.tech/index.html), framework `cpp-restbed-server`
@@ -35,7 +35,7 @@ Perform request [here](http://api.openapi-generator.tech/index.html), framework 
 ```
 
 The following changes were done to the auto-generated files:
-- Autoformat
+- Auto-format
 - In DefaultApi.cpp: 
   - Create shared_ptr for message object from body and load json text into object.
   - Change default return for callbacks to `501 - Not Implemented` and always return a response.

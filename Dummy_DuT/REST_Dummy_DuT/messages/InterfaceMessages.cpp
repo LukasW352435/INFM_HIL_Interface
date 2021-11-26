@@ -26,18 +26,10 @@
 #include "InterfaceMessages.h"
 
 namespace dummy_dut::rest::messages {
-    /**
-     * Adds the given message to the end of the list
-     * @param message Message to add to list
-     */
     void InterfaceMessages::addMessage(MessageWithTimestamp message) {
         InterfaceMessages::messages.emplace_back(message);
     }
 
-    /**
-     * Returns the list of messages
-     * @return vector of MessageWithTimestamp
-     */
     std::vector<MessageWithTimestamp> InterfaceMessages::getMessages() {
         return InterfaceMessages::messages;
     }

@@ -6,7 +6,7 @@
  *
  * This file is part of "HIL - REST Dummy Connector".
  *
- * "HIL - REST Dummy DuT" is free software: you can redistribute it and/or modify
+ * "HIL - REST Dummy Connector" is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -30,14 +30,8 @@
 #include "ReceiveEndpoint.h"
 
 namespace sim_interface::dut_connector::rest_dummy {
-    /**
-     * Construct a connector to the REST Dummy DuT with given config, init curl lib for use
-     *
-     * @param queueDuTToSim queue to write received SimEvents to
-     * @param config Configuration of connector containing urls, port and (TODO) supported operations
-     */
     RESTDummyConnector::RESTDummyConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
-                                           const RESTConfig &config)
+                                           const RESTConnectorConfig &config)
             : DuTConnector(std::move(queueDuTToSim), config) {
         sendCallbackDuT = config.baseUrlDuT + "/send";
         readCallbackDuT = config.baseUrlDuT + "/read?clientUrl=";
@@ -48,19 +42,13 @@ namespace sim_interface::dut_connector::rest_dummy {
         curlJsonHeader = curl_slist_append(curlJsonHeader, "Content-Type: application/json");
     }
 
-    /**
-     * Deconstructur freeing curl resource
-     */
     RESTDummyConnector::~RESTDummyConnector() {
         curl_slist_free_all(curlJsonHeader);
         curl_global_cleanup();
+        receiveEndpoint->stopService();
+        receiveThread.join();
     }
 
-    /**
-     * Return some basic information like name, version and a short description of this connector
-     *
-     * @return ConnectorInfo containing information about this DuT connector
-     */
     ConnectorInfo RESTDummyConnector::getConnectorInfo() {
         ConnectorInfo info(
                 "REST Dummy Connector",
@@ -69,11 +57,6 @@ namespace sim_interface::dut_connector::rest_dummy {
         return info;
     }
 
-    /**
-     * Send the given event to the configured REST DuT
-     *
-     * @param e SimEvent to send
-     */
     void RESTDummyConnector::handleEventSingle(const SimEvent &e) {
         auto handle = curl_easy_init();
 
@@ -97,10 +80,6 @@ namespace sim_interface::dut_connector::rest_dummy {
         }
     }
 
-    /**
-     * Enable receiving events from the DuT by sending the HTTP URL to post it to to the DuT
-     * Starts the receiving HTTP endpoint and runs it a separate thread
-     */
     void RESTDummyConnector::enableReceiveFromDuT() {
         if (!receiveEndpoint) {
             receiveEndpoint = std::make_unique<ReceiveEndpoint>();
@@ -130,10 +109,6 @@ namespace sim_interface::dut_connector::rest_dummy {
         }
     }
 
-    /**
-     * Disable receiving events from the DuT by removing the HTTP URL from the DuT
-     * Stop the receiving HTTP endpoint
-     */
     void RESTDummyConnector::disableReceiveFromDuT() {
         receiveEndpoint->stopService();
         auto handle = curl_easy_init();
@@ -155,13 +130,7 @@ namespace sim_interface::dut_connector::rest_dummy {
         }
     }
 
-    /**
-     * Transform given event to json string for DuT
-     *
-     * @param e SimEvent to transform
-     * @return json string with key=operation and status=value
-     */
     std::string RESTDummyConnector::EventToRESTMessage(const SimEvent &e) {
-        return R"({"key":")" + e.operation + R"(","status":")" + boost::lexical_cast<std::string>(e.value).c_str() + R"("})";
+        return R"({"key":")" + e.operation + R"(","status":")" + boost::lexical_cast<std::string>(e.value) + R"("})";
     }
 }
