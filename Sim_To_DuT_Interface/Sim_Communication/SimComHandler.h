@@ -29,6 +29,7 @@
 #include "../Events/SimEvent.h"
 #include <string>
 #include "../Utility/SharedQueue.h"
+#include "../SystemConfig.h"
 #include <thread>
 #include <chrono>
 #include <zmq.hpp>
@@ -37,20 +38,22 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
+#include "../SystemConfig.h"
+#include <utility>
+#include <zmq.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/serialization/variant.hpp>
+
 namespace sim_interface {
     class SimComHandler {
     public:
-        SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const std::string& socketSimAddressSub,
-                      zmq::context_t &context_sub , const std::string& socketSimAddressPub,
-                      zmq::context_t &context_pub);
+        SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig& config);
 
         // async send event to simulation
         void sendEventToSim(const SimEvent &simEvent);
 
         // run async receive incoming events
         void run();
-
-
 
     private:
         // send an event to the interface

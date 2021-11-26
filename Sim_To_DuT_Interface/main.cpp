@@ -34,19 +34,19 @@
 #include "Utility/SharedQueue.h"
 #include "Sim_Communication/SimComHandler.h"
 #include "DuTLogger/DuTLogger.h"
+#include "SystemConfig.h"
 
 int main() {
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
     
     // Create interface
     sim_interface::SimToDuTInterface interface;
-    // Create simComHandler
-    std::string socketSimAddressSub = "tcp://localhost:7777";
-    zmq::context_t context_sub(1);
-    std::string socketSimAddressPub = "tcp://*:7778";
-    zmq::context_t context_pub(1);
-    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddressSub, context_sub, socketSimAddressPub , context_pub);
 
+    // Create simComHandler
+    sim_interface::SystemConfig sysConfig;
+    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), sysConfig);
+
+    // Init interface with SimComHandler
     interface.setSimComHandler(&simComHandler);
 
     // Create DuT Devices
