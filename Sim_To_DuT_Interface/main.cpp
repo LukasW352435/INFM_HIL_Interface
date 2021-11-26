@@ -38,13 +38,16 @@
 
 int main() {
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
-    
+
+    // System config
+    sim_interface::SystemConfig systemConfig;
+    sim_interface::SystemConfig::loadFromFile("../../Config/SystemConfig.xml",systemConfig, true);
+
     // Create interface
     sim_interface::SimToDuTInterface interface;
 
     // Create simComHandler
-    sim_interface::SystemConfig sysConfig;
-    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), sysConfig);
+    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), systemConfig);
 
     // Init interface with SimComHandler
     interface.setSimComHandler(&simComHandler);

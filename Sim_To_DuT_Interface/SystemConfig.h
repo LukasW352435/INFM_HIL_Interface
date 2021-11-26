@@ -25,13 +25,24 @@
 #ifndef SIM_TO_DUT_INTERFACE_SYSTEMCONFIG_H
 #define SIM_TO_DUT_INTERFACE_SYSTEMCONFIG_H
 
+#include <boost/archive/xml_oarchive.hpp>
+#include <boost/archive/xml_iarchive.hpp>
+#include <fstream>
+#include "DuTLogger/DuTLogger.h"
+
 namespace sim_interface {
     /**
-     * Class containign the conifg for the SimComHandler, the SimToDuTInterface and the Logger.
+     * Class containing the config for the SimComHandler, the SimToDuTInterface and the Logger.
+     * All attributes in this class should have default values assigned.
      */
-    class SystemConfig{
+    class SystemConfig {
     public:
-        // TODO add Logging Config
+        /**
+         * Create a new system config with default values.
+         */
+        SystemConfig() = default;
+
+        // TODO add Logging Config, dont forget to change the serialize methode if you add new attributes
 
         /**
          * Address of the zmq subscriber.
@@ -41,6 +52,55 @@ namespace sim_interface {
          * Address of the zmq publisher.
          */
         std::string socketSimAddressPub = "tcp://*:7778";
+
+        /**
+         * Save the config to a File.
+         * Does not create a new folder if it dose not exist!
+         * @param file File path.
+         * @param systemConfig Reverence to a system config object.
+         */
+        static void saveToFile(const std::string& file, SystemConfig& systemConfig) {
+            try{
+                std::ofstream ofs(file);
+                boost::archive::xml_oarchive oa(ofs);
+                oa << BOOST_SERIALIZATION_NVP(systemConfig);
+                ofs.close();
+                DuTLogger::logMessage("Successfully saved system config to <" + file + ">", LOG_LEVEL::INFO);
+            }catch (...){
+                DuTLogger::logMessage("Save system config failed.", LOG_LEVEL::ERROR);
+            }
+        }
+
+        /**
+         * Load the config from a File.
+         * @param file File path.
+         * @param systemConfig Reverence to a system config object.
+         * @param createNewIfNotFoundOrInvalid Save the default system config to the file location if the loading is
+         * unsuccessful.
+         */
+        static void loadFromFile(const std::string& file, SystemConfig& systemConfig, bool createNewIfNotFoundOrInvalid) {
+            try{
+                std::ifstream ifs(file);
+                boost::archive::xml_iarchive ia(ifs);
+                ia >> BOOST_SERIALIZATION_NVP(systemConfig);
+                ifs.close();
+            }catch (...){
+                DuTLogger::logMessage("Load system config failed. Fallback to default values.", LOG_LEVEL::ERROR);
+                if(createNewIfNotFoundOrInvalid){
+                    sim_interface::SystemConfig::saveToFile(file,systemConfig);
+                }
+            }
+        }
+
+    private:
+        friend class boost::serialization::access;
+
+        template<class Archive>
+        void serialize(Archive &ar, const unsigned int version) {
+            ar & BOOST_SERIALIZATION_NVP(socketSimAddressSub);
+            ar & BOOST_SERIALIZATION_NVP(socketSimAddressPub);
+            // TODO add all attributes here if they need to be saved and loaded
+        }
     };
 }
 
