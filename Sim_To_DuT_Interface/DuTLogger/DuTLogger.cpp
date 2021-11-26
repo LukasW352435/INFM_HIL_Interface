@@ -386,6 +386,9 @@ std::string DuTLogger::getCurrentTimestamp() {
 
 /**
  * This function logs the event to the data logfiles. There is no need to define a logging level for this operation.
+ * <br>
+ * Please notice, that characters like comma or double quotes causes trouble in CSV files and will be replaced by using
+ * standard rules.
  *
  * @param event This event will be logged.
  */
@@ -405,5 +408,9 @@ void DuTLogger::logEvent(sim_interface::SimEvent event) {
     std::string convertedValue = boost::apply_visitor(EventVisitor(), event.value);
 
     // log the event with the converted value
-    LOG_INFO(dataLogger, "{},{},{},{}", event.operation, convertedValue, event.origin, event.current);
+    // don't forget to replace character, that will cause problems in CSV files
+    LOG_INFO(dataLogger, "{},{},{},{}", EventVisitor::checkForSpecialChars(event.operation),
+                                        convertedValue,
+                                        EventVisitor::checkForSpecialChars(event.origin),
+                                        event.current);
 }
