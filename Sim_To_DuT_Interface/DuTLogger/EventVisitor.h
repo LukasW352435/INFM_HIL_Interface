@@ -2,6 +2,8 @@
  * EventVisitor.h
  *
  * Contains a util class for string cast operations.
+ *
+ * @author Marco Keul
  */
 
 #ifndef SIM_TO_DUT_INTERFACE_EVENTVISITOR_H
@@ -25,7 +27,42 @@ public:
     }
 
     std::string operator() (const std::string &str) const {
+        return checkForBadChars(str);
+    }
+
+    std::string checkForBadChars(const std::string &str) const {
+        if (str.find('\"') != std::string::npos) {
+            std::string res = str;
+            replaceAll(res, "\"", "\"\"\"");
+            return res;
+        }
+
+        if (str.find(',') != std::string::npos) {
+            std::string res = str;
+            replaceAll(res, ",", "\",\"");
+            return res;
+        }
         return str;
+    }
+
+    void replaceAll(std::string &str, const std::string &fromThis, const std::string &toThis) const {
+        // check for invalid arguments
+        if (fromThis.empty() || toThis.empty()) {
+            return;
+        }
+
+        // declare an index to handle the replacement logic
+        size_t index = 0;
+
+        // if the string contains the part which should be replaced, there will be work for us
+        // we have to do this, for every appearance of this part
+        while((index = str.find(fromThis, index)) != std::string::npos) {
+            str.replace(index, fromThis.length(), toThis);
+
+            // increase the index, so we don't always handle the same part
+            // it has to be increased by the length of 'toThis'
+            index += toThis.length();
+        }
     }
 };
 
