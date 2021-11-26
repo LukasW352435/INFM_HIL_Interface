@@ -45,14 +45,33 @@
 #include <boost/serialization/variant.hpp>
 
 namespace sim_interface {
+    /**
+     * Handler between interface and simulation.
+     * Responsible for sending/receiving SimEvents to/from the simulation.
+     */
     class SimComHandler {
     public:
+        /**
+         * Create a new handler.
+         * @param queueSimToInterface A queue to communicate with the interface.
+         * @param config System configuration.
+         */
         SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig& config);
 
-        // async send event to simulation
+        /**
+         * Destroys the handler and stops all threads.
+         */
+        ~SimComHandler();
+
+        /**
+         * Asynchronous sending of events to simulation.
+         * @param simEvent An event that should be sent to the simulation.
+         */
         void sendEventToSim(const SimEvent &simEvent);
 
-        // run async receive incoming events
+        /**
+         * Starts the handler to asynchronously receive incoming events.
+         */
         void run();
 
     private:

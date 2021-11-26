@@ -104,11 +104,6 @@ namespace sim_interface {
                 sendEventToInterface(event);
             }
         }
-
-
-
-
-
     }
 
     void SimComHandler::sendEventToSim(const SimEvent &simEvent) {
@@ -144,4 +139,10 @@ namespace sim_interface {
     void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
         queueSimToInterface->push(simEvent);
     }
+
+    SimComHandler::~SimComHandler() {
+        // TODO end zmq, etc.
+    }
+
+
 }
