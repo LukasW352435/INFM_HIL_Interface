@@ -79,47 +79,56 @@ $(function() {
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;iterator&gt;</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesim__interface.html">sim_interface</a> {</div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classsim__interface_1_1SimToDuTInterface.html">   34</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classsim__interface_1_1SimToDuTInterface.html">SimToDuTInterface</a> {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <a class="code" href="classsim__interface_1_1SimToDuTInterface.html">SimToDuTInterface</a>();</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        ~<a class="code" href="classsim__interface_1_1SimToDuTInterface.html">SimToDuTInterface</a>();</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordtype">void</span> addConnector(<a class="code" href="classsim__interface_1_1dut__connector_1_1DuTConnector.html">dut_connector::DuTConnector</a> *duTConnector);</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordtype">void</span> setSimComHandler(<a class="code" href="classsim__interface_1_1SimComHandler.html">SimComHandler</a> *simComHandler);</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordtype">void</span> run();</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keyword">friend</span> std::ostream &amp;operator&lt;&lt;(std::ostream &amp;os, <span class="keyword">const</span> <a class="code" href="classsim__interface_1_1SimToDuTInterface.html">SimToDuTInterface</a> &amp;interface);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        std::shared_ptr&lt;SharedQueue&lt;SimEvent&gt;&gt; getQueueDuTToSim();</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classsim__interface_1_1SimToDuTInterface.html">   37</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classsim__interface_1_1SimToDuTInterface.html">SimToDuTInterface</a> {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="code" href="classsim__interface_1_1SimToDuTInterface.html#ab6afddedac9d240b086f38c58d566393">SimToDuTInterface</a>();</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <a class="code" href="classsim__interface_1_1SimToDuTInterface.html#a251aaaa5d9139974f1890ee4e798ceec">~SimToDuTInterface</a>();</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        std::shared_ptr&lt;SharedQueue&lt;SimEvent&gt;&gt; getQueueSimToInterface();</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        std::shared_ptr&lt;SharedQueue&lt;SimEvent&gt;&gt; queueDuTToSim;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        std::shared_ptr&lt;SharedQueue&lt;SimEvent&gt;&gt; queueSimToInterface;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="code" href="classsim__interface_1_1SimComHandler.html">SimComHandler</a> *simComHandler = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        std::list&lt;dut_connector::DuTConnector *&gt; duTConnectors;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        std::thread threadSimToInterface;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        std::thread threadDuTToSim;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordtype">bool</span> stopThreads = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordtype">void</span> sendEventToConnector(<span class="keyword">const</span> <a class="code" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;event);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordtype">void</span> handleEventsFromSim();</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordtype">void</span> handleEventsFromDuT();</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    };</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#endif //SIM_TO_DUT_INTERFACE_SIMTODUTINTERFACE_H</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classsim__interface_1_1SimToDuTInterface.html#afb81b13a26c5c9b6c5701b30ed77fc1e">addConnector</a>(<a class="code" href="classsim__interface_1_1dut__connector_1_1DuTConnector.html">dut_connector::DuTConnector</a> *duTConnector);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classsim__interface_1_1SimToDuTInterface.html#ad3fb2ac3fd31022c2a6035d36f439833">setSimComHandler</a>(<a class="code" href="classsim__interface_1_1SimComHandler.html">SimComHandler</a> *simComHandler);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classsim__interface_1_1SimToDuTInterface.html#a09dedf083656d44e57032c323873672a">run</a>();</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keyword">friend</span> std::ostream &amp;<a class="code" href="classsim__interface_1_1SimToDuTInterface.html#a53fa491120800615346efa52ca002151">operator&lt;&lt;</a>(std::ostream &amp;os, <span class="keyword">const</span> <a class="code" href="classsim__interface_1_1SimToDuTInterface.html">SimToDuTInterface</a> &amp;interface);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        std::shared_ptr&lt;SharedQueue&lt;SimEvent&gt;&gt; <a class="code" href="classsim__interface_1_1SimToDuTInterface.html#abd0dd914aa20328da5fce074ecf87c5e">getQueueDuTToSim</a>();</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        std::shared_ptr&lt;SharedQueue&lt;SimEvent&gt;&gt; <a class="code" href="classsim__interface_1_1SimToDuTInterface.html#af3cc804de645ace14530eb173c1dfc0e">getQueueSimToInterface</a>();</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        std::shared_ptr&lt;SharedQueue&lt;SimEvent&gt;&gt; queueDuTToSim;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        std::shared_ptr&lt;SharedQueue&lt;SimEvent&gt;&gt; queueSimToInterface;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <a class="code" href="classsim__interface_1_1SimComHandler.html">SimComHandler</a> *simComHandler = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        std::list&lt;dut_connector::DuTConnector *&gt; duTConnectors;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        std::thread threadSimToInterface;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        std::thread threadDuTToSim;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordtype">bool</span> stopThreads = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordtype">void</span> sendEventToConnector(<span class="keyword">const</span> <a class="code" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;event);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordtype">void</span> handleEventsFromSim();</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordtype">void</span> handleEventsFromDuT();</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    };</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;}</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor">#endif //SIM_TO_DUT_INTERFACE_SIMTODUTINTERFACE_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclasssim__interface_1_1SimToDuTInterface_html_abd0dd914aa20328da5fce074ecf87c5e"><div class="ttname"><a href="classsim__interface_1_1SimToDuTInterface.html#abd0dd914aa20328da5fce074ecf87c5e">sim_interface::SimToDuTInterface::getQueueDuTToSim</a></div><div class="ttdeci">std::shared_ptr&lt; SharedQueue&lt; SimEvent &gt; &gt; getQueueDuTToSim()</div><div class="ttdef"><b>Definition:</b> SimToDuTInterface.cpp:57</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SimToDuTInterface_html_a53fa491120800615346efa52ca002151"><div class="ttname"><a href="classsim__interface_1_1SimToDuTInterface.html#a53fa491120800615346efa52ca002151">sim_interface::SimToDuTInterface::operator&lt;&lt;</a></div><div class="ttdeci">friend std::ostream &amp; operator&lt;&lt;(std::ostream &amp;os, const SimToDuTInterface &amp;interface)</div><div class="ttdef"><b>Definition:</b> SimToDuTInterface.cpp:43</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SimToDuTInterface_html_a251aaaa5d9139974f1890ee4e798ceec"><div class="ttname"><a href="classsim__interface_1_1SimToDuTInterface.html#a251aaaa5d9139974f1890ee4e798ceec">sim_interface::SimToDuTInterface::~SimToDuTInterface</a></div><div class="ttdeci">~SimToDuTInterface()</div><div class="ttdef"><b>Definition:</b> SimToDuTInterface.cpp:89</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SimToDuTInterface_html_ab6afddedac9d240b086f38c58d566393"><div class="ttname"><a href="classsim__interface_1_1SimToDuTInterface.html#ab6afddedac9d240b086f38c58d566393">sim_interface::SimToDuTInterface::SimToDuTInterface</a></div><div class="ttdeci">SimToDuTInterface()</div><div class="ttdef"><b>Definition:</b> SimToDuTInterface.cpp:28</div></div>
 <div class="ttc" id="anamespacesim__interface_html"><div class="ttname"><a href="namespacesim__interface.html">sim_interface</a></div><div class="ttdef"><b>Definition:</b> CANConnector.cpp:21</div></div>
-<div class="ttc" id="aclasssim__interface_1_1SimToDuTInterface_html"><div class="ttname"><a href="classsim__interface_1_1SimToDuTInterface.html">sim_interface::SimToDuTInterface</a></div><div class="ttdef"><b>Definition:</b> SimToDuTInterface.h:34</div></div>
-<div class="ttc" id="aclasssim__interface_1_1SimEvent_html"><div class="ttname"><a href="classsim__interface_1_1SimEvent.html">sim_interface::SimEvent</a></div><div class="ttdef"><b>Definition:</b> SimEvent.h:34</div></div>
-<div class="ttc" id="aclasssim__interface_1_1SimComHandler_html"><div class="ttname"><a href="classsim__interface_1_1SimComHandler.html">sim_interface::SimComHandler</a></div><div class="ttdef"><b>Definition:</b> SimComHandler.h:41</div></div>
-<div class="ttc" id="aclasssim__interface_1_1dut__connector_1_1DuTConnector_html"><div class="ttname"><a href="classsim__interface_1_1dut__connector_1_1DuTConnector.html">sim_interface::dut_connector::DuTConnector</a></div><div class="ttdef"><b>Definition:</b> DuTConnector.h:41</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SimToDuTInterface_html_af3cc804de645ace14530eb173c1dfc0e"><div class="ttname"><a href="classsim__interface_1_1SimToDuTInterface.html#af3cc804de645ace14530eb173c1dfc0e">sim_interface::SimToDuTInterface::getQueueSimToInterface</a></div><div class="ttdeci">std::shared_ptr&lt; SharedQueue&lt; SimEvent &gt; &gt; getQueueSimToInterface()</div><div class="ttdef"><b>Definition:</b> SimToDuTInterface.cpp:61</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SimToDuTInterface_html"><div class="ttname"><a href="classsim__interface_1_1SimToDuTInterface.html">sim_interface::SimToDuTInterface</a></div><div class="ttdef"><b>Definition:</b> SimToDuTInterface.h:37</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SimToDuTInterface_html_afb81b13a26c5c9b6c5701b30ed77fc1e"><div class="ttname"><a href="classsim__interface_1_1SimToDuTInterface.html#afb81b13a26c5c9b6c5701b30ed77fc1e">sim_interface::SimToDuTInterface::addConnector</a></div><div class="ttdeci">void addConnector(dut_connector::DuTConnector *duTConnector)</div><div class="ttdef"><b>Definition:</b> SimToDuTInterface.cpp:33</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SimEvent_html"><div class="ttname"><a href="classsim__interface_1_1SimEvent.html">sim_interface::SimEvent</a></div><div class="ttdef"><b>Definition:</b> SimEvent.h:37</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SimComHandler_html"><div class="ttname"><a href="classsim__interface_1_1SimComHandler.html">sim_interface::SimComHandler</a></div><div class="ttdef"><b>Definition:</b> SimComHandler.h:45</div></div>
+<div class="ttc" id="aclasssim__interface_1_1dut__connector_1_1DuTConnector_html"><div class="ttname"><a href="classsim__interface_1_1dut__connector_1_1DuTConnector.html">sim_interface::dut_connector::DuTConnector</a></div><div class="ttdef"><b>Definition:</b> DuTConnector.h:46</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SimToDuTInterface_html_ad3fb2ac3fd31022c2a6035d36f439833"><div class="ttname"><a href="classsim__interface_1_1SimToDuTInterface.html#ad3fb2ac3fd31022c2a6035d36f439833">sim_interface::SimToDuTInterface::setSimComHandler</a></div><div class="ttdeci">void setSimComHandler(SimComHandler *simComHandler)</div><div class="ttdef"><b>Definition:</b> SimToDuTInterface.cpp:85</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SimToDuTInterface_html_a09dedf083656d44e57032c323873672a"><div class="ttname"><a href="classsim__interface_1_1SimToDuTInterface.html#a09dedf083656d44e57032c323873672a">sim_interface::SimToDuTInterface::run</a></div><div class="ttdeci">void run()</div><div class="ttdef"><b>Definition:</b> SimToDuTInterface.cpp:52</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

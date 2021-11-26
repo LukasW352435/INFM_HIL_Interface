@@ -90,11 +90,9 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a825b7253cd06fb0dd6898a4124c43ffe"><td class="memItemLeft" align="right" valign="top"><a id="a825b7253cd06fb0dd6898a4124c43ffe"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent)</td></tr>
+<tr class="memitem:a825b7253cd06fb0dd6898a4124c43ffe"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesim__interface.html#a825b7253cd06fb0dd6898a4124c43ffe">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent)</td></tr>
 <tr class="separator:a825b7253cd06fb0dd6898a4124c43ffe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ebaebf2fdcf3047a074897fe8457a13"><td class="memItemLeft" align="right" valign="top"><a id="a2ebaebf2fdcf3047a074897fe8457a13"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classsim__interface_1_1SimToDuTInterface.html">SimToDuTInterface</a> &amp;interface)</td></tr>
+<tr class="memitem:a2ebaebf2fdcf3047a074897fe8457a13"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesim__interface.html#a2ebaebf2fdcf3047a074897fe8457a13">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classsim__interface_1_1SimToDuTInterface.html">SimToDuTInterface</a> &amp;interface)</td></tr>
 <tr class="separator:a2ebaebf2fdcf3047a074897fe8457a13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -122,7 +120,80 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <p>You should have received a copy of the GNU General Public License along with "HIL - Periodic Timer". If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
 <dl class="section author"><dt>Author</dt><dd>Michael Schmitz </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>1.0 </dd></dl>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a825b7253cd06fb0dd6898a4124c43ffe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a825b7253cd06fb0dd6898a4124c43ffe">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream&amp; sim_interface::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;&#160;</td>
+          <td class="paramname"><em>simEvent</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns a string representation of the event. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">os</td><td></td></tr>
+    <tr><td class="paramname">simEvent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a2ebaebf2fdcf3047a074897fe8457a13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ebaebf2fdcf3047a074897fe8457a13">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream&amp; sim_interface::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classsim__interface_1_1SimToDuTInterface.html">SimToDuTInterface</a> &amp;&#160;</td>
+          <td class="paramname"><em>interface</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns a string representation for the interface. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">os</td><td>Output stream object reference. </td></tr>
+    <tr><td class="paramname">interface</td><td>Instance reference of this class. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Output stream object reference. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

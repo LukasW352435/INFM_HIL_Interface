@@ -74,21 +74,23 @@ $(function() {
 <div class="title">sim_interface::SharedQueue&lt; T &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="SharedQueue_8h_source.html">SharedQueue.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a116bd0f0785aced4f837663745844d77"><td class="memItemLeft" align="right" valign="top"><a id="a116bd0f0785aced4f837663745844d77"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SharedQueue</b> (const <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; T &gt; &amp;)=delete</td></tr>
+<tr class="memitem:ad4628711bf33c87ba9fcf8952332c7d5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SharedQueue.html#ad4628711bf33c87ba9fcf8952332c7d5">SharedQueue</a> ()=default</td></tr>
+<tr class="separator:ad4628711bf33c87ba9fcf8952332c7d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a116bd0f0785aced4f837663745844d77"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SharedQueue.html#a116bd0f0785aced4f837663745844d77">SharedQueue</a> (const <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; T &gt; &amp;)=delete</td></tr>
 <tr class="separator:a116bd0f0785aced4f837663745844d77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad96b85c5074011fd96cd1d600c39b34c"><td class="memItemLeft" align="right" valign="top"><a id="ad96b85c5074011fd96cd1d600c39b34c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>push</b> (T elem)</td></tr>
+<tr class="memitem:ad96b85c5074011fd96cd1d600c39b34c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SharedQueue.html#ad96b85c5074011fd96cd1d600c39b34c">push</a> (T elem)</td></tr>
 <tr class="separator:ad96b85c5074011fd96cd1d600c39b34c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a6c919b6b83f87137bddab686ed4f41"><td class="memItemLeft" align="right" valign="top"><a id="a3a6c919b6b83f87137bddab686ed4f41"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>pop</b> (T &amp;elem)</td></tr>
+<tr class="memitem:a3a6c919b6b83f87137bddab686ed4f41"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SharedQueue.html#a3a6c919b6b83f87137bddab686ed4f41">pop</a> (T &amp;elem)</td></tr>
 <tr class="separator:a3a6c919b6b83f87137bddab686ed4f41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a128dcade8cffcfe9c0a6ac387bcfc432"><td class="memItemLeft" align="right" valign="top"><a id="a128dcade8cffcfe9c0a6ac387bcfc432"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Stop</b> ()</td></tr>
+<tr class="memitem:a128dcade8cffcfe9c0a6ac387bcfc432"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SharedQueue.html#a128dcade8cffcfe9c0a6ac387bcfc432">Stop</a> ()</td></tr>
 <tr class="separator:a128dcade8cffcfe9c0a6ac387bcfc432"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fa522a71d805abfc79df46b6d173ec3"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SharedQueue.html#a8fa522a71d805abfc79df46b6d173ec3">~SharedQueue</a> ()</td></tr>
+<tr class="separator:a8fa522a71d805abfc79df46b6d173ec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -114,6 +116,195 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>requestEnd</b> = fals
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>enqueue</b> = true</td></tr>
 <tr class="separator:a365c902945fb8767dc8bb9be36791fc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;class T&gt;<br />
+class sim_interface::SharedQueue&lt; T &gt;</h3>
+
+<p>A thread save shared queue to communicate between multiple threads. The queue is a FIFO queue. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ad4628711bf33c87ba9fcf8952332c7d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4628711bf33c87ba9fcf8952332c7d5">&#9670;&nbsp;</a></span>SharedQueue() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classsim__interface_1_1SharedQueue.html">sim_interface::SharedQueue</a>&lt; T &gt;::<a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Create a shared queue. </p>
+
+</div>
+</div>
+<a id="a116bd0f0785aced4f837663745844d77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a116bd0f0785aced4f837663745844d77">&#9670;&nbsp;</a></span>SharedQueue() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classsim__interface_1_1SharedQueue.html">sim_interface::SharedQueue</a>&lt; T &gt;::<a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Destroys the queue. </p>
+
+</div>
+</div>
+<a id="a8fa522a71d805abfc79df46b6d173ec3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fa522a71d805abfc79df46b6d173ec3">&#9670;&nbsp;</a></span>~SharedQueue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classsim__interface_1_1SharedQueue.html">sim_interface::SharedQueue</a>&lt; T &gt;::~<a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Destroys and stops the queue. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a3a6c919b6b83f87137bddab686ed4f41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a6c919b6b83f87137bddab686ed4f41">&#9670;&nbsp;</a></span>pop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classsim__interface_1_1SharedQueue.html">sim_interface::SharedQueue</a>&lt; T &gt;::pop </td>
+          <td>(</td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>elem</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the first element in the queue. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">elem</td><td>Reverence to the first element. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns TRUE if the element is valid and FALSE if not. </dd></dl>
+
+</div>
+</div>
+<a id="ad96b85c5074011fd96cd1d600c39b34c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad96b85c5074011fd96cd1d600c39b34c">&#9670;&nbsp;</a></span>push()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classsim__interface_1_1SharedQueue.html">sim_interface::SharedQueue</a>&lt; T &gt;::push </td>
+          <td>(</td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>elem</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Push a element at the end of the queue. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">elem</td><td>Element to add to the queue. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a128dcade8cffcfe9c0a6ac387bcfc432"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a128dcade8cffcfe9c0a6ac387bcfc432">&#9670;&nbsp;</a></span>Stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classsim__interface_1_1SharedQueue.html">sim_interface::SharedQueue</a>&lt; T &gt;::Stop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Stops the queue and enqueues all its elements. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>Sim_To_DuT_Interface/Utility/<a class="el" href="SharedQueue_8h_source.html">SharedQueue.h</a></li>
 </ul>

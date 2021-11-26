@@ -74,17 +74,18 @@ $(function() {
 <div class="title">sim_interface::SimComHandler Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="SimComHandler_8h_source.html">SimComHandler.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9e06e6def9fc959dbfab3adead56e908"><td class="memItemLeft" align="right" valign="top"><a id="a9e06e6def9fc959dbfab3adead56e908"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SimComHandler</b> (std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &gt;&gt; queueSimToInterface, const std::string &amp;socketSimAddressSub, zmq::context_t &amp;context_sub, const std::string &amp;socketSimAddressPub, zmq::context_t &amp;context_pub)</td></tr>
+<tr class="memitem:a9e06e6def9fc959dbfab3adead56e908"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#a9e06e6def9fc959dbfab3adead56e908">SimComHandler</a> (std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &gt;&gt; queueSimToInterface, const std::string &amp;socketSimAddressSub, zmq::context_t &amp;context_sub, const std::string &amp;socketSimAddressPub, zmq::context_t &amp;context_pub)</td></tr>
 <tr class="separator:a9e06e6def9fc959dbfab3adead56e908"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2064c6154aa11da9f9d0c815f45cd270"><td class="memItemLeft" align="right" valign="top"><a id="a2064c6154aa11da9f9d0c815f45cd270"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>sendEventToSim</b> (const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent)</td></tr>
+<tr class="memitem:adc0dc288964e1c31b4ac629ec6a6fb68"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#adc0dc288964e1c31b4ac629ec6a6fb68">~SimComHandler</a> ()</td></tr>
+<tr class="separator:adc0dc288964e1c31b4ac629ec6a6fb68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2064c6154aa11da9f9d0c815f45cd270"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#a2064c6154aa11da9f9d0c815f45cd270">sendEventToSim</a> (const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent)</td></tr>
 <tr class="separator:a2064c6154aa11da9f9d0c815f45cd270"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e3045aec9762d50b256b8c27058f9ab"><td class="memItemLeft" align="right" valign="top"><a id="a9e3045aec9762d50b256b8c27058f9ab"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>run</b> ()</td></tr>
+<tr class="memitem:a9e3045aec9762d50b256b8c27058f9ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#a9e3045aec9762d50b256b8c27058f9ab">run</a> ()</td></tr>
 <tr class="separator:a9e3045aec9762d50b256b8c27058f9ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
@@ -108,6 +109,126 @@ zmq::context_t&#160;</td><td class="memItemRight" valign="bottom"><b>context_tes
 std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>queueSimToInterface</b></td></tr>
 <tr class="separator:a4001f869524d35f49e669369e00fe7ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Handler between interface and simulation. Responsible for sending/receiving SimEvents to/from the simulation. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a9e06e6def9fc959dbfab3adead56e908"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e06e6def9fc959dbfab3adead56e908">&#9670;&nbsp;</a></span>SimComHandler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sim_interface::SimComHandler::SimComHandler </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &gt;&gt;&#160;</td>
+          <td class="paramname"><em>queueSimToInterface</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>socketSimAddressSub</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">zmq::context_t &amp;&#160;</td>
+          <td class="paramname"><em>context_sub</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>socketSimAddressPub</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">zmq::context_t &amp;&#160;</td>
+          <td class="paramname"><em>context_pub</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Create a new handler. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">queueSimToInterface</td><td>A queue to communicate with the interface. </td></tr>
+    <tr><td class="paramname">socketSimAddressSub</td><td></td></tr>
+    <tr><td class="paramname">context_sub</td><td></td></tr>
+    <tr><td class="paramname">socketSimAddressPub</td><td></td></tr>
+    <tr><td class="paramname">context_pub</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="adc0dc288964e1c31b4ac629ec6a6fb68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc0dc288964e1c31b4ac629ec6a6fb68">&#9670;&nbsp;</a></span>~SimComHandler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sim_interface::SimComHandler::~SimComHandler </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Destroys the handler and stops all threads. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a9e3045aec9762d50b256b8c27058f9ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e3045aec9762d50b256b8c27058f9ab">&#9670;&nbsp;</a></span>run()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sim_interface::SimComHandler::run </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Starts the handler to asynchronously receive incoming events. </p>
+
+</div>
+</div>
+<a id="a2064c6154aa11da9f9d0c815f45cd270"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2064c6154aa11da9f9d0c815f45cd270">&#9670;&nbsp;</a></span>sendEventToSim()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sim_interface::SimComHandler::sendEventToSim </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;&#160;</td>
+          <td class="paramname"><em>simEvent</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Asynchronous sending of events to simulation. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">simEvent</td><td>An event that should be sent to the simulation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>Sim_To_DuT_Interface/Sim_Communication/<a class="el" href="SimComHandler_8h_source.html">SimComHandler.h</a></li>
 <li>Sim_To_DuT_Interface/Sim_Communication/SimComHandler.cpp</li>

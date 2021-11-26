@@ -86,39 +86,40 @@ $(function() {
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#include &lt;boost/archive/binary_iarchive.hpp&gt;</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#include &lt;boost/archive/binary_oarchive.hpp&gt;</span></div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesim__interface.html">sim_interface</a> {</div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classsim__interface_1_1SimComHandler.html">   41</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classsim__interface_1_1SimComHandler.html">SimComHandler</a> {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="code" href="classsim__interface_1_1SimComHandler.html">SimComHandler</a>(std::shared_ptr&lt;<a class="code" href="classsim__interface_1_1SharedQueue.html">SharedQueue&lt;SimEvent&gt;</a>&gt; queueSimToInterface, <span class="keyword">const</span> std::string&amp; socketSimAddressSub,</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                      zmq::context_t &amp;context_sub , <span class="keyword">const</span> std::string&amp; socketSimAddressPub,</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                      zmq::context_t &amp;context_pub);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="comment">// async send event to simulation</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordtype">void</span> sendEventToSim(<span class="keyword">const</span> <a class="code" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent);</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="comment">// run async receive incoming events</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordtype">void</span> run();</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="comment">// send an event to the interface</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">void</span> sendEventToInterface(<span class="keyword">const</span> <a class="code" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent);</div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classsim__interface_1_1SimComHandler.html">   45</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classsim__interface_1_1SimComHandler.html">SimComHandler</a> {</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="code" href="classsim__interface_1_1SimComHandler.html#a9e06e6def9fc959dbfab3adead56e908">SimComHandler</a>(std::shared_ptr&lt;<a class="code" href="classsim__interface_1_1SharedQueue.html">SharedQueue&lt;SimEvent&gt;</a>&gt; queueSimToInterface, <span class="keyword">const</span> std::string&amp; socketSimAddressSub,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                      zmq::context_t &amp;context_sub , <span class="keyword">const</span> std::string&amp; socketSimAddressPub,</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                      zmq::context_t &amp;context_pub);</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        zmq::socket_t socketSimSub_;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        zmq::socket_t socketSimPub_;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        zmq::context_t context_test;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="comment">// used by sendEventToInterface</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        std::shared_ptr&lt;SharedQueue&lt;SimEvent&gt;&gt; queueSimToInterface;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    };</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#endif //SIM_TO_DUT_INTERFACE_SIMCOMHANDLER_H</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="code" href="classsim__interface_1_1SimComHandler.html#adc0dc288964e1c31b4ac629ec6a6fb68">~SimComHandler</a>();</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classsim__interface_1_1SimComHandler.html#a2064c6154aa11da9f9d0c815f45cd270">sendEventToSim</a>(<span class="keyword">const</span> <a class="code" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classsim__interface_1_1SimComHandler.html#a9e3045aec9762d50b256b8c27058f9ab">run</a>();</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="comment">// send an event to the interface</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordtype">void</span> sendEventToInterface(<span class="keyword">const</span> <a class="code" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        zmq::socket_t socketSimSub_;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        zmq::socket_t socketSimPub_;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        zmq::context_t context_test;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="comment">// used by sendEventToInterface</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        std::shared_ptr&lt;SharedQueue&lt;SimEvent&gt;&gt; queueSimToInterface;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    };</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;}</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">#endif //SIM_TO_DUT_INTERFACE_SIMCOMHANDLER_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclasssim__interface_1_1SimComHandler_html_a2064c6154aa11da9f9d0c815f45cd270"><div class="ttname"><a href="classsim__interface_1_1SimComHandler.html#a2064c6154aa11da9f9d0c815f45cd270">sim_interface::SimComHandler::sendEventToSim</a></div><div class="ttdeci">void sendEventToSim(const SimEvent &amp;simEvent)</div><div class="ttdef"><b>Definition:</b> SimComHandler.cpp:119</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SimComHandler_html_a9e3045aec9762d50b256b8c27058f9ab"><div class="ttname"><a href="classsim__interface_1_1SimComHandler.html#a9e3045aec9762d50b256b8c27058f9ab">sim_interface::SimComHandler::run</a></div><div class="ttdeci">void run()</div><div class="ttdef"><b>Definition:</b> SimComHandler.cpp:63</div></div>
 <div class="ttc" id="anamespacesim__interface_html"><div class="ttname"><a href="namespacesim__interface.html">sim_interface</a></div><div class="ttdef"><b>Definition:</b> CANConnector.cpp:21</div></div>
-<div class="ttc" id="aclasssim__interface_1_1SimEvent_html"><div class="ttname"><a href="classsim__interface_1_1SimEvent.html">sim_interface::SimEvent</a></div><div class="ttdef"><b>Definition:</b> SimEvent.h:34</div></div>
-<div class="ttc" id="aclasssim__interface_1_1SimComHandler_html"><div class="ttname"><a href="classsim__interface_1_1SimComHandler.html">sim_interface::SimComHandler</a></div><div class="ttdef"><b>Definition:</b> SimComHandler.h:41</div></div>
-<div class="ttc" id="aclasssim__interface_1_1SharedQueue_html"><div class="ttname"><a href="classsim__interface_1_1SharedQueue.html">sim_interface::SharedQueue</a></div><div class="ttdef"><b>Definition:</b> SharedQueue.h:34</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SimComHandler_html_adc0dc288964e1c31b4ac629ec6a6fb68"><div class="ttname"><a href="classsim__interface_1_1SimComHandler.html#adc0dc288964e1c31b4ac629ec6a6fb68">sim_interface::SimComHandler::~SimComHandler</a></div><div class="ttdeci">~SimComHandler()</div><div class="ttdef"><b>Definition:</b> SimComHandler.cpp:153</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SimEvent_html"><div class="ttname"><a href="classsim__interface_1_1SimEvent.html">sim_interface::SimEvent</a></div><div class="ttdef"><b>Definition:</b> SimEvent.h:37</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SimComHandler_html"><div class="ttname"><a href="classsim__interface_1_1SimComHandler.html">sim_interface::SimComHandler</a></div><div class="ttdef"><b>Definition:</b> SimComHandler.h:45</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SharedQueue_html"><div class="ttname"><a href="classsim__interface_1_1SharedQueue.html">sim_interface::SharedQueue</a></div><div class="ttdef"><b>Definition:</b> SharedQueue.h:38</div></div>
+<div class="ttc" id="aclasssim__interface_1_1SimComHandler_html_a9e06e6def9fc959dbfab3adead56e908"><div class="ttname"><a href="classsim__interface_1_1SimComHandler.html#a9e06e6def9fc959dbfab3adead56e908">sim_interface::SimComHandler::SimComHandler</a></div><div class="ttdeci">SimComHandler(std::shared_ptr&lt; SharedQueue&lt; SimEvent &gt;&gt; queueSimToInterface, const std::string &amp;socketSimAddressSub, zmq::context_t &amp;context_sub, const std::string &amp;socketSimAddressPub, zmq::context_t &amp;context_pub)</div><div class="ttdef"><b>Definition:</b> SimComHandler.cpp:39</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

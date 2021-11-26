@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['operations_221',['operations',['../classsim__interface_1_1dut__connector_1_1ConnectorConfig.html#a77e14f58da623a57d4290d6472bc7462',1,'sim_interface::dut_connector::ConnectorConfig']]]
+  ['current_261',['current',['../classsim__interface_1_1SimEvent.html#a27093b5db7e5427b548d1b755dff8588',1,'sim_interface::SimEvent']]]
 ];

@@ -67,6 +67,9 @@ $(function() {
 <li>addCallbackHandler()
 : <a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#ac3190e630f038eaf8ef7c3e522cb957e">dummy_dut::rest::impl::DefaultApiImpl</a>
 </li>
+<li>addConnector()
+: <a class="el" href="classsim__interface_1_1SimToDuTInterface.html#afb81b13a26c5c9b6c5701b30ed77fc1e">sim_interface::SimToDuTInterface</a>
+</li>
 <li>addInterfaceCallback()
 : <a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1RegisteredInterface.html#a46b729b3688d95d89868dc555dc35650">dummy_dut::rest::impl::RegisteredInterface</a>
 </li>
@@ -95,6 +98,9 @@ $(function() {
 </li>
 <li>changeLogLevel()
 : <a class="el" href="classDuTLogger.html#a7dd2b3ffa81af4c7f19073388bb55ea7">DuTLogger</a>
+</li>
+<li>ConnectorInfo()
+: <a class="el" href="classsim__interface_1_1dut__connector_1_1ConnectorInfo.html#aa730ec35ad692b16ed97ccef4b7038a6">sim_interface::dut_connector::ConnectorInfo</a>
 </li>
 <li>createBcmSocket()
 : <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#ac79620836ce1d0c8013cd807d643d8e2">sim_interface::dut_connector::can::CANConnector</a>
@@ -127,6 +133,9 @@ $(function() {
 <li>disableReceiveFromDuT()
 : <a class="el" href="classsim__interface_1_1dut__connector_1_1rest__dummy_1_1RESTDummyConnector.html#ab9c14c2d71b33f2b02aa066f22e1a651">sim_interface::dut_connector::rest_dummy::RESTDummyConnector</a>
 </li>
+<li>DuTConnector()
+: <a class="el" href="classsim__interface_1_1dut__connector_1_1DuTConnector.html#af3666830462f30db3077c5e436ce3af2">sim_interface::dut_connector::DuTConnector</a>
+</li>
 </ul>
 
 
@@ -146,6 +155,7 @@ $(function() {
 </li>
 <li>getConnectorInfo()
 : <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#a3a38323c5110e12da04a941ced36b574">sim_interface::dut_connector::can::CANConnector</a>
+, <a class="el" href="classsim__interface_1_1dut__connector_1_1DuTConnector.html#ac6d123e6e29674d485ac144cde3fc909">sim_interface::dut_connector::DuTConnector</a>
 , <a class="el" href="classsim__interface_1_1dut__connector_1_1rest__dummy_1_1RESTDummyConnector.html#abe1f98fb6b192f7b7c8df4263837d436">sim_interface::dut_connector::rest_dummy::RESTDummyConnector</a>
 </li>
 <li>getCurrentTimestamp()
@@ -170,6 +180,12 @@ $(function() {
 <li>getOperationOptions()
 : <a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#a8e201a338f79378c17c23cd63a53440d">dummy_dut::rest::impl::DefaultApiImpl</a>
 </li>
+<li>getQueueDuTToSim()
+: <a class="el" href="classsim__interface_1_1SimToDuTInterface.html#abd0dd914aa20328da5fce074ecf87c5e">sim_interface::SimToDuTInterface</a>
+</li>
+<li>getQueueSimToInterface()
+: <a class="el" href="classsim__interface_1_1SimToDuTInterface.html#af3cc804de645ace14530eb173c1dfc0e">sim_interface::SimToDuTInterface</a>
+</li>
 <li>getStatus()
 : <a class="el" href="classdummy__dut_1_1rest_1_1model_1_1Message.html#a748008e891a5c1470621ae733e484ee5">dummy_dut::rest::model::Message</a>
 </li>
@@ -177,8 +193,12 @@ $(function() {
 
 
 <h3><a id="index_h"></a>- h -</h3><ul>
+<li>handleEvent()
+: <a class="el" href="classsim__interface_1_1dut__connector_1_1DuTConnector.html#abab260d7e4860b8826a1484a2248e7a1">sim_interface::dut_connector::DuTConnector</a>
+</li>
 <li>handleEventSingle()
 : <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#ae0c07e6a52f017f1f927c0d3e9fa9b9a">sim_interface::dut_connector::can::CANConnector</a>
+, <a class="el" href="classsim__interface_1_1dut__connector_1_1DuTConnector.html#a11c00ef99fc0e92208367ac73763217e">sim_interface::dut_connector::DuTConnector</a>
 , <a class="el" href="classsim__interface_1_1dut__connector_1_1rest__dummy_1_1RESTDummyConnector.html#a7ce794dea31c064ba112ccc10eeeedc1">sim_interface::dut_connector::rest_dummy::RESTDummyConnector</a>
 </li>
 <li>handleReceivedData()
@@ -235,6 +255,12 @@ $(function() {
 
 
 <h3><a id="index_p"></a>- p -</h3><ul>
+<li>pop()
+: <a class="el" href="classsim__interface_1_1SharedQueue.html#a3a6c919b6b83f87137bddab686ed4f41">sim_interface::SharedQueue&lt; T &gt;</a>
+</li>
+<li>push()
+: <a class="el" href="classsim__interface_1_1SharedQueue.html#ad96b85c5074011fd96cd1d600c39b34c">sim_interface::SharedQueue&lt; T &gt;</a>
+</li>
 <li>PUT_method_handler()
 : <a class="el" href="classdummy__dut_1_1rest_1_1api_1_1DefaultApiSendResource.html#aa666dfc8e02322487544b9d7b2492de8">dummy_dut::rest::api::DefaultApiSendResource</a>
 , <a class="el" href="classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveApiResource.html#a5fee62c40e99499b65f3ba272c0d150f">sim_interface::dut_connector::rest_dummy::ReceiveApiResource</a>
@@ -261,6 +287,10 @@ $(function() {
 <li>RESTDummyConnector()
 : <a class="el" href="classsim__interface_1_1dut__connector_1_1rest__dummy_1_1RESTDummyConnector.html#a3c71ce3f09bdf663a51740bb34794605">sim_interface::dut_connector::rest_dummy::RESTDummyConnector</a>
 </li>
+<li>run()
+: <a class="el" href="classsim__interface_1_1SimComHandler.html#a9e3045aec9762d50b256b8c27058f9ab">sim_interface::SimComHandler</a>
+, <a class="el" href="classsim__interface_1_1SimToDuTInterface.html#a09dedf083656d44e57032c323873672a">sim_interface::SimToDuTInterface</a>
+</li>
 <li>rxDelete()
 : <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#a1865fa97c68a31af90dbce8c5bb88608">sim_interface::dut_connector::can::CANConnector</a>
 </li>
@@ -274,8 +304,27 @@ $(function() {
 
 
 <h3><a id="index_s"></a>- s -</h3><ul>
+<li>sendEventToSim()
+: <a class="el" href="classsim__interface_1_1dut__connector_1_1DuTConnector.html#a0333f023233d13481e0ef72a9245370b">sim_interface::dut_connector::DuTConnector</a>
+, <a class="el" href="classsim__interface_1_1SimComHandler.html#a2064c6154aa11da9f9d0c815f45cd270">sim_interface::SimComHandler</a>
+</li>
 <li>sendMessageHandler()
 : <a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#a675bf4d45927695fafbaa76572056328">dummy_dut::rest::impl::DefaultApiImpl</a>
+</li>
+<li>setSimComHandler()
+: <a class="el" href="classsim__interface_1_1SimToDuTInterface.html#ad3fb2ac3fd31022c2a6035d36f439833">sim_interface::SimToDuTInterface</a>
+</li>
+<li>SharedQueue()
+: <a class="el" href="classsim__interface_1_1SharedQueue.html#ad4628711bf33c87ba9fcf8952332c7d5">sim_interface::SharedQueue&lt; T &gt;</a>
+</li>
+<li>SimComHandler()
+: <a class="el" href="classsim__interface_1_1SimComHandler.html#a9e06e6def9fc959dbfab3adead56e908">sim_interface::SimComHandler</a>
+</li>
+<li>SimEvent()
+: <a class="el" href="classsim__interface_1_1SimEvent.html#a066f75ffc76c04cff8950d33c4d4214d">sim_interface::SimEvent</a>
+</li>
+<li>SimToDuTInterface()
+: <a class="el" href="classsim__interface_1_1SimToDuTInterface.html#ab6afddedac9d240b086f38c58d566393">sim_interface::SimToDuTInterface</a>
 </li>
 <li>start()
 : <a class="el" href="classsim__interface_1_1PeriodicTimer.html#a8a4af89ff3a9f914986956848425ef70">sim_interface::PeriodicTimer</a>
@@ -291,6 +340,9 @@ $(function() {
 </li>
 <li>stop()
 : <a class="el" href="classsim__interface_1_1PeriodicTimer.html#a25f285eef20fa9a1d109f3bd3bbc7ac7">sim_interface::PeriodicTimer</a>
+</li>
+<li>Stop()
+: <a class="el" href="classsim__interface_1_1SharedQueue.html#a128dcade8cffcfe9c0a6ac387bcfc432">sim_interface::SharedQueue&lt; T &gt;</a>
 </li>
 <li>stopProcessing()
 : <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#ab6ebf3fcc03330635fee5f8c4633d730">sim_interface::dut_connector::can::CANConnector</a>
@@ -345,8 +397,20 @@ $(function() {
 <li>~DefaultApiImpl()
 : <a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#a3e3bcc96fdbbf711e87559999fb37df7">dummy_dut::rest::impl::DefaultApiImpl</a>
 </li>
+<li>~DuTConnector()
+: <a class="el" href="classsim__interface_1_1dut__connector_1_1DuTConnector.html#a74d62b1a896d3cda009a370cd3e092b7">sim_interface::dut_connector::DuTConnector</a>
+</li>
 <li>~RESTDummyConnector()
 : <a class="el" href="classsim__interface_1_1dut__connector_1_1rest__dummy_1_1RESTDummyConnector.html#a085eef0d9333f03b77e25958a94ae873">sim_interface::dut_connector::rest_dummy::RESTDummyConnector</a>
+</li>
+<li>~SharedQueue()
+: <a class="el" href="classsim__interface_1_1SharedQueue.html#a8fa522a71d805abfc79df46b6d173ec3">sim_interface::SharedQueue&lt; T &gt;</a>
+</li>
+<li>~SimComHandler()
+: <a class="el" href="classsim__interface_1_1SimComHandler.html#adc0dc288964e1c31b4ac629ec6a6fb68">sim_interface::SimComHandler</a>
+</li>
+<li>~SimToDuTInterface()
+: <a class="el" href="classsim__interface_1_1SimToDuTInterface.html#a251aaaa5d9139974f1890ee4e798ceec">sim_interface::SimToDuTInterface</a>
 </li>
 </ul>
 </div><!-- contents -->
