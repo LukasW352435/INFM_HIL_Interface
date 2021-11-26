@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['jsontosimevent_61',['JsonToSimEvent',['../classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveApiResource.html#aae99455f2a8a065e7e7217d8ebaa0069',1,'sim_interface::dut_connector::rest_dummy::ReceiveApiResource']]]
+  ['m_5fspreceiveapiresource_45',['m_spReceiveApiResource',['../classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveEndpoint.html#ad79fc6116ddee9f3a1d4061f4b4597f4',1,'sim_interface::dut_connector::rest_dummy::ReceiveEndpoint']]],
+  ['message_46',['Message',['../classdummy__dut_1_1rest_1_1model_1_1Message.html',1,'dummy_dut::rest::model']]],
+  ['messagewithtimestamp_47',['MessageWithTimestamp',['../classdummy__dut_1_1rest_1_1messages_1_1MessageWithTimestamp.html',1,'dummy_dut::rest::messages::MessageWithTimestamp'],['../classdummy__dut_1_1rest_1_1messages_1_1MessageWithTimestamp.html#ae0feb2c5aa91fa7e04b95d2efda3c866',1,'dummy_dut::rest::messages::MessageWithTimestamp::MessageWithTimestamp()']]]
 ];

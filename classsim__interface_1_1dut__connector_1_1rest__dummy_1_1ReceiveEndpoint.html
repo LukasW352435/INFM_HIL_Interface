@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: sim_interface::dut_connector::rest_dummy::ReceiveEndpoint Class Reference</title>
+<title>INFM HIL Interface: sim_interface::dut_connector::rest_dummy::ReceiveEndpoint Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,8 +21,9 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">My Project
+   <div id="projectname">INFM HIL Interface
    </div>
+   <div id="projectbrief">Interface between Artery simulation and DuTs</div>
   </td>
  </tr>
  </tbody>
@@ -79,7 +80,7 @@ Inheritance diagram for sim_interface::dut_connector::rest_dummy::ReceiveEndpoin
 <div class="center"><img src="classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveEndpoint__inherit__graph.png" border="0" usemap="#sim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveEndpoint_inherit__map" alt="Inheritance graph"/></div>
 <map name="sim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveEndpoint_inherit__map" id="sim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveEndpoint_inherit__map">
 <area shape="rect" title=" " alt="" coords="5,80,188,136"/>
-<area shape="rect" title=" " alt="" coords="33,5,160,32"/>
+<area shape="rect" title=" " alt="" coords="61,5,132,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -87,8 +88,11 @@ Collaboration diagram for sim_interface::dut_connector::rest_dummy::ReceiveEndpo
 <div class="dyncontent">
 <div class="center"><img src="classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveEndpoint__coll__graph.png" border="0" usemap="#sim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveEndpoint_coll__map" alt="Collaboration graph"/></div>
 <map name="sim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveEndpoint_coll__map" id="sim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveEndpoint_coll__map">
-<area shape="rect" title=" " alt="" coords="5,80,188,136"/>
-<area shape="rect" title=" " alt="" coords="33,5,160,32"/>
+<area shape="rect" title=" " alt="" coords="879,23,1061,79"/>
+<area shape="rect" title=" " alt="" coords="489,5,559,32"/>
+<area shape="rect" title=" " alt="" coords="391,56,657,112"/>
+<area shape="rect" href="classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveApiResource.html" title=" " alt="" coords="137,56,320,112"/>
+<area shape="rect" title=" " alt="" coords="5,71,88,97"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -101,8 +105,7 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ad79fc6116ddee9f3a1d4061f4b4597f4"><td class="memItemLeft" align="right" valign="top"><a id="ad79fc6116ddee9f3a1d4061f4b4597f4"></a>
-std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveApiResource.html">ReceiveApiResource</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_spReceiveApiResource</b></td></tr>
+<tr class="memitem:ad79fc6116ddee9f3a1d4061f4b4597f4"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveApiResource.html">ReceiveApiResource</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveEndpoint.html#ad79fc6116ddee9f3a1d4061f4b4597f4">m_spReceiveApiResource</a></td></tr>
 <tr class="separator:ad79fc6116ddee9f3a1d4061f4b4597f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -160,14 +163,30 @@ std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1dut__connector_1_
 
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ad79fc6116ddee9f3a1d4061f4b4597f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad79fc6116ddee9f3a1d4061f4b4597f4">&#9670;&nbsp;</a></span>m_spReceiveApiResource</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveApiResource.html">ReceiveApiResource</a>&gt; sim_interface::dut_connector::rest_dummy::ReceiveEndpoint::m_spReceiveApiResource</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>REST Api resource for receiving and sending events to REST Dummy DuT </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>Sim_To_DuT_Interface/DuT_Connectors/RESTDummyConnector/<a class="el" href="ReceiveEndpoint_8h_source.html">ReceiveEndpoint.h</a></li>
+<li>Sim_To_DuT_Interface/DuT_Connectors/RESTDummyConnector/ReceiveEndpoint.h</li>
 <li>Sim_To_DuT_Interface/DuT_Connectors/RESTDummyConnector/ReceiveEndpoint.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 26 2021 15:41:08 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

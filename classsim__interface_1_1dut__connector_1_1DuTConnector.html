@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: sim_interface::dut_connector::DuTConnector Class Reference</title>
+<title>INFM HIL Interface: sim_interface::dut_connector::DuTConnector Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,8 +21,9 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">My Project
+   <div id="projectname">INFM HIL Interface
    </div>
+   <div id="projectbrief">Interface between Artery simulation and DuTs</div>
   </td>
  </tr>
  </tbody>
@@ -68,15 +69,13 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classsim__interface_1_1dut__connector_1_1DuTConnector-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">sim_interface::dut_connector::DuTConnector Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="DuTConnector_8h_source.html">DuTConnector.h</a>&gt;</code></p>
+<p><code>#include &lt;DuTConnector.h&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for sim_interface::dut_connector::DuTConnector:</div>
 <div class="dyncontent">
@@ -105,48 +104,6 @@ Public Member Functions</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a11c00ef99fc0e92208367ac73763217e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1dut__connector_1_1DuTConnector.html#a11c00ef99fc0e92208367ac73763217e">handleEventSingle</a> (const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent)</td></tr>
 <tr class="separator:a11c00ef99fc0e92208367ac73763217e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:ab65725c4e06b48622ff55eeb9731c8df"><td class="memItemLeft" align="right" valign="top"><a id="ab65725c4e06b48622ff55eeb9731c8df"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>canHandleSimEvent</b> (const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent)</td></tr>
-<tr class="separator:ab65725c4e06b48622ff55eeb9731c8df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27343bbb1ed55ee19daeedb86e1c5d29"><td class="memItemLeft" align="right" valign="top"><a id="a27343bbb1ed55ee19daeedb86e1c5d29"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isPeriodicEnabled</b> (const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent)</td></tr>
-<tr class="separator:a27343bbb1ed55ee19daeedb86e1c5d29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5076853f26c65824169afccde11112a"><td class="memItemLeft" align="right" valign="top"><a id="ae5076853f26c65824169afccde11112a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setupTimer</b> (const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent)</td></tr>
-<tr class="separator:ae5076853f26c65824169afccde11112a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4ec90087592461a0bd9da7c797bcde8"><td class="memItemLeft" align="right" valign="top"><a id="aa4ec90087592461a0bd9da7c797bcde8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>enablePeriodicSending</b> (const std::string &amp;operation, int periodMs)</td></tr>
-<tr class="separator:aa4ec90087592461a0bd9da7c797bcde8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:a1d3c78e3e7cb39d4453109d0d777b576"><td class="memItemLeft" align="right" valign="top"><a id="a1d3c78e3e7cb39d4453109d0d777b576"></a>
-std::shared_ptr&lt; boost::asio::io_service &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>io</b></td></tr>
-<tr class="separator:a1d3c78e3e7cb39d4453109d0d777b576"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8673e18c1d6c496c78fa1ee24afbc338"><td class="memItemLeft" align="right" valign="top"><a id="a8673e18c1d6c496c78fa1ee24afbc338"></a>
-std::thread&#160;</td><td class="memItemRight" valign="bottom"><b>timerRunner</b></td></tr>
-<tr class="separator:a8673e18c1d6c496c78fa1ee24afbc338"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9707057f7c5b3cd868abee56bfbc63b"><td class="memItemLeft" align="right" valign="top"><a id="ae9707057f7c5b3cd868abee56bfbc63b"></a>
-std::set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>processableOperations</b></td></tr>
-<tr class="separator:ae9707057f7c5b3cd868abee56bfbc63b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98476a0bcfcfaeeb2231ec6706db9750"><td class="memItemLeft" align="right" valign="top"><a id="a98476a0bcfcfaeeb2231ec6706db9750"></a>
-std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>queueDuTToSim</b></td></tr>
-<tr class="separator:a98476a0bcfcfaeeb2231ec6706db9750"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b96986aa743d63ff924f4e9977b1a9e"><td class="memItemLeft" align="right" valign="top"><a id="a2b96986aa743d63ff924f4e9977b1a9e"></a>
-std::map&lt; std::string, std::unique_ptr&lt; <a class="el" href="classsim__interface_1_1PeriodicTimer.html">sim_interface::PeriodicTimer</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>periodicTimers</b></td></tr>
-<tr class="separator:a2b96986aa743d63ff924f4e9977b1a9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a804030b0b4eeea491069cc63f847b1ec"><td class="memItemLeft" align="right" valign="top"><a id="a804030b0b4eeea491069cc63f847b1ec"></a>
-std::map&lt; std::string, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>periodicIntervals</b></td></tr>
-<tr class="separator:a804030b0b4eeea491069cc63f847b1ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac586626e99b4ce774fa71ae5f77c4324"><td class="memItemLeft" align="right" valign="top"><a id="ac586626e99b4ce774fa71ae5f77c4324"></a>
-std::unique_ptr&lt; <a class="el" href="classsim__interface_1_1PeriodicTimer.html">PeriodicTimer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>aliveTimer</b></td></tr>
-<tr class="separator:ac586626e99b4ce774fa71ae5f77c4324"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54b76175a9837b3e6671ddb4b6f327e7"><td class="memItemLeft" align="right" valign="top"><a id="a54b76175a9837b3e6671ddb4b6f327e7"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>periodicTimerEnabled</b></td></tr>
-<tr class="separator:a54b76175a9837b3e6671ddb4b6f327e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Connector implementing all kinds of DuT devices. The different connectors should implement the protocol to communicate with a specific hardware DuT. Used in the interface to send/receive events to/from the device. </p>
@@ -319,13 +276,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>periodicTimerEnabled<
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>Sim_To_DuT_Interface/DuT_Connectors/<a class="el" href="DuTConnector_8h_source.html">DuTConnector.h</a></li>
+<li>Sim_To_DuT_Interface/DuT_Connectors/DuTConnector.h</li>
 <li>Sim_To_DuT_Interface/DuT_Connectors/DuTConnector.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 26 2021 15:41:08 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

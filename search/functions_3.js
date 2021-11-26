@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['dashboardhandler_182',['dashboardHandler',['../classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#a1a61ed44c36783a576a41d82fe92a8f0',1,'dummy_dut::rest::impl::DefaultApiImpl']]],
-  ['dashboardmessagestreamhandler_183',['dashboardMessageStreamHandler',['../classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#af1c5c69444701cafe303da45398b750f',1,'dummy_dut::rest::impl::DefaultApiImpl']]],
-  ['dashboardposthandler_184',['dashboardPostHandler',['../classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#a4e7f757140bd8199452f89d5b0345e96',1,'dummy_dut::rest::impl::DefaultApiImpl']]],
-  ['data_185',['data',['../classInterfaceIndexIO.html#a834132140bef3ca64a3dc1d4a0f82424',1,'InterfaceIndexIO']]],
-  ['defaultapiimpl_186',['DefaultApiImpl',['../classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#a19ff6254210bb5b226a7d7adc69add05',1,'dummy_dut::rest::impl::DefaultApiImpl']]],
-  ['disablereceivefromdut_187',['disableReceiveFromDuT',['../classsim__interface_1_1dut__connector_1_1rest__dummy_1_1RESTDummyConnector.html#ab9c14c2d71b33f2b02aa066f22e1a651',1,'sim_interface::dut_connector::rest_dummy::RESTDummyConnector']]],
-  ['dutconnector_188',['DuTConnector',['../classsim__interface_1_1dut__connector_1_1DuTConnector.html#af3666830462f30db3077c5e436ce3af2',1,'sim_interface::dut_connector::DuTConnector']]]
+  ['getcallbacks_142',['getCallbacks',['../classdummy__dut_1_1rest_1_1impl_1_1RegisteredInterface.html#a6bc94c58461cbe5ce7601ce27c23575e',1,'dummy_dut::rest::impl::RegisteredInterface']]],
+  ['getconnectorinfo_143',['getConnectorInfo',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#a3a38323c5110e12da04a941ced36b574',1,'sim_interface::dut_connector::can::CANConnector::getConnectorInfo()'],['../classsim__interface_1_1dut__connector_1_1DuTConnector.html#ac6d123e6e29674d485ac144cde3fc909',1,'sim_interface::dut_connector::DuTConnector::getConnectorInfo()'],['../classsim__interface_1_1dut__connector_1_1rest__dummy_1_1RESTDummyConnector.html#abe1f98fb6b192f7b7c8df4263837d436',1,'sim_interface::dut_connector::rest_dummy::RESTDummyConnector::getConnectorInfo()']]],
+  ['getkey_144',['getKey',['../classdummy__dut_1_1rest_1_1model_1_1Message.html#a25b743d03d76995dc4721e59c75309b2',1,'dummy_dut::rest::model::Message']]],
+  ['getmessages_145',['getMessages',['../classdummy__dut_1_1rest_1_1messages_1_1InterfaceMessages.html#a50de384cbea671e1bfde455386fa03a4',1,'dummy_dut::rest::messages::InterfaceMessages']]],
+  ['getqueueduttosim_146',['getQueueDuTToSim',['../classsim__interface_1_1SimToDuTInterface.html#abd0dd914aa20328da5fce074ecf87c5e',1,'sim_interface::SimToDuTInterface']]],
+  ['getqueuesimtointerface_147',['getQueueSimToInterface',['../classsim__interface_1_1SimToDuTInterface.html#af3cc804de645ace14530eb173c1dfc0e',1,'sim_interface::SimToDuTInterface']]],
+  ['getstatus_148',['getStatus',['../classdummy__dut_1_1rest_1_1model_1_1Message.html#a748008e891a5c1470621ae733e484ee5',1,'dummy_dut::rest::model::Message']]]
 ];

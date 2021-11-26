@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: sim_interface::SimToDuTInterface Class Reference</title>
+<title>INFM HIL Interface: sim_interface::SimToDuTInterface Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,8 +21,9 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">My Project
+   <div id="projectname">INFM HIL Interface
    </div>
+   <div id="projectbrief">Interface between Artery simulation and DuTs</div>
   </td>
  </tr>
  </tbody>
@@ -67,8 +68,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classsim__interface_1_1SimToDuTInterface-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -76,16 +75,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="SimToDuTInterface_8h_source.html">SimToDuTInterface.h</a>&gt;</code></p>
-<div class="dynheader">
-Collaboration diagram for sim_interface::SimToDuTInterface:</div>
-<div class="dyncontent">
-<div class="center"><img src="classsim__interface_1_1SimToDuTInterface__coll__graph.png" border="0" usemap="#sim__interface_1_1SimToDuTInterface_coll__map" alt="Collaboration graph"/></div>
-<map name="sim__interface_1_1SimToDuTInterface_coll__map" id="sim__interface_1_1SimToDuTInterface_coll__map">
-<area shape="rect" title=" " alt="" coords="5,95,248,121"/>
-<area shape="rect" href="classsim__interface_1_1SimComHandler.html" title=" " alt="" coords="14,5,239,32"/>
-</map>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+<p><code>#include &lt;SimToDuTInterface.h&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -103,42 +93,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abd0dd914aa20328da5fce074ecf87c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3cc804de645ace14530eb173c1dfc0e"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimToDuTInterface.html#af3cc804de645ace14530eb173c1dfc0e">getQueueSimToInterface</a> ()</td></tr>
 <tr class="separator:af3cc804de645ace14530eb173c1dfc0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:ad3e1d2ecb9bc2f358f694d5f6bcbec9b"><td class="memItemLeft" align="right" valign="top"><a id="ad3e1d2ecb9bc2f358f694d5f6bcbec9b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>sendEventToConnector</b> (const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;event)</td></tr>
-<tr class="separator:ad3e1d2ecb9bc2f358f694d5f6bcbec9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d2a03aba74df3aa4696c2216de5c031"><td class="memItemLeft" align="right" valign="top"><a id="a3d2a03aba74df3aa4696c2216de5c031"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>handleEventsFromSim</b> ()</td></tr>
-<tr class="separator:a3d2a03aba74df3aa4696c2216de5c031"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a573a88b4a7c2a5ea8b1de1f893d1ad87"><td class="memItemLeft" align="right" valign="top"><a id="a573a88b4a7c2a5ea8b1de1f893d1ad87"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>handleEventsFromDuT</b> ()</td></tr>
-<tr class="separator:a573a88b4a7c2a5ea8b1de1f893d1ad87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:a74d2a1b10b42281e5d273033d13fec90"><td class="memItemLeft" align="right" valign="top"><a id="a74d2a1b10b42281e5d273033d13fec90"></a>
-std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>queueDuTToSim</b></td></tr>
-<tr class="separator:a74d2a1b10b42281e5d273033d13fec90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b630ea2b018260f3ec9f82045b37ff8"><td class="memItemLeft" align="right" valign="top"><a id="a1b630ea2b018260f3ec9f82045b37ff8"></a>
-std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>queueSimToInterface</b></td></tr>
-<tr class="separator:a1b630ea2b018260f3ec9f82045b37ff8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae02c11e278be05dbb8ccd46f3894baa9"><td class="memItemLeft" align="right" valign="top"><a id="ae02c11e278be05dbb8ccd46f3894baa9"></a>
-<a class="el" href="classsim__interface_1_1SimComHandler.html">SimComHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>simComHandler</b> = nullptr</td></tr>
-<tr class="separator:ae02c11e278be05dbb8ccd46f3894baa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a515d77f6ca1276131a2310d14e0556eb"><td class="memItemLeft" align="right" valign="top"><a id="a515d77f6ca1276131a2310d14e0556eb"></a>
-std::list&lt; <a class="el" href="classsim__interface_1_1dut__connector_1_1DuTConnector.html">dut_connector::DuTConnector</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>duTConnectors</b></td></tr>
-<tr class="separator:a515d77f6ca1276131a2310d14e0556eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ba0312d283d72fbfad98b9de63f120b"><td class="memItemLeft" align="right" valign="top"><a id="a1ba0312d283d72fbfad98b9de63f120b"></a>
-std::thread&#160;</td><td class="memItemRight" valign="bottom"><b>threadSimToInterface</b></td></tr>
-<tr class="separator:a1ba0312d283d72fbfad98b9de63f120b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9a4b3ae291393e147b60a49126551b1"><td class="memItemLeft" align="right" valign="top"><a id="af9a4b3ae291393e147b60a49126551b1"></a>
-std::thread&#160;</td><td class="memItemRight" valign="bottom"><b>threadDuTToSim</b></td></tr>
-<tr class="separator:af9a4b3ae291393e147b60a49126551b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa47296bf131bd25e145010c93f3550e"><td class="memItemLeft" align="right" valign="top"><a id="afa47296bf131bd25e145010c93f3550e"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>stopThreads</b> = true</td></tr>
-<tr class="separator:afa47296bf131bd25e145010c93f3550e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -333,13 +287,13 @@ Friends</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>Sim_To_DuT_Interface/<a class="el" href="SimToDuTInterface_8h_source.html">SimToDuTInterface.h</a></li>
+<li>Sim_To_DuT_Interface/SimToDuTInterface.h</li>
 <li>Sim_To_DuT_Interface/SimToDuTInterface.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 26 2021 15:41:08 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

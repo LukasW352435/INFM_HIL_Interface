@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: dummy_dut::rest::impl::DefaultApiImpl Class Reference</title>
+<title>INFM HIL Interface: dummy_dut::rest::impl::DefaultApiImpl Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,8 +21,9 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">My Project
+   <div id="projectname">INFM HIL Interface
    </div>
+   <div id="projectbrief">Interface between Artery simulation and DuTs</div>
   </td>
  </tr>
  </tbody>
@@ -67,9 +68,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">dummy_dut::rest::impl::DefaultApiImpl Class Reference</div>  </div>
@@ -82,7 +80,7 @@ Inheritance diagram for dummy_dut::rest::impl::DefaultApiImpl:</div>
 <map name="dummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl_inherit__map" id="dummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl_inherit__map">
 <area shape="rect" title=" " alt="" coords="5,169,176,211"/>
 <area shape="rect" href="classdummy__dut_1_1rest_1_1api_1_1DefaultApi.html" title=" " alt="" coords="10,80,171,121"/>
-<area shape="rect" title=" " alt="" coords="55,5,126,32"/>
+<area shape="rect" title=" " alt="" coords="27,5,154,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -90,11 +88,21 @@ Collaboration diagram for dummy_dut::rest::impl::DefaultApiImpl:</div>
 <div class="dyncontent">
 <div class="center"><img src="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl__coll__graph.png" border="0" usemap="#dummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl_coll__map" alt="Collaboration graph"/></div>
 <map name="dummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl_coll__map" id="dummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl_coll__map">
-<area shape="rect" title=" " alt="" coords="516,71,687,112"/>
-<area shape="rect" href="classdummy__dut_1_1rest_1_1api_1_1DefaultApi.html" title=" " alt="" coords="148,5,309,47"/>
-<area shape="rect" title=" " alt="" coords="5,13,76,39"/>
-<area shape="rect" href="classdummy__dut_1_1rest_1_1impl_1_1RegisteredInterface.html" title=" " alt="" coords="143,71,314,112"/>
-<area shape="rect" href="classdummy__dut_1_1rest_1_1messages_1_1InterfaceMessages.html" title=" " alt="" coords="125,136,332,177"/>
+<area shape="rect" title=" " alt="" coords="1676,143,1847,185"/>
+<area shape="rect" href="classdummy__dut_1_1rest_1_1api_1_1DefaultApi.html" title=" " alt="" coords="1465,143,1627,185"/>
+<area shape="rect" title=" " alt="" coords="981,5,1107,32"/>
+<area shape="rect" title=" " alt="" coords="915,216,1173,272"/>
+<area shape="rect" href="classdummy__dut_1_1rest_1_1api_1_1DefaultApiDashboardMessagesResource.html" title="Open message stream to receive new messages continuously" alt="" coords="609,212,844,268"/>
+<area shape="rect" title=" " alt="" coords="359,151,442,177"/>
+<area shape="rect" href="classdummy__dut_1_1rest_1_1api_1_1DefaultApiSendResource.html" title="Send a message to the dummy DuT" alt="" coords="631,71,822,113"/>
+<area shape="rect" href="classdummy__dut_1_1rest_1_1api_1_1DefaultApiDashboardResource.html" title="Load messages to view received messages and send from DuT" alt="" coords="612,143,841,185"/>
+<area shape="rect" title=" " alt="" coords="301,219,500,261"/>
+<area shape="rect" title=" " alt="" coords="5,219,188,261"/>
+<area shape="rect" title=" " alt="" coords="934,56,1154,112"/>
+<area shape="rect" title=" " alt="" coords="915,136,1173,192"/>
+<area shape="rect" title=" " alt="" coords="933,296,1155,352"/>
+<area shape="rect" href="classdummy__dut_1_1rest_1_1api_1_1DefaultApiReadResource.html" title="Subscribe client to receive messages from dummy DuT" alt="" coords="631,303,823,345"/>
+<area shape="rect" title=" " alt="" coords="331,311,470,337"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -104,70 +112,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a19ff6254210bb5b226a7d7adc69add05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e3bcc96fdbbf711e87559999fb37df7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#a3e3bcc96fdbbf711e87559999fb37df7">~DefaultApiImpl</a> () override</td></tr>
 <tr class="separator:a3e3bcc96fdbbf711e87559999fb37df7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:af1c5c69444701cafe303da45398b750f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#af1c5c69444701cafe303da45398b750f">dashboardMessageStreamHandler</a> (<a class="el" href="classdummy__dut_1_1rest_1_1messages_1_1MessageWithTimestamp.html">dummy_dut::rest::messages::MessageWithTimestamp</a> message)</td></tr>
-<tr class="separator:af1c5c69444701cafe303da45398b750f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a518c9d45f7f46f532bdb13c0c1db9738"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#a518c9d45f7f46f532bdb13c0c1db9738">callUrl</a> (const std::string &amp;url, const std::string &amp;message)</td></tr>
-<tr class="separator:a518c9d45f7f46f532bdb13c0c1db9738"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d9e123be7a6bb88b682a77ebea042ab"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#a8d9e123be7a6bb88b682a77ebea042ab">getMessages</a> ()</td></tr>
-<tr class="separator:a8d9e123be7a6bb88b682a77ebea042ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e201a338f79378c17c23cd63a53440d"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#a8e201a338f79378c17c23cd63a53440d">getOperationOptions</a> ()</td></tr>
-<tr class="separator:a8e201a338f79378c17c23cd63a53440d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a047b5ba699cfa4963db228683c0bce2d"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#a047b5ba699cfa4963db228683c0bce2d">getDashboardPage</a> ()</td></tr>
-<tr class="separator:a047b5ba699cfa4963db228683c0bce2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classdummy__dut_1_1rest_1_1api_1_1DefaultApi"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classdummy__dut_1_1rest_1_1api_1_1DefaultApi')"><img src="closed.png" alt="-"/>&#160;Private Member Functions inherited from <a class="el" href="classdummy__dut_1_1rest_1_1api_1_1DefaultApi.html">dummy_dut::rest::api::DefaultApi</a></td></tr>
-<tr class="memitem:a0f0a53045d829e69be9644894b052731 inherit pub_methods_classdummy__dut_1_1rest_1_1api_1_1DefaultApi"><td class="memItemLeft" align="right" valign="top"><a id="a0f0a53045d829e69be9644894b052731"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>startService</b> (int const &amp;port)</td></tr>
-<tr class="separator:a0f0a53045d829e69be9644894b052731 inherit pub_methods_classdummy__dut_1_1rest_1_1api_1_1DefaultApi"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7731ff59e1db6270374165e67e863bc1 inherit pub_methods_classdummy__dut_1_1rest_1_1api_1_1DefaultApi"><td class="memItemLeft" align="right" valign="top"><a id="a7731ff59e1db6270374165e67e863bc1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>stopService</b> ()</td></tr>
-<tr class="separator:a7731ff59e1db6270374165e67e863bc1 inherit pub_methods_classdummy__dut_1_1rest_1_1api_1_1DefaultApi"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
-Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a1a61ed44c36783a576a41d82fe92a8f0"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; int, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#a1a61ed44c36783a576a41d82fe92a8f0">dashboardHandler</a> (<a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html">DefaultApiImpl</a> *instance)</td></tr>
-<tr class="separator:a1a61ed44c36783a576a41d82fe92a8f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e7f757140bd8199452f89d5b0345e96"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; int, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#a4e7f757140bd8199452f89d5b0345e96">dashboardPostHandler</a> (<a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html">DefaultApiImpl</a> *instance, const std::shared_ptr&lt; <a class="el" href="classdummy__dut_1_1rest_1_1model_1_1Message.html">model::Message</a> &gt; &amp;message)</td></tr>
-<tr class="separator:a4e7f757140bd8199452f89d5b0345e96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3190e630f038eaf8ef7c3e522cb957e"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; int, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#ac3190e630f038eaf8ef7c3e522cb957e">addCallbackHandler</a> (<a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html">DefaultApiImpl</a> *instance, const std::string &amp;callback)</td></tr>
-<tr class="separator:ac3190e630f038eaf8ef7c3e522cb957e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe29a6f60b8b0dec2defe7423ad66460"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; int, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#afe29a6f60b8b0dec2defe7423ad66460">removeCallbackHandler</a> (<a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html">DefaultApiImpl</a> *instance, const std::string &amp;callback)</td></tr>
-<tr class="separator:afe29a6f60b8b0dec2defe7423ad66460"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a675bf4d45927695fafbaa76572056328"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; int, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#a675bf4d45927695fafbaa76572056328">sendMessageHandler</a> (<a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html">DefaultApiImpl</a> *instance, const std::shared_ptr&lt; <a class="el" href="classdummy__dut_1_1rest_1_1model_1_1Message.html">dummy_dut::rest::model::Message</a> &gt; &amp;message)</td></tr>
-<tr class="separator:a675bf4d45927695fafbaa76572056328"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:a5f42eff647027757426203b90a467fce"><td class="memItemLeft" align="right" valign="top"><a id="a5f42eff647027757426203b90a467fce"></a>
-std::set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>operations</b></td></tr>
-<tr class="separator:a5f42eff647027757426203b90a467fce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3d7dd1e6aadc2004ed7d1395eb0500d"><td class="memItemLeft" align="right" valign="top"><a id="af3d7dd1e6aadc2004ed7d1395eb0500d"></a>
-<a class="el" href="classdummy__dut_1_1rest_1_1messages_1_1InterfaceMessages.html">dummy_dut::rest::messages::InterfaceMessages</a>&#160;</td><td class="memItemRight" valign="bottom"><b>interfaceMessages</b> = {}</td></tr>
-<tr class="separator:af3d7dd1e6aadc2004ed7d1395eb0500d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca43300d481dc5655e1ac43b41249eeb"><td class="memItemLeft" align="right" valign="top"><a id="aca43300d481dc5655e1ac43b41249eeb"></a>
-<a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1RegisteredInterface.html">dummy_dut::rest::impl::RegisteredInterface</a>&#160;</td><td class="memItemRight" valign="bottom"><b>registeredInterfaces</b> = {}</td></tr>
-<tr class="separator:aca43300d481dc5655e1ac43b41249eeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12bfd623b0d90770b77d5fd236045902"><td class="memItemLeft" align="right" valign="top"><a id="a12bfd623b0d90770b77d5fd236045902"></a>
-struct curl_slist *&#160;</td><td class="memItemRight" valign="bottom"><b>curlJsonHeader</b> = curl_slist_append(curlJsonHeader, &quot;Content-Type: application/json&quot;)</td></tr>
-<tr class="separator:a12bfd623b0d90770b77d5fd236045902"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af61976ec006570fa559ac02517282e52"><td class="memItemLeft" align="right" valign="top"><a id="af61976ec006570fa559ac02517282e52"></a>
-std::vector&lt; std::thread &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>curlThreads</b> = std::vector&lt;std::thread&gt;()</td></tr>
-<tr class="separator:af61976ec006570fa559ac02517282e52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_attribs_classdummy__dut_1_1rest_1_1api_1_1DefaultApi"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classdummy__dut_1_1rest_1_1api_1_1DefaultApi')"><img src="closed.png" alt="-"/>&#160;Private Attributes inherited from <a class="el" href="classdummy__dut_1_1rest_1_1api_1_1DefaultApi.html">dummy_dut::rest::api::DefaultApi</a></td></tr>
-<tr class="memitem:a6cddcb917702c9e74dfe93dabbe234a3 inherit pub_attribs_classdummy__dut_1_1rest_1_1api_1_1DefaultApi"><td class="memItemLeft" align="right" valign="top"><a id="a6cddcb917702c9e74dfe93dabbe234a3"></a>
-std::shared_ptr&lt; <a class="el" href="classdummy__dut_1_1rest_1_1api_1_1DefaultApiDashboardResource.html">DefaultApiDashboardResource</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_spDefaultApiDashboardResource</b></td></tr>
-<tr class="separator:a6cddcb917702c9e74dfe93dabbe234a3 inherit pub_attribs_classdummy__dut_1_1rest_1_1api_1_1DefaultApi"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31c7a435a65f53edc296a0ca8056e030 inherit pub_attribs_classdummy__dut_1_1rest_1_1api_1_1DefaultApi"><td class="memItemLeft" align="right" valign="top"><a id="a31c7a435a65f53edc296a0ca8056e030"></a>
-std::shared_ptr&lt; <a class="el" href="classdummy__dut_1_1rest_1_1api_1_1DefaultApiDashboardMessagesResource.html">DefaultApiDashboardMessagesResource</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_spDefaultApiDashboardMessagesResource</b></td></tr>
-<tr class="separator:a31c7a435a65f53edc296a0ca8056e030 inherit pub_attribs_classdummy__dut_1_1rest_1_1api_1_1DefaultApi"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65c445a6c56e0141052f6203ab33dcac inherit pub_attribs_classdummy__dut_1_1rest_1_1api_1_1DefaultApi"><td class="memItemLeft" align="right" valign="top"><a id="a65c445a6c56e0141052f6203ab33dcac"></a>
-std::shared_ptr&lt; <a class="el" href="classdummy__dut_1_1rest_1_1api_1_1DefaultApiSendResource.html">DefaultApiSendResource</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_spDefaultApiSendResource</b></td></tr>
-<tr class="separator:a65c445a6c56e0141052f6203ab33dcac inherit pub_attribs_classdummy__dut_1_1rest_1_1api_1_1DefaultApi"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab21e0eb640694c8c2b0715ccf4b9a3ee inherit pub_attribs_classdummy__dut_1_1rest_1_1api_1_1DefaultApi"><td class="memItemLeft" align="right" valign="top"><a id="ab21e0eb640694c8c2b0715ccf4b9a3ee"></a>
-std::shared_ptr&lt; <a class="el" href="classdummy__dut_1_1rest_1_1api_1_1DefaultApiReadResource.html">DefaultApiReadResource</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_spDefaultApiReadClientUrlResource</b></td></tr>
-<tr class="separator:ab21e0eb640694c8c2b0715ccf4b9a3ee inherit pub_attribs_classdummy__dut_1_1rest_1_1api_1_1DefaultApi"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a19ff6254210bb5b226a7d7adc69add05"></a>
@@ -239,379 +183,13 @@ std::shared_ptr&lt; <a class="el" href="classdummy__dut_1_1rest_1_1api_1_1Defaul
 
 </div>
 </div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac3190e630f038eaf8ef7c3e522cb957e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac3190e630f038eaf8ef7c3e522cb957e">&#9670;&nbsp;</a></span>addCallbackHandler()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::pair&lt; int, std::string &gt; dummy_dut::rest::impl::DefaultApiImpl::addCallbackHandler </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html">DefaultApiImpl</a> *&#160;</td>
-          <td class="paramname"><em>instance</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>callback</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Handler to add an URL to registered callbacks </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">instance</td><td>Instance to call the handler on </td></tr>
-    <tr><td class="paramname">callback</td><td>Callback to register </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Status code and HTML code (empty, if stub should set based on message defined in spec) </dd></dl>
-
-</div>
-</div>
-<a id="a518c9d45f7f46f532bdb13c0c1db9738"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a518c9d45f7f46f532bdb13c0c1db9738">&#9670;&nbsp;</a></span>callUrl()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dummy_dut::rest::impl::DefaultApiImpl::callUrl </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>url</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>message</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Send given message to given url with an timeout of 5sec </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">url</td><td>URL to send message to </td></tr>
-    <tr><td class="paramname">message</td><td>JSON encoded message to send </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a1a61ed44c36783a576a41d82fe92a8f0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a61ed44c36783a576a41d82fe92a8f0">&#9670;&nbsp;</a></span>dashboardHandler()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::pair&lt; int, std::string &gt; dummy_dut::rest::impl::DefaultApiImpl::dashboardHandler </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html">DefaultApiImpl</a> *&#160;</td>
-          <td class="paramname"><em>instance</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Handler to construct the dashboard web page </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">instance</td><td>Instance to call the handler on </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Status code and HTML code (empty, if stub should set based on message defined in spec) </dd></dl>
-
-</div>
-</div>
-<a id="af1c5c69444701cafe303da45398b750f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1c5c69444701cafe303da45398b750f">&#9670;&nbsp;</a></span>dashboardMessageStreamHandler()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dummy_dut::rest::impl::DefaultApiImpl::dashboardMessageStreamHandler </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classdummy__dut_1_1rest_1_1messages_1_1MessageWithTimestamp.html">dummy_dut::rest::messages::MessageWithTimestamp</a>&#160;</td>
-          <td class="paramname"><em>message</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Handler to send Server-Sent Events (SSE) to all open sessions </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">instance</td><td>Instance to call the handler on </td></tr>
-    <tr><td class="paramname">message</td><td>Message to send as SSE </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Status code and HTML code (empty, if stub should set based on message defined in spec) </dd></dl>
-
-</div>
-</div>
-<a id="a4e7f757140bd8199452f89d5b0345e96"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e7f757140bd8199452f89d5b0345e96">&#9670;&nbsp;</a></span>dashboardPostHandler()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::pair&lt; int, std::string &gt; dummy_dut::rest::impl::DefaultApiImpl::dashboardPostHandler </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html">DefaultApiImpl</a> *&#160;</td>
-          <td class="paramname"><em>instance</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classdummy__dut_1_1rest_1_1model_1_1Message.html">model::Message</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>message</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Handler to receive message from dashboard (DuT) and send it to all registered callbacks (in new threads) </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">instance</td><td>Instance to call the handler on </td></tr>
-    <tr><td class="paramname">message</td><td>Message received </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Status code and HTML code (empty, if stub should set based on message defined in spec) </dd></dl>
-
-</div>
-</div>
-<a id="a047b5ba699cfa4963db228683c0bce2d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a047b5ba699cfa4963db228683c0bce2d">&#9670;&nbsp;</a></span>getDashboardPage()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string dummy_dut::rest::impl::DefaultApiImpl::getDashboardPage </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Construct the dashboard with all its functionality and already received messages </p><dl class="section return"><dt>Returns</dt><dd>HTML web page </dd></dl>
-
-</div>
-</div>
-<a id="a8d9e123be7a6bb88b682a77ebea042ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d9e123be7a6bb88b682a77ebea042ab">&#9670;&nbsp;</a></span>getMessages()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string dummy_dut::rest::impl::DefaultApiImpl::getMessages </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Construct a list of received messages in HTML </p><dl class="section return"><dt>Returns</dt><dd>HTML snippet for messages </dd></dl>
-
-</div>
-</div>
-<a id="a8e201a338f79378c17c23cd63a53440d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e201a338f79378c17c23cd63a53440d">&#9670;&nbsp;</a></span>getOperationOptions()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string dummy_dut::rest::impl::DefaultApiImpl::getOperationOptions </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Construct all options for the select dropdown to send messages </p><dl class="section return"><dt>Returns</dt><dd>HTML snippet containg valid select options </dd></dl>
-
-</div>
-</div>
-<a id="afe29a6f60b8b0dec2defe7423ad66460"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afe29a6f60b8b0dec2defe7423ad66460">&#9670;&nbsp;</a></span>removeCallbackHandler()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::pair&lt; int, std::string &gt; dummy_dut::rest::impl::DefaultApiImpl::removeCallbackHandler </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html">DefaultApiImpl</a> *&#160;</td>
-          <td class="paramname"><em>instance</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>callback</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Handler to remove an URL from registered callbacks </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">instance</td><td>Instance to call the handler on </td></tr>
-    <tr><td class="paramname">callback</td><td>Callback to deregister </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Status code and HTML code (empty, if stub should set based on message defined in spec) </dd></dl>
-
-</div>
-</div>
-<a id="a675bf4d45927695fafbaa76572056328"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a675bf4d45927695fafbaa76572056328">&#9670;&nbsp;</a></span>sendMessageHandler()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::pair&lt; int, std::string &gt; dummy_dut::rest::impl::DefaultApiImpl::sendMessageHandler </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html">DefaultApiImpl</a> *&#160;</td>
-          <td class="paramname"><em>instance</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classdummy__dut_1_1rest_1_1model_1_1Message.html">dummy_dut::rest::model::Message</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>message</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Handler to receive messages from the interface Sends the message over SSE stream and saves it to list </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">instance</td><td>Instance to call the handler on </td></tr>
-    <tr><td class="paramname">message</td><td>Message that was received </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Status code and HTML code (empty, if stub should set based on message defined in spec) </dd></dl>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following files:<ul>
-<li>Dummy_DuT/REST_Dummy_DuT/apiImpl/<a class="el" href="DefaultApiImpl_8h_source.html">DefaultApiImpl.h</a></li>
-<li>Dummy_DuT/REST_Dummy_DuT/apiImpl/DefaultApiImpl.cpp</li>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Dummy_DuT/REST_Dummy_DuT/apiImpl/DefaultApiImpl.h</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 26 2021 15:41:08 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

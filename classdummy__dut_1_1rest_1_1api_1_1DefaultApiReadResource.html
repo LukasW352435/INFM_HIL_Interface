@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: dummy_dut::rest::api::DefaultApiReadResource Class Reference</title>
+<title>INFM HIL Interface: dummy_dut::rest::api::DefaultApiReadResource Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,8 +21,9 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">My Project
+   <div id="projectname">INFM HIL Interface
    </div>
+   <div id="projectbrief">Interface between Artery simulation and DuTs</div>
   </td>
  </tr>
  </tbody>
@@ -67,7 +68,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classdummy__dut_1_1rest_1_1api_1_1DefaultApiReadResource-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">dummy_dut::rest::api::DefaultApiReadResource Class Reference</div>  </div>
@@ -77,14 +77,14 @@ $(function() {
 <p>Subscribe client to receive messages from dummy DuT  
  <a href="classdummy__dut_1_1rest_1_1api_1_1DefaultApiReadResource.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="DefaultApi_8h_source.html">DefaultApi.h</a>&gt;</code></p>
+<p><code>#include &lt;DefaultApi.h&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for dummy_dut::rest::api::DefaultApiReadResource:</div>
 <div class="dyncontent">
 <div class="center"><img src="classdummy__dut_1_1rest_1_1api_1_1DefaultApiReadResource__inherit__graph.png" border="0" usemap="#dummy__dut_1_1rest_1_1api_1_1DefaultApiReadResource_inherit__map" alt="Inheritance graph"/></div>
 <map name="dummy__dut_1_1rest_1_1api_1_1DefaultApiReadResource_inherit__map" id="dummy__dut_1_1rest_1_1api_1_1DefaultApiReadResource_inherit__map">
 <area shape="rect" title="Subscribe client to receive messages from dummy DuT" alt="" coords="5,80,197,121"/>
-<area shape="rect" title=" " alt="" coords="60,5,143,32"/>
+<area shape="rect" title=" " alt="" coords="32,5,171,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -93,7 +93,7 @@ Collaboration diagram for dummy_dut::rest::api::DefaultApiReadResource:</div>
 <div class="center"><img src="classdummy__dut_1_1rest_1_1api_1_1DefaultApiReadResource__coll__graph.png" border="0" usemap="#dummy__dut_1_1rest_1_1api_1_1DefaultApiReadResource_coll__map" alt="Collaboration graph"/></div>
 <map name="dummy__dut_1_1rest_1_1api_1_1DefaultApiReadResource_coll__map" id="dummy__dut_1_1rest_1_1api_1_1DefaultApiReadResource_coll__map">
 <area shape="rect" title="Subscribe client to receive messages from dummy DuT" alt="" coords="5,80,197,121"/>
-<area shape="rect" title=" " alt="" coords="60,5,143,32"/>
+<area shape="rect" title=" " alt="" coords="32,5,171,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -111,27 +111,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>set_handler_POST</b> 
 <tr class="memitem:a6d3c408c901d08b413946c1faf24823f"><td class="memItemLeft" align="right" valign="top"><a id="a6d3c408c901d08b413946c1faf24823f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_handler_DELETE</b> (std::function&lt; std::pair&lt; int, std::string &gt;(std::string const &amp;)&gt; handler)</td></tr>
 <tr class="separator:a6d3c408c901d08b413946c1faf24823f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:a78823b700f9ebf950551705679836407"><td class="memItemLeft" align="right" valign="top"><a id="a78823b700f9ebf950551705679836407"></a>
-std::function&lt; std::pair&lt; int, std::string &gt; std::string const &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>handler_POST_</b></td></tr>
-<tr class="separator:a78823b700f9ebf950551705679836407"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afbfa6688628ece75a095624bb79e32b7"><td class="memItemLeft" align="right" valign="top"><a id="afbfa6688628ece75a095624bb79e32b7"></a>
-std::function&lt; std::pair&lt; int, std::string &gt; std::string const &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>handler_DELETE_</b></td></tr>
-<tr class="separator:afbfa6688628ece75a095624bb79e32b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Subscribe client to receive messages from dummy DuT </p>
 <p>Messages will be in the same format as for the /send endpoint (see &lt;a href&amp;#x3D;&amp;quot;#model-Messages&amp;quot;&gt;Messages&lt;/a&gt;) </p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
-<li>Dummy_DuT/REST_Dummy_DuT/generatedAPI/api/<a class="el" href="DefaultApi_8h_source.html">DefaultApi.h</a></li>
+<li>Dummy_DuT/REST_Dummy_DuT/generatedAPI/api/DefaultApi.h</li>
 <li>Dummy_DuT/REST_Dummy_DuT/generatedAPI/api/DefaultApi.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 26 2021 15:41:08 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

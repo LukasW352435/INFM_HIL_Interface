@@ -1,14 +1,10 @@
 var searchData=
 [
-  ['tick_111',['tick',['../classsim__interface_1_1PeriodicTimer.html#ae6125c4a85c08557657e830e9b53123d',1,'sim_interface::PeriodicTimer']]],
-  ['totableentry_112',['toTableEntry',['../classdummy__dut_1_1rest_1_1messages_1_1MessageWithTimestamp.html#a1586211f527a8d030a4e7c9841c3fb8f',1,'dummy_dut::rest::messages::MessageWithTimestamp']]],
-  ['totableentrywithoutnewline_113',['toTableEntryWithoutNewline',['../classdummy__dut_1_1rest_1_1messages_1_1MessageWithTimestamp.html#a873f9692ae0dd048ddc5ef7535126e79',1,'dummy_dut::rest::messages::MessageWithTimestamp']]],
-  ['txdelete_114',['txDelete',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#a0f0e73deaecef667e4314aadc6489b5a',1,'sim_interface::dut_connector::can::CANConnector']]],
-  ['txsendmultipleframes_115',['txSendMultipleFrames',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#a5aaa504b6ed77a167a53a7be701d1021',1,'sim_interface::dut_connector::can::CANConnector']]],
-  ['txsendsingleframe_116',['txSendSingleFrame',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#ab3e89cd261f04ee751183f224809ec65',1,'sim_interface::dut_connector::can::CANConnector']]],
-  ['txsetupmultipleframes_117',['txSetupMultipleFrames',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#a69bf3cc8c694d127f318d32fc740d97f',1,'sim_interface::dut_connector::can::CANConnector']]],
-  ['txsetupsequence_118',['txSetupSequence',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#afe0b73a222d567b2ebbcfc442beeb831',1,'sim_interface::dut_connector::can::CANConnector']]],
-  ['txsetupsingleframe_119',['txSetupSingleFrame',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#aadf4a1989cf1de9fff74eafd07264233',1,'sim_interface::dut_connector::can::CANConnector']]],
-  ['txsetupupdatemultipleframes_120',['txSetupUpdateMultipleFrames',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#ab8a984115c2964790aad2c9230c413d4',1,'sim_interface::dut_connector::can::CANConnector']]],
-  ['txsetupupdatesingleframe_121',['txSetupUpdateSingleFrame',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#aaa32529068b8a9c6a5b9c3d1f72c4946',1,'sim_interface::dut_connector::can::CANConnector']]]
+  ['_7ecanconnector_87',['~CANConnector',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#a59328868c6b0195083d3b331b28b29d4',1,'sim_interface::dut_connector::can::CANConnector']]],
+  ['_7edefaultapiimpl_88',['~DefaultApiImpl',['../classdummy__dut_1_1rest_1_1impl_1_1DefaultApiImpl.html#a3e3bcc96fdbbf711e87559999fb37df7',1,'dummy_dut::rest::impl::DefaultApiImpl']]],
+  ['_7edutconnector_89',['~DuTConnector',['../classsim__interface_1_1dut__connector_1_1DuTConnector.html#a74d62b1a896d3cda009a370cd3e092b7',1,'sim_interface::dut_connector::DuTConnector']]],
+  ['_7erestdummyconnector_90',['~RESTDummyConnector',['../classsim__interface_1_1dut__connector_1_1rest__dummy_1_1RESTDummyConnector.html#a085eef0d9333f03b77e25958a94ae873',1,'sim_interface::dut_connector::rest_dummy::RESTDummyConnector']]],
+  ['_7esharedqueue_91',['~SharedQueue',['../classsim__interface_1_1SharedQueue.html#a8fa522a71d805abfc79df46b6d173ec3',1,'sim_interface::SharedQueue']]],
+  ['_7esimcomhandler_92',['~SimComHandler',['../classsim__interface_1_1SimComHandler.html#adc0dc288964e1c31b4ac629ec6a6fb68',1,'sim_interface::SimComHandler']]],
+  ['_7esimtodutinterface_93',['~SimToDuTInterface',['../classsim__interface_1_1SimToDuTInterface.html#a251aaaa5d9139974f1890ee4e798ceec',1,'sim_interface::SimToDuTInterface']]]
 ];

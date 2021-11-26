@@ -1,4 +1,8 @@
 <map id="sim_interface::dut_connector::can::CANConnectorConfig" name="sim_interface::dut_connector::can::CANConnectorConfig">
-<area shape="rect" id="node1" title=" " alt="" coords="5,95,232,151"/>
-<area shape="rect" id="node2" href="$classsim__interface_1_1dut__connector_1_1ConnectorConfig.html" title=" " alt="" coords="15,5,223,47"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,380,232,436"/>
+<area shape="rect" id="node2" href="$classsim__interface_1_1dut__connector_1_1ConnectorConfig.html" title=" " alt="" coords="140,289,348,331"/>
+<area shape="rect" id="node3" title=" " alt="" coords="140,185,303,227"/>
+<area shape="rect" id="node4" title="STL class." alt="" coords="178,96,265,123"/>
+<area shape="rect" id="node6" title=" " alt="" coords="327,193,492,219"/>
+<area shape="rect" id="node5" title="STL class." alt="" coords="152,5,291,47"/>
 </map>

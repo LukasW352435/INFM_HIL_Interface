@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['logevent_210',['logEvent',['../classDuTLogger.html#a8114c09c6e023f973d3b08b6f02ced36',1,'DuTLogger']]],
-  ['logmessage_211',['logMessage',['../classDuTLogger.html#abd1b532e3be08fa7d886b9daa2be7e62',1,'DuTLogger::logMessage(std::string msg, LOG_LEVEL level)'],['../classDuTLogger.html#af472ac89ae956db381b94bc944069df4',1,'DuTLogger::logMessage(std::string msg, LOG_LEVEL level, bool writeToFile)']]],
-  ['logwithlevel_212',['logWithLevel',['../classDuTLogger.html#a350a388af6bd6d8d334ad6a8d4a1c5da',1,'DuTLogger']]]
+  ['operator_3c_3c_156',['operator&lt;&lt;',['../namespacesim__interface_1_1dut__connector.html#a104a56bab2047727d5709ccd33dd1dd9',1,'sim_interface::dut_connector::operator&lt;&lt;()'],['../namespacesim__interface.html#a825b7253cd06fb0dd6898a4124c43ffe',1,'sim_interface::operator&lt;&lt;(std::ostream &amp;os, const SimEvent &amp;simEvent)'],['../namespacesim__interface.html#a2ebaebf2fdcf3047a074897fe8457a13',1,'sim_interface::operator&lt;&lt;(std::ostream &amp;os, const SimToDuTInterface &amp;interface)']]]
 ];
