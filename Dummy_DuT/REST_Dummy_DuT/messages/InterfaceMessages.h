@@ -32,8 +32,16 @@
 namespace dummy_dut::rest::messages {
     class InterfaceMessages {
     public:
-        void addMessage(MessageWithTimestamp message);
+        /**
+         * Adds the given message to the end of the list
+         * @param message Message to add to list
+         */
+         void addMessage(MessageWithTimestamp message);
 
+        /**
+         * Returns the list of messages
+         * @return vector of MessageWithTimestamp
+         */
         std::vector<MessageWithTimestamp> getMessages();
 
     private:

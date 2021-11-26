@@ -33,10 +33,24 @@
 namespace dummy_dut::rest::impl {
     class RegisteredInterface {
     public:
+        /**
+         * Add the given URL to the list of callbacks, if not already present
+         * @param callback URL to add
+         * @return State of operation
+         */
         bool addInterfaceCallback(const std::string &callback);
 
+        /**
+         * Remove the given URL from the list of callbacks, if present
+         * @param callback URL to remove
+         * @return State of operation
+         */
         bool removeInterfaceCallback(const std::string &callback);
 
+        /**
+         * Get a list of all registered callbacks
+         * @return set of strings, each representing one URL
+         */
         std::set<std::string> getCallbacks();
 
     private:

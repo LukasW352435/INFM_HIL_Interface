@@ -10,7 +10,7 @@ target_sources(libs
         RESTDummyConnector.cpp
         PUBLIC
         RESTDummyConnector.h
-        RESTConfig.h)
+        RESTConnectorConfig.h)
 
 find_package(CURL REQUIRED)
 

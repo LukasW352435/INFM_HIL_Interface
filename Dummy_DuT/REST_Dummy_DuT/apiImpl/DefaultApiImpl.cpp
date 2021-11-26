@@ -30,13 +30,6 @@
 #include <curl/curl.h>
 
 namespace dummy_dut::rest::impl {
-    /**
-     * Construct all ApiResources and publish them on the restbed service.
-     * Register all handlers with their ApiResources.
-     * Starts the REST server.
-     * @param port Port to start on
-     * @param operations List of valid operations
-     */
     DefaultApiImpl::DefaultApiImpl(int port, std::set<std::string> operations) : DefaultApi() {
         curl_global_init(CURL_GLOBAL_DEFAULT);
         this->operations = std::move(operations);
@@ -66,9 +59,6 @@ namespace dummy_dut::rest::impl {
         startService(port);
     }
 
-    /**
-     * Wait for all curl threads to finish, free all global curl resources
-     */
     DefaultApiImpl::~DefaultApiImpl() {
         for (auto &thread: curlThreads) {
             thread.join();
@@ -77,21 +67,10 @@ namespace dummy_dut::rest::impl {
         curl_global_cleanup();
     }
 
-    /**
-     * Handler to construct the dashboard web page
-     * @param instance Instance to call the handler on
-     * @return Status code and HTML code (empty, if stub should set based on message defined in spec)
-     */
     std::pair<int, std::string> DefaultApiImpl::dashboardHandler(DefaultApiImpl *instance) {
         return {200, instance->getDashboardPage()};
     }
 
-    /**
-     * Handler to receive message from dashboard (DuT) and send it to all registered callbacks (in new threads)
-     * @param instance Instance to call the handler on
-     * @param message Message received
-     * @return Status code and HTML code (empty, if stub should set based on message defined in spec)
-     */
     std::pair<int, std::string>
     DefaultApiImpl::dashboardPostHandler(DefaultApiImpl *instance, const std::shared_ptr<model::Message> &message) {
         if (message->getKey().empty() || message->getStatus().empty()) {
@@ -107,12 +86,6 @@ namespace dummy_dut::rest::impl {
         return {201, ""};
     }
 
-    /**
-     * Handler to send Server-Sent Events (SSE) to all open sessions
-     * @param instance Instance to call the handler on
-     * @param message Message to send as SSE
-     * @return Status code and HTML code (empty, if stub should set based on message defined in spec)
-     */
     void DefaultApiImpl::dashboardMessageStreamHandler(messages::MessageWithTimestamp message) {
         const auto event = "data: " + message.toTableEntryWithoutNewline() + "\n\n";
 #define SESSIONS this->m_spDefaultApiDashboardMessagesResource->sessions
@@ -125,12 +98,6 @@ namespace dummy_dut::rest::impl {
         }
     }
 
-    /**
-     * Handler to add an URL to registered callbacks
-     * @param instance Instance to call the handler on
-     * @param callback Callback to register
-     * @return Status code and HTML code (empty, if stub should set based on message defined in spec)
-     */
     std::pair<int, std::string>
     DefaultApiImpl::addCallbackHandler(DefaultApiImpl *instance, const std::string &callback) {
         if (callback.empty() || !(callback.compare(0, 8, "http://") || callback.compare(0, 9, "https://"))) {
@@ -143,12 +110,6 @@ namespace dummy_dut::rest::impl {
         }
     }
 
-    /**
-     * Handler to remove an URL from registered callbacks
-     * @param instance Instance to call the handler on
-     * @param callback Callback to deregister
-     * @return Status code and HTML code (empty, if stub should set based on message defined in spec)
-     */
     std::pair<int, std::string>
     DefaultApiImpl::removeCallbackHandler(DefaultApiImpl *instance, const std::string &callback) {
         if (callback.empty() || !(callback.compare(0, 8, "http://") || callback.compare(0, 9, "https://"))) {
@@ -161,13 +122,6 @@ namespace dummy_dut::rest::impl {
         }
     }
 
-    /**
-     * Handler to receive messages from the interface
-     * Sends the message over SSE stream and saves it to list
-     * @param instance Instance to call the handler on
-     * @param message Message that was received
-     * @return Status code and HTML code (empty, if stub should set based on message defined in spec)
-     */
     std::pair<int, std::string>
     DefaultApiImpl::sendMessageHandler(DefaultApiImpl *instance, const std::shared_ptr<model::Message> &message) {
         if (message->getKey().empty() || message->getStatus().empty()) {
@@ -185,11 +139,6 @@ namespace dummy_dut::rest::impl {
         return {200, ""};
     }
 
-    /**
-     * Send given message to given url with an timeout of 5sec
-     * @param url URL to send message to
-     * @param message JSON encoded message to send
-     */
     void DefaultApiImpl::callUrl(const std::string &url, const std::string &message) {
         auto handle = curl_easy_init();
 
@@ -211,10 +160,6 @@ namespace dummy_dut::rest::impl {
         }
     }
 
-    /**
-     * Construct a list of received messages in HTML
-     * @return HTML snippet for messages
-     */
     std::string DefaultApiImpl::getMessages() {
         auto messages = this->interfaceMessages.getMessages();
 
@@ -225,10 +170,6 @@ namespace dummy_dut::rest::impl {
         return out;
     }
 
-    /**
-     * Construct all options for the select dropdown to send messages
-     * @return HTML snippet containg valid select options
-     */
     std::string DefaultApiImpl::getOperationOptions() {
         std::string out;
         for (const auto &operation: operations) {
@@ -242,10 +183,6 @@ namespace dummy_dut::rest::impl {
         return out;
     }
 
-    /**
-     * Construct the dashboard with all its functionality and already received messages
-     * @return HTML web page
-     */
     std::string DefaultApiImpl::getDashboardPage() {
         std::string page = R"V0G0N(<!DOCTYPE html>
 <html>
@@ -253,11 +190,8 @@ namespace dummy_dut::rest::impl {
     <title>REST Dummy DuT</title>
     <meta charset="UTF-8">
     <!-- Bootstrap 5 -->
-    <link href="https:/)V0G0N";
-        // Workaround for doxygen (file not processed if raw string contains //)
-        page += R"V0G0N(/cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https:/)V0G0N";
-        page += R"V0G0N(/cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script>
         function formDataToJson(form) {
             const json = {};
