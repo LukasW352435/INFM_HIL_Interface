@@ -399,20 +399,11 @@ void DuTLogger::logEvent(sim_interface::SimEvent event) {
         csvHeaderPrinted = true;
     }
 
-    // because the value of the event can have different types, it is necessary to find out what type it is.
-    // so test through all known cases in order. If you find the right one -> log it
-    if (event.value.type() == typeid(int)) {
-        int value = boost::get<int>(event.value);
-        LOG_INFO(dataLogger, "{},{},{},{}", event.operation, value, event.origin, event.current);
-    } else if (event.value.type() == typeid(double)) {
-        double value = boost::get<double>(event.value);
-        LOG_INFO(dataLogger, "{},{},{},{}", event.operation, value, event.origin, event.current);
-    } else if (event.value.type() == typeid(std::string)) {
-        std::string value = boost::get<std::string>(event.value);
-        LOG_INFO(dataLogger, "{},{},{},{}", event.operation, value, event.origin, event.current);
-    } else {
-        // an unknown type appeared!! -> can't handle it
-        // log an error instead of an event
-        logMessage("Can't log event: Unknown type for the value of the event.", LOG_LEVEL::ERROR);
-    }
+    // because the value of the event can have different types we have to use format this type into a string to log it.
+    // To solve this problem a boost::static_visitor class has been created. This class can cast values of
+    // defined types into strings
+    std::string convertedValue = boost::apply_visitor(EventVisitor(), event.value);
+
+    // log the event with the converted value
+    LOG_INFO(dataLogger, "{},{},{},{}", event.operation, convertedValue, event.origin, event.current);
 }
