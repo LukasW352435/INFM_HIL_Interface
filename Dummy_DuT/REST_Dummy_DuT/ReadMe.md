@@ -15,8 +15,9 @@ If you want to compile locally the following libraries are needed:
 - libssl-dev
 
 This implementation uses the [restbed](https://github.com/Corvusoft/restbed) framework as well as
-the [OpenAPI Stub Generator](https://github.com/OpenAPITools/openapi-generator). Restbed is provided as git submodule,
-use `git submodule update` or `git clone --recursive` in order to checkout with submodules.
+the [OpenAPI Stub Generator](https://github.com/OpenAPITools/openapi-generator).
+
+Restbed is provided as git submodule, use `git submodule update` or `git clone --recursive` in order to checkout with submodules, but only `--depth 1` is needed
 
 The generated stub (from [OpenApi Spec](REST_Dummy_DuT.yaml)) has to be slightly modified,
 see [generatedAPI/README.md](generatedAPI/README.md).
