@@ -12,12 +12,41 @@
 
 
 /*******************************************************************************
+ * INCLUDES
+ ******************************************************************************/
+// Project includes
+
+// System includes
+#include <string>
+#include <linux/can.h>
+#include <linux/can/bcm.h>
+
+
+/*******************************************************************************
  * CLASS DECLARATIONS
  ******************************************************************************/
 namespace sim_interface::dut_connector::can{
 
     class CANConnectorSendOperation{
 
+    public:
+        // Functions members
+
+        // Data members
+
+    private:
+        // Functions members
+
+        // Data members
+        std::string operation;          /**< The operation name.                                        */
+        canid_t canID;                  /**< The CAN ID of the frame.                                   */
+        __u32 count;                    /**< Number of times the frame is send with the first interval. */
+        struct bcm_timeval ival1;       /**< First Interval.                                            */
+        struct bcm_timeval ival2;       /**< Second Interval.                                           */
+        bool isCANFD;                   /**< Flag for CANFD frames.                                     */
+        bool announce;                  /**< Flag for immediately sending out updates once.             */
+        bool isCyclic;                  /**< Flag for cyclic messages.                                  */
+        
     };
 
 }

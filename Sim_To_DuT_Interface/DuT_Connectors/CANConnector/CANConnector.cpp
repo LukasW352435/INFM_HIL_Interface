@@ -592,7 +592,7 @@ namespace sim_interface::dut_connector::can{
     * @param frames   - The array of CAN/CANFD frames with the updated data.
     * @param nframes  - The number of CAN/CANFD frames that should be updated.
     * @param isCANFD  - Flag for CANFD frames.
-    * @param announce - Flag for immediately sending out the changes once will retaining the cycle.
+    * @param announce - Flag for immediately sending out the changes once while retaining the cycle.
     */
     void CANConnector::txSetupUpdateMultipleFrames(struct canfd_frame frames[], int nframes, bool isCANFD, bool announce){
 
@@ -970,9 +970,9 @@ namespace sim_interface::dut_connector::can{
         mask.data[0] = 0xFF;
 
         // Test txSendSingleFrame with a single CAN frame
-        //for(auto & i : frameArrCAN){
-        //   txSendSingleFrame(i, false);
-        //}
+        for(auto & i : frameArrCAN){
+            txSendSingleFrame(i, false);
+        }
 
         // Test txSendSingleFrame with a single CANFD frames
         //for(auto & i : frameArrCANFD){

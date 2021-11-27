@@ -12,11 +12,37 @@
 
 
 /*******************************************************************************
+ * INCLUDES
+ ******************************************************************************/
+// Project includes
+
+// System includes
+#include <string>
+#include <linux/can.h>
+#include <linux/can/bcm.h>
+
+
+/*******************************************************************************
  * CLASS DECLARATIONS
  ******************************************************************************/
 namespace sim_interface::dut_connector::can{
 
     class CANConnectorReceiveOperation{
+
+    public:
+        // Functions members
+
+        // Data members
+
+    private:
+        // Functions members
+
+        // Data members
+        std::string operation;      /**< The operation name.            */
+        canid_t canID;              /**< The CAN ID of the frame.       */
+        bool isCANFD;               /**< Flag for CANFD frames.         */
+        bool hasMask;               /**< Flag if a mask should be used. */
+        __u8 mask[CAN_MAX_DLEN];    /**< The mask that should be used.  */
 
     };
 
