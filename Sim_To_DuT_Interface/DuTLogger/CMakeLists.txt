@@ -8,6 +8,7 @@ target_sources(libs
         PUBLIC
         DuTLogger.h
         DuTLoggerConfig.h
-        EventVisitor.h)
+        EventVisitor.h
+        EventVisitor.cpp)
 
 target_include_directories(libs PUBLIC ${CMAKE_CURRENT_LIST_DIR} quill/quill/include)
