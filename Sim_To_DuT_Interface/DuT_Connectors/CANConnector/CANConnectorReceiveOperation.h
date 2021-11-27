@@ -18,6 +18,8 @@
 
 // System includes
 #include <string>
+#include <cstring>
+#include <cassert>
 #include <linux/can.h>
 #include <linux/can/bcm.h>
 
@@ -32,17 +34,30 @@ namespace sim_interface::dut_connector::can{
     public:
         // Functions members
 
+        /**
+         * Constructor
+         *
+         * @param operation  - The operation name.
+         * @param canID      - The CAN ID of the frame.
+         * @param isCANFD    - Flag for CANFD frames.
+         * @param hasMask    - Flag if a mask should be used.
+         * @param maskData   - The mask data that should be used. Only required for operations that have a mask.
+         * @param maskLength - The length of the passed mask.
+         */
+        CANConnectorReceiveOperation(std::string operation, canid_t canID, bool isCANFD, bool hasMask, __u8* maskData, int maskLength);
+
         // Data members
+        std::string operation;        /**< The operation name.            */
+        canid_t canID;                /**< The CAN ID of the frame.       */
+        bool isCANFD;                 /**< Flag for CANFD frames.         */
+        bool hasMask;                 /**< Flag if a mask should be used. */
+        int maskLength;               /**< The length of the mask data.   */
+        __u8 mask[CANFD_MAX_DLEN];    /**< The mask that should be used.  */
 
     private:
         // Functions members
 
         // Data members
-        std::string operation;      /**< The operation name.            */
-        canid_t canID;              /**< The CAN ID of the frame.       */
-        bool isCANFD;               /**< Flag for CANFD frames.         */
-        bool hasMask;               /**< Flag if a mask should be used. */
-        __u8 mask[CAN_MAX_DLEN];    /**< The mask that should be used.  */
 
     };
 

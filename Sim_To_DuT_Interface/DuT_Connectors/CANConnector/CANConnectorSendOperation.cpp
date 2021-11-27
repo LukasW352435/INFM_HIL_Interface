@@ -11,13 +11,41 @@
 
 /*******************************************************************************
  * INCLUDES
- ******************************************************************************/
+ ******************************************************************************/#
+// Project includes
 #include "CANConnectorSendOperation.h"
 
+// System includes
+#include <cassert>
 
 /*******************************************************************************
  * FUNCTION DEFINITIONS
  ******************************************************************************/
+namespace sim_interface::dut_connector::can{
+
+    CANConnectorSendOperation::CANConnectorSendOperation(std::string operation, canid_t canID, __u32 count,
+                                                         struct bcm_timeval ival1, struct bcm_timeval ival2,
+                                                         bool isCANFD, bool announce, bool isCyclic) :
+                                                         operation(std::move(operation)), canID(canID),
+                                                         count(count), ival1(ival1), ival2(ival2),
+                                                         isCANFD(isCANFD), announce(announce),
+                                                         isCyclic(isCyclic){
+
+        // Check if it is a cyclic operation
+        if(this->isCyclic){
+
+            // Assert that the elements of ival1 and ival2 are not negative
+            assert(0 <= this->ival1.tv_sec && 0 <= this->ival1.tv_usec);
+            assert(0 <= this->ival2.tv_sec && 0 <= this->ival2.tv_usec);
+
+            // Assert that ival1 and ival2 are greater than zero
+            assert(0 < this->ival1.tv_sec || 0 < this->ival1.tv_usec);
+            assert(0 < this->ival2.tv_sec || 0 < this->ival2.tv_usec);
+        }
+
+    }
+
+}
 
 
 /*******************************************************************************

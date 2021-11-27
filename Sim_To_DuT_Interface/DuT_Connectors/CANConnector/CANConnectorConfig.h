@@ -20,16 +20,17 @@
  * CLASS DECLARATIONS
  ******************************************************************************/
 
-namespace sim_interface::dut_connector::can {
+namespace sim_interface::dut_connector::can{
 
-    class CANConnectorConfig : public ConnectorConfig {
+    class CANConnectorConfig : public ConnectorConfig{
 
     public:
         explicit CANConnectorConfig(std::set<std::string> operations,
                                     std::map<std::string, int> periodicOperations = {},
-                                    bool periodicTimerEnabled = false) : ConnectorConfig(std::move(operations),
-                                                                                         std::move(periodicOperations),
-                                                                                         periodicTimerEnabled) {}
+                                    bool periodicTimerEnabled = false) :
+                                    ConnectorConfig(std::move(operations),
+                                                    std::move(periodicOperations),
+                                                    periodicTimerEnabled){}
 
         // Data member
         std::string interfaceName;

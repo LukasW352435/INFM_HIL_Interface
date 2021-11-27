@@ -32,10 +32,20 @@ namespace sim_interface::dut_connector::can{
     public:
         // Functions members
 
-        // Data members
-
-    private:
-        // Functions members
+        /**
+         * Constructor
+         *
+         * @param operation - The operation name. Always required.
+         * @param canID     - The CAN ID of the frame. Always required.
+         * @param count     - Number of times the frame is send with the first interval. Only required for cyclic operations.
+         * @param ival1     - First Interval. Only required for cyclic operations.
+         * @param ival2     - Second Interval. Only required for cyclic operations.
+         * @param isCANFD   - Flag for CANFD frames. Always required.
+         * @param announce  - Flag for immediately sending out updates once. Only required for cyclic operations.
+         * @param isCyclic  - Flag for cyclic messages. Always required.
+         */
+        CANConnectorSendOperation(std::string operation, canid_t canID, __u32 count, struct bcm_timeval ival1,
+                struct bcm_timeval ival2, bool isCANFD, bool announce, bool isCyclic);
 
         // Data members
         std::string operation;          /**< The operation name.                                        */
@@ -46,7 +56,12 @@ namespace sim_interface::dut_connector::can{
         bool isCANFD;                   /**< Flag for CANFD frames.                                     */
         bool announce;                  /**< Flag for immediately sending out updates once.             */
         bool isCyclic;                  /**< Flag for cyclic messages.                                  */
-        
+
+    private:
+        // Functions members
+
+        // Data members
+
     };
 
 }
