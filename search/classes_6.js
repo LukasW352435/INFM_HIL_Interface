@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['periodictimer_115',['PeriodicTimer',['../classsim__interface_1_1PeriodicTimer.html',1,'sim_interface']]]
+  ['message_117',['Message',['../classdummy__dut_1_1rest_1_1model_1_1Message.html',1,'dummy_dut::rest::model']]],
+  ['messagewithtimestamp_118',['MessageWithTimestamp',['../classdummy__dut_1_1rest_1_1messages_1_1MessageWithTimestamp.html',1,'dummy_dut::rest::messages']]]
 ];

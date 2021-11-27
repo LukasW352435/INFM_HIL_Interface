@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['value_85',['value',['../classsim__interface_1_1SimEvent.html#aded0ac68333023bb6075a589791262d9',1,'sim_interface::SimEvent']]],
-  ['version_86',['version',['../classsim__interface_1_1dut__connector_1_1ConnectorInfo.html#a0dd3326791c3ba0f84376af7ba304365',1,'sim_interface::dut_connector::ConnectorInfo']]]
+  ['totableentry_86',['toTableEntry',['../classdummy__dut_1_1rest_1_1messages_1_1MessageWithTimestamp.html#a1586211f527a8d030a4e7c9841c3fb8f',1,'dummy_dut::rest::messages::MessageWithTimestamp']]],
+  ['totableentrywithoutnewline_87',['toTableEntryWithoutNewline',['../classdummy__dut_1_1rest_1_1messages_1_1MessageWithTimestamp.html#a873f9692ae0dd048ddc5ef7535126e79',1,'dummy_dut::rest::messages::MessageWithTimestamp']]]
 ];
