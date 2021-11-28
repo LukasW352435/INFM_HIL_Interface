@@ -66,4 +66,24 @@ static const quill::LogLevel DEFAULT_CONSOLE_LOG_LEVEL = quill::LogLevel::Info;
  */
 static const quill::LogLevel DEFAULT_FILE_LOG_LEVEL = quill::LogLevel::Info;
 
+class LoggerConfig {
+public:
+    LoggerConfig(bool enableDebugMode, std::string pathConsoleLog, std::string pathDataLog,
+                 int fileBackupCount, quill::LogLevel defaultConsoleLogLevel, quill::LogLevel defaultFileLogLevel)
+                 : enableDebugMode(std::move(enableDebugMode)), pathConsoleLog(std::move(pathConsoleLog)),
+                 pathDataLog(std::move(pathDataLog)), fileBackupCount(std::move(fileBackupCount)),
+                 defaultConsoleLogLevel(std::move(defaultConsoleLogLevel)),
+                 defaultFileLogLevel(std::move(defaultFileLogLevel)) {
+
+    }
+
+    bool enableDebugMode = false;
+    std::string pathConsoleLog = "/logs/console";
+    std::string pathDataLog = "/logs/data";
+    int fileBackupCount = 10;
+    quill::LogLevel defaultConsoleLogLevel = quill::LogLevel::Info;
+    quill::LogLevel defaultFileLogLevel = quill::LogLevel::Info;
+};
+
+
 #endif //SIM_TO_DUT_INTERFACE_DUTLOGGERCONFIG_H
