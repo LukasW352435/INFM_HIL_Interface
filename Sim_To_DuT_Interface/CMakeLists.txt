@@ -19,5 +19,5 @@ add_executable(${PROJECT_NAME} main.cpp
 if (CMAKE_CXX_COMPILER_VERSION GREATER_EQUAL 9)
     target_link_libraries(${PROJECT_NAME} libs zmq quill boost_serialization)
 else()
-    target_link_libraries(${PROJECT_NAME} libs zmq quill boost_serialization stdc++fs)
+    target_link_libraries(${PROJECT_NAME} libs zmq quill boost_serialization stdc++fs -lboost_system)
 endif()
