@@ -26,11 +26,6 @@
 #include "RegisteredInterface.h"
 
 namespace dummy_dut::rest::impl {
-    /**
-     * Add the given URL to the list of callbacks, if not already present
-     * @param callback URL to add
-     * @return State of operation
-     */
     bool RegisteredInterface::addInterfaceCallback(const std::string &callback) {
         if (callbacks.find(callback) != callbacks.end()) {
             return false;
@@ -39,11 +34,6 @@ namespace dummy_dut::rest::impl {
         return true;
     }
 
-    /**
-     * Remove the given URL from the list of callbacks, if present
-     * @param callback URL to remove
-     * @return State of operation
-     */
     bool RegisteredInterface::removeInterfaceCallback(const std::string &callback) {
         if (callbacks.find(callback) != callbacks.end()) {
             callbacks.erase(callback);
@@ -52,10 +42,6 @@ namespace dummy_dut::rest::impl {
         return false;
     }
 
-    /**
-     * Get a list of all registered callbacks
-     * @return set of strings, each representing one URL
-     */
     std::set<std::string> RegisteredInterface::getCallbacks() {
         return callbacks;
     }

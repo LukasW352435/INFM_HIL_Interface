@@ -203,7 +203,9 @@ namespace sim_interface {
         queueSimToInterface->push(simEvent);
     }
 
-
+    SimComHandler::~SimComHandler() {
+        // TODO end zmq, etc.
+    }
 
 
 }
