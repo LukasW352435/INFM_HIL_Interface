@@ -124,6 +124,7 @@ namespace sim_interface::dut_connector::can{
         boost::asio::generic::datagram_protocol::socket bcmSocket;
         std::array<std::uint8_t, sizeof(struct bcmMsgMultipleFramesCanFD)> rxBuffer{0};
         std::thread ioContextThread;
+        CANConnectorConfig config;
 
     };
 

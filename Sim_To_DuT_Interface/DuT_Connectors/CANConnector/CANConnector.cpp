@@ -23,18 +23,21 @@ namespace sim_interface::dut_connector::can{
     /**
      * CAN Connector constructor.
      *
-     * @param queueDuTToSim - Queue to write received simulation events to
-     * @param config        - Configuration for the connector
+     * @param queueDuTToSim - Queue to write received simulation events to.
+     * @param config        - Configuration for the connector.
      */
     CANConnector::CANConnector(
             std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
-            const CANConnectorConfig &config
-            )
-    :
-    DuTConnector(std::move(queueDuTToSim), config),
-    ioContext(boost::make_shared<boost::asio::io_context>()),
-    bcmSocket(createBcmSocket(config))
-    {
+            const CANConnectorConfig &config):
+            DuTConnector(std::move(queueDuTToSim), config),
+            ioContext(boost::make_shared<boost::asio::io_context>()),
+            bcmSocket(createBcmSocket(config)),
+            config(config){
+
+        // Create all receive operations
+        for(auto const& [canID, receiveOperation] : config.frameToOperation){
+            // TODO
+        }
 
         // Create the first receive operation
         receiveOnSocket();

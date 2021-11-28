@@ -20,14 +20,19 @@
  ******************************************************************************/
 namespace sim_interface::dut_connector::can{
 
-    CANConnectorReceiveOperation::CANConnectorReceiveOperation(std::string operation, canid_t canID, bool isCANFD,
-                                                               bool hasMask, __u8 *maskData, int maskLength):
-                                                               operation(std::move(operation)), canID(canID),
-                                                               isCANFD(isCANFD), hasMask(hasMask), mask(),
+    CANConnectorReceiveOperation::CANConnectorReceiveOperation(std::string operation,
+                                                               bool isCANFD,
+                                                               bool hasMask,
+                                                               int maskLength = 0,
+                                                               __u8 *maskData = nullptr):
+                                                               operation(std::move(operation)),
+                                                               isCANFD(isCANFD),
+                                                               hasMask(hasMask),
+                                                               mask(),
                                                                maskLength(maskLength){
 
         // Assert that:
-        if(this->isCANFD){
+        if(this->isCANFD && this->hasMask){
             // - the mask length is not greater than the CANFD MTU and greater than zero
             assert(0 < this->maskLength && this->maskLength <= CANFD_MAX_DLEN);
         }else{

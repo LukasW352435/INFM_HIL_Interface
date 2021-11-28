@@ -35,25 +35,23 @@ namespace sim_interface::dut_connector::can{
         /**
          * Constructor
          *
-         * @param operation - The operation name. Always required.
-         * @param canID     - The CAN ID of the frame. Always required.
-         * @param count     - Number of times the frame is send with the first interval. Only required for cyclic operations.
-         * @param ival1     - First Interval. Only required for cyclic operations.
-         * @param ival2     - Second Interval. Only required for cyclic operations.
-         * @param isCANFD   - Flag for CANFD frames. Always required.
-         * @param announce  - Flag for immediately sending out updates once. Only required for cyclic operations.
-         * @param isCyclic  - Flag for cyclic messages. Always required.
+         * @param canID     - The CAN ID of the frame.
+         * @param isCANFD   - Flag for CANFD frames.
+         * @param isCyclic  - Flag for cyclic messages.
+         * @param announce  - Flag for immediately sending out updates once.
+         * @param count     - Number of times the frame is send with the first interval.
+         * @param ival1     - First Interval.
+         * @param ival2     - Second Interval.
          */
-        CANConnectorSendOperation(std::string operation, canid_t canID, __u32 count, struct bcm_timeval ival1,
-                struct bcm_timeval ival2, bool isCANFD, bool announce, bool isCyclic);
+        CANConnectorSendOperation(canid_t canID, bool isCANFD, bool isCyclic, bool announce, __u32 count,
+                                  struct bcm_timeval ival1, struct bcm_timeval ival2);
 
         // Data members
-        std::string operation;          /**< The operation name.                                        */
         canid_t canID;                  /**< The CAN ID of the frame.                                   */
+        bool isCANFD;                   /**< Flag for CANFD frames.                                     */
         __u32 count;                    /**< Number of times the frame is send with the first interval. */
         struct bcm_timeval ival1;       /**< First Interval.                                            */
         struct bcm_timeval ival2;       /**< Second Interval.                                           */
-        bool isCANFD;                   /**< Flag for CANFD frames.                                     */
         bool announce;                  /**< Flag for immediately sending out updates once.             */
         bool isCyclic;                  /**< Flag for cyclic messages.                                  */
 

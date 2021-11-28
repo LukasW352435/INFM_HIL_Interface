@@ -23,13 +23,20 @@
  ******************************************************************************/
 namespace sim_interface::dut_connector::can{
 
-    CANConnectorSendOperation::CANConnectorSendOperation(std::string operation, canid_t canID, __u32 count,
-                                                         struct bcm_timeval ival1, struct bcm_timeval ival2,
-                                                         bool isCANFD, bool announce, bool isCyclic) :
-                                                         operation(std::move(operation)), canID(canID),
-                                                         count(count), ival1(ival1), ival2(ival2),
-                                                         isCANFD(isCANFD), announce(announce),
-                                                         isCyclic(isCyclic){
+    CANConnectorSendOperation::CANConnectorSendOperation(canid_t canID,
+                                                         bool isCANFD,
+                                                         bool isCyclic,
+                                                         bool announce = false,
+                                                         __u32 count = 0,
+                                                         struct bcm_timeval ival1 = {0},
+                                                                 struct bcm_timeval ival2 = {0}):
+                                                         canID(canID),
+                                                         isCANFD(isCANFD),
+                                                         isCyclic(isCyclic),
+                                                         announce(announce),
+                                                         count(count),
+                                                         ival1(ival1),
+                                                         ival2(ival2){
 
         // Check if it is a cyclic operation
         if(this->isCyclic){
