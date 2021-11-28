@@ -81,28 +81,29 @@ static bool csvHeaderPrinted = false;
 class DuTLogger {
 
 public:
+    static void initializeLogger(LoggerConfig con);
     static void logMessage(std::string msg, LOG_LEVEL level);
     static void logMessage(std::string msg, LOG_LEVEL level, bool writeToFile);
     static void changeLogLevel(LOG_LEVEL_CHANGE_ON typ, LOG_LEVEL level);
     static void logEvent(sim_interface::SimEvent event);
 
 private:
+    static bool initialized;
+
     // define all required loggers
     static quill::Logger* consoleLogger;
     static quill::Logger* consoleFileLogger;
     static quill::Logger* dataLogger;
-    static std::string currentLogpathConsole;
-    static std::string currentLogpathData;
 
     // handlers (important to change the log_level
     static quill::Handler* consoleHandler;
     static quill::Handler* consoleFileHandler;
-    static quill::Handler* buildConsoleHandler();
-    static quill::Handler* buildFileHandler();
+    static quill::Handler* buildConsoleHandler(bool enableDebugMode, quill::LogLevel defaultConsoleLogLevel);
+    static quill::Handler* buildFileHandler(std::string logPath, bool enableDebugMode, quill::LogLevel defaultFileLogLevel);
 
     // functions to create and manage loggers
     static quill::Logger* createConsoleLogger(const char* name, bool withFileHandler);
-    static quill::Logger* createDataLogger();
+    static quill::Logger* createDataLogger(std::string logPath);
     static void startEngine();
 
     // help functions
@@ -111,9 +112,9 @@ private:
     static std::string getCurrentTimestamp();
 
     // file management
-    static std::string getLoggingPath(LOGGER_TYPE type);
-    static std::string initializeLoggingPath(LOGGER_TYPE type);
-    static void removeOldLogfiles(std::string directory);
+    static std::string getLoggingPath(std::string logPath);
+    static std::string initializeLoggingPath(std::string logPath);
+    static void removeOldLogfiles(std::string directory, int backupCount);
 };
 
 #endif //SIM_TO_DUT_INTERFACE_DUTLOGGER_H
