@@ -4,6 +4,7 @@ target_sources(libs
         PRIVATE
         CANConnector.cpp
         InterfaceIndexIO.cpp
+        CANConnectorConfig.cpp
         CANConnectorSendOperation.cpp
         CANConnectorReceiveOperation.cpp
         PUBLIC

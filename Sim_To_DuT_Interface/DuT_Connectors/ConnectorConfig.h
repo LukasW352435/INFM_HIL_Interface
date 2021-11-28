@@ -26,6 +26,8 @@
 #ifndef SIM_TO_DUT_INTERFACE_CONNECTORCONFIG_H
 #define SIM_TO_DUT_INTERFACE_CONNECTORCONFIG_H
 
+#include <set>
+#include <map>
 #include <string>
 
 namespace sim_interface::dut_connector {
