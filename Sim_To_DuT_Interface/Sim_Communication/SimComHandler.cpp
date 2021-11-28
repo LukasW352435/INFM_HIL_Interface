@@ -29,6 +29,7 @@
 #include <zmq.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
 
@@ -77,35 +78,27 @@ namespace sim_interface {
 
         std::string input_data_( buf, reply.size() );
         std::istringstream archive_stream(input_data_);
-        boost::archive::text_iarchive archive(archive_stream);
-        std::multimap <std::string, std::string> receiveMap;
+        boost::archive::xml_iarchive archive(archive_stream);
+        //std::map <std::string, std::string> receiveMap;
+    //   std::map<std::string,std::multimap<std::string,std::string>> receiveMap;
 
-        try
-        {
-            archive >> receiveMap;
-        } catch (boost::archive::archive_exception& ex) {
-            std::cout << "Archive Exception during deserializing:" << std::endl;
-            std::cout << ex.what() << std::endl;
-        } catch (int e) {
-            std::cout << "EXCEPTION " << e << std::endl;
-        }
+    //   try
+    //   {
+    //       archive >> receiveMap;
+    //   } catch (boost::archive::archive_exception& ex) {
+    //       std::cout << "Archive Exception during deserializing:" << std::endl;
+    //       std::cout << ex.what() << std::endl;
+    //   } catch (int e) {
+    //       std::cout << "EXCEPTION " << e << std::endl;
+    //   }
 
-        //  std::string test  = receiveMap["Speed"].which();
-        std::vector<std::string> keyVector;
-        std::vector<std::string> valueVector;
-        for (auto const& element: receiveMap) {
-            keyVector.push_back(element.first);
-            valueVector.push_back(element.second);
-            std::string keyAsString = element.first;
+    //   //  std::string test  = receiveMap["Speed"].which();
+    //   std::vector<std::string> keyVector;
+    //   std::vector<std::string> valueVector;
+    //   std::multimap<std::string,std::string> testCanMap;
+    //   testCanMap  = receiveMap.at("CANConnector");
 
-            auto valueAsAny =   element.second;
-            std::stringstream stringStreamValue ;
-            stringStreamValue <<  valueAsAny;
 
-            std::cout << "value: " << stringStreamValue.str() << std::endl;
-            std::cout << "Key: " << keyAsString << std::endl;
-
-        }
     }
 
     void SimComHandler::run() {
