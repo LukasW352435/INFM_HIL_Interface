@@ -45,6 +45,9 @@ void DuTLogger::initializeLogger(const LoggerConfig con) {
     // initialize the CSV file for data logging
     LOG_INFO(dataLogger, "{}", CSV_HEADER);
 
+    // remember that we've initialized the logger
+    initialized = true;
+
     // check if the user want to use another logging level than the default one
     if (con.fileLogLevel != LOG_LEVEL::INFO) {
         changeLogLevel(LOG_TYPE::FILE_LOG, con.fileLogLevel);
@@ -52,9 +55,6 @@ void DuTLogger::initializeLogger(const LoggerConfig con) {
     if (con.consoleLogLevel != LOG_LEVEL::INFO) {
         changeLogLevel(LOG_TYPE::CONSOLE_LOG, con.consoleLogLevel);
     }
-
-    // remember that we've initialized the logger
-    initialized = true;
 }
 
 /**

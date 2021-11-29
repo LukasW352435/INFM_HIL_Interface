@@ -33,12 +33,11 @@
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
 #include "Sim_Communication/SimComHandler.h"
 #include "DuTLogger/DuTLogger.h"
-#include "DuTLoggerConfig.h"
 
 int main() {
     // initialize the logger
     DuTLogger::initializeLogger(LoggerConfig());
-    
+
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
 
     // Create interface

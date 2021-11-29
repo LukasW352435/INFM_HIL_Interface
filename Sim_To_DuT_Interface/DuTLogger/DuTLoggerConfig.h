@@ -45,7 +45,8 @@ public:
      * @param fileLogLevel      - defines the logging level for the file log
      * @param consoleLogLevel   - defines the logging level for the console log
      */
-    LoggerConfig(bool enableDebugMode, std::string pathConsoleLog, std::string pathDataLog, int fileBackupCount)
+    LoggerConfig(bool enableDebugMode, std::string pathConsoleLog, std::string pathDataLog, int fileBackupCount,
+                 LOG_LEVEL fileLogLevel, LOG_LEVEL consoleLogLevel)
                  : enableDebugMode(std::move(enableDebugMode)), pathConsoleLog(std::move(pathConsoleLog)),
                  pathDataLog(std::move(pathDataLog)), fileBackupCount(std::move(fileBackupCount)),
                  fileLogLevel(std::move(fileLogLevel)), consoleLogLevel(std::move(consoleLogLevel)) {
