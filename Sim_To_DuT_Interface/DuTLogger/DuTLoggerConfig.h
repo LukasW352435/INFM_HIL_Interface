@@ -10,6 +10,7 @@
 #define SIM_TO_DUT_INTERFACE_DUTLOGGERCONFIG_H
 
 #include <string>
+#include <cassert>
 
 /**
  * Defines the level of logging
@@ -50,6 +51,9 @@ public:
                  : enableDebugMode(std::move(enableDebugMode)), pathConsoleLog(std::move(pathConsoleLog)),
                  pathDataLog(std::move(pathDataLog)), fileBackupCount(std::move(fileBackupCount)),
                  fileLogLevel(std::move(fileLogLevel)), consoleLogLevel(std::move(consoleLogLevel)) {
+        assert (this->fileBackupCount > 0);
+        assert (!this->pathConsoleLog.empty());
+        assert (!this->pathDataLog.empty());
     }
 
     bool enableDebugMode = false;

@@ -247,7 +247,7 @@ void DuTLogger::changeLogLevel(LOG_TYPE type, LOG_LEVEL level) {
     if (!initialized) {
         std::cerr << "Logger has not been initialized. Please parse a config to the logger." << std::endl;
     }
-
+    // get the right handler. We want to make changes on this one.
     quill::Handler* handler = DuTLogger::getHandlerType(type);
 
     // log all messages before changing the level
