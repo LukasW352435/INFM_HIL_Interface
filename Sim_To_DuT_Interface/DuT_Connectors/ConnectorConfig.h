@@ -29,6 +29,7 @@
 #include <set>
 #include <map>
 #include <string>
+#include <cassert>
 
 namespace sim_interface::dut_connector {
     class ConnectorConfig {
