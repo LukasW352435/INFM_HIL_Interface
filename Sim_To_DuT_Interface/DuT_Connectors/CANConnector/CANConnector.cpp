@@ -829,7 +829,6 @@ namespace sim_interface::dut_connector::can{
             case RX_TIMEOUT:
 
                 // Cyclic message is detected to be absent.
-                // TODO: Implement handling
                 std::cout << "RX_TIMEOUT is not implemented" << std::endl;
                 break;
 

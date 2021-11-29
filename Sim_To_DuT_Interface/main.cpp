@@ -68,7 +68,7 @@ int main() {
             0,
             nullptr);
 
-    // CANFD receive operation with a mask
+    // CANFD receive operation mask
     int mask1Len  = 1;
     __u8 mask1[1] = {0xFF};
 
@@ -79,7 +79,7 @@ int main() {
             mask1Len,
             mask1);
 
-    // CAN non-cylic send operation
+    // CAN non-cyclic send operation
     sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCan1(
             0x789,
             false,
