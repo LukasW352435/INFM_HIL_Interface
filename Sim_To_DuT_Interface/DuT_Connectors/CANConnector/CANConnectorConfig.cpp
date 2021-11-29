@@ -21,10 +21,10 @@ namespace sim_interface::dut_connector::can{
 
     CANConnectorConfig::CANConnectorConfig(std::string interfaceName,
                                            std::set<std::string> operations,
-                                           std::map<canid_t, CANConnectorReceiveOperation> frameToOperation = {},
-                                           std::map<std::string, CANConnectorSendOperation> operationToFrame = {},
-                                           std::map<std::string, int> periodicOperations = {},
-                                           bool periodicTimerEnabled = false):
+                                           std::map<canid_t, CANConnectorReceiveOperation> frameToOperation,
+                                           std::map<std::string, CANConnectorSendOperation> operationToFrame,
+                                           std::map<std::string, int> periodicOperations,
+                                           bool periodicTimerEnabled):
                                            ConnectorConfig(std::move(operations),std::move(periodicOperations), periodicTimerEnabled),
                                            interfaceName(std::move(interfaceName)),
                                            frameToOperation(std::move(frameToOperation)),

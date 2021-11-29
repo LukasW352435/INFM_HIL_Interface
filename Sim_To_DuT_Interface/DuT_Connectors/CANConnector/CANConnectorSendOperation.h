@@ -43,8 +43,13 @@ namespace sim_interface::dut_connector::can{
          * @param ival1     - First Interval.
          * @param ival2     - Second Interval.
          */
-        CANConnectorSendOperation(canid_t canID, bool isCANFD, bool isCyclic, bool announce, __u32 count,
-                                  struct bcm_timeval ival1, struct bcm_timeval ival2);
+        CANConnectorSendOperation(canid_t canID,
+                                  bool isCANFD,
+                                  bool isCyclic,
+                                  bool announce = false,
+                                  __u32 count = 0,
+                                  struct bcm_timeval ival1 = {0},
+                                  struct bcm_timeval ival2 = {0});
 
         // Data members
         canid_t canID;                  /**< The CAN ID of the frame.                                   */

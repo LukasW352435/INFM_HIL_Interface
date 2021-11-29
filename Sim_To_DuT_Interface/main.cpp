@@ -64,9 +64,8 @@ int main() {
     sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCan1(
             "Hazard",
             false,
-            false,
-            0,
-            nullptr);
+            false
+            );
 
     // CANFD receive operation mask
     int mask1Len  = 1;
@@ -77,17 +76,14 @@ int main() {
             true,
             true,
             mask1Len,
-            mask1);
+            mask1
+            );
 
     // CAN non-cyclic send operation
     sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCan1(
             0x789,
             false,
-            false,
-            false,
-            0,
-            {0},
-            {0}
+            false
             );
 
     // CANFD cyclic send operation

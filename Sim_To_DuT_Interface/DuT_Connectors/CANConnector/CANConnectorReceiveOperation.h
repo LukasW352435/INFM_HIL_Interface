@@ -42,7 +42,11 @@ namespace sim_interface::dut_connector::can{
          * @param maskLength - The length of the passed mask.
          * @param maskData   - The mask data that should be used. Only required for operations that have a mask.
          */
-        CANConnectorReceiveOperation(std::string operation, bool isCANFD, bool hasMask, int maskLength, __u8* maskData);
+        CANConnectorReceiveOperation(std::string operation,
+                                     bool isCANFD,
+                                     bool hasMask,
+                                     int maskLength = 0,
+                                     __u8* maskData = nullptr);
 
         // Data members
         std::string operation;            /**< The operation name.            */

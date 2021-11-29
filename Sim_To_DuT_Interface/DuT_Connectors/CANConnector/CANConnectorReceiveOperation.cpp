@@ -23,12 +23,11 @@ namespace sim_interface::dut_connector::can{
     CANConnectorReceiveOperation::CANConnectorReceiveOperation(std::string operation,
                                                                bool isCANFD,
                                                                bool hasMask,
-                                                               int maskLength = 0,
-                                                               __u8 *maskData = nullptr):
+                                                               int maskLength,
+                                                               __u8 *maskData):
                                                                operation(std::move(operation)),
                                                                isCANFD(isCANFD),
                                                                hasMask(hasMask),
-                                                               mask(),
                                                                maskLength(maskLength){
 
         // Assert that:
