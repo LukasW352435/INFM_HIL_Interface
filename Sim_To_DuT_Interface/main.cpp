@@ -58,19 +58,76 @@ int main() {
     interface.setSimComHandler(&simComHandler);
 
 
-    // Create a new CAN Connector config
+    //+++++ Create a new CAN Connector config +++++
 
-    std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> frameToOperation = {};
-    std::map<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> operationToFrame = {};
+    // CAN receive operation without a mask
+    sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCan1(
+            "Hazard",
+            false,
+            false,
+            0,
+            nullptr);
+
+    // CANFD receive operation with a mask
+    int mask1Len  = 1;
+    __u8 mask1[1] = {0xFF};
+
+    sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCanfd1(
+            "Brake",
+            true,
+            true,
+            mask1Len,
+            mask1);
+
+    // CAN non-cylic send operation
+    sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCan1(
+            0x789,
+            false,
+            false,
+            false,
+            0,
+            {0},
+            {0}
+            );
+
+    // CANFD cyclic send operation
+    struct bcm_timeval ival1 = {0};
+    ival1.tv_sec  = 1;
+    ival1.tv_usec = 0;
+
+    struct bcm_timeval ival2 = {0};
+    ival2.tv_sec  = 3;
+    ival2.tv_usec = 0;
+
+    sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCyclicCanfd1(
+            0x9AB,
+            true,
+            true,
+            true,
+            10,
+            ival1,
+            ival2
+            );
+
+    // CAN Connector Receive Config
+    std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> frameToOperation = {
+            {0x123, recvOpCan1},
+            {0x456, recvOpCanfd1}
+    };
+
+    // CAN Connector Send Config
+    std::map<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> operationToFrame = {
+            {"Speed", sendOpCan1},
+            {"Blink", sendOpCyclicCanfd1}
+    };
 
     sim_interface::dut_connector::can::CANConnectorConfig canConfig(
             "vcan0",
-            {"Speed", "Blink"},
+            {"Speed", "Blink", "Hazard", "Brake"},
             frameToOperation,
             operationToFrame,
             {},
-            false
-            );
+            false);
 
     // Create a new CAN Connector and add it to the interface
     sim_interface::dut_connector::can::CANConnector canConnector(interface.getQueueDuTToSim(), canConfig);
