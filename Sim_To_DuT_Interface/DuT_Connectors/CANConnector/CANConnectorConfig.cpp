@@ -33,6 +33,8 @@ namespace sim_interface::dut_connector::can{
         // Assert that the interface name is not empty
         assert(!this->interfaceName.empty());
 
+        // Assert that at least one map has an entry
+        assert(!this->frameToOperation.empty() || !this->operationToFrame.empty());
     }
 
 }

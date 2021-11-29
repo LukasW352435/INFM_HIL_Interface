@@ -36,10 +36,26 @@ namespace sim_interface::dut_connector::can{
 
         // Create all receive operations
         for(auto const& [canID, receiveOperation] : config.frameToOperation){
-            // TODO
+
+            // Check if the receive operation has a mask
+            if(receiveOperation.hasMask){
+
+                // Set the CAN ID in the mask
+                struct canfd_frame mask = receiveOperation.mask;
+                mask.can_id = canID;
+
+                // Create the receive operation
+                rxSetupMask(canID, mask, receiveOperation.isCANFD);
+
+            }else{
+
+                // Create the receive operation
+                rxSetupCanID(canID, receiveOperation.isCANFD);
+            }
+
         }
 
-        // Create the first receive operation
+        // Start the receive loop on the socket
         receiveOnSocket();
 
         // Start the io context loop
