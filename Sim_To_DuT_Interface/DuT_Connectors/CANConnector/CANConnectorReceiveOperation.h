@@ -45,11 +45,11 @@ namespace sim_interface::dut_connector::can{
         CANConnectorReceiveOperation(std::string operation, bool isCANFD, bool hasMask, int maskLength, __u8* maskData);
 
         // Data members
-        std::string operation;        /**< The operation name.            */
-        bool isCANFD;                 /**< Flag for CANFD frames.         */
-        bool hasMask;                 /**< Flag if a mask should be used. */
-        int maskLength;               /**< The length of the mask data.   */
-        __u8 mask[CANFD_MAX_DLEN];    /**< The mask that should be used.  */
+        std::string operation;            /**< The operation name.            */
+        bool isCANFD;                     /**< Flag for CANFD frames.         */
+        bool hasMask;                     /**< Flag if a mask should be used. */
+        int maskLength;                   /**< The length of the mask data.   */
+        struct canfd_frame mask = {0};    /**< The mask that should be used.  */
 
     private:
         // Functions members
