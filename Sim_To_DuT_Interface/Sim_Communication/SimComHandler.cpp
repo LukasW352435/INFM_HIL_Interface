@@ -30,12 +30,37 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/variant.hpp>
+
+#include <boost/property_tree/ptree_serialization.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/ini_parser.hpp>
+#include <boost/foreach.hpp>
+#include <string>
+#include <set>
+#include <exception>
+#include <iostream>
+#include <boost/algorithm/string.hpp>
+
+
+
+
+#include <thread>
+
+#include <boost/archive/xml_oarchive.hpp>
+
+#include "../DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
+
+namespace pt = boost::property_tree;
+using namespace std;
+using boost::property_tree::ptree;
 namespace sim_interface {
     SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface,
                                  const std::string& socketSimAddressSub, zmq::context_t &context_sub,
@@ -61,7 +86,12 @@ namespace sim_interface {
 
 
     }
+    SimComHandler::connectorType SimComHandler::resolveConnectorTypeForSwitch(std::string connectorTypeS) {
+        if(connectorTypeS == "RESTDummyConnector") return RESTDummyConnector;
+        if(connectorTypeS == "CANConnector") return CANConnector;
+        return Invalid_Connector;
 
+    }
     void SimComHandler::getConfig()
     {
         zmq::message_t reply;
@@ -73,13 +103,140 @@ namespace sim_interface {
             // TODO unbind
         }
 
-        const char *buf = static_cast<const char*>(reply.data());
-        std::cout << "CHAR [" << buf << "]" << std::endl;
 
-        std::string input_data_( buf, reply.size() );
-        std::istringstream archive_stream(input_data_);
-        boost::archive::xml_iarchive archive(archive_stream);
-        //std::map <std::string, std::string> receiveMap;
+
+
+        const char *buf = static_cast<const char*>(reply.data());
+      // std::cout << "CHAR [" << buf << "]" << std::endl;
+        pt::ptree tree;
+      //  pt::basic_ptree
+
+
+
+
+        std::ostringstream t;
+        t << buf;
+        std::string s = t.str();
+        std::stringstream stringStream(s);
+      //  boost::archive::xml_iarchive xmlInputArchive(stringStream);
+
+        // Parse the XML into the property tree.
+        pt::read_xml(stringStream, tree);
+      std::string connectorTypeS;
+        for (pt::ptree::value_type &v: tree.get_child("connectors")) {
+              connectorTypeS =v.second.get<std::string>("<xmlattr>.classType");
+              cout << "HALLOOOOOO" <<connectorTypeS << endl;
+              switch (resolveConnectorTypeForSwitch(connectorTypeS)) {
+                  case RESTDummyConnector: {
+
+                        std::ostringstream oss;
+                        auto optionszzz = pt::xml_writer_make_settings<std::string>(' ', 4);
+
+                 //  v.second.push_front({"boost_serialization signature=\"serialization::archive\" version=\"16\"", decltype(v.second)()});
+                 //    v.second.push_front({"!DOCTYPE boost_serialization", decltype(v.second)()});
+                     std::stringstream test;
+                      boost::property_tree::xml_parser::write_xml(test,v.second,optionszzz);
+                      //  v.second.insert(v.second.begin(), {test, decltype(v.second)()});
+       // v.second.add("test", v.second);
+
+                 //  cout << "XML STRING " << test.str() << endl;
+
+
+
+                    std::string filename = "XMLTESTGenerated.xml";
+                   //     std::remove(filename.c_str());
+                      std::ifstream in(filename);
+              std::stringstream s ;
+              boost::property_tree::xml_parser::write_xml(s,v.second,optionszzz);
+              std::string s1 = R"(<?xml version="1.0" encoding="utf-8"?>)";
+              std::string s2 = R"(<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE boost_serialization>
+<boost_serialization signature="serialization::archive" version="16">
+)";
+              std::string s3 = s.str();
+              s3.replace(s.str().find(s1),s1.length(),s2);
+//  boost::trim(s3);
+std::istringstream t(s3);
+cout << "XML STRING " << s3 << endl;
+                      boost::archive::xml_iarchive xmlInputArchive(in);
+                     // dut_connector::rest_dummy::RESTConnectorConfig restConnectorConfig =     dut_connector::rest_dummy::RESTConnectorConfig("baseUURL//", "baseCallback//", 222, {"Operation"},{{"Operation",1}} );
+                   //   xmlInputArchive >> BOOST_SERIALIZATION_NVP(restConnectorConfig);
+                    dut_connector::rest_dummy::RESTConnectorConfig *restConnectorConfig = nullptr;
+                      xmlInputArchive >> boost::serialization::make_nvp("restConnectorConfig", restConnectorConfig);
+                      in.close();
+
+//                         std::ostringstream xz;
+//   xz << in.rdbuf();
+//    std::string xs = t.str();
+//    std::istringstream ssx(xs);
+
+
+/*
+     std::stringstream s ;
+     boost::property_tree::xml_parser::write_xml(s,v.second,optionszzz);
+     std::string s1 = R"(<?xml version="1.0" encoding="utf-8"?>)";
+                      std::string s2 = R"(<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE boost_serialization>
+<boost_serialization signature="serialization::archive" version="16">
+)";
+                      std::string s3 = s.str();
+                     s3.replace(s.str().find(s1),s1.length(),s2);
+                    //  boost::trim(s3);
+                    std::istringstream t(s3);
+                      cout << "XML STRING " << s3 << endl;
+ //boost::archive::xml_iarchive xmlInputArchive(t);
+
+                      boost::archive::xml_iarchive xmlInputArchive(in);
+                     // boost::archive::text_iarchive testt(stringStream);
+
+              //  xmlInputArchive & BOOST_SERIALIZATION_NVP( v.second);
+
+                   // boost::archive::xml_iarchive xmlInputArchive(test);
+               //     boost::property_tree::serialize( xmlInputArchive,v.second,  1);
+
+                     //TODO working emty REST constructor
+                    //  dut_connector::rest_dummy::RESTConnectorConfig * restConnectorConfig;
+              //       std::unique_ptr< dut_connector::rest_dummy::RESTConnectorConfig>  restConnectorConfig;
+                  //    dut_connector::rest_dummy::RESTConnectorConfig restConnectorConfig;
+                      dut_connector::rest_dummy::RESTConnectorConfig restConnectorConfig =     dut_connector::rest_dummy::RESTConnectorConfig("baseUURL//", "baseCallback//", 222, {"Operation"},{{"Operation",1}} );
+                       //sim_interface::dut_connector::ConnectorConfig ccc = sim_interface::dut_connector::ConnectorConfig({"Penis","Speed"},{{"Penis",1}});
+                      std::cout << "HÄÄÄ" << std::endl;
+                   xmlInputArchive & BOOST_SERIALIZATION_NVP(restConnectorConfig);
+                     in.close();
+
+*/
+
+    //     std::ofstream ofss("XMLTESTGenerated.xml");
+    //      boost::archive::xml_oarchive xmlArchivee(ofss);
+
+    //     xmlArchivee & BOOST_SERIALIZATION_NVP(restConnectorConfig);
+
+
+    //     ofss.close();
+
+
+                      //xmlArchive << cc;
+
+
+                      break;
+                  }
+                  case CANConnector: {
+
+                      break;
+                  }
+                  default: {
+
+                      break;
+                  }
+
+          //    }
+
+          }
+        }
+    //    std::string input_data_( buf, reply.size() );
+    //    std::istringstream archive_stream(input_data_);
+    //    boost::archive::xml_iarchive archive(archive_stream);
+    //    //std::map <std::string, std::string> receiveMap;
     //   std::map<std::string,std::multimap<std::string,std::string>> receiveMap;
 
     //   try

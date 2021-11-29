@@ -73,6 +73,12 @@ namespace sim_interface {
          */
         void run();
         void getConfig();
+        enum connectorType {
+            RESTDummyConnector,
+            CANConnector,
+            Invalid_Connector
+        };
+        connectorType resolveConnectorTypeForSwitch(std::string connectorTypeS);
 
 
 

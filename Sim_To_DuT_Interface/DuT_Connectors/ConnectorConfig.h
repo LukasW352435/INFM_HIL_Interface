@@ -27,17 +27,52 @@
 #define SIM_TO_DUT_INTERFACE_CONNECTORCONFIG_H
 
 #include <string>
-
+#include <boost/archive/xml_oarchive.hpp>
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/serialization/set.hpp>
+#include <boost/serialization/map.hpp>
 namespace sim_interface::dut_connector {
     class ConnectorConfig {
+    private:
+        friend class boost::serialization::access;
+        template<class Archive>
+        void serialize(Archive & archive, const unsigned int version){
+           archive & BOOST_SERIALIZATION_NVP(operations);
+          archive &  BOOST_SERIALIZATION_NVP(periodicOperations);
+            archive & BOOST_SERIALIZATION_NVP(periodicTimerEnabled);
+            std::cout << "LERRRRR GLOBAL" << std::endl;
+
+        }
+
+        template<class Archive>
+        inline void load_construct_data(Archive & archive, ConnectorConfig * configPtr, const unsigned int version)
+        {
+            std::set<std::string> _operations;
+            std::map<std::string, int> _periodicOperations;
+            bool _periodicTimerEnabled;
+
+
+            archive >> _operations;
+            archive >> _periodicOperations;
+            archive >> _periodicTimerEnabled;
+
+
+
+            ::new (configPtr) ConnectorConfig (     _operations, _periodicOperations,  _periodicTimerEnabled );
+
+        }
+
     public:
         explicit ConnectorConfig(std::set<std::string> operations, std::map<std::string, int> periodicOperations = {}, bool periodicTimerEnabled = false)
         : operations(std::move(operations)), periodicOperations(std::move(periodicOperations)), periodicTimerEnabled(periodicTimerEnabled) {
+
             assert(!this->operations.empty()); // Set of operations cannot be empty
             for(const auto& periodicOperation : this->periodicOperations) {
                 assert(this->operations.find(periodicOperation.first) != this->operations.end()); // Periodic operation not found in operations
             }
         };
+
+        ConnectorConfig() = default;
 
         /** Set of processable operations */
         std::set<std::string> operations{};
@@ -48,6 +83,7 @@ namespace sim_interface::dut_connector {
         /** Enable periodic timer on Connector level */
         bool periodicTimerEnabled = false;
     };
+
 }
 
 

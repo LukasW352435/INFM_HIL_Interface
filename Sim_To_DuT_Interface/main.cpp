@@ -33,8 +33,45 @@
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
 #include "Sim_Communication/SimComHandler.h"
 #include "DuTLogger/DuTLogger.h"
+#include <boost/archive/xml_oarchive.hpp>
 
 int main() {
+
+
+
+
+
+/*
+
+   std::ifstream in("XMLTESTGenerated.xml");
+//
+  // std::ostringstream t;
+  // t << in.rdbuf();
+  //   std::string s = t.str();
+//std::istringstream stringStream(in);
+boost::archive::xml_iarchive xmlInputArchive(in);
+  //sim_interface::dut_connector::ConnectorConfig ccc = sim_interface::dut_connector::ConnectorConfig({"Penis","Speed"},{{"Penis",1}});
+
+  //xmlInputArchive & BOOST_SERIALIZATION_NVP(ccc);
+    sim_interface::dut_connector::rest_dummy::RESTConnectorConfig restConnectorConfig =     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig("baseUURL//", "baseCallback//", 222, {"Operation"},{{"Operation",1}} );
+
+    xmlInputArchive & BOOST_SERIALIZATION_NVP(restConnectorConfig);
+  in.close();
+
+//
+sim_interface::dut_connector::rest_dummy::RESTConnectorConfig restConnectorConfig =     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig("baseUURL//", "baseCallback//", 222, {"Operation"},{{"Operation",1}} );
+
+ std::ofstream ofss("XMLTESTGenerated.xml");
+boost::archive::xml_oarchive xmlArchivee(ofss);
+//
+    xmlArchivee & BOOST_SERIALIZATION_NVP(restConnectorConfig);
+//xmlArchivee & BOOST_SERIALIZATION_NVP(ccc);
+//
+ofss.close();
+  */
+
+    //xmlArchive << cc;
+
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
 
     // Create interface
@@ -47,8 +84,10 @@ int main() {
     std::string socketSimAddressSubConfig = "tcp://localhost:7779";
     zmq::context_t context_subConfig(1);
     sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddressSub, context_sub, socketSimAddressPub , context_pub,socketSimAddressSubConfig, context_subConfig);
-    std::thread simConfigHandlerThread (&sim_interface::SimComHandler::getConfig, &simComHandler);
-    simConfigHandlerThread.detach();
+
+   // std::thread simConfigHandlerThread (&sim_interface::SimComHandler::getConfig, &simComHandler);
+    //simConfigHandlerThread.detach();
+    simComHandler.getConfig();
 
     interface.setSimComHandler(&simComHandler);
 
@@ -86,7 +125,7 @@ int main() {
                                                                          {{"Test", 1000}},
                                                                          true);
 
-    sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(),
+        sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(),
                                                                                     config);
     /*
     auto event = sim_interface::SimEvent();
