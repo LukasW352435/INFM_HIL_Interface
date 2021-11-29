@@ -6,6 +6,7 @@
 
 #include "DuTLogger.h"
 
+// set the initialized variable to false at start
 bool DuTLogger::initialized = false;
 
 // initialize the static handlers
@@ -18,20 +19,20 @@ quill::Logger* DuTLogger::consoleFileLogger;
 quill::Logger* DuTLogger::dataLogger;
 
 
-void DuTLogger::initializeLogger(LoggerConfig con) {
+void DuTLogger::initializeLogger(const LoggerConfig con) {
     if (initialized) {
         logMessage("Logger can't be initialized again!", LOG_LEVEL::ERROR);
         return;
     }
     // start the quill engine
-    startEngine();
+    quill::start();
 
     // create the logging paths
     std::string logPathConsole = initializeLoggingPath(con.pathConsoleLog);
     std::string logPathData = initializeLoggingPath(con.pathDataLog);
 
-    DuTLogger::consoleHandler = DuTLogger::buildConsoleHandler(con.enableDebugMode, con.defaultConsoleLogLevel);
-    DuTLogger::consoleFileHandler = DuTLogger::buildFileHandler(logPathConsole, con.enableDebugMode, con.defaultFileLogLevel);
+    DuTLogger::consoleHandler = DuTLogger::buildConsoleHandler(con.enableDebugMode);
+    DuTLogger::consoleFileHandler = DuTLogger::buildFileHandler(logPathConsole, con.enableDebugMode);
 
     DuTLogger::consoleLogger = DuTLogger::createConsoleLogger("consoleLog", false);
     DuTLogger::consoleFileLogger = DuTLogger::createConsoleLogger("consoleFileLog", true);
@@ -41,22 +42,19 @@ void DuTLogger::initializeLogger(LoggerConfig con) {
     removeOldLogfiles(logPathConsole, con.fileBackupCount);
     removeOldLogfiles(logPathData, con.fileBackupCount);
 
+    // initialize the CSV file for data logging
+    LOG_INFO(dataLogger, "{}", CSV_HEADER);
+
+    // check if the user want to use another logging level than the default one
+    if (con.fileLogLevel != LOG_LEVEL::INFO) {
+        changeLogLevel(LOG_TYPE::FILE_LOG, con.fileLogLevel);
+    }
+    if (con.consoleLogLevel != LOG_LEVEL::INFO) {
+        changeLogLevel(LOG_TYPE::CONSOLE_LOG, con.consoleLogLevel);
+    }
+
     // remember that we've initialized the logger
     initialized = true;
-}
-
-/**
- * Starts the quill engine. Won't start the engine again if it's already running.
- */
-void DuTLogger::startEngine() {
-    // initialize everything if it hasn't been done yet
-    if (!startedQuillEngine) {
-        // start the quill engine
-        quill::start();
-
-        // remember that we started the engine and checked everything
-        startedQuillEngine = true;
-    }
 }
 
 /**
@@ -65,7 +63,7 @@ void DuTLogger::startEngine() {
  *
  * @return a handler to log messages in the console
  */
-quill::Handler* DuTLogger::buildConsoleHandler(bool enableDebugMode, quill::LogLevel defaultConsoleLogLevel) {
+quill::Handler* DuTLogger::buildConsoleHandler(bool enableDebugMode) {
     // build a handler for the console
     quill::Handler* newHandler = quill::stdout_handler("consoleHandler");
 
@@ -73,7 +71,7 @@ quill::Handler* DuTLogger::buildConsoleHandler(bool enableDebugMode, quill::LogL
     if (enableDebugMode) {
         newHandler->set_log_level(quill::LogLevel::Debug);
     } else {
-        newHandler->set_log_level(defaultConsoleLogLevel);
+        newHandler->set_log_level(quill::LogLevel::Info);
     }
 
     // modify the pattern for the logger
@@ -89,7 +87,7 @@ quill::Handler* DuTLogger::buildConsoleHandler(bool enableDebugMode, quill::LogL
  *
  * @return a handler to log messages in a file
  */
-quill::Handler* DuTLogger::buildFileHandler(std::string logPath, bool enableDebugMode, quill::LogLevel defaultFileLogLevel) {
+quill::Handler* DuTLogger::buildFileHandler(std::string logPath, bool enableDebugMode) {
     // a second handler for the file is needed
     std::string basicPath = logPath + "/Logfile_" + getCurrentTimestamp() + ".log";
     quill::Handler* newHandler = quill::file_handler(basicPath, FILE_MODE_CONSOLE,
@@ -99,7 +97,7 @@ quill::Handler* DuTLogger::buildFileHandler(std::string logPath, bool enableDebu
     if (enableDebugMode) {
         newHandler->set_log_level(quill::LogLevel::Debug);
     } else {
-        newHandler->set_log_level(defaultFileLogLevel);
+        newHandler->set_log_level(quill::LogLevel::Info);
     }
 
     // modify the pattern for the logger.
@@ -245,7 +243,7 @@ void DuTLogger::removeOldLogfiles(std::string directory, int backupCount) {
  * @param type the type of logger
  * @param level new level for logging
  */
-void DuTLogger::changeLogLevel(LOG_LEVEL_CHANGE_ON type, LOG_LEVEL level) {
+void DuTLogger::changeLogLevel(LOG_TYPE type, LOG_LEVEL level) {
     if (!initialized) {
         std::cerr << "Logger has not been initialized. Please parse a config to the logger." << std::endl;
     }
@@ -292,20 +290,20 @@ void DuTLogger::changeLogLevel(LOG_LEVEL_CHANGE_ON type, LOG_LEVEL level) {
  * @param type type of logger
  * @return connected handler
  */
-quill::Handler* DuTLogger::getHandlerType(LOG_LEVEL_CHANGE_ON type) {
+quill::Handler* DuTLogger::getHandlerType(LOG_TYPE type) {
     quill::Handler* handler;
 
     switch (type) {
-        case LOG_LEVEL_CHANGE_ON::CONSOLE_LOG:
+        case LOG_TYPE::CONSOLE_LOG:
             handler = consoleHandler;
             break;
 
-        case LOG_LEVEL_CHANGE_ON::FILE_LOG:
+        case LOG_TYPE::FILE_LOG:
             handler = consoleFileHandler;
             break;
 
         default:
-            throw std::invalid_argument("Internal Error! Unknown Typ of <LOG_LEVEL_CHANGED_ON> appeared.");
+            throw std::invalid_argument("Internal Error! Unknown Typ of <LOG_TYPE> appeared.");
     }
 
     return handler;
@@ -419,15 +417,6 @@ std::string DuTLogger::getCurrentTimestamp() {
 void DuTLogger::logEvent(sim_interface::SimEvent event) {
     if (!initialized) {
         std::cerr << "Logger has not been initialized. Please parse a config to the logger." << std::endl;
-    }
-
-    // check if we already printed the header to the file.
-    // Because of troubles with the quill engine we can't write the header in the file when we're building logger
-    if (!csvHeaderPrinted) {
-        // log the header
-        LOG_INFO(dataLogger, "{},{},{},{}", "Operation", "Value", "Origin", "Timestamp");
-        // remember that we have logged the header
-        csvHeaderPrinted = true;
     }
 
     // because the value of the event can have different types we have to use format this type into a string to log it.

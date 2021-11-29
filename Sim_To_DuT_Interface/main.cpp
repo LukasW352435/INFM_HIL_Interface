@@ -36,9 +36,9 @@
 #include "DuTLoggerConfig.h"
 
 int main() {
-    DuTLogger::initializeLogger(LoggerConfig(false, "/logs/console",
-                                             "/logs/data", 10, quill::LogLevel::Info,
-                                             quill::LogLevel::Info));
+    // initialize the logger
+    DuTLogger::initializeLogger(LoggerConfig());
+    
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
 
     // Create interface
