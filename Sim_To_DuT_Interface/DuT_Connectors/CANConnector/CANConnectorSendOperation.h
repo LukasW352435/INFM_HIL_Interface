@@ -37,7 +37,7 @@ namespace sim_interface::dut_connector::can{
          *
          * @param canID     - The CAN ID of the frame.
          * @param isCANFD   - Flag for CANFD frames.
-         * @param isCyclic  - Flag for cyclic messages.
+         * @param isCyclic  - Flag for cyclic frames.
          * @param announce  - Flag for immediately sending out updates once.
          * @param count     - Number of times the frame is send with the first interval.
          * @param ival1     - First Interval.
@@ -54,11 +54,11 @@ namespace sim_interface::dut_connector::can{
         // Data members
         canid_t canID;                  /**< The CAN ID of the frame.                                   */
         bool isCANFD;                   /**< Flag for CANFD frames.                                     */
+        bool isCyclic;                  /**< Flag for cyclic messages.                                  */
+        bool announce;                  /**< Flag for immediately sending out updates once.             */
         __u32 count;                    /**< Number of times the frame is send with the first interval. */
         struct bcm_timeval ival1;       /**< First Interval.                                            */
         struct bcm_timeval ival2;       /**< Second Interval.                                           */
-        bool announce;                  /**< Flag for immediately sending out updates once.             */
-        bool isCyclic;                  /**< Flag for cyclic messages.                                  */
 
     private:
         // Functions members

@@ -40,11 +40,12 @@ namespace sim_interface::dut_connector::can{
          * Constructor for the CAN Connector configuration.
          *
          * @param interfaceName        - The name of the interface that should be used by the connector.
-         * @param operations           - The operations supported by the connector.
-         * @param periodicOperations   - The periodic operations supported by the connector.
+         * @param operations           - The operations supported by the CAN Connector.
+         * @param frameToOperation     - The configurations for the receive operations.
+         * @param operationToFrame     - The configurations for the send operations.
+         * @param periodicOperations   - The periodic operations supported by the connector through the interface.
          * @param periodicTimerEnabled - Flag that enables the periodic sending through the interface.
-         * @param recvOperations       - The configurations for the receive operations.
-         * @param sendOperations       - The configuration for the send operations.
+         *                               Since the BCM socket supports cyclic operations this should always be false
          */
         explicit CANConnectorConfig(std::string interfaceName,
                                     std::set<std::string> operations,

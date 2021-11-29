@@ -23,7 +23,6 @@
  ******************************************************************************/
 namespace sim_interface::dut_connector::can{
 
-
     CANConnectorSendOperation::CANConnectorSendOperation(canid_t canID,
                                                          bool isCANFD,
                                                          bool isCyclic,
