@@ -34,11 +34,13 @@ namespace sim_interface::dut_connector::can{
         // Assert that:
         if(this->hasMask){
 
+            // Note: We need to use CAN/CANFD_MAX_DLEN and not CAN/CANFD_MTU because the DLEN is
+            // the max size of the data array and the MTU is the sizeof the struct as a whole.
             if(this->isCANFD){
-                // - the mask length is not greater than the CANFD MTU and greater than zero
+                // - the mask length is greater than zero and not greater than the CANFD MTU
                 assert(0 < this->maskLength && this->maskLength <= CANFD_MAX_DLEN);
             }else{
-                // - the mask length is not greater than the CAN MTU and greater than zero
+                // - the mask length is greater than zero and not greater than the CAN MTU
                 assert(0 < this->maskLength && this->maskLength <= CAN_MAX_DLEN);
             }
 
