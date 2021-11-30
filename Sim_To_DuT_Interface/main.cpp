@@ -28,10 +28,9 @@
 #include "SimToDuTInterface.h"
 #include <thread>
 #include "DuT_Connectors/RESTDummyConnector/RESTDummyConnector.h"
-#include "DuT_Connectors/RESTDummyConnector/RESTConfig.h"
+#include "DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
 #include "DuT_Connectors/CANConnector/CANConnector.h"
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
-#include "Utility/SharedQueue.h"
 #include "Sim_Communication/SimComHandler.h"
 #include "DuTLogger/DuTLogger.h"
 #include "SystemConfig.h"
@@ -54,33 +53,33 @@ int main() {
     interface.setSimComHandler(&simComHandler);
 
     // Create DuT Devices
-    sim_interface::dut_connector::rest_dummy::RESTConfig config;
-    config.baseUrlDuT = "http://localhost:9090";
-    config.baseCallbackUrl = "http://172.17.0.1";
-    config.port = 9091;
-    config.operations = {"Test","Angle",
-    "Acceleration",
-    "Decel",
-    "Distance",
-    "Height",
-    "LaneID",
-    "LaneIndex",
-    "LanePosition",
-    "Length",
-    "Position_X-Coordinate",
-    "Position_Y-Coordinate",
-    "Position_Z-Coordinate",
-    "RoadID",
-    "RouteIndex",
-    "Signals",
-    "Speed",
-    "Width",
-    "current",
-    "origin"};
-    config.periodicTimerEnabled = true;
-    config.periodicOperations = {{ "Test", 1000 }};
+    sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
+                                                                         "http://172.17.0.1",
+                                                                         9091,
+                                                                         {"Test", "Angle",
+                                                                 "Acceleration",
+                                                                 "Decel",
+                                                                 "Distance",
+                                                                 "Height",
+                                                                 "LaneID",
+                                                                 "LaneIndex",
+                                                                 "LanePosition",
+                                                                 "Length",
+                                                                 "Position_X-Coordinate",
+                                                                 "Position_Y-Coordinate",
+                                                                 "Position_Z-Coordinate",
+                                                                 "RoadID",
+                                                                 "RouteIndex",
+                                                                 "Signals",
+                                                                 "Speed",
+                                                                 "Width",
+                                                                 "current",
+                                                                 "origin"},
+                                                                         {{"Test", 1000}},
+                                                                         true);
 
-    sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), config);
+    sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(),
+                                                                                    config);
     /*
     auto event = sim_interface::SimEvent();
     event.operation = "Test";
@@ -91,11 +90,11 @@ int main() {
     event.value = "xyz";
     restDummyConnector.handleEvent(event);
     */
-  
+
     interface.addConnector(&restDummyConnector);
 
     // Create a new CAN Connector config
-    sim_interface::dut_connector::can::CANConnectorConfig canConfig;
+    sim_interface::dut_connector::can::CANConnectorConfig canConfig({"Test"});
     canConfig.interfaceName = "vcan0";
 
     // Create a new CAN Connector and add it to the interface
@@ -105,18 +104,18 @@ int main() {
     // Test the CAN Connector
     auto canEvent = sim_interface::SimEvent();
     canEvent.operation = "Test";
-    canEvent.value     = "Value";
+    canEvent.value = "Value";
     canConnector.handleEvent(canEvent);
 
     std::cout << interface << std::endl;
 
     // Start simComHandler to receive events from the simulation
-    std::thread simComHandlerThread (&sim_interface::SimComHandler::run, &simComHandler);
+    std::thread simComHandlerThread(&sim_interface::SimComHandler::run, &simComHandler);
     simComHandlerThread.detach();
 
     // Start interface to receive/send events
     interface.run();
-    
+
     std::cin.get();
     DuTLogger::logMessage("Shut down application", LOG_LEVEL::INFO);
     return 0;

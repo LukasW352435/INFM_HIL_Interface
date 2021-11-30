@@ -31,6 +31,14 @@
 namespace sim_interface::dut_connector {
     class ConnectorConfig {
     public:
+        explicit ConnectorConfig(std::set<std::string> operations, std::map<std::string, int> periodicOperations = {}, bool periodicTimerEnabled = false)
+        : operations(std::move(operations)), periodicOperations(std::move(periodicOperations)), periodicTimerEnabled(periodicTimerEnabled) {
+            assert(!this->operations.empty()); // Set of operations cannot be empty
+            for(const auto& periodicOperation : this->periodicOperations) {
+                assert(this->operations.find(periodicOperation.first) != this->operations.end()); // Periodic operation not found in operations
+            }
+        };
+
         /** Set of processable operations */
         std::set<std::string> operations{};
 
