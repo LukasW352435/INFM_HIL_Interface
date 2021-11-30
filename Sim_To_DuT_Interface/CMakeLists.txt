@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS -pthread)
 
 add_library(libs "")
 
-add_subdirectory(DuTLogger/quill)
+add_subdirectory(DuTLogger)
 
 add_subdirectory(DuT_Connectors)
 add_executable(${PROJECT_NAME} main.cpp
