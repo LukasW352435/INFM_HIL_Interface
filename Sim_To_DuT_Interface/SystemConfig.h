@@ -83,6 +83,7 @@ namespace sim_interface {
                 std::ifstream ifs(file);
                 boost::archive::xml_iarchive ia(ifs);
                 ia >> BOOST_SERIALIZATION_NVP(systemConfig);
+                DuTLogger::logMessage("Successfully loaded system config.", LOG_LEVEL::INFO);
             } catch (...) {
                 DuTLogger::logMessage("Load system config failed. Fallback to default values.", LOG_LEVEL::ERROR);
                 if (createNewIfNotFoundOrInvalid) {
