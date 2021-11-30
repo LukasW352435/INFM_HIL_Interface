@@ -57,16 +57,15 @@ namespace sim_interface {
          * Save the config to a File.
          * Does not create a new folder if it dose not exist!
          * @param file File path.
-         * @param systemConfig Reverence to a system config object.
+         * @param systemConfig Reference to a system config object.
          */
-        static void saveToFile(const std::string& file, SystemConfig& systemConfig) {
-            try{
+        static void saveToFile(const std::string &file, SystemConfig &systemConfig) {
+            try {
                 std::ofstream ofs(file);
                 boost::archive::xml_oarchive oa(ofs);
                 oa << BOOST_SERIALIZATION_NVP(systemConfig);
-                ofs.close();
                 DuTLogger::logMessage("Successfully saved system config to <" + file + ">", LOG_LEVEL::INFO);
-            }catch (...){
+            } catch (...) {
                 DuTLogger::logMessage("Save system config failed.", LOG_LEVEL::ERROR);
             }
         }
@@ -74,20 +73,20 @@ namespace sim_interface {
         /**
          * Load the config from a File.
          * @param file File path.
-         * @param systemConfig Reverence to a system config object.
+         * @param systemConfig Reference to a system config object.
          * @param createNewIfNotFoundOrInvalid Save the default system config to the file location if the loading is
          * unsuccessful.
          */
-        static void loadFromFile(const std::string& file, SystemConfig& systemConfig, bool createNewIfNotFoundOrInvalid) {
-            try{
+        static void
+        loadFromFile(const std::string &file, SystemConfig &systemConfig, bool createNewIfNotFoundOrInvalid) {
+            try {
                 std::ifstream ifs(file);
                 boost::archive::xml_iarchive ia(ifs);
                 ia >> BOOST_SERIALIZATION_NVP(systemConfig);
-                ifs.close();
-            }catch (...){
+            } catch (...) {
                 DuTLogger::logMessage("Load system config failed. Fallback to default values.", LOG_LEVEL::ERROR);
-                if(createNewIfNotFoundOrInvalid){
-                    sim_interface::SystemConfig::saveToFile(file,systemConfig);
+                if (createNewIfNotFoundOrInvalid) {
+                    sim_interface::SystemConfig::saveToFile(file, systemConfig);
                 }
             }
         }

@@ -41,7 +41,8 @@ int main() {
 
     // System config
     sim_interface::SystemConfig systemConfig;
-    sim_interface::SystemConfig::loadFromFile("../../Config/SystemConfig.xml",systemConfig, true);
+    std::string configPath = std::filesystem::canonical("/proc/self/exe").parent_path().string();
+    sim_interface::SystemConfig::loadFromFile(configPath + "/SystemConfig.xml",systemConfig, true);
 
     // Create interface
     sim_interface::SimToDuTInterface interface;
