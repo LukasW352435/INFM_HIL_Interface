@@ -20,32 +20,30 @@
  *
  * @author Lukas Wagenlehner
  * @author Michael Schmitz
+ * @author Matthias Bank
  * // TODO add all authors
  * @version 1.0
  */
 
-#include <iostream>
-#include <set>
-#include <map>
-#include <string>
+// Project includes
 #include "SimToDuTInterface.h"
-#include <thread>
+#include "Sim_Communication/SimComHandler.h"
 #include "DuT_Connectors/RESTDummyConnector/RESTDummyConnector.h"
 #include "DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
 #include "DuT_Connectors/CANConnector/CANConnector.h"
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
-#include "DuT_Connectors/CANConnector/CANConnectorSendOperation.h"
-#include "DuT_Connectors/CANConnector/CANConnectorReceiveOperation.h"
-#include "Sim_Communication/SimComHandler.h"
 #include "DuTLogger/DuTLogger.h"
+
+// System includes
+#include <thread>
+#include <iostream>
+
 
 int main() {
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
 
-
     // Create interface
     sim_interface::SimToDuTInterface interface;
-
 
     // Create simComHandler
     std::string socketSimAddressSub = "tcp://localhost:7777";
@@ -57,15 +55,55 @@ int main() {
 
     interface.setSimComHandler(&simComHandler);
 
+    // Create DuT Devices
+    sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
+                                                                         "http://172.17.0.1",
+                                                                         9091,
+                                                                         {"Test", "Angle",
+                                                                          "Acceleration",
+                                                                          "Decel",
+                                                                          "Distance",
+                                                                          "Height",
+                                                                          "LaneID",
+                                                                          "LaneIndex",
+                                                                          "LanePosition",
+                                                                          "Length",
+                                                                          "Position_X-Coordinate",
+                                                                          "Position_Y-Coordinate",
+                                                                          "Position_Z-Coordinate",
+                                                                          "RoadID",
+                                                                          "RouteIndex",
+                                                                          "Signals",
+                                                                          "Speed",
+                                                                          "Width",
+                                                                          "current",
+                                                                          "origin"},
+                                                                         {{"Test", 1000}},
+                                                                         true);
 
-    //+++++ Create a new CAN Connector config +++++
+    sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(),
+                                                                                    config);
+    /*
+    auto event = sim_interface::SimEvent();
+    event.operation = "Test";
+    event.value = "Test";
+    restDummyConnector.handleEvent(event);
+    auto event2 = sim_interface::SimEvent();
+    event.operation = "Indicator Right";
+    event.value = "xyz";
+    restDummyConnector.handleEvent(event);
+    */
+
+    interface.addConnector(&restDummyConnector);
+
+    //+++++ Start CAN Connector +++++
 
     // CAN receive operation without a mask
     sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCan1(
             "Hazard",
             false,
             false
-            );
+    );
 
     // CANFD receive operation mask
     int mask1Len  = 1;
@@ -77,14 +115,14 @@ int main() {
             true,
             mask1Len,
             mask1
-            );
+    );
 
     // CAN non-cyclic send operation
     sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCan1(
             0x789,
             false,
             false
-            );
+    );
 
     // CANFD cyclic send operation
     struct bcm_timeval ival1 = {0};
@@ -103,7 +141,7 @@ int main() {
             10,
             ival1,
             ival2
-            );
+    );
 
     // CAN Connector Receive Config
     std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> frameToOperation = {
@@ -133,7 +171,9 @@ int main() {
     auto canEvent = sim_interface::SimEvent();
     canEvent.operation = "Test";
     canEvent.value = "Value";
-    canConnector.handleEvent(canEvent);
+    canConnector.handleEventSingle(canEvent);
+
+    //+++++ End CAN Connector +++++
 
     std::cout << interface << std::endl;
 
