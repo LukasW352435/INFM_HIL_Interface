@@ -12,7 +12,10 @@
 /*******************************************************************************
  * INCLUDES
  ******************************************************************************/
+// Project includes
 #include "CANConnector.h"
+
+// System includes
 
 
 /*******************************************************************************
@@ -20,12 +23,6 @@
  ******************************************************************************/
 namespace sim_interface::dut_connector::can{
 
-    /**
-     * CAN Connector constructor.
-     *
-     * @param queueDuTToSim - Queue to write received simulation events to.
-     * @param config        - Configuration for the connector.
-     */
     CANConnector::CANConnector(
             std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
             const CANConnectorConfig &config):
@@ -64,9 +61,6 @@ namespace sim_interface::dut_connector::can{
         std::cout << "CAN Connector created" << std::endl;
     }
 
-    /**
-    * CAN Connector destructor.
-    */
     CANConnector::~CANConnector(){
 
         // Stop the io context loop
@@ -75,11 +69,6 @@ namespace sim_interface::dut_connector::can{
         std::cout << "CAN Connector destroyed" << std::endl;
     }
 
-    /**
-    * Creates the bcmSocket data member.
-    *
-    * @return The BCM socket.
-    */
     boost::asio::generic::datagram_protocol::socket CANConnector::createBcmSocket(const CANConnectorConfig &config){
 
         // Error code return value
@@ -119,9 +108,6 @@ namespace sim_interface::dut_connector::can{
         return socket;
     }
 
-    /**
-    * Stats the io context loop.
-    */
     void CANConnector::startProcessing(){
 
         // Run the io context in its own thread
@@ -130,9 +116,6 @@ namespace sim_interface::dut_connector::can{
         std::cout << "CAN Connector starting io context loop processing" << std::endl;
     }
 
-    /**
-    * Stops the io context loop.
-    */
     void CANConnector::stopProcessing(){
 
         // Check if we need to stop the io context loop
@@ -150,31 +133,20 @@ namespace sim_interface::dut_connector::can{
         std::cout << "CAN Connector stopped io context loop processing" << std::endl;
     }
 
-    /**
-    * Thread for the io context loop.
-    */
     void CANConnector::ioContextThreadFunction(const boost::shared_ptr<boost::asio::io_context>& context){
         context->run();
     }
 
-    /**
-     * Gets information about the CAN Connector
-     *
-     * @return info - The connector information
-     */
     ConnectorInfo CANConnector::getConnectorInfo(){
+
         ConnectorInfo info(
                 "CAN Connector",
                 0x0000001,
                 "The CAN Connector enables the communication over a CAN/CANFD interface.");
+
         return info;
     }
 
-    /**
-    * Receives on the BCM socket. The received data is stored in the rxBuffer.
-    * After processing the receive operation the next receive operation is
-    * created to keep  the io context loop running.
-    */
     void CANConnector::receiveOnSocket(){
 
         std::cout << "CAN Connector created new receive operation" << std::endl;
@@ -237,12 +209,6 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-    * Create a non cyclic transmission task for a single CAN/CANFD frame.
-    *
-    * @param frame   - The frame that should be send.
-    * @param isCANFD - Flag for a CANFD frame.
-    */
     void CANConnector::txSendSingleFrame(struct canfd_frame frame, bool isCANFD){
 
         // BCM message we are sending with a single CAN or CANFD frame
@@ -307,13 +273,6 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-    * Create a non cyclic transmission task for multiple CAN/CANFD frames.
-    *
-    * @param frames  - The frames that should be send.
-    * @param nframes - The number of frames that should be send.
-    * @param isCANFD - Flag for CANFD frames.
-    */
     void CANConnector::txSendMultipleFrames(struct canfd_frame frames[], int nframes, bool isCANFD){
 
         // Note: The TX_SEND operation can only handle exactly one frame!
@@ -324,16 +283,6 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-    * Create a cyclic transmission task for a CAN/CANFD frame.
-    *
-    * @param frame   - The frame that should be send cyclic.
-    * @param count   - Number of times the frame is send with the first interval.
-    *                  If count is zero only the second interval is being used.
-    * @param ival1   - First interval.
-    * @param ival2   - Second interval.
-    * @param isCANFD - Flag for a CANFD frames.
-    */
     void CANConnector::txSetupSingleFrame(struct canfd_frame frame, uint32_t count, struct bcm_timeval ival1,
                                           struct bcm_timeval ival2, bool isCANFD){
 
@@ -405,23 +354,6 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-     * Create a cyclic transmission task for multiple CAN/CANFD frames.
-    *
-    * Note: The frames will not be send as a atomic sequence. We send for each TX_SETUP
-    * a single CAN/CANFD frame with its CAN ID in the bcm_msg_head. This way we do not
-    * create a cyclic transmission sequence which can only be removed with the CAN ID
-    * that was set in the bcm_msg_head. Another benefit is that each CAN/CANFD frame
-    * can have different count, ival1, and ival2 values.
-    *
-    * @param frames  - The frames that should be send cyclic.
-    * @param nframes - The number of frames that should be send cyclic.
-    * @param count   - Number of times the frame is send with the first interval.
-    *                  If count is zero only the second interval is being used.
-    * @param ival1   - First interval.
-    * @param ival2   - Second interval.
-    *  @param isCANFD - Flag for CANFD frames.
-    */
     void CANConnector::txSetupMultipleFrames(struct canfd_frame frames[], int nframes, uint32_t count[], struct bcm_timeval ival1[],
                                              struct bcm_timeval ival2[], bool isCANFD){
 
@@ -431,22 +363,6 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-    * Create a cyclic transmission task for one or multiple CAN/CANFD frames.
-    * If more than one frame should be send cyclic the provided sequence of
-    * the frames is kept by the BCM.
-    *
-    * Note: The cyclic transmission task for the sequence can only be deleted
-    * with the CAN ID that was set in the bcm_msg_head.
-    *
-    * @param frames   - The array of CAN/CANFD frames that should be send cyclic.
-    * @param nframes  - The number of CAN/CANFD frames that should be send cyclic.
-    * @param count    - Number of times the frame is send with the first interval.
-    *                   If count is zero only the second interval is being used.
-    * @param ival1    - First interval.
-    * @param ival2    - Second interval.
-    * @param isCANFD  - Flag for CANFD frames.
-    */
     void CANConnector::txSetupSequence(struct canfd_frame frames[], int nframes, uint32_t count,
                                        struct bcm_timeval ival1, struct bcm_timeval ival2, bool isCANFD){
 
@@ -524,14 +440,6 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-    * Updates a cyclic transmission task for a CAN/CANFD frame.
-    *
-    * @param frames   - The updated CAN/CANFD frame data.
-    * @param nframes  - The number of CAN/CANFD frames that should be updated.
-    * @param isCANFD  - Flag for CANFD frames.
-    * @param announce - Flag for immediately sending out the changes once will retaining the cycle.
-    */
     void CANConnector::txSetupUpdateSingleFrame(struct canfd_frame frame, bool isCANFD, bool announce){
 
         // BCM message we are sending with a single CAN or CANFD frame
@@ -605,14 +513,6 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-    * Updates a cyclic transmission task for one or multiple CAN/CANFD frames.
-    *
-    * @param frames   - The array of CAN/CANFD frames with the updated data.
-    * @param nframes  - The number of CAN/CANFD frames that should be updated.
-    * @param isCANFD  - Flag for CANFD frames.
-    * @param announce - Flag for immediately sending out the changes once while retaining the cycle.
-    */
     void CANConnector::txSetupUpdateMultipleFrames(struct canfd_frame frames[], int nframes, bool isCANFD, bool announce){
 
         for(int index = 0; index < nframes; index++){
@@ -621,14 +521,6 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-    * Removes a cyclic transmission task for the given CAN ID.
-    *
-    * Note: A cyclic transmission task for a sequence of frames can only
-    * be deleted with the CAN ID that was set in the bcm_msg_head.
-    *
-    * @param canID - The CAN ID of the task that should be removed.
-    */
     void CANConnector::txDelete(canid_t canID, bool isCANFD){
 
         // BCM message we are sending
@@ -660,13 +552,6 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-     * Creates a RX filter for the given CAN ID.
-    * I. e. we get notified on all received frames with this CAN ID.
-    *
-    * @param canID    - The CAN ID that should be added to the RX filter.
-    * @param isCANFD  - Flag for CANFD frames.
-    */
     void CANConnector::rxSetupCanID(canid_t canID, bool isCANFD){
 
         // BCM message we are sending
@@ -699,14 +584,6 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-    * Creates a RX filter for the CAN ID and the relevant bits of the frame.
-    * I. e. we only get notified on changes for the set bits in the mask.
-    *
-    * @param canID    - The CAN ID that should be added to the RX filter.
-    * @param mask     - The mask for the relevant bits of the frame.
-    * @param isCANFD  - Flag for CANFD frames.
-    */
     void CANConnector::rxSetupMask(canid_t canID, struct canfd_frame mask, bool isCANFD){
 
         // BCM message we are sending with a single CAN or CANFD frame
@@ -768,12 +645,6 @@ namespace sim_interface::dut_connector::can{
         });
     }
 
-    /**
-    * Removes the RX filter for the given CAN ID.
-    *
-    * @param canID   - The CAN ID that should be removed from the RX filter.
-    * @param isCANFD - Flag for CANFD frames.
-    */
     void CANConnector::rxDelete(canid_t canID, bool isCANFD){
 
         // BCM message we are sending
@@ -805,14 +676,6 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-    * Decides what to do with the data we received on the socket.
-    *
-    * @param head    - The received bcm msg head.
-    * @param frames  - The received CAN or CANFD frames.
-    * @param nframes - The number of the received frames.
-    * @param isCANFD - Flag for CANFD frames.
-    */
     void CANConnector::handleReceivedData(const bcm_msg_head *head, void *frames, uint32_t nframes, bool isCANFD){
 
         std::cout << "Handling the received data" << std::endl;
@@ -828,7 +691,8 @@ namespace sim_interface::dut_connector::can{
 
             case RX_TIMEOUT:
 
-                // Cyclic message is detected to be absent.
+                // Cyclic message is detected to be absent by the timeout monitoring.
+                // There is no function implemented yet that should cause/use this.
                 std::cout << "RX_TIMEOUT is not implemented" << std::endl;
                 break;
 
@@ -860,11 +724,6 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-    * Decides what to do with the event we received from the simulation.
-    *
-    * @param event - The event we received from the simulation.
-    */
     void CANConnector::handleEventSingle(const SimEvent &event){
 
         // Test CAN Frame
