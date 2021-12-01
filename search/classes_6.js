@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['message_134',['Message',['../classdummy__dut_1_1rest_1_1model_1_1Message.html',1,'dummy_dut::rest::model']]],
-  ['messagewithtimestamp_135',['MessageWithTimestamp',['../classdummy__dut_1_1rest_1_1messages_1_1MessageWithTimestamp.html',1,'dummy_dut::rest::messages']]]
+  ['message_136',['Message',['../classdummy__dut_1_1rest_1_1model_1_1Message.html',1,'dummy_dut::rest::model']]],
+  ['messagewithtimestamp_137',['MessageWithTimestamp',['../classdummy__dut_1_1rest_1_1messages_1_1MessageWithTimestamp.html',1,'dummy_dut::rest::messages']]]
 ];
