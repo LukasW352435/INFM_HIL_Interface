@@ -20,25 +20,31 @@
  *
  * @author Lukas Wagenlehner
  * @author Michael Schmitz
+ * @author Matthias Bank
  * // TODO add all authors
  * @version 1.0
  */
 
-#include <iostream>
+// Project includes
 #include "SimToDuTInterface.h"
-#include <thread>
+#include "Sim_Communication/SimComHandler.h"
 #include "DuT_Connectors/RESTDummyConnector/RESTDummyConnector.h"
 #include "DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
 #include "DuT_Connectors/CANConnector/CANConnector.h"
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
-#include "Sim_Communication/SimComHandler.h"
 #include "DuTLogger/DuTLogger.h"
+
+// System includes
+#include <thread>
+#include <iostream>
+
 
 int main() {
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
 
     // Create interface
     sim_interface::SimToDuTInterface interface;
+
     // Create simComHandler
     std::string socketSimAddressSub = "tcp://localhost:7777";
     zmq::context_t context_sub(1);
@@ -54,24 +60,24 @@ int main() {
                                                                          "http://172.17.0.1",
                                                                          9091,
                                                                          {"Test", "Angle",
-                                                                 "Acceleration",
-                                                                 "Decel",
-                                                                 "Distance",
-                                                                 "Height",
-                                                                 "LaneID",
-                                                                 "LaneIndex",
-                                                                 "LanePosition",
-                                                                 "Length",
-                                                                 "Position_X-Coordinate",
-                                                                 "Position_Y-Coordinate",
-                                                                 "Position_Z-Coordinate",
-                                                                 "RoadID",
-                                                                 "RouteIndex",
-                                                                 "Signals",
-                                                                 "Speed",
-                                                                 "Width",
-                                                                 "current",
-                                                                 "origin"},
+                                                                          "Acceleration",
+                                                                          "Decel",
+                                                                          "Distance",
+                                                                          "Height",
+                                                                          "LaneID",
+                                                                          "LaneIndex",
+                                                                          "LanePosition",
+                                                                          "Length",
+                                                                          "Position_X-Coordinate",
+                                                                          "Position_Y-Coordinate",
+                                                                          "Position_Z-Coordinate",
+                                                                          "RoadID",
+                                                                          "RouteIndex",
+                                                                          "Signals",
+                                                                          "Speed",
+                                                                          "Width",
+                                                                          "current",
+                                                                          "origin"},
                                                                          {{"Test", 1000}},
                                                                          true);
 
@@ -90,9 +96,72 @@ int main() {
 
     interface.addConnector(&restDummyConnector);
 
-    // Create a new CAN Connector config
-    sim_interface::dut_connector::can::CANConnectorConfig canConfig({"Test"});
-    canConfig.interfaceName = "vcan0";
+    //+++++ Start CAN Connector +++++
+
+    // CAN receive operation without a mask
+    sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCan1(
+            "Hazard",
+            false,
+            false
+    );
+
+    // CANFD receive operation mask
+    int mask1Len  = 1;
+    __u8 mask1[1] = {0xFF};
+
+    sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCanfd1(
+            "Brake",
+            true,
+            true,
+            mask1Len,
+            mask1
+    );
+
+    // CAN non-cyclic send operation
+    sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCan1(
+            0x789,
+            false,
+            false
+    );
+
+    // CANFD cyclic send operation
+    struct bcm_timeval ival1 = {0};
+    ival1.tv_sec  = 1;
+    ival1.tv_usec = 0;
+
+    struct bcm_timeval ival2 = {0};
+    ival2.tv_sec  = 3;
+    ival2.tv_usec = 0;
+
+    sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCyclicCanfd1(
+            0x9AB,
+            true,
+            true,
+            true,
+            10,
+            ival1,
+            ival2
+    );
+
+    // CAN Connector Receive Config
+    std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> frameToOperation = {
+            {0x123, recvOpCan1},
+            {0x456, recvOpCanfd1}
+    };
+
+    // CAN Connector Send Config
+    std::map<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> operationToFrame = {
+            {"Speed", sendOpCan1},
+            {"Blink", sendOpCyclicCanfd1}
+    };
+
+    sim_interface::dut_connector::can::CANConnectorConfig canConfig(
+            "vcan0",
+            {"Speed", "Blink", "Hazard", "Brake"},
+            frameToOperation,
+            operationToFrame,
+            {},
+            false);
 
     // Create a new CAN Connector and add it to the interface
     sim_interface::dut_connector::can::CANConnector canConnector(interface.getQueueDuTToSim(), canConfig);
@@ -102,7 +171,9 @@ int main() {
     auto canEvent = sim_interface::SimEvent();
     canEvent.operation = "Test";
     canEvent.value = "Value";
-    canConnector.handleEvent(canEvent);
+    canConnector.handleEventSingle(canEvent);
+
+    //+++++ End CAN Connector +++++
 
     std::cout << interface << std::endl;
 

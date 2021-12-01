@@ -23,20 +23,39 @@ namespace sim_interface::dut_connector::can{
     /**
      * CAN Connector constructor.
      *
-     * @param queueDuTToSim - Queue to write received simulation events to
-     * @param config        - Configuration for the connector
+     * @param queueDuTToSim - Queue to write received simulation events to.
+     * @param config        - Configuration for the connector.
      */
     CANConnector::CANConnector(
             std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
-            const CANConnectorConfig &config
-            )
-    :
-    DuTConnector(std::move(queueDuTToSim), config),
-    ioContext(boost::make_shared<boost::asio::io_context>()),
-    bcmSocket(createBcmSocket(config))
-    {
+            const CANConnectorConfig &config):
+            DuTConnector(std::move(queueDuTToSim), config),
+            ioContext(boost::make_shared<boost::asio::io_context>()),
+            bcmSocket(createBcmSocket(config)),
+            config(config){
 
-        // Create the first receive operation
+        // Create all receive operations
+        for(auto const& [canID, receiveOperation] : config.frameToOperation){
+
+            // Check if the receive operation has a mask
+            if(receiveOperation.hasMask){
+
+                // Set the CAN ID in the mask
+                struct canfd_frame mask = receiveOperation.mask;
+                mask.can_id = canID;
+
+                // Create the receive operation
+                rxSetupMask(canID, mask, receiveOperation.isCANFD);
+
+            }else{
+
+                // Create the receive operation
+                rxSetupCanID(canID, receiveOperation.isCANFD);
+            }
+
+        }
+
+        // Start the receive loop on the socket
         receiveOnSocket();
 
         // Start the io context loop
@@ -592,7 +611,7 @@ namespace sim_interface::dut_connector::can{
     * @param frames   - The array of CAN/CANFD frames with the updated data.
     * @param nframes  - The number of CAN/CANFD frames that should be updated.
     * @param isCANFD  - Flag for CANFD frames.
-    * @param announce - Flag for immediately sending out the changes once will retaining the cycle.
+    * @param announce - Flag for immediately sending out the changes once while retaining the cycle.
     */
     void CANConnector::txSetupUpdateMultipleFrames(struct canfd_frame frames[], int nframes, bool isCANFD, bool announce){
 
@@ -810,7 +829,6 @@ namespace sim_interface::dut_connector::can{
             case RX_TIMEOUT:
 
                 // Cyclic message is detected to be absent.
-                // TODO: Implement handling
                 std::cout << "RX_TIMEOUT is not implemented" << std::endl;
                 break;
 
@@ -970,9 +988,9 @@ namespace sim_interface::dut_connector::can{
         mask.data[0] = 0xFF;
 
         // Test txSendSingleFrame with a single CAN frame
-        //for(auto & i : frameArrCAN){
-        //   txSendSingleFrame(i, false);
-        //}
+        for(auto & i : frameArrCAN){
+            txSendSingleFrame(i, false);
+        }
 
         // Test txSendSingleFrame with a single CANFD frames
         //for(auto & i : frameArrCANFD){
