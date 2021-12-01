@@ -40,6 +40,9 @@
 
 
 int main() {
+    // initialize the logger
+    DuTLogger::initializeLogger(LoggerConfig());
+
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
 
     // Create interface
