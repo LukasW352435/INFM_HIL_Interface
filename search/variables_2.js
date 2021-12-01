@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['description_192',['description',['../classsim__interface_1_1dut__connector_1_1ConnectorInfo.html#ab7e9469258a71da202256ebe80224162',1,'sim_interface::dut_connector::ConnectorInfo']]]
+  ['canid_212',['canID',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorSendOperation.html#a5dec0eab27ea159b7f3cee6f9d17462c',1,'sim_interface::dut_connector::can::CANConnectorSendOperation']]],
+  ['count_213',['count',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorSendOperation.html#a499cfd7cfa9943ab69fecbb3c812bcc5',1,'sim_interface::dut_connector::can::CANConnectorSendOperation']]],
+  ['current_214',['current',['../classsim__interface_1_1SimEvent.html#a27093b5db7e5427b548d1b755dff8588',1,'sim_interface::SimEvent']]]
 ];
