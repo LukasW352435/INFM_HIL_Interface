@@ -18,6 +18,7 @@
 #include "../DuTConnector.h"
 #include "InterfaceIndexIO.h"
 #include "CANConnectorConfig.h"
+#include "../../DuTLogger/DuTLogger.h"
 
 // System includes
 #include <thread>
@@ -126,9 +127,10 @@ namespace sim_interface::dut_connector::can{
         /**
         * Creates the BCM socket that is used by the CAN Connector.
         *
+        * @param config - The config of the CAN Connector.
         * @return The BCM socket.
         */
-        boost::asio::generic::datagram_protocol::socket createBcmSocket(const CANConnectorConfig &config);
+        boost::asio::generic::datagram_protocol::socket createBcmSocket(const CANConnectorConfig &canConfig);
 
         /**
         * Starts the io context loop that is running in a dedicated thread.
