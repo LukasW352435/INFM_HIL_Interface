@@ -105,8 +105,6 @@ int main() {
     //V2x Connector
     sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("wlp0s20f3");
 
-
-
     sim_interface::dut_connector::v2x::V2XConnector v2xConnector(interface.getQueueDuTToSim(), v2xconfig);
 
 

@@ -11,8 +11,6 @@ add_subdirectory(DuTLogger)
 
 add_subdirectory(DuT_Connectors)
 
-option(V2X_ENABLED "V2X enable" ON)
-
 add_executable(${PROJECT_NAME} main.cpp
         SimToDuTInterface.cpp SimToDuTInterface.h
         Events/SimEvent.cpp Events/SimEvent.h
