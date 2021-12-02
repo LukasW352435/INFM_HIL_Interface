@@ -33,7 +33,7 @@
 #include "DuT_Connectors/CANConnector/CANConnector.h"
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
 #include "DuTLogger/DuTLogger.h"
-#include "DuT_Connectors/V2XConnector/V2XConfig.h"
+#include "DuT_Connectors/V2XConnector/V2XConnectorConfig.h"
 #include "DuT_Connectors/V2XConnector/V2XConnector.h"
 
 // System includes
@@ -103,11 +103,7 @@ int main() {
     interface.addConnector(&restDummyConnector);
 
     //V2x Connector
-    sim_interface::dut_connector::v2x::V2XConfig v2xconfig;
-    v2xconfig.params.multicastIp = "239.67.77.67";
-    v2xconfig.params.multicastPort = 33211;
-    v2xconfig.params.ccuIp = "172.16.2.1";
-    v2xconfig.params.ccuPort = 33210;
+    sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("wlp0s20f3");
 
 
 

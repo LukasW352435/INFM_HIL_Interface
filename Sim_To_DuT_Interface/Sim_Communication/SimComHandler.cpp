@@ -35,6 +35,8 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/variant.hpp>
+#include <EventVisitor.h>
+
 namespace sim_interface {
     SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface,
                                  const std::string& socketSimAddressSub, zmq::context_t &context_sub,
@@ -128,7 +130,7 @@ namespace sim_interface {
        //Not working with curreent time
         std::map<std::string , boost::variant<int, double, std::string>> simEventMap;
         simEventMap["Operation"] = simEvent.operation;
-        simEventMap["Value"]     = simEvent.value;
+        simEventMap["Value"]     = boost::apply_visitor(EventVisitor(), simEvent.value);
         simEventMap["Origin"]    = simEvent.origin;
         std::stringstream time;
         time << simEvent.current;

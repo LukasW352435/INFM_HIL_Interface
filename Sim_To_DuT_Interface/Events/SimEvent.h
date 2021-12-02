@@ -26,6 +26,7 @@
 #define INFM_HIL_INTERFACE_SIMEVENT_H
 
 #include <ctime>
+#include <map>
 #include <string>
 #include <iostream>
 #include <boost/variant.hpp>
@@ -48,7 +49,7 @@ namespace sim_interface {
          * @param value The value of the event.
          * @param origin The origin of the event.
          */
-        SimEvent(std::string operation, boost::variant<int, double, std::string> value, std::string origin);
+        SimEvent(std::string operation, boost::variant<int, double, std::string, std::vector<unsigned char>> value, std::string origin);
 
         /**
          * Operation of the event.
@@ -57,7 +58,7 @@ namespace sim_interface {
         /**
          * Value of the event.
          */
-        boost::variant<int, double, std::string> value;
+        boost::variant<int, double, std::string, std::vector<unsigned char>> value;
         /**
          * Time when the event was created.
          */

@@ -30,38 +30,44 @@
 #include "../DuTConnector.h"
 #include <curl/curl.h>
 #include <thread>
-#include "V2XConfig.h"
-
-#include "cube-its/catkin_ws/src/vanetza/src/vanetza_ros_node.h"
-#include <vanetza/btp/data_indication.hpp>
-#include <vanetza/geonet/transport_interface.hpp>
-
+#include "V2XConnectorConfig.h"
 
 
 namespace sim_interface::dut_connector::v2x{
     class V2XConnector : public DuTConnector {
 
     public:
-        explicit V2XConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim, const V2XConfig &config);
+        /**
+         *
+         * @param queueDuTToSim queue to write received SimEvents to
+         * @param config Configuration of connector containing params (Context Params from Cube Board)
+         */
+        explicit V2XConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim, const V2XConnectorConfig &config);
 
         ~V2XConnector();
 
-        void handleEvent(const SimEvent &e) override;
+        /**
+         * Process the given event
+         *
+         * @param e SimEvent to handle
+         */
+        void handleEventSingle(const SimEvent &e) override;
 
+        /**
+         * Return some basic information like name, version and a short description of this connector
+         *
+         * @return ConnectorInfo containing information about this DuT connector
+         */
         ConnectorInfo getConnectorInfo() override;
-        void sendEventToDuT(const SimEvent &e);
-        void sendV2XEventToSim(const vanetza::geonet::MIB mib);
-
     private:
-
-        VanetzaROSNode vanetza_ros_node;
-        // std::unique_ptr<ReceiveEndpoint> receiveEndpoint;
-        ContextParams params;
-        std::thread receiveThread;
-
-        void enableReceiveFromDuT();
-
-
+        void receiveCallback(const std::vector<unsigned char> &msg);
+        void startReceive();
+        void onReceive(const boost::system::error_code& ec, std::size_t read_bytes);
+        boost::asio::io_service ioService;
+        boost::asio::generic::raw_protocol::socket _socket;
+        std::vector<unsigned char>receiveBuffer;
+        boost::asio::generic::raw_protocol::endpoint receiveEndpoint;
+        std::thread sockRunner;
 
     };
 }

@@ -10,6 +10,7 @@
 #define SIM_TO_DUT_INTERFACE_EVENTVISITOR_H
 
 #include <string>
+#include <sstream>
 #include "boost/variant.hpp"
 
 /**
@@ -24,6 +25,16 @@ public:
 
     std::string operator() (double d) const {
         return std::to_string(d);
+    }
+
+    std::string operator() (const std::vector<unsigned char>& vect) const {
+        std::stringstream out;
+        out << '[';
+        for(const auto& c : vect) {
+            out << ' ' << std::hex << (int) c;
+        }
+        out << " ]";
+        return out.str();
     }
 
     std::string operator() (const std::string &str) const {

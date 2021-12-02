@@ -1,3 +1,5 @@
+#include <utility>
+
 /**
  * HIL - V2X Connector
  * This the connector to interface with the V2X DuT
@@ -23,16 +25,24 @@
  * @version 1.0
  */
 
-#ifndef SIM_TO_DUT_INTERFACE_V2XCONFIG_H
-#define SIM_TO_DUT_INTERFACE_V2XCONFIG_H
+#ifndef SIM_TO_DUT_INTERFACE_V2XCONNECTORCONFIG_H
+#define SIM_TO_DUT_INTERFACE_V2XCONNECTORCONFIG_H
 
-#include "cube-its/catkin_ws/src/vanetza/src/cube_context.hpp"
 
-namespace sim_interface::dut_connector::v2x{
-    class V2XConfig : public ConnectorConfig {
+namespace sim_interface::dut_connector::v2x {
+    class V2XConnectorConfig : public ConnectorConfig {
     public:
-        ContextParams params;
+        explicit V2XConnectorConfig(std::string ifname)
+                : ConnectorConfig({"V2X"}, {}, false),
+                  ifname(std::move(ifname)) {
+            assert(!this->ifname.empty());
+        }
+
+        /**
+         * Network interface to send and receive V2X to/from
+         */
+        std::string ifname;
     };
 }
 
-#endif //SIM_TO_DUT_INTERFACE_V2XCONFIG_H
+#endif //SIM_TO_DUT_INTERFACE_V2XCONNECTORCONFIG_H

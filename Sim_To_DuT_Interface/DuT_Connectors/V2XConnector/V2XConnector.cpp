@@ -23,85 +23,86 @@
  * @version 1.0
  */
 
-#include <iostream>
 #include <utility>
+#include <boost/asio.hpp>
 #include "V2XConnector.h"
-
-
+#include "V2XVisitor.h"
+#include <linux/if_ether.h>
+#include <linux/if_packet.h>
+#include <net/if.h>
+#include "../../DuTLogger/DuTLogger.h"
 
 namespace sim_interface::dut_connector::v2x {
-    /**
-     *
-     * @param queueDuTToSim queue to write received SimEvents to
-     * @param config Configuration of connector containing params (Context Params from Cube Board)
-     */
     V2XConnector::V2XConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
-                               const V2XConfig &config)
-            : DuTConnector(std::move(queueDuTToSim), config) {
-        params = config.params;
+                               const V2XConnectorConfig &config)
+            : DuTConnector(std::move(queueDuTToSim), config),
+              _socket(ioService) {
+        sockRunner = std::thread([&]() {
+            this->ioService.run();
+        });
+        try {
+            boost::asio::generic::raw_protocol raw_protocol(AF_PACKET, SOCK_RAW);
+            ifreq data = {0};
+            std::strncpy(data.ifr_name, config.ifname.c_str(), IF_NAMESIZE);
+            data.ifr_name[IF_NAMESIZE -1] = '\0';
 
-        vanetza_ros_node = VanetzaROSNode();
+            ioctl(socket(AF_LOCAL, SOCK_PACKET, 0), SIOCGIFINDEX, &data);
+            sockaddr_ll socket_address = {0};
+            socket_address.sll_family = AF_PACKET;
+            socket_address.sll_protocol = htons(ETH_P_ALL);
+            socket_address.sll_ifindex = data.ifr_ifindex;
+            _socket.open(raw_protocol);
+            _socket.bind(boost::asio::generic::raw_protocol::endpoint(&socket_address, sizeof(sockaddr_ll)));
 
-
-
-        std::cout << "Created V2xConnector with multicast-ip: " << params.multicastIp << std::endl;
+            receiveEndpoint = boost::asio::generic::raw_protocol::endpoint(_socket.local_endpoint());
+        } catch (std::exception& e) {
+            DuTLogger::logMessage(fmt::format("V2XConnector: Exception on opening socket: {}", e.what()), LOG_LEVEL::ERROR);
+            exit(1);
+        }
+        startReceive();
     }
 
-/**
- * Deconstructur
- */
     V2XConnector::~V2XConnector() {
-
+        ioService.stop();
+        sockRunner.join();
     }
 
-/**
- * Process the given event
- *
- * @param e SimEvent to handle
- */
-    void V2XConnector::handleEvent(const SimEvent &e) {
-        //TODO include canHandleSimEvent
-            // if (canHandleSimEvent(e)) {}
-                 sendEventToDuT(e);
 
+    void V2XConnector::startReceive() {
+        _socket.async_receive_from(
+                boost::asio::buffer(receiveBuffer), receiveEndpoint,
+                [this](auto && PH1, auto && PH2) { onReceive(std::forward<decltype(PH1)>(PH1), std::forward<decltype(PH2)>(PH2)); });
     }
 
-/**
- * Return some basic information like name, version and a short description of this connector
- *
- * @return ConnectorInfo containing information about this DuT connector
- */
+
+    void V2XConnector::onReceive(const boost::system::error_code& ec, std::size_t read_bytes)
+    {
+        if (!ec) {
+            DuTLogger::logMessage(fmt::format("V2XConnector: received {} bytes", read_bytes), LOG_LEVEL::DEBUG);
+            std::vector<unsigned char> msg = std::vector(receiveBuffer.begin(), receiveBuffer.begin() + read_bytes);
+
+            receiveCallback(msg);
+            startReceive();
+        }
+    }
+
+    void V2XConnector::handleEventSingle(const SimEvent &e) {
+        boost::asio::const_buffer buffer = boost::asio::buffer(boost::apply_visitor(V2XVisitor(), e.value));
+
+        std::size_t ret = _socket.send(buffer);
+        if (ret != 0) {
+            DuTLogger::logMessage(fmt::format("V2XConnector: Error {} sending over socket", ret), LOG_LEVEL::ERROR);
+        }
+    }
+
     ConnectorInfo V2XConnector::getConnectorInfo() {
-
-        ConnectorInfo info(
+        return {
                 "V2X Connector",
-                0x0000002,
-                " ");
-        return info;
-
+                0x0000001,
+                " "};
     }
 
-/**
- * Send the given event to the configured V2X DuT
- *
- * @param e SimEvent to send
- */
-    void V2XConnector::sendEventToDuT(const SimEvent &e) {
-        vanetza::geonet::DataIndication dataIndication;
-        std::unique_ptr<vanetza::UpPacket> upPacket;
-        //TODO Mapping SimEvent <-> dataIndication, upPacket
-
-        vanetza_ros_node.getBtpPublisher().indicate(dataIndication, upPacket);
+    void V2XConnector::receiveCallback(const std::vector<unsigned char>& msg) {
+        sendEventToSim(SimEvent("V2X", msg, "V2X"));
     }
-
-    void V2XConnector::enableReceiveFromDuT() {
-
-    }
-
-    void V2XConnector::sendV2XEventToSim(const vanetza::geonet::MIB mib){
-    	const SimEvent e;
-    	//TODO Mapping mib <-> e
-    	this->sendEventSim(e);
-    }
-
 }
