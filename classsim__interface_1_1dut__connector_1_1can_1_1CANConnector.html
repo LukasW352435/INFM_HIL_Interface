@@ -141,7 +141,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>CAN Connector constructor.</p>
+<p>CAN Connector constructor. Configures the BCM socket based on the provided receive configuration. Starts the io_context- and receive-loop of the CAN Connector.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">queueDuTToSim</td><td>- Queue to write received simulation events to. </td></tr>
@@ -166,7 +166,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>CAN Connector destructor. </p>
+<p>CAN Connector destructor. Stops the io_context loop of the CAN Connector. </p>
 
 </div>
 </div>
@@ -242,7 +242,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Dec 1 2021 12:17:24 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 2 2021 08:17:30 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
