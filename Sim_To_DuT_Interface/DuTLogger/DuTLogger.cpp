@@ -19,7 +19,7 @@ quill::Logger* DuTLogger::consoleFileLogger;
 quill::Logger* DuTLogger::dataLogger;
 
 
-void DuTLogger::initializeLogger(const LoggerConfig con) {
+void DuTLogger::initializeLogger(const LoggerConfig &con) {
     if (initialized) {
         logMessage("Logger can't be initialized again!", LOG_LEVEL::ERROR);
         return;
@@ -57,12 +57,6 @@ void DuTLogger::initializeLogger(const LoggerConfig con) {
     }
 }
 
-/**
- * Creates a handler to write messages in the console.
- * This handler can be connected to a logger.
- *
- * @return a handler to log messages in the console
- */
 quill::Handler* DuTLogger::buildConsoleHandler(bool enableDebugMode) {
     // build a handler for the console
     quill::Handler* newHandler = quill::stdout_handler("consoleHandler");
@@ -80,18 +74,10 @@ quill::Handler* DuTLogger::buildConsoleHandler(bool enableDebugMode) {
     return newHandler;
 }
 
-/**
- * Creates a handler to write messages into a file.
- * This handler can be connected to a logger.
- * Depending on the configuration the handler will create a new file for every start or try to append on the current one.
- *
- * @return a handler to log messages in a file
- */
-quill::Handler* DuTLogger::buildFileHandler(std::string logPath, bool enableDebugMode) {
+quill::Handler* DuTLogger::buildFileHandler(const std::string &logPath, bool enableDebugMode) {
     // a second handler for the file is needed
     std::string basicPath = logPath + "/Logfile_" + getCurrentTimestamp() + ".log";
-    quill::Handler* newHandler = quill::file_handler(basicPath, FILE_MODE_CONSOLE,
-                                                     quill::FilenameAppend::None);
+    quill::Handler* newHandler = quill::file_handler(basicPath, "w", quill::FilenameAppend::None);
 
     // Check if debug mode is enabled. If not use the configured default level
     if (enableDebugMode) {
@@ -108,14 +94,6 @@ quill::Handler* DuTLogger::buildFileHandler(std::string logPath, bool enableDebu
     return newHandler;
 }
 
-/**
- * Builds a logger for the console. If necessary the logger will be build with an additional handler for
- * files. This will be configured by the second argument.
- *
- * @param name the name for the logger
- * @param withFileHandler true if the logger also needs a handler for logfiles
- * @return the created logger
- */
 quill::Logger* DuTLogger::createConsoleLogger(const char* name, bool withFileHandler) {
     // check if the new logger needs to write the console log to a file
     // if needed, we have to build the logger in a different way
@@ -134,17 +112,10 @@ quill::Logger* DuTLogger::createConsoleLogger(const char* name, bool withFileHan
     return newLogger;
 }
 
-/**
- * Creates a logger to log a specific data object (like events; not normal messages!) into a file.
- * The logger will be build with all necessary handlers.
- * Depending on the configuration the handler will create a new file for every start or try to append on the current one.
- *
- * @return a logger to log data objects into a file
- */
-quill::Logger* DuTLogger::createDataLogger(std::string logPath) {
+quill::Logger* DuTLogger::createDataLogger(const std::string &logPath) {
     // create a file handler to connect quill to a logfile
     std::string basicPath = logPath + "/Logfile_" + getCurrentTimestamp() + ".csv";
-    quill::Handler* file_handler = quill::file_handler(basicPath, FILE_MODE_DATA,quill::FilenameAppend::None);
+    quill::Handler* file_handler = quill::file_handler(basicPath, "w",quill::FilenameAppend::None);
 
     // configure the pattern of a line
     file_handler->set_pattern(QUILL_STRING("%(message)"));
@@ -155,13 +126,7 @@ quill::Logger* DuTLogger::createDataLogger(std::string logPath) {
     return createdLogger;
 }
 
-/**
- * This function returns a valid path to the logfiles. To handle this task it will read the configurated path.
- * If necessary it will create the path.
- * @param type the type of logger
- * @return a valid path for creating and modifying logfiles
- */
-std::string DuTLogger::initializeLoggingPath(std::string logPath) {
+std::string DuTLogger::initializeLoggingPath(const std::string &logPath) {
     // get the wished logging path for this type of logger
     std::string path = getLoggingPath(logPath);
 
@@ -170,13 +135,6 @@ std::string DuTLogger::initializeLoggingPath(std::string logPath) {
     return path;
 }
 
-/**
- * Identifies the path to the log file for the specific typ of logger by using the underlying path configuration.
- * The function can handle absolute and relative paths from the configuration.
- *
- * @param type  - type of logger
- * @return path to the logfile
- */
 std::string DuTLogger::getLoggingPath(std::string logPath) {
     // Check if the user provided an absolute path for logging
     // If this is true -> remove the first identifier
@@ -189,7 +147,7 @@ std::string DuTLogger::getLoggingPath(std::string logPath) {
     std::string path = std::filesystem::current_path();
 
     // modify the path, so it leads to our logfile
-    std::string result = path.substr(0, path.find_last_of("/"));
+    std::string result = path.substr(0, path.find_last_of('/'));
 
     // append the specified logging path for the logger on the path
     result.append(logPath);
@@ -198,19 +156,7 @@ std::string DuTLogger::getLoggingPath(std::string logPath) {
     return result;
 }
 
-/**
- * This function should be called on every startup of the application.
- * It deletes old logfiles in the given logging directory.
- *
- * Which files will be deleted depends on the configured backup count. If the current number of files is higher
- * than the allowed number by the backup count, old files will be deleted until we have the allowed number again.
- *
- * Please notice that on every start of the application the file handlers will automatically create a new file,
- * if there isn't already a file for the day.
- *
- * @param directory old logfiles will be deleted in this directory
- */
-void DuTLogger::removeOldLogfiles(std::string directory, int backupCount) {
+void DuTLogger::removeOldLogfiles(const std::string &directory, int backupCount) {
     // collect all files under this directory in a list
     std::list<std::string> allLogFiles;
     for (const auto & entry : std::filesystem::directory_iterator(directory)) {
@@ -225,7 +171,7 @@ void DuTLogger::removeOldLogfiles(std::string directory, int backupCount) {
         // get the iterator for the list and search for old files to remove them
         // remove so much files until we have the accepted number again
         // remove from the front, because there will be the old files
-        std::list<std::string>::iterator iter = allLogFiles.begin();
+        auto iter = allLogFiles.begin();
         for (int i = 0; i < (allLogFiles.size() - backupCount); i++) {
             // get the path to the file and remove it
             std::string file = *iter;
@@ -237,12 +183,6 @@ void DuTLogger::removeOldLogfiles(std::string directory, int backupCount) {
     }
 }
 
-/**
- * Change the logging level for a specific logger. Because there are multiple loggers you have to
- * select for which type of logger you want to change the level.
- * @param type the type of logger
- * @param level new level for logging
- */
 void DuTLogger::changeLogLevel(LOG_TYPE type, LOG_LEVEL level) {
     if (!initialized) {
         std::cerr << "Logger has not been initialized. Please parse a config to the logger." << std::endl;
@@ -285,11 +225,6 @@ void DuTLogger::changeLogLevel(LOG_TYPE type, LOG_LEVEL level) {
     }
 }
 
-/**
- * Returns the right quill handler for the given type of logger
- * @param type type of logger
- * @return connected handler
- */
 quill::Handler* DuTLogger::getHandlerType(LOG_TYPE type) {
     quill::Handler* handler;
 
@@ -309,16 +244,7 @@ quill::Handler* DuTLogger::getHandlerType(LOG_TYPE type) {
     return handler;
 }
 
-/**
- * Logs the message with consideration of the log level. Please notice that this function will also log the message
- * into a logfile if the file logger accepts the log level. If you explicitly don't want to log this message into the
- * logfile, please use the function below.
- *
- * @see void DuTLogger::logMessage(std::string msg, LOG_LEVEL level, bool doNotWriteIntoFile)
- * @param msg message that should be logged
- * @param level the logging level for this message
- */
-void DuTLogger::logMessage(std::string msg, LOG_LEVEL level) {
+void DuTLogger::logMessage(const std::string &msg, LOG_LEVEL level) {
     if (!initialized) {
         std::cerr << "Logger has not been initialized. Please parse a config to the logger." << std::endl;
     }
@@ -329,16 +255,7 @@ void DuTLogger::logMessage(std::string msg, LOG_LEVEL level) {
     logWithLevel(consoleFileLogger, msg, level);
 }
 
-/**
- * Logs the message with consideration of the log level. This function gives you additionally the possibility
- * to prevent that the logger will write your message into the logfile. So if you set the 3rd parameter to 'false'
- * the logger won't log your message into the file even if the log level would have accepted it.
- *
- * @param msg message that should be logged
- * @param level the logging level for this message
- * @param doNotWriteIntoFile true, if you don't want to log into the logfile
- */
-void DuTLogger::logMessage(std::string msg, LOG_LEVEL level, bool doNotWriteIntoFile) {
+void DuTLogger::logMessage(const std::string &msg, LOG_LEVEL level, bool doNotWriteIntoFile) {
     if (!initialized) {
         std::cerr << "Logger has not been initialized. Please parse a config to the logger." << std::endl;
     }
@@ -351,13 +268,6 @@ void DuTLogger::logMessage(std::string msg, LOG_LEVEL level, bool doNotWriteInto
     }
 }
 
-/**
- * This help function will parse the message to the quill engine.
- *
- * @param log the specific logger that should be used
- * @param msg the message that should be logged
- * @param level the logging level
- */
 void DuTLogger::logWithLevel(quill::Logger* log, std::string msg, LOG_LEVEL level) {
     // parse the message to the right will logger with the given level
     switch (level) {
@@ -390,30 +300,17 @@ void DuTLogger::logWithLevel(quill::Logger* log, std::string msg, LOG_LEVEL leve
     }
 }
 
-/**
- * This function returns a string with the current time. This string can be used to name files.
- *
- * @return the current time as string
- */
 std::string DuTLogger::getCurrentTimestamp() {
     // look up the local time
     auto t = std::time(nullptr);
     auto timer = *std::localtime(&t);
 
-    // write it formatted in a stream and convert that to a string so we can return it
+    // write it formatted in a stream and convert that to a string, so we can return it
     std::ostringstream oss;
     oss << std::put_time(&timer, "%Y-%m-%d_%H-%M-%S");
     return oss.str();
 }
 
-/**
- * This function logs the event to the data logfiles. There is no need to define a logging level for this operation.
- * <br>
- * Please notice, that characters like comma or double quotes causes trouble in CSV files and will be replaced by using
- * standard rules.
- *
- * @param event This event will be logged.
- */
 void DuTLogger::logEvent(sim_interface::SimEvent event) {
     if (!initialized) {
         std::cerr << "Logger has not been initialized. Please parse a config to the logger." << std::endl;
