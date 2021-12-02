@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.20)
 target_sources(libs
         PRIVATE
         CANConnector.cpp
+        CANConnectorCodec.h
         InterfaceIndexIO.cpp
         CANConnectorConfig.cpp
         CANConnectorSendOperation.cpp
