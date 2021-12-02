@@ -33,6 +33,8 @@
 #include "DuT_Connectors/CANConnector/CANConnector.h"
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
 #include "DuTLogger/DuTLogger.h"
+#include "DuT_Connectors/CANConnector/CANConnectorCodec.h"
+#include "DuT_Connectors/CANConnector/CANConnectorCodecFactory.h"
 
 // System includes
 #include <thread>
@@ -42,9 +44,18 @@
 int main() {
     // initialize the logger
     DuTLogger::initializeLogger(LoggerConfig());
-
+    DuTLogger::changeLogLevel(LOG_TYPE::CONSOLE_LOG, LOG_LEVEL::DEBUG);
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
 
+    sim_interface::dut_connector::can::CANConnectorCodec* co1;
+    co1 = sim_interface::dut_connector::can::CANConnectorCodecFactory::createCodec("bmwCodec");
+    co1->parseEventToFrame(sim_interface::SimEvent("Op1", "Val", "CAN"));
+
+    sim_interface::dut_connector::can::CANConnectorCodec* co2;
+    co2 = sim_interface::dut_connector::can::CANConnectorCodecFactory::createCodec("suzukiCodec");
+    co2->parseEventToFrame(sim_interface::SimEvent("Op2", "Val", "CAN"));
+
+    /*
     // Create interface
     sim_interface::SimToDuTInterface interface;
 
@@ -85,7 +96,7 @@ int main() {
                                                                          true);
 
     sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(),
-                                                                                    config);
+                                                                                    config);*/
     /*
     auto event = sim_interface::SimEvent();
     event.operation = "Test";
@@ -96,7 +107,7 @@ int main() {
     event.value = "xyz";
     restDummyConnector.handleEvent(event);
     */
-
+    /*
     interface.addConnector(&restDummyConnector);
 
     //+++++ Start CAN Connector +++++
@@ -189,6 +200,6 @@ int main() {
     interface.run();
 
     std::cin.get();
-    DuTLogger::logMessage("Shut down application", LOG_LEVEL::INFO);
+    DuTLogger::logMessage("Shut down application", LOG_LEVEL::INFO);*/
     return 0;
 }

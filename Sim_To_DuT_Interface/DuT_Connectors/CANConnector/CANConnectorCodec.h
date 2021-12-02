@@ -29,7 +29,7 @@ namespace sim_interface::dut_connector::can{
 
     class CANConnectorCodec{
     public:
-        virtual canfd_frame parseEventToFrame(const SimEvent &event) = 0;
+        virtual canfd_frame parseEventToFrame(const SimEvent &event) {};
 
     private:
         void sendEvent(const canfd_frame &frame);
