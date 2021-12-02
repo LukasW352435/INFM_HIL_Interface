@@ -1,5 +1,3 @@
-#include <utility>
-
 /**
  * HIL - V2X Connector
  * This the connector to interface with the V2X DuT
@@ -22,12 +20,14 @@
  * along with "HIL - REST Dummy Connector".  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Franziska Ihrler
+ * @author Michael Schmitz
  * @version 1.0
  */
 
 #ifndef SIM_TO_DUT_INTERFACE_V2XCONNECTORCONFIG_H
 #define SIM_TO_DUT_INTERFACE_V2XCONNECTORCONFIG_H
 
+#include <utility>
 
 namespace sim_interface::dut_connector::v2x {
     class V2XConnectorConfig : public ConnectorConfig {

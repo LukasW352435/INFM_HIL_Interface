@@ -20,6 +20,7 @@
  * along with "HIL - REST Dummy Connector".  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Franziska Ihrler
+ * @author Michael Schmitz
  * @version 1.0
  */
 
