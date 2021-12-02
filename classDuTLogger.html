@@ -74,20 +74,19 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aaec3043b0919417f3718976636d64667"><td class="memItemLeft" align="right" valign="top"><a id="aaec3043b0919417f3718976636d64667"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeLogger</b> (<a class="el" href="classLoggerConfig.html">LoggerConfig</a> con)</td></tr>
-<tr class="separator:aaec3043b0919417f3718976636d64667"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd1b532e3be08fa7d886b9daa2be7e62"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDuTLogger.html#abd1b532e3be08fa7d886b9daa2be7e62">logMessage</a> (std::string msg, LOG_LEVEL level)</td></tr>
-<tr class="separator:abd1b532e3be08fa7d886b9daa2be7e62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af472ac89ae956db381b94bc944069df4"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDuTLogger.html#af472ac89ae956db381b94bc944069df4">logMessage</a> (std::string msg, LOG_LEVEL level, bool writeToFile)</td></tr>
-<tr class="separator:af472ac89ae956db381b94bc944069df4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc3cc27936adec67ba4e9cc259fa4e9a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDuTLogger.html#abc3cc27936adec67ba4e9cc259fa4e9a">initializeLogger</a> (const <a class="el" href="classLoggerConfig.html">LoggerConfig</a> &amp;con)</td></tr>
+<tr class="separator:abc3cc27936adec67ba4e9cc259fa4e9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9758a49895c8b32767f74e4b03a0f9d6"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDuTLogger.html#a9758a49895c8b32767f74e4b03a0f9d6">logMessage</a> (const std::string &amp;msg, LOG_LEVEL level)</td></tr>
+<tr class="separator:a9758a49895c8b32767f74e4b03a0f9d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d5cee2616636923ebc8dae0c11e13d9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDuTLogger.html#a8d5cee2616636923ebc8dae0c11e13d9">logMessage</a> (const std::string &amp;msg, LOG_LEVEL level, bool writeToFile)</td></tr>
+<tr class="separator:a8d5cee2616636923ebc8dae0c11e13d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2f1e07c2d8a9324440f39554f926fad"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDuTLogger.html#ad2f1e07c2d8a9324440f39554f926fad">changeLogLevel</a> (LOG_TYPE typ, LOG_LEVEL level)</td></tr>
 <tr class="separator:ad2f1e07c2d8a9324440f39554f926fad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8114c09c6e023f973d3b08b6f02ced36"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDuTLogger.html#a8114c09c6e023f973d3b08b6f02ced36">logEvent</a> (<a class="el" href="classsim__interface_1_1SimEvent.html">sim_interface::SimEvent</a> event)</td></tr>
 <tr class="separator:a8114c09c6e023f973d3b08b6f02ced36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This logger is a tool with specialized functions to log and store messages for all elements of the Sim_To_DuT_Interface. The logger and all of it's functions are static so it's not necessary to create instances of the logger to write a message.</p>
+<div class="textblock"><p>This logger is a tool with specialized functions to log and store messages for all elements of the Sim_To_DuT_Interface. The logger and all of it's functions are static so it's not necessary to create instances of the logger to write a message. Please notice that the logger has to be initialised in a first call by a valid configuration before using it.</p>
 <p>With logger's functionality it's possible to log messages and events during the execution.</p>
 <p>The logger will create files if necessary in which the messages will be stored. The message provider can choose if the message should be logged in the file or not. The logger notices old logfiles and will remove them if the real number of logfiles is higher than the configured backup count.</p>
 <dl class="section author"><dt>Author</dt><dd>Marco Keul </dd></dl>
@@ -106,7 +105,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeLogg
           <td class="memname">void DuTLogger::changeLogLevel </td>
           <td>(</td>
           <td class="paramtype">LOG_TYPE&#160;</td>
-          <td class="paramname"><em>type</em>, </td>
+          <td class="paramname"><em>typ</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -130,6 +129,39 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeLogg
   <table class="params">
     <tr><td class="paramname">type</td><td>the type of logger </td></tr>
     <tr><td class="paramname">level</td><td>new level for logging </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abc3cc27936adec67ba4e9cc259fa4e9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc3cc27936adec67ba4e9cc259fa4e9a">&#9670;&nbsp;</a></span>initializeLogger()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DuTLogger::initializeLogger </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classLoggerConfig.html">LoggerConfig</a> &amp;&#160;</td>
+          <td class="paramname"><em>con</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This function initializes the logger with the given configuration. After calling this function it's possible to log messages and data objects.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">con</td><td>- a valid configuration </td></tr>
   </table>
   </dd>
 </dl>
@@ -170,8 +202,8 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeLogg
 
 </div>
 </div>
-<a id="abd1b532e3be08fa7d886b9daa2be7e62"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd1b532e3be08fa7d886b9daa2be7e62">&#9670;&nbsp;</a></span>logMessage() <span class="overload">[1/2]</span></h2>
+<a id="a9758a49895c8b32767f74e4b03a0f9d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9758a49895c8b32767f74e4b03a0f9d6">&#9670;&nbsp;</a></span>logMessage() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -182,7 +214,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeLogg
         <tr>
           <td class="memname">void DuTLogger::logMessage </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>msg</em>, </td>
         </tr>
         <tr>
@@ -204,7 +236,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeLogg
 </table>
 </div><div class="memdoc">
 <p>Logs the message with consideration of the log level. Please notice that this function will also log the message into a logfile if the file logger accepts the log level. If you explicitly don't want to log this message into the logfile, please use the function below.</p>
-<dl class="section see"><dt>See also</dt><dd>void <a class="el" href="classDuTLogger.html#af472ac89ae956db381b94bc944069df4">DuTLogger::logMessage(std::string msg, LOG_LEVEL level, bool doNotWriteIntoFile)</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd>void DuTLogger::logMessage(std::string msg, LOG_LEVEL level, bool doNotWriteIntoFile) </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">msg</td><td>message that should be logged </td></tr>
@@ -215,8 +247,8 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeLogg
 
 </div>
 </div>
-<a id="af472ac89ae956db381b94bc944069df4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af472ac89ae956db381b94bc944069df4">&#9670;&nbsp;</a></span>logMessage() <span class="overload">[2/2]</span></h2>
+<a id="a8d5cee2616636923ebc8dae0c11e13d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d5cee2616636923ebc8dae0c11e13d9">&#9670;&nbsp;</a></span>logMessage() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -227,7 +259,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeLogg
         <tr>
           <td class="memname">void DuTLogger::logMessage </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>msg</em>, </td>
         </tr>
         <tr>
@@ -240,7 +272,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeLogg
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>doNotWriteIntoFile</em>&#160;</td>
+          <td class="paramname"><em>writeToFile</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -273,7 +305,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeLogg
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 2 2021 08:17:30 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 2 2021 17:32:55 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
