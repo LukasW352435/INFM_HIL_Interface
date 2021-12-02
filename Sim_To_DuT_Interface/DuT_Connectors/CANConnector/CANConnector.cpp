@@ -12,7 +12,10 @@
 /*******************************************************************************
  * INCLUDES
  ******************************************************************************/
+// Project includes
 #include "CANConnector.h"
+
+// System includes
 
 
 /*******************************************************************************
@@ -20,48 +23,54 @@
  ******************************************************************************/
 namespace sim_interface::dut_connector::can{
 
-    /**
-     * CAN Connector constructor.
-     *
-     * @param queueDuTToSim - Queue to write received simulation events to
-     * @param config        - Configuration for the connector
-     */
     CANConnector::CANConnector(
             std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
-            const CANConnectorConfig &config
-            )
-    :
-    DuTConnector(std::move(queueDuTToSim), config),
-    ioContext(boost::make_shared<boost::asio::io_context>()),
-    bcmSocket(createBcmSocket(config))
-    {
+            const CANConnectorConfig &config):
+            DuTConnector(std::move(queueDuTToSim), config),
+            ioContext(boost::make_shared<boost::asio::io_context>()),
+            bcmSocket(createBcmSocket(config)),
+            config(config){
 
-        // Create the first receive operation
+        // Create all receive operations
+        for(auto const& [canID, receiveOperation] : config.frameToOperation){
+
+            // Check if the receive operation has a mask
+            if(receiveOperation.hasMask){
+
+                // Set the CAN ID in the mask
+                struct canfd_frame mask = receiveOperation.mask;
+                mask.can_id = canID;
+
+                // Create the receive operation
+                rxSetupMask(canID, mask, receiveOperation.isCANFD);
+
+            }else{
+
+                // Create the receive operation
+                rxSetupCanID(canID, receiveOperation.isCANFD);
+            }
+
+        }
+        DuTLogger::logMessage("CAN Connector: Created initial RX setup", LOG_LEVEL::INFO);
+
+        // Start the receive loop on the socket
         receiveOnSocket();
 
         // Start the io context loop
         startProcessing();
 
-        std::cout << "CAN Connector created" << std::endl;
+        DuTLogger::logMessage("CAN Connector: CAN Connector created", LOG_LEVEL::INFO);
     }
 
-    /**
-    * CAN Connector destructor.
-    */
     CANConnector::~CANConnector(){
 
         // Stop the io context loop
         stopProcessing();
 
-        std::cout << "CAN Connector destroyed" << std::endl;
+        DuTLogger::logMessage("CAN Connector: CAN Connector destroyed", LOG_LEVEL::INFO);
     }
 
-    /**
-    * Creates the bcmSocket data member.
-    *
-    * @return The BCM socket.
-    */
-    boost::asio::generic::datagram_protocol::socket CANConnector::createBcmSocket(const CANConnectorConfig &config){
+    boost::asio::generic::datagram_protocol::socket CANConnector::createBcmSocket(const CANConnectorConfig &connectorConfig){
 
         // Error code return value
         boost::system::error_code errorCode;
@@ -73,12 +82,13 @@ namespace sim_interface::dut_connector::can{
         boost::asio::generic::datagram_protocol::socket socket(*ioContext, bcmProtocol);
 
         // Create an I/O command and resolve the interface name to an interface index
-        InterfaceIndexIO interfaceIndexIO(config.interfaceName);
+        InterfaceIndexIO interfaceIndexIO(connectorConfig.interfaceName);
         socket.io_control(interfaceIndexIO, errorCode);
 
         // Check if we could resolve the interface correctly
         if(errorCode){
-            std::cout << "An error occurred on the io control operation: " << errorCode.message() << std::endl;
+            DuTLogger::logMessage("CAN Connector: An error occurred on the io control operation: " + errorCode.message(), LOG_LEVEL::ERROR);
+            throw std::invalid_argument("CAN Connector: Could not resolve the interface name correctly");
         }
 
         // Connect the socket
@@ -91,7 +101,8 @@ namespace sim_interface::dut_connector::can{
 
         // Check if we could connect correctly
         if(errorCode){
-            std::cout << "An error occurred on the connect operation: " << errorCode.message() << std::endl;
+            DuTLogger::logMessage("CAN Connector: An error occurred on the connect operation: " + errorCode.message(), LOG_LEVEL::ERROR);
+            throw std::runtime_error("CAN Connector: Could not connect to the interface");
         }
 
         // Note: In contrast to a raw CAN socket there is no need to
@@ -100,20 +111,14 @@ namespace sim_interface::dut_connector::can{
         return socket;
     }
 
-    /**
-    * Stats the io context loop.
-    */
     void CANConnector::startProcessing(){
 
         // Run the io context in its own thread
         ioContextThread = std::thread(&CANConnector::ioContextThreadFunction, this, std::ref(ioContext));
 
-        std::cout << "CAN Connector starting io context loop processing" << std::endl;
+        DuTLogger::logMessage("CAN Connector: Starting the io context loop", LOG_LEVEL::INFO);
     }
 
-    /**
-    * Stops the io context loop.
-    */
     void CANConnector::stopProcessing(){
 
         // Check if we need to stop the io context loop
@@ -125,40 +130,29 @@ namespace sim_interface::dut_connector::can{
         if(ioContextThread.joinable()){
             ioContextThread.join();
         }else{
-            std::cout << "Error ioContextThread was not joinable" << std::endl;
+            DuTLogger::logMessage("CAN Connector: ioContextThread was not joinable", LOG_LEVEL::ERROR);
         }
 
-        std::cout << "CAN Connector stopped io context loop processing" << std::endl;
+        DuTLogger::logMessage("CAN Connector: Stopped the io context loop", LOG_LEVEL::INFO);
     }
 
-    /**
-    * Thread for the io context loop.
-    */
     void CANConnector::ioContextThreadFunction(const boost::shared_ptr<boost::asio::io_context>& context){
         context->run();
     }
 
-    /**
-     * Gets information about the CAN Connector
-     *
-     * @return info - The connector information
-     */
     ConnectorInfo CANConnector::getConnectorInfo(){
+
         ConnectorInfo info(
                 "CAN Connector",
                 0x0000001,
                 "The CAN Connector enables the communication over a CAN/CANFD interface.");
+
         return info;
     }
 
-    /**
-    * Receives on the BCM socket. The received data is stored in the rxBuffer.
-    * After processing the receive operation the next receive operation is
-    * created to keep  the io context loop running.
-    */
     void CANConnector::receiveOnSocket(){
 
-        std::cout << "CAN Connector created new receive operation" << std::endl;
+        DuTLogger::logMessage("CAN Connector: Creating a new receive operation on the socket", LOG_LEVEL::INFO);
 
         // Create an async receive operation on the BCM socket
         bcmSocket.async_receive(boost::asio::buffer(rxBuffer),
@@ -169,7 +163,7 @@ namespace sim_interface::dut_connector::can{
             // Check the error code of the operation
             if(!errorCode){
 
-                std::cout << "CAN Connector received: " << receivedBytes << " bytes" << std::endl;
+                DuTLogger::logMessage("CAN Connector: Received " + std::to_string(receivedBytes) + " bytes on the socket", LOG_LEVEL::INFO);
 
                 // We need to receive at least a whole bcm_msg_head
                 if(receivedBytes >= sizeof(bcm_msg_head)){
@@ -202,13 +196,13 @@ namespace sim_interface::dut_connector::can{
                         handleReceivedData(head, frames, head->nframes, isCANFD);
 
                     }else{
-                        std::cout << "The expected amount of bytes is not equal to the received bytes" << std::endl;
+                        DuTLogger::logMessage("CAN Connector: The expected amount of bytes is not equal to the received bytes", LOG_LEVEL::ERROR);
                     }
 
                 }
 
             }else{
-                std::cout << "An error occurred on the async receive operation: " << errorCode.message() << std::endl;
+                DuTLogger::logMessage("CAN Connector: An error occurred on the async receive operation: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
             // Create the next receive operation
@@ -218,12 +212,6 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-    * Create a non cyclic transmission task for a single CAN/CANFD frame.
-    *
-    * @param frame   - The frame that should be send.
-    * @param isCANFD - Flag for a CANFD frame.
-    */
     void CANConnector::txSendSingleFrame(struct canfd_frame frame, bool isCANFD){
 
         // BCM message we are sending with a single CAN or CANFD frame
@@ -244,7 +232,8 @@ namespace sim_interface::dut_connector::can{
 
         // Error handling / Sanity check
         if(msg == nullptr){
-            std::cout << "Error could not make message structure" << std::endl;
+            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            return;
         }
 
         // Fill out the message
@@ -279,22 +268,15 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                std::cout << "Transmission of TX_SEND completed successfully" << std::endl;
+                DuTLogger::logMessage("CAN Connector: TX_SEND completed successfully", LOG_LEVEL::INFO);
             }else{
-                std::cerr << "Transmission of TX_SEND failed" << std::endl;
+                DuTLogger::logMessage("CAN Connector: TX_SEND failed: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
         });
 
     }
 
-    /**
-    * Create a non cyclic transmission task for multiple CAN/CANFD frames.
-    *
-    * @param frames  - The frames that should be send.
-    * @param nframes - The number of frames that should be send.
-    * @param isCANFD - Flag for CANFD frames.
-    */
     void CANConnector::txSendMultipleFrames(struct canfd_frame frames[], int nframes, bool isCANFD){
 
         // Note: The TX_SEND operation can only handle exactly one frame!
@@ -305,16 +287,6 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-    * Create a cyclic transmission task for a CAN/CANFD frame.
-    *
-    * @param frame   - The frame that should be send cyclic.
-    * @param count   - Number of times the frame is send with the first interval.
-    *                  If count is zero only the second interval is being used.
-    * @param ival1   - First interval.
-    * @param ival2   - Second interval.
-    * @param isCANFD - Flag for a CANFD frames.
-    */
     void CANConnector::txSetupSingleFrame(struct canfd_frame frame, uint32_t count, struct bcm_timeval ival1,
                                           struct bcm_timeval ival2, bool isCANFD){
 
@@ -336,7 +308,8 @@ namespace sim_interface::dut_connector::can{
 
         // Error handling / Sanity check
         if(msg == nullptr){
-            std::cout << "Error could not make message structure" << std::endl;
+            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            return;
         }
 
         // Note: By combining the flags SETTIMER and STARTTIMER
@@ -377,32 +350,15 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                std::cout << "Transmission of TX_SETUP completed successfully" << std::endl;
+                DuTLogger::logMessage("CAN Connector: TX_SETUP completed successfully", LOG_LEVEL::INFO);
             }else{
-                std::cerr << "Transmission of TX_SETUP failed" << std::endl;
+                DuTLogger::logMessage("CAN Connector: TX_SETUP failed: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
         });
 
     }
 
-    /**
-     * Create a cyclic transmission task for multiple CAN/CANFD frames.
-    *
-    * Note: The frames will not be send as a atomic sequence. We send for each TX_SETUP
-    * a single CAN/CANFD frame with its CAN ID in the bcm_msg_head. This way we do not
-    * create a cyclic transmission sequence which can only be removed with the CAN ID
-    * that was set in the bcm_msg_head. Another benefit is that each CAN/CANFD frame
-    * can have different count, ival1, and ival2 values.
-    *
-    * @param frames  - The frames that should be send cyclic.
-    * @param nframes - The number of frames that should be send cyclic.
-    * @param count   - Number of times the frame is send with the first interval.
-    *                  If count is zero only the second interval is being used.
-    * @param ival1   - First interval.
-    * @param ival2   - Second interval.
-    *  @param isCANFD - Flag for CANFD frames.
-    */
     void CANConnector::txSetupMultipleFrames(struct canfd_frame frames[], int nframes, uint32_t count[], struct bcm_timeval ival1[],
                                              struct bcm_timeval ival2[], bool isCANFD){
 
@@ -412,22 +368,6 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-    * Create a cyclic transmission task for one or multiple CAN/CANFD frames.
-    * If more than one frame should be send cyclic the provided sequence of
-    * the frames is kept by the BCM.
-    *
-    * Note: The cyclic transmission task for the sequence can only be deleted
-    * with the CAN ID that was set in the bcm_msg_head.
-    *
-    * @param frames   - The array of CAN/CANFD frames that should be send cyclic.
-    * @param nframes  - The number of CAN/CANFD frames that should be send cyclic.
-    * @param count    - Number of times the frame is send with the first interval.
-    *                   If count is zero only the second interval is being used.
-    * @param ival1    - First interval.
-    * @param ival2    - Second interval.
-    * @param isCANFD  - Flag for CANFD frames.
-    */
     void CANConnector::txSetupSequence(struct canfd_frame frames[], int nframes, uint32_t count,
                                        struct bcm_timeval ival1, struct bcm_timeval ival2, bool isCANFD){
 
@@ -449,7 +389,8 @@ namespace sim_interface::dut_connector::can{
 
         // Error handling / Sanity check
         if(msg == nullptr){
-            std::cout << "Error could not make message structure" << std::endl;
+            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            return;
         }
 
         // Note: By combining the flags SETTIMER and STARTTIMER
@@ -496,23 +437,15 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                std::cout << "Transmission of TX_SETUP sequence completed successfully" << std::endl;
+                DuTLogger::logMessage("CAN Connector: TX_SETUP (sequence) completed successfully", LOG_LEVEL::INFO);
             }else{
-                std::cerr << "Transmission of TX_SETUP sequence failed" << std::endl;
+                DuTLogger::logMessage("CAN Connector: TX_SETUP (sequence) failed: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
         });
 
     }
 
-    /**
-    * Updates a cyclic transmission task for a CAN/CANFD frame.
-    *
-    * @param frames   - The updated CAN/CANFD frame data.
-    * @param nframes  - The number of CAN/CANFD frames that should be updated.
-    * @param isCANFD  - Flag for CANFD frames.
-    * @param announce - Flag for immediately sending out the changes once will retaining the cycle.
-    */
     void CANConnector::txSetupUpdateSingleFrame(struct canfd_frame frame, bool isCANFD, bool announce){
 
         // BCM message we are sending with a single CAN or CANFD frame
@@ -533,7 +466,8 @@ namespace sim_interface::dut_connector::can{
 
         // Error handling / Sanity check
         if(msg == nullptr){
-            std::cout << "Error could not make message structure" << std::endl;
+            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            return;
         }
 
         // Note: By combining the flags SETTIMER and STARTTIMER
@@ -577,23 +511,15 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                std::cout << "Transmission of TX_SETUP update completed successfully" << std::endl;
+                DuTLogger::logMessage("CAN Connector: TX_SETUP (update) completed successfully", LOG_LEVEL::INFO);
             }else{
-                std::cerr << "Transmission of TX_SETUP update failed" << std::endl;
+                DuTLogger::logMessage("CAN Connector: TX_SETUP (update) failed: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
         });
 
     }
 
-    /**
-    * Updates a cyclic transmission task for one or multiple CAN/CANFD frames.
-    *
-    * @param frames   - The array of CAN/CANFD frames with the updated data.
-    * @param nframes  - The number of CAN/CANFD frames that should be updated.
-    * @param isCANFD  - Flag for CANFD frames.
-    * @param announce - Flag for immediately sending out the changes once will retaining the cycle.
-    */
     void CANConnector::txSetupUpdateMultipleFrames(struct canfd_frame frames[], int nframes, bool isCANFD, bool announce){
 
         for(int index = 0; index < nframes; index++){
@@ -602,18 +528,16 @@ namespace sim_interface::dut_connector::can{
 
     }
 
-    /**
-    * Removes a cyclic transmission task for the given CAN ID.
-    *
-    * Note: A cyclic transmission task for a sequence of frames can only
-    * be deleted with the CAN ID that was set in the bcm_msg_head.
-    *
-    * @param canID - The CAN ID of the task that should be removed.
-    */
     void CANConnector::txDelete(canid_t canID, bool isCANFD){
 
         // BCM message we are sending
         auto msg = std::make_shared<bcm_msg_head>();
+
+        // Error handling / Sanity check
+        if(msg == nullptr){
+            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            return;
+        }
 
         // Fill out the message
         msg->opcode = TX_DELETE;
@@ -632,26 +556,25 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                std::cout << "Transmission of TX_DELETE completed successfully" << std::endl;
+                DuTLogger::logMessage("CAN Connector: TX_DELETE completed successfully", LOG_LEVEL::INFO);
             }else{
-                std::cerr << "Transmission of TX_DELETE failed" << std::endl;
+                DuTLogger::logMessage("CAN Connector: TX_DELETE failed: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
         });
 
     }
 
-    /**
-     * Creates a RX filter for the given CAN ID.
-    * I. e. we get notified on all received frames with this CAN ID.
-    *
-    * @param canID    - The CAN ID that should be added to the RX filter.
-    * @param isCANFD  - Flag for CANFD frames.
-    */
     void CANConnector::rxSetupCanID(canid_t canID, bool isCANFD){
 
         // BCM message we are sending
         auto msg = std::make_shared<bcm_msg_head>();
+
+        // Error handling / Sanity check
+        if(msg == nullptr){
+            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            return;
+        }
 
         // Fill out the message
         msg->opcode = RX_SETUP;
@@ -671,23 +594,15 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                std::cout << "Transmission of RX_SETUP based on a CAN ID completed successfully" << std::endl;
+                DuTLogger::logMessage("CAN Connector: RX_SETUP (CAN ID) completed successfully", LOG_LEVEL::INFO);
             }else{
-                std::cerr << "Transmission of RX_SETUP based on a CAN ID failed" << std::endl;
+                DuTLogger::logMessage("CAN Connector: RX_SETUP (CAN ID) failed: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
         });
 
     }
 
-    /**
-    * Creates a RX filter for the CAN ID and the relevant bits of the frame.
-    * I. e. we only get notified on changes for the set bits in the mask.
-    *
-    * @param canID    - The CAN ID that should be added to the RX filter.
-    * @param mask     - The mask for the relevant bits of the frame.
-    * @param isCANFD  - Flag for CANFD frames.
-    */
     void CANConnector::rxSetupMask(canid_t canID, struct canfd_frame mask, bool isCANFD){
 
         // BCM message we are sending with a single CAN or CANFD frame
@@ -708,7 +623,8 @@ namespace sim_interface::dut_connector::can{
 
         // Error handling / Sanity check
         if(msg == nullptr){
-            std::cout << "Error could not make message structure" << std::endl;
+            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            return;
         }
 
         // Fill out the message
@@ -741,24 +657,24 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                std::cout << "Transmission of RX_SETUP with mask completed successfully" << std::endl;
+                DuTLogger::logMessage("CAN Connector: RX_SETUP (mask) completed successfully", LOG_LEVEL::INFO);
             }else{
-                std::cerr << "Transmission of RX_SETUP with mask failed" << std::endl;
+                DuTLogger::logMessage("CAN Connector: RX_SETUP (mask) failed: " + errorCode.message(), LOG_LEVEL::INFO);
             }
 
         });
     }
 
-    /**
-    * Removes the RX filter for the given CAN ID.
-    *
-    * @param canID   - The CAN ID that should be removed from the RX filter.
-    * @param isCANFD - Flag for CANFD frames.
-    */
     void CANConnector::rxDelete(canid_t canID, bool isCANFD){
 
         // BCM message we are sending
         auto msg = std::make_shared<bcm_msg_head>();
+
+        // Error handling / Sanity check
+        if(msg == nullptr){
+            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            return;
+        }
 
         // Fill out the message
         msg->opcode = RX_DELETE;
@@ -777,26 +693,18 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                std::cout << "Transmission of RX_DELETE completed successfully" << std::endl;
+                DuTLogger::logMessage("CAN Connector: RX_DELETE completed successfully", LOG_LEVEL::INFO);
             }else{
-                std::cerr << "Transmission of RX_DELETE failed" << std::endl;
+                DuTLogger::logMessage("CAN Connector: RX_DELETE failed: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
         });
 
     }
 
-    /**
-    * Decides what to do with the data we received on the socket.
-    *
-    * @param head    - The received bcm msg head.
-    * @param frames  - The received CAN or CANFD frames.
-    * @param nframes - The number of the received frames.
-    * @param isCANFD - Flag for CANFD frames.
-    */
     void CANConnector::handleReceivedData(const bcm_msg_head *head, void *frames, uint32_t nframes, bool isCANFD){
 
-        std::cout << "Handling the received data" << std::endl;
+        DuTLogger::logMessage("CAN Connector: Handling the received data", LOG_LEVEL::INFO);
 
         switch(head->opcode){
 
@@ -804,50 +712,46 @@ namespace sim_interface::dut_connector::can{
 
                 // Simple reception of a CAN/CANFD frame or a content change occurred.
                 // TODO: Implement handling
-                std::cout << "RX_CHANGED is not implemented" << std::endl;
+                DuTLogger::logMessage("CAN Connector: RX_CHANGED handling is not implemented", LOG_LEVEL::WARNING);
                 break;
 
             case RX_TIMEOUT:
 
-                // Cyclic message is detected to be absent.
-                // TODO: Implement handling
-                std::cout << "RX_TIMEOUT is not implemented" << std::endl;
+                // Cyclic message is detected to be absent by the timeout monitoring.
+                // There is no function implemented yet that should cause/use this.
+                DuTLogger::logMessage("CAN Connector: RX_TIMEOUT handling is not implemented", LOG_LEVEL::WARNING);
                 break;
 
             case TX_EXPIRED:
 
                 // Notification when counter finishes sending at ival1 interval.
                 // Requires TX_COUNTEVT flag to be set at TX_SETUP.
-                std::cerr << "TX_EXPIRED is not implemented" << std::endl;
+                // There is no function implemented yet that should cause/use this.
+                DuTLogger::logMessage("CAN Connector: TX_EXPIRED handling is not implemented", LOG_LEVEL::WARNING);
                 break;
 
             case RX_STATUS:
 
                 // Reply to a RX_READ request that returns the RX content filter properties for a given CAN ID.
-                // This should not occur on a regular receive.
-                std::cerr << "Received unexpected RX_STATUS message" << std::endl;
+                // This should not occur on our regular receive loop.
+                DuTLogger::logMessage("CAN Connector: Received unexpected RX_STATUS message", LOG_LEVEL::WARNING);
                 break;
 
             case TX_STATUS:
 
                 // Reply to a TX_READ request that returns the TX transmission properties for a given CAN ID.
-                // This should not occur on a regular receive.
-                std::cerr << "Received unexpected TX_STATUS message" << std::endl;
+                // This should not occur on our regular receive loop.
+                DuTLogger::logMessage("CAN Connector: Received unexpected TX_STATUS message", LOG_LEVEL::WARNING);
                 break;
 
             default:
 
-                std::cerr << "Received unknown opcode!" << std::endl;
+                DuTLogger::logMessage("CAN Connector: Received unknown opcode", LOG_LEVEL::WARNING);
         }
 
     }
 
-    /**
-    * Decides what to do with the event we received from the simulation.
-    *
-    * @param event - The event we received from the simulation.
-    */
-    void CANConnector::handleEvent(const SimEvent &event){
+    void CANConnector::handleEventSingle(const SimEvent &event){
 
         // Test CAN Frame
         struct can_frame canFrame1 = {0};
@@ -970,9 +874,9 @@ namespace sim_interface::dut_connector::can{
         mask.data[0] = 0xFF;
 
         // Test txSendSingleFrame with a single CAN frame
-        //for(auto & i : frameArrCAN){
-        //   txSendSingleFrame(i, false);
-        //}
+        for(auto & i : frameArrCAN){
+            txSendSingleFrame(i, false);
+        }
 
         // Test txSendSingleFrame with a single CANFD frames
         //for(auto & i : frameArrCANFD){

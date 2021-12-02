@@ -7,7 +7,8 @@ set(CMAKE_C_FLAGS -pthread)
 
 add_library(libs "")
 
-add_subdirectory(DuTLogger/quill)
+add_subdirectory(DuTLogger)
+
 add_subdirectory(DuT_Connectors)
 
 option(V2X_ENABLED "V2X enable" ON)
@@ -17,7 +18,7 @@ add_executable(${PROJECT_NAME} main.cpp
         Events/SimEvent.cpp Events/SimEvent.h
         Sim_Communication/SimComHandler.cpp Sim_Communication/SimComHandler.h
         Utility/SharedQueue.h
-        DuTLogger/DuTLogger.cpp DuTLogger/DuTLogger.h)
+        Utility/PeriodicTimer.cpp Utility/PeriodicTimer.h)
 
 
 if (CMAKE_CXX_COMPILER_VERSION GREATER_EQUAL 9)

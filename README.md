@@ -13,8 +13,8 @@ Logging of the communication is included in the interface.
 
 
 ## Useful links
-[Doxygen documentation](https://lukasw352435.github.io/INFM_HIL_Interface)
-[Artery simulation](https://github.com/riebl/artery)
+- [Doxygen documentation](https://lukasw352435.github.io/INFM_HIL_Interface)
+- [Artery simulation](https://github.com/riebl/artery)
 
 # Clone
 Clone the repository with submodules (but not all, as you dont want to compile openssl from scratch)

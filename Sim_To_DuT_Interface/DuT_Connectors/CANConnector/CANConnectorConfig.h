@@ -11,16 +11,58 @@
 
 
 /*******************************************************************************
+ * INCLUDES
+ ******************************************************************************/
+// Project includes
+#include "../ConnectorConfig.h"
+#include "CANConnectorReceiveOperation.h"
+#include "CANConnectorSendOperation.h"
+
+// System includes
+#include <set>
+#include <map>
+#include <vector>
+#include <string>
+#include <cassert>
+
+
+/*******************************************************************************
  * CLASS DECLARATIONS
  ******************************************************************************/
-
 namespace sim_interface::dut_connector::can{
 
-    class CANConnectorConfig : public sim_interface::dut_connector::ConnectorConfig{
+    class CANConnectorConfig : public ConnectorConfig{
 
     public:
+        // Function members
+
+        /**
+         * Constructor for the CAN Connector configuration.
+         *
+         * @param interfaceName        - The name of the interface that should be used by the connector.
+         * @param operations           - The operations supported by the CAN Connector.
+         * @param frameToOperation     - The configurations for the receive operations.
+         * @param operationToFrame     - The configurations for the send operations.
+         * @param periodicOperations   - The periodic operations supported by the connector through the interface.
+         * @param periodicTimerEnabled - Flag that enables the periodic sending through the interface.
+         *                               Since the BCM socket supports cyclic operations this should always be false
+         */
+        explicit CANConnectorConfig(std::string interfaceName,
+                                    std::set<std::string> operations,
+                                    std::map<canid_t, CANConnectorReceiveOperation> frameToOperation = {},
+                                    std::map<std::string, CANConnectorSendOperation> operationToFrame = {},
+                                    std::map<std::string, int> periodicOperations = {},
+                                    bool periodicTimerEnabled = false);
+
         // Data member
-        std::string interfaceName;
+        std::string interfaceName;                                         /**< The name of the interface that should be used.*/
+        std::map<canid_t, CANConnectorReceiveOperation>  frameToOperation; /**< Used for mapping a CAN frame to an operation. */
+        std::map<std::string, CANConnectorSendOperation> operationToFrame; /**< Used for mapping an operation to a CAN frame. */
+
+    private:
+        // Function members
+
+        // Data member
 
     };
 

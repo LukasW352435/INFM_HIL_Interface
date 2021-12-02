@@ -6,7 +6,7 @@
  *
  * This file is part of "HIL - REST Dummy Connector".
  *
- * "HIL - REST Dummy DuT" is free software: you can redistribute it and/or modify
+ * "HIL - REST Dummy Connector" is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -35,22 +35,53 @@
 namespace sim_interface::dut_connector::rest_dummy {
     class ReceiveApiResource : public restbed::Resource {
     public:
+        /**
+         * Create endpoint for REST service on path /rest/DuT and method PUT
+         *
+         * @param function callback to call with received SimEvent
+         */
         explicit ReceiveApiResource(std::function<void(const SimEvent &)> function);
 
+        /**
+         * Parse body and extract SimEvent and provide it to callback
+         *
+         * @param session HTTP session on which the request was received
+         */
         void PUT_method_handler(const std::shared_ptr<restbed::Session> &session);
 
     private:
+        /**
+         * Extract the SimEvent from given json
+         *
+         * @param json JSON encoded string
+         * @return SimEvent based on json
+         */
         static SimEvent JsonToSimEvent(const std::string &json);
 
+        /**
+         * Callback to be called when an event is received from DuT
+         */
         std::function<void(const SimEvent &)> eventToSimCallback;
     };
 
     class ReceiveEndpoint : public restbed::Service {
     public:
+        /**
+         * Constructs the restbed service and runs it on given port
+         *
+         * @param port Port to start webservice to receive DuT messages on
+         * @param function callback to call with received SimEvent
+         */
         void startService(int const &port, std::function<void(const SimEvent &)> function);
 
+        /**
+         * Stop webservice
+         */
         void stopService();
 
+        /**
+         * REST Api resource for receiving and sending events to REST Dummy DuT
+         */
         std::shared_ptr<ReceiveApiResource> m_spReceiveApiResource;
     };
 }

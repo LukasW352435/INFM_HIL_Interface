@@ -19,6 +19,7 @@
  * along with "Sim To DuT Interface".  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Lukas Wagenlehner
+ * @author Michael Schmitz
  * @version 1.0
  */
 
@@ -29,34 +30,86 @@
 #include <iostream>
 #include <set>
 #include <memory>
+#include <boost/asio.hpp>
 #include "../DuT_Connectors/ConnectorInfo.h"
 #include "../Events/SimEvent.h"
 #include "../Utility/SharedQueue.h"
+#include "../Utility/PeriodicTimer.h"
 #include "ConnectorConfig.h"
 
 namespace sim_interface::dut_connector {
+    /**
+     * Connector implementing all kinds of DuT devices.
+     * The different connectors should implement the protocol to communicate with a specific hardware DuT.
+     * Used in the interface to send/receive events to/from the device.
+     */
     class DuTConnector {
     public:
+        /**
+         * Create a new connector.
+         * @param queueDuTToSim Queue to communicate with the interface.
+         * @param config Config for the device.
+         */
         explicit DuTConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
                               const sim_interface::dut_connector::ConnectorConfig &config);
 
-        // return some basic information from the connector
+        /**
+         * Destroy the connector, stop all operations, end all threads.
+         */
+        ~DuTConnector();
+
+        /**
+         * Some basic information from the connector.
+         * Please override this methode!
+         * @return Some information and version of the device.
+         */
         virtual ConnectorInfo getConnectorInfo();
 
-        // handle event from the simulation async
-        virtual void handleEvent(const SimEvent &simEvent);
+        /**
+         * Handles an event asynchronously from the simulation.
+         * Called by the interface.
+         */
+        void handleEvent(const SimEvent &simEvent);
 
-// send the event to the simulation
+        /**
+         * Send an event to the simulation. Creates multiple events from a single event if configured so.
+         * Called by the DuT connector itself.
+         * @param simEvent Event that should be send.
+         */
         void sendEventToSim(const SimEvent &simEvent);
 
     protected:
+        /**
+         * Handles an single event asynchronously from the simulation.
+         * Called whenever a new event for the device arrives.
+         * Please override this methode!
+         * @param simEvent Event that should be processed by the device.
+         */
+        virtual void handleEventSingle(const SimEvent &simEvent) {};
+
+    private:
+
         // determine if an event needs to be processed
         bool canHandleSimEvent(const SimEvent &simEvent);
 
-    private:
+        bool isPeriodicEnabled(const SimEvent &simEvent);
+
+        void setupTimer(const SimEvent &simEvent);
+
+        void enablePeriodicSending(const std::string& operation, int periodMs);
+
+        std::shared_ptr<boost::asio::io_service> io;
+        std::thread timerRunner;
+;
+
         std::set<std::string> processableOperations;
 
         std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim;
+
+        std::map<std::string, std::unique_ptr<sim_interface::PeriodicTimer>> periodicTimers;
+        std::map<std::string, int> periodicIntervals;
+        std::unique_ptr<PeriodicTimer> aliveTimer;
+        bool periodicTimerEnabled;
     };
 }
 
