@@ -160,6 +160,7 @@ int main() {
 
     sim_interface::dut_connector::can::CANConnectorConfig canConfig(
             "vcan0",
+            "bmwCodec",
             {"Speed", "Blink", "Hazard", "Brake"},
             frameToOperation,
             operationToFrame,
