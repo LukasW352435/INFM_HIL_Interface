@@ -1,6 +1,6 @@
 /*******************************************************************************
  \project   INFM_HIL_Interface
- \file      CANConnectorConfig.h
+ \file      CANConnectorConfig.cpp
  \brief     The Config for the CANConnector.
  \author    Matthias Bank
  \version   1.0.0

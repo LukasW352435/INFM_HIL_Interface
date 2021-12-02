@@ -16,8 +16,10 @@
  ******************************************************************************/
 // Project includes
 #include "../../Events/SimEvent.h"
+#include "DuTLogger.h"
 
 // System includes
+#include <linux/can.h>
 
 
 /*******************************************************************************
@@ -26,9 +28,12 @@
 namespace sim_interface::dut_connector::can{
 
     class CANConnectorCodec{
+    public:
+        virtual canfd_frame parseEventToFrame(const SimEvent &event) = 0;
 
+    private:
+        void sendEvent(const canfd_frame &frame);
     };
-
 }
 
 
