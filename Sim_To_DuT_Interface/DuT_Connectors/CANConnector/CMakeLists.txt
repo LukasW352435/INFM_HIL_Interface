@@ -8,10 +8,10 @@ target_sources(libs
         CANConnectorCodec.h
         InterfaceIndexIO.cpp
         CANConnectorConfig.cpp
-        CANConnectorSendOperation.cpp
-        CANConnectorReceiveOperation.cpp
         CANConnectorCodecFactory.h
         CANConnectorCodecFactory.cpp
+        CANConnectorSendOperation.cpp
+        CANConnectorReceiveOperation.cpp
         PUBLIC
         CANConnector.h
         CANConnectorConfig.h

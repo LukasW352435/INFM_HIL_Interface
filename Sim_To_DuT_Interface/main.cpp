@@ -48,11 +48,11 @@ int main() {
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
 
     sim_interface::dut_connector::can::CANConnectorCodec* co1;
-    co1 = sim_interface::dut_connector::can::CANConnectorCodecFactory::createCodec("bmwCodec");
+    co1 = sim_interface::dut_connector::can::CANConnectorCodecFactory::createCodec("BmwCodec");
     co1->parseEventToFrame(sim_interface::SimEvent("Op1", "Val", "CAN"));
 
     sim_interface::dut_connector::can::CANConnectorCodec* co2;
-    co2 = sim_interface::dut_connector::can::CANConnectorCodecFactory::createCodec("suzukiCodec");
+    co2 = sim_interface::dut_connector::can::CANConnectorCodecFactory::createCodec("SuzukiCodec");
     co2->parseEventToFrame(sim_interface::SimEvent("Op2", "Val", "CAN"));
 
     /*
