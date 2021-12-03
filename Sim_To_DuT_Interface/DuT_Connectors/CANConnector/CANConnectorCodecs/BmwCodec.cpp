@@ -40,7 +40,12 @@ namespace sim_interface::dut_connector::can{
 
     std::vector<SimEvent> BmwCodec::convertFrameToSimEvent(struct canfd_frame frame, bool isCanfd){
 
+        // Vector that contains the resulting simulation events
         std::vector<SimEvent> events;
+
+        switch(frame.can_id){
+
+        }
 
         auto testEvent = sim_interface::SimEvent();
         testEvent.operation = "Geschwindigkeit";

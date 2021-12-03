@@ -55,7 +55,22 @@ namespace sim_interface::dut_connector::can{
             }
 
         }
+
         DuTLogger::logMessage("CAN Connector: Created initial RX setup", LOG_LEVEL::INFO);
+
+        // Create the isSetup map based on the send operations in the config.
+        // This map keeps track if we already created a cyclic send operation,
+        // so we know if we need to create a new one or only perform an update.
+        for(auto const& [operation, sendOperation] : config.operationToFrame){
+
+            // Add it to the map if it is a cyclic operation
+            if(sendOperation.isCyclic){
+                this->isSetup[operation] = false;
+            }
+
+        }
+
+        DuTLogger::logMessage("CAN Connector: Created initial isSetup map", LOG_LEVEL::INFO);
 
         // Start the receive loop on the socket
         receiveOnSocket();
@@ -182,8 +197,7 @@ namespace sim_interface::dut_connector::can{
                         isCANFD = true;
                     }
 
-                    // Calculate the expected size in bytes of the whole
-                    // message based upon the bcm_msg_head information.
+                    // Calculate the expected size in bytes of the whole message based upon the bcm_msg_head information.
                     size_t expectedBytes = 0;
 
                     if(isCANFD){
@@ -474,10 +488,8 @@ namespace sim_interface::dut_connector::can{
             return;
         }
 
-        // Note: By combining the flags SETTIMER and STARTTIMER
-        // the BCM will start sending the messages immediately
-
         // Fill out the message
+        // Note: By combining the flags SETTIMER and STARTTIMER the BCM will start sending the messages immediately
         if(isCANFD){
             std::shared_ptr<bcmMsgSingleFrameCanFD> msgCANFD = std::reinterpret_pointer_cast<bcmMsgSingleFrameCanFD>(msg);
 
@@ -715,8 +727,15 @@ namespace sim_interface::dut_connector::can{
             case RX_CHANGED:
 
                 // Simple reception of a CAN/CANFD frame or a content change occurred.
-                // TODO: Implement handling
-                DuTLogger::logMessage("CAN Connector: RX_CHANGED handling is not implemented", LOG_LEVEL::WARNING);
+                DuTLogger::logMessage("CAN Connector: RX_CHANGED for CAN ID: <" + std::to_string(head->can_id) + ">" , LOG_LEVEL::INFO);
+
+                // We should only receive one frame in each RX_CHANGED BCM message
+                if(nframes != 1){
+                    DuTLogger::logMessage("CAN Connector: Received an RX_CHANGED message with multiple frames", LOG_LEVEL::ERROR);
+                    return;
+                }
+
+                CANConnector::handleRxChanged(head, frames, isCANFD);
                 break;
 
             case RX_TIMEOUT:
@@ -749,217 +768,118 @@ namespace sim_interface::dut_connector::can{
                 break;
 
             default:
-
                 DuTLogger::logMessage("CAN Connector: Received unknown opcode", LOG_LEVEL::WARNING);
+        }
+
+    }
+
+    void CANConnector::handleRxChanged(const bcm_msg_head* head, void* frame, bool isCANFD){
+
+        // The simulation events we received
+        std::vector<SimEvent> events;
+
+        // Note: We could also pass a reference instead of passing a copy of the received
+        // frame data in a struct can_fd. This way it may be a bit easier to end user that
+        // only wants to implement codec?
+
+        // Check if it is a CAN or CANFD frame we need to fill out.
+        if(isCANFD){
+            // Initialize the struct with zero
+            struct canfd_frame canfdFrame = {0};
+
+            // Copy the frame data
+            auto canfdFramePtr = (struct canfd_frame*) frame;
+            canfdFrame = *canfdFramePtr;
+
+            events = codec->convertFrameToSimEvent(canfdFrame, isCANFD);
+        }else{
+            // Initialize the struct with zero
+            struct canfd_frame canfdFrame = {0};
+
+            // Copy the frame data
+            auto canFramePtr = (struct can_frame*) frame;
+            struct can_frame canFrame = *canFramePtr;
+            canfdFrame = *((struct canfd_frame*) &canFrame);
+
+            events = codec->convertFrameToSimEvent(canfdFrame, isCANFD);
+        }
+
+        // Sanity check
+        if(events.empty()){
+            DuTLogger::logMessage("CAN Connector: Codec returned no simulation events a frame", LOG_LEVEL::WARNING);
+        }
+
+        // Send the received simulation events to the simulation
+        for(const auto& event: events){
+            DuTLogger::logMessage("CAN Connector: Send SimEvent: <" + event.operation + ">", LOG_LEVEL::INFO);
+            sendEventToSim(event);
         }
 
     }
 
     void CANConnector::handleEventSingle(const SimEvent &event){
 
-        // Test CAN Frame
-        struct can_frame canFrame1 = {0};
-        canFrame1.can_id  = 0x123;
-        canFrame1.can_dlc = 4;
-        canFrame1.data[0] = 0xDE;
-        canFrame1.data[1] = 0xAD;
-        canFrame1.data[2] = 0xBE;
-        canFrame1.data[3] = 0xEF;
+        // Get the data from the config that we need for the send operation
+        CANConnectorSendOperation sendOperation = this->config.operationToFrame.at(event.operation);
 
-        struct can_frame canFrame2 = {0};
-        canFrame2.can_id  = 0x345;
-        canFrame2.can_dlc = 3;
-        canFrame2.data[0] = 0xC0;
-        canFrame2.data[1] = 0xFF;
-        canFrame2.data[2] = 0xEE;
+        // Convert the simulation event to a CAN/CANFD frame payload
+        std::vector<__u8> frameData = codec->convertSimEventToFrame(event);
 
-        // CANFD frame array containing CAN frames
-        struct canfd_frame frameArrCAN[2];
-        frameArrCAN[0] = *((struct canfd_frame*) &canFrame1);
-        frameArrCAN[1] = *((struct canfd_frame*) &canFrame2);
-
-        struct can_frame canFrame1Modified = {0};
-        canFrame1Modified.can_id  = 0x123;
-        canFrame1Modified.can_dlc = 4;
-        canFrame1Modified.data[0] = 0xBE;
-        canFrame1Modified.data[1] = 0xEF;
-        canFrame1Modified.data[2] = 0xDE;
-        canFrame1Modified.data[3] = 0xAD;
-
-        struct can_frame canFrame2Modified = {0};
-        canFrame2Modified.can_id  = 0x345;
-        canFrame2Modified.can_dlc = 5;
-        canFrame2Modified.data[0] = 0xC0;
-        canFrame2Modified.data[1] = 0xFF;
-        canFrame2Modified.data[2] = 0xEE;
-        canFrame2Modified.data[3] = 0xFF;
-        canFrame2Modified.data[4] = 0xEE;
-
-        // CANFD frame array containing CAN frames with modified data
-        struct canfd_frame frameArrCANModified[2];
-        frameArrCANModified[0] = *((struct canfd_frame*) &canFrame1Modified);
-        frameArrCANModified[1] = *((struct canfd_frame*) &canFrame2Modified);
-
-        // Test CANFD Frame
-        struct canfd_frame canfdFrame1 = {0};
-        canfdFrame1.can_id   = 0x567;
-        canfdFrame1.len      = 16;
-        canfdFrame1.data[0]  = 0xDE;
-        canfdFrame1.data[1]  = 0xAD;
-        canfdFrame1.data[2]  = 0xBE;
-        canfdFrame1.data[3]  = 0xEF;
-        canfdFrame1.data[4]  = 0xDE;
-        canfdFrame1.data[5]  = 0xAD;
-        canfdFrame1.data[6]  = 0xBE;
-        canfdFrame1.data[7]  = 0xEF;
-        canfdFrame1.data[8]  = 0xDE;
-        canfdFrame1.data[9]  = 0xAD;
-        canfdFrame1.data[10] = 0xBE;
-        canfdFrame1.data[11] = 0xEF;
-        canfdFrame1.data[12] = 0xDE;
-        canfdFrame1.data[13] = 0xAD;
-        canfdFrame1.data[14] = 0xBE;
-        canfdFrame1.data[15] = 0xEF;
-
-        struct canfd_frame canfdFrame2 = {0};
-        canfdFrame2.can_id   = 0x789;
-        canfdFrame2.len      = 12;
-        canfdFrame2.data[0]  = 0xC0;
-        canfdFrame2.data[1]  = 0xFF;
-        canfdFrame2.data[2]  = 0xEE;
-        canfdFrame2.data[3]  = 0xC0;
-        canfdFrame2.data[4]  = 0xFF;
-        canfdFrame2.data[5]  = 0xEE;
-        canfdFrame2.data[6]  = 0xC0;
-        canfdFrame2.data[7]  = 0xFF;
-        canfdFrame2.data[8]  = 0xEE;
-        canfdFrame2.data[9]  = 0xC0;
-        canfdFrame2.data[10] = 0xFF;
-        canfdFrame2.data[11] = 0xEE;
-
-        // CANFD frame array
-        struct canfd_frame frameArrCANFD[2];
-        frameArrCANFD[0] = canfdFrame1;
-        frameArrCANFD[1] = canfdFrame2;
-
-        // Test intervals
-        struct bcm_timeval ival1 = {0};
-        ival1.tv_sec  = 0;
-        ival1.tv_usec = 500;
-
-        struct bcm_timeval ival2 = {0};
-        ival2.tv_sec  = 1;
-        ival2.tv_usec = 0;
-
-        struct bcm_timeval ivalZero = {0};
-
-        struct bcm_timeval ival1Arr[2];
-        ival1Arr[0] = ival1;
-        ival1Arr[1] = ival2;
-
-        struct bcm_timeval ivalArr1Zero[2];
-        ivalArr1Zero[0] = ivalZero;
-        ivalArr1Zero[1] = ivalZero;
-
-        struct bcm_timeval ival2Arr[2];
-        ival2Arr[0] = ival2;
-        ival2Arr[1] = ival2;
-
-        // Test Counts
-        uint32_t countArr[2];
-        countArr[0] = 10;
-        countArr[1] = 5;
-
-        uint32_t countArrZero[2] = {0};
-
-        // Test Mask
-        struct canfd_frame mask = {0};
-        mask.len     = 1;
-        mask.data[0] = 0xFF;
-
-        // Test txSendSingleFrame with a single CAN frame
-        for(auto & i : frameArrCAN){
-            txSendSingleFrame(i, false);
+        // Sanity checks to identify errors made by the user written codec
+        if(frameData.empty()){
+            DuTLogger::logMessage("CAN Connector: Codec returned an empty frame payload for a simulation event", LOG_LEVEL::WARNING);
+            return;
+        }else{
+            if(sendOperation.isCANFD){
+                if(CANFD_MAX_DLEN < frameData.size()){
+                    DuTLogger::logMessage(
+                            "CAN Connector: Codec returned a frame payload that is bigger than the CANFD frame",
+                            LOG_LEVEL::ERROR);
+                    return;
+                }
+            }else{
+                if(CAN_MAX_DLEN < frameData.size()){
+                    DuTLogger::logMessage(
+                            "CAN Connector: Codec returned a frame payload that is bigger than the CAN frame",
+                            LOG_LEVEL::ERROR);
+                    return;
+                }
+            }
         }
 
-        // Test txSendSingleFrame with a single CANFD frames
-        //for(auto & i : frameArrCANFD){
-        //    txSendSingleFrame(i, true);
-        //}
+        // Fill out the frame
+        struct canfd_frame canfdFrame = {0};
 
-        // Test txSendMultipleFrames with multiple CAN frames
-        //txSendMultipleFrames(frameArrCAN, 2, false);
+        if(sendOperation.isCANFD){
+            canfdFrame.can_id = sendOperation.canID;
+            canfdFrame.len    = frameData.size();
+            memcpy((void*) &canfdFrame.data[0], frameData.data(), frameData.size());
+        }else{
+            struct can_frame canFrame = {0};
+            canFrame.can_id  = sendOperation.canID;
+            canFrame.can_dlc = frameData.size();
+            memcpy((void*) &canFrame.data[0], frameData.data(), frameData.size());
+            canfdFrame = *((struct canfd_frame*) &canFrame);
+        }
 
-        // Test txSendMultipleFrames with multiple CANFD frames
-        //txSendMultipleFrames(frameArrCANFD, 2, true);
+        // Check if we should send it once or cyclic
+        if(sendOperation.isCyclic){
 
-        // Test txSetupSingleFrame with a single CAN frame
-        //for(auto & i : frameArrCAN){
-        //    txSetupSingleFrame(i, 2, ival1, ival2, false);
-        //}
+            // Check if a cyclic send operation was set up already
+            if(this->isSetup.at(event.operation)){
+                // Update the cyclic send operation with the new frame payload
+                txSetupUpdateSingleFrame(canfdFrame, sendOperation.isCANFD, sendOperation.announce);
+            }else{
+                // Create a new cyclic send operation and remember that we already set it up
+                this->isSetup[event.operation] = true;
+                txSetupSingleFrame(canfdFrame, sendOperation.count, sendOperation.ival1, sendOperation.ival2, sendOperation.isCANFD);
+            }
 
-        // Test txSetupSingleFrame with a single CANFD frame
-        //for(auto & i : frameArrCANFD){
-        //   txSetupSingleFrame(i, 2, ival1, ival2, true);
-        //}
+        }else{
+            // Send out the frame once
+            txSendSingleFrame(canfdFrame, sendOperation.isCANFD);
+        }
 
-        // Test txSetupMultipleFrames with CAN frames
-        //txSetupMultipleFrames(frameArrCAN, 2, countArr, ival1Arr, ival2Arr, false);
-
-        // Test txSetupMultipleFrames with CANFD frames
-        //txSetupMultipleFrames(frameArrCANFD, 2, countArr, ival1Arr, ival2Arr, true);
-
-        // Test txSetupSequence with multiple CAN frames
-        //txSetupSequence(frameArrCAN, 2, 3, ival1, ival2, false);
-
-        // Test txSetupSequence with multiple CANFD frames
-        //txSetupSequence(frameArrCANFD, 2, 3, ival1, ival2, true);
-
-        // Test txSetupUpdate without announce
-        //txSetupMultipleFrames(frameArrCAN, 2, countArrZero, ivalArr1Zero, ival2Arr, false);
-        //sleep(10);
-        //txSetupUpdateMultipleFrames(frameArrCANModified, 2, false, false);
-        //sleep(10);
-
-        // Test txSetupUpdate with announce
-        //txSetupMultipleFrames(frameArrCAN, 2, countArrZero, ivalArr1Zero, ival2Arr,false);
-        //sleep(10);
-        //txSetupUpdateMultipleFrames(frameArrCANModified, 2, false, true);
-        //sleep(10);
-
-        // Test txDelete with a canfd transmission task
-        //txSetupMultipleFrames(frameArrCANFD, 2, countArr, ival1Arr, ival2Arr, true);
-        //std::this_thread::sleep_for(std::chrono::seconds(3));
-        //txDelete(frameArrCANFD[0].can_id, true);
-        //std::this_thread::sleep_for(std::chrono::seconds(3));
-        //txDelete(frameArrCANFD[1].can_id, true);
-
-        // Test txDelete with a canfd sequence transmission task
-        //txSetupSequence(&canfdFrame1, 1, 3, ival1, ival2, true);
-        //std::this_thread::sleep_for(std::chrono::seconds(5));
-        //txDelete(canfdFrame1.can_id, true);
-
-        // Test rxSetupCanID with a CAN frame
-        //rxSetupCanID(0x222, false);
-
-        // Test rxSetupCanID with a CANFD frame
-        //rxSetupCanID(0x333, true);
-
-        // Test rxSetupMask with a CAN frame
-        //rxSetupMask(0x222, mask, false);
-
-        // Test rxSetupMask with a CANFD frame
-        //rxSetupMask(0x333, mask, true);
-
-        // Test rxDelete with a CAN frame
-        //rxSetupCanID(0x222, false);
-        //std::this_thread::sleep_for(std::chrono::seconds(3));
-        //rxDelete(0x222, false);
-
-        // Test rxDelete with a CANFD frame
-        //rxSetupCanID(0x333, true);
-        //std::this_thread::sleep_for(std::chrono::seconds(3));
-        //rxDelete(0x333, true);
     }
 
 }

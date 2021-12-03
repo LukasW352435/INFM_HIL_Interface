@@ -24,8 +24,11 @@ namespace sim_interface::dut_connector::can{
 
     bool CodecUtilities::checkEndianness(){
 
-        // Note: The htons function converts always to big endian.
-        // There is no need to check the endianness of the number.
+        // Note: If the project is upgraded from C++17 to C++20
+        // one could have also used std::endian instead.
+
+        // Note: The htons function always converts safely to big endian.
+        // No matter the fact if the host uses little- or big endian.
         uint16_t testNumberInHostOrder = 0x1122;
         uint16_t testNumberInBigEndian = htons(testNumberInHostOrder);
 
@@ -51,7 +54,9 @@ namespace sim_interface::dut_connector::can{
         uint8_t data[4] = {0};
         std::memcpy(&data, &number, sizeof(data));
 
-        // Swap the first and the fourth byte and swap the second and the third byte.
+        // Swap the:
+        // - first and the fourth byte
+        // - swap the second and the third byte
         return (((uint32_t) data[3] << 0) | ((uint32_t) data[2] << 8) | ((uint32_t) data[1] << 16) | ((uint32_t) data[0] << 24));
     };
 
@@ -60,7 +65,11 @@ namespace sim_interface::dut_connector::can{
         uint8_t data[8] = {0};
         std::memcpy(&data, &number, sizeof(data));
 
-        // Swap the first and the fourth byte and swap the second and the third byte.
+        // Swap the
+        // - first and the eight byte
+        // - second and the seventh byte.
+        // - third and the sixth byte
+        // - fourth and the fifth byte
         return (((uint64_t) data[7] << 0) | ((uint64_t) data[6] << 8) | ((uint64_t) data[5] << 16) | ((uint64_t) data[4] << 24) |
                 ((uint64_t) data[3] << 32) | ((uint64_t) data[2] << 40) | ((uint64_t) data[1] << 48) | ((uint64_t) data[0] << 56));
     };
