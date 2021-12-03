@@ -25,22 +25,24 @@
 
 #include "SimComHandler.h"
 
-#include <utility>
-#include <zmq.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/archive/binary_iarchive.hpp>
-
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/serialization/map.hpp>
-#include <boost/serialization/variant.hpp>
 namespace sim_interface {
-    SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface,
-                                 const std::string& socketSimAddressSub, zmq::context_t &context_sub,
-                                 const std::string& socketSimAddressPub, zmq::context_t &context_pub)
-            : queueSimToInterface(std::move(queueSimToInterface)), socketSimSub_(context_sub, zmq::socket_type::sub) , socketSimPub_(context_pub, zmq::socket_type::pub)  {
 
+    SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig& config)
+            : queueSimToInterface(std::move(queueSimToInterface)) {
+
+        // zmq Subscriber
+        std::string socketSimAddressSub = config.socketSimAddressSub;
+        zmq::context_t context_sub(1);
+
+        // zmq Publisher
+        std::string socketSimAddressPub = config.socketSimAddressPub;
+        zmq::context_t context_pub(1);
+
+        // Create Sockets
+        socketSimSub_ = zmq::socket_t(context_sub, zmq::socket_type::sub);
+        socketSimPub_ = zmq::socket_t(context_pub, zmq::socket_type::pub);
+
+        // Config Sockets
         socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
 
         // Connect to publisher
@@ -50,15 +52,8 @@ namespace sim_interface {
         // Open the connection
         std::cout << "Binding to " << socketSimAddressPub << " . . ." << std::endl;
         socketSimPub_.bind(socketSimAddressPub);
-
-
-
-
-
         socketSimSub_.connect(socketSimAddressSub);
-
     }
-
 
     void SimComHandler::run() {
         // TODO async receive events from the Simulation and send them to the interface
@@ -109,11 +104,6 @@ namespace sim_interface {
                 sendEventToInterface(event);
             }
         }
-
-
-
-
-
     }
 
     void SimComHandler::sendEventToSim(const SimEvent &simEvent) {

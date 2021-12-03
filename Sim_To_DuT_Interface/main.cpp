@@ -33,6 +33,7 @@
 #include "DuT_Connectors/CANConnector/CANConnector.h"
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
 #include "DuTLogger/DuTLogger.h"
+#include "SystemConfig.h"
 
 // System includes
 #include <thread>
@@ -45,17 +46,18 @@ int main() {
 
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
 
+    // System config
+    sim_interface::SystemConfig systemConfig;
+    std::string configPath = std::filesystem::canonical("/proc/self/exe").parent_path().string();
+    sim_interface::SystemConfig::loadFromFile(configPath + "/SystemConfig.xml",systemConfig, true);
+
     // Create interface
     sim_interface::SimToDuTInterface interface;
 
     // Create simComHandler
-    std::string socketSimAddressSub = "tcp://localhost:7777";
-    zmq::context_t context_sub(1);
-    std::string socketSimAddressPub = "tcp://*:7778";
-    zmq::context_t context_pub(1);
-    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddressSub, context_sub,
-                                               socketSimAddressPub, context_pub);
+    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), systemConfig);
 
+    // Init interface with SimComHandler
     interface.setSimComHandler(&simComHandler);
 
     // Create DuT Devices

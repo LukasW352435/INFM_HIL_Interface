@@ -14,7 +14,9 @@ add_executable(${PROJECT_NAME} main.cpp
         Events/SimEvent.cpp Events/SimEvent.h
         Sim_Communication/SimComHandler.cpp Sim_Communication/SimComHandler.h
         Utility/SharedQueue.h
-        Utility/PeriodicTimer.cpp Utility/PeriodicTimer.h)
+        Utility/PeriodicTimer.cpp Utility/PeriodicTimer.h
+        DuTLogger/DuTLogger.cpp DuTLogger/DuTLogger.h DuTLogger/DuTLoggerConfig.h
+        SystemConfig.h)
 
 if (CMAKE_CXX_COMPILER_VERSION GREATER_EQUAL 9)
     target_link_libraries(${PROJECT_NAME} libs zmq quill boost_serialization)
