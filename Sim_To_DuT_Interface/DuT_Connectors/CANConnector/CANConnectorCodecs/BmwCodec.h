@@ -14,7 +14,8 @@
  * INCLUDES
  ******************************************************************************/
 // Project includes
-#include <CANConnectorCodec.h>
+#include "CodecUtilities.h"
+#include "../CANConnectorCodec.h"
 
 // System includes
 
@@ -30,13 +31,18 @@ namespace sim_interface::dut_connector::can{
         // Function members
 
         /**
+         * Constructor.
+         */
+        BmwCodec();
+
+        /**
         * Converts an simulation event to a CAN/CANFD payload.
         *
         * @param event - The simulation event we want to transform into a CAN/CANFD frame payload.
         *
         * @return The CAN/CANFD frame payload.
         */
-        virtual std::vector<__u8> convertSimEventToFrame(SimEvent event) override;;
+        std::vector<__u8> convertSimEventToFrame(SimEvent event) override;
 
         /**
         * Converts a CAN/CANFD frame to the corresponding simulation events.
@@ -46,7 +52,7 @@ namespace sim_interface::dut_connector::can{
         *
         * @return The simulation events that were contained in the CAN/CANFD frame.
         */
-        virtual std::vector<SimEvent> convertFrameToInt(struct canfd_frame frame, bool isCanfd) override;
+        std::vector<SimEvent> convertFrameToSimEvent(struct canfd_frame frame, bool isCanfd) override;
 
         // Data members
 
@@ -54,6 +60,7 @@ namespace sim_interface::dut_connector::can{
         // Function members
 
         // Data members
+        bool hostIsBigEndian;
 
     };
 

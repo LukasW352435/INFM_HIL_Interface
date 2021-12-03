@@ -39,7 +39,7 @@
 #include <iostream>
 
 
-int main() {
+int main(){
 
     // Initialize the logger
     DuTLogger::initializeLogger(LoggerConfig());

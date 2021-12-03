@@ -27,7 +27,7 @@ namespace sim_interface::dut_connector::can{
         return payload;
     }
 
-    std::vector<SimEvent> SuzukiCodec::convertFrameToInt(struct canfd_frame frame, bool isCanfd){
+    std::vector<SimEvent> SuzukiCodec::convertFrameToSimEvent(struct canfd_frame frame, bool isCanfd){
         std::vector<SimEvent> events;
 
         auto testEvent = sim_interface::SimEvent();

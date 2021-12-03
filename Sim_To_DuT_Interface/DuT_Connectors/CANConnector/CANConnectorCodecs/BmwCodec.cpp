@@ -22,12 +22,23 @@
  ******************************************************************************/
 namespace sim_interface::dut_connector::can{
 
+    BmwCodec::BmwCodec() : hostIsBigEndian(CodecUtilities::checkEndianness()){
+
+        // Test:
+        if(hostIsBigEndian) {
+            DuTLogger::logMessage("CAN Connector: Host uses big endian", LOG_LEVEL::INFO);
+        }else{
+            DuTLogger::logMessage("CAN Connector: Host uses little endian", LOG_LEVEL::INFO);
+        }
+
+    }
+
     std::vector<__u8> BmwCodec::convertSimEventToFrame(SimEvent event){
         std::vector<__u8> payload;
         return payload;
     }
 
-    std::vector<SimEvent> BmwCodec::convertFrameToInt(struct canfd_frame frame, bool isCanfd){
+    std::vector<SimEvent> BmwCodec::convertFrameToSimEvent(struct canfd_frame frame, bool isCanfd){
 
         std::vector<SimEvent> events;
 

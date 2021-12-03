@@ -36,7 +36,7 @@ namespace sim_interface::dut_connector::can{
         *
         * @return The CAN/CANFD frame payload.
         */
-        virtual std::vector<__u8> convertSimEventToFrame(SimEvent event) override;;
+        std::vector<__u8> convertSimEventToFrame(SimEvent event) override;
 
         /**
         * Converts a CAN/CANFD frame to the corresponding simulation events.
@@ -46,7 +46,7 @@ namespace sim_interface::dut_connector::can{
         *
         * @return The simulation events that were contained in the CAN/CANFD frame.
         */
-        virtual std::vector<SimEvent> convertFrameToInt(struct canfd_frame frame, bool isCanfd) override;
+        std::vector<SimEvent> convertFrameToSimEvent(struct canfd_frame frame, bool isCanfd) override;
 
         // Data members
 

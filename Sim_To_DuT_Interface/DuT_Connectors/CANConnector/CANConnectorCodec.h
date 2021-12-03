@@ -50,7 +50,7 @@ namespace sim_interface::dut_connector::can{
          *
          * @return The simulation events that were contained in the CAN/CANFD frame.
          */
-        virtual std::vector<SimEvent> convertFrameToInt(struct canfd_frame frame, bool isCanfd) = 0;
+        virtual std::vector<SimEvent> convertFrameToSimEvent(struct canfd_frame frame, bool isCanfd) = 0;
 
         // Data members
 
