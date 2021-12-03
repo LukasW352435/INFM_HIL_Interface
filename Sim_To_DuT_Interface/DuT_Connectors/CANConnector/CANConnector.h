@@ -17,7 +17,9 @@
 // Project includes
 #include "../DuTConnector.h"
 #include "InterfaceIndexIO.h"
+#include "CANConnectorCodec.h"
 #include "CANConnectorConfig.h"
+#include "CANConnectorCodecFactory.h"
 #include "../../DuTLogger/DuTLogger.h"
 
 // System includes
@@ -293,7 +295,8 @@ namespace sim_interface::dut_connector::can{
         boost::asio::generic::datagram_protocol::socket bcmSocket;                      /**< The BCM socket that is used to send and receive. */
         std::array<std::uint8_t, sizeof(struct bcmMsgMultipleFramesCanFD)> rxBuffer{0}; /**< Buffer that stores the received data.            */
         std::thread ioContextThread;                                                    /**< Thread for the io_context loop.                  */
-        CANConnectorConfig config;
+        CANConnectorConfig config;                                                      /**< The config of the CAN connector.                 */
+        CANConnectorCodec *codec;                                                       /**< The codec that is used for parsing.              */
 
     };
 

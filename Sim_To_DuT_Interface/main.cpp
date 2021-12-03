@@ -21,7 +21,7 @@
  * @author Lukas Wagenlehner
  * @author Michael Schmitz
  * @author Matthias Bank
- * // TODO add all authors
+ * @author Marco Keul
  * @version 1.0
  */
 
@@ -33,8 +33,6 @@
 #include "DuT_Connectors/CANConnector/CANConnector.h"
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
 #include "DuTLogger/DuTLogger.h"
-#include "DuT_Connectors/CANConnector/CANConnectorCodec.h"
-#include "DuT_Connectors/CANConnector/CANConnectorCodecFactory.h"
 
 // System includes
 #include <thread>
@@ -42,24 +40,16 @@
 
 
 int main() {
-    // initialize the logger
+
+    // Initialize the logger
     DuTLogger::initializeLogger(LoggerConfig());
     DuTLogger::changeLogLevel(LOG_TYPE::CONSOLE_LOG, LOG_LEVEL::DEBUG);
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
 
-    sim_interface::dut_connector::can::CANConnectorCodec* co1;
-    co1 = sim_interface::dut_connector::can::CANConnectorCodecFactory::createCodec("BmwCodec");
-    co1->parseEventToFrame(sim_interface::SimEvent("Op1", "Val", "CAN"));
-
-    sim_interface::dut_connector::can::CANConnectorCodec* co2;
-    co2 = sim_interface::dut_connector::can::CANConnectorCodecFactory::createCodec("SuzukiCodec");
-    co2->parseEventToFrame(sim_interface::SimEvent("Op2", "Val", "CAN"));
-
-    /*
-    // Create interface
+    // Create the interface
     sim_interface::SimToDuTInterface interface;
 
-    // Create simComHandler
+    // Create the simComHandler
     std::string socketSimAddressSub = "tcp://localhost:7777";
     zmq::context_t context_sub(1);
     std::string socketSimAddressPub = "tcp://*:7778";
@@ -70,6 +60,9 @@ int main() {
     interface.setSimComHandler(&simComHandler);
 
     // Create DuT Devices
+
+    /*
+    // Create the REST connector
     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
                                                                          "http://172.17.0.1",
                                                                          9091,
@@ -96,8 +89,9 @@ int main() {
                                                                          true);
 
     sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(),
-                                                                                    config);*/
-    /*
+                                                                                    config);
+
+    // Test the REST connector
     auto event = sim_interface::SimEvent();
     event.operation = "Test";
     event.value = "Test";
@@ -106,9 +100,11 @@ int main() {
     event.operation = "Indicator Right";
     event.value = "xyz";
     restDummyConnector.handleEvent(event);
-    */
-    /*
+
+    // Add the REST connector to the interface
     interface.addConnector(&restDummyConnector);
+    */
+
 
     //+++++ Start CAN Connector +++++
 
@@ -171,7 +167,7 @@ int main() {
 
     sim_interface::dut_connector::can::CANConnectorConfig canConfig(
             "vcan0",
-            "bmwCodec",
+            "BmwCodec",
             {"Speed", "Blink", "Hazard", "Brake"},
             frameToOperation,
             operationToFrame,
@@ -184,13 +180,13 @@ int main() {
 
     // Test the CAN Connector
     auto canEvent = sim_interface::SimEvent();
-    canEvent.operation = "Test";
-    canEvent.value = "Value";
+    canEvent.operation = "Geschwindigkeit";
+    canEvent.value     = 30;
     canConnector.handleEventSingle(canEvent);
 
     //+++++ End CAN Connector +++++
 
-    std::cout << interface << std::endl;
+    //std::cout << interface << std::endl;
 
     // Start simComHandler to receive events from the simulation
     std::thread simComHandlerThread(&sim_interface::SimComHandler::run, &simComHandler);
@@ -200,6 +196,6 @@ int main() {
     interface.run();
 
     std::cin.get();
-    DuTLogger::logMessage("Shut down application", LOG_LEVEL::INFO);*/
+    DuTLogger::logMessage("Shut down application", LOG_LEVEL::INFO);
     return 0;
 }

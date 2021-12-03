@@ -22,9 +22,20 @@
  ******************************************************************************/
 namespace sim_interface::dut_connector::can{
 
-    canfd_frame SuzukiCodec::parseEventToFrame(const SimEvent &event){
-        DuTLogger::logMessage("Suzuki Codec received event", LOG_LEVEL::DEBUG);
-        std::cout << "ParseEventToFrame Suzuki" << std::endl;
+    std::vector<__u8> SuzukiCodec::convertSimEventToFrame(SimEvent event){
+        std::vector<__u8> payload;
+        return payload;
+    }
+
+    std::vector<SimEvent> SuzukiCodec::convertFrameToInt(struct canfd_frame frame, bool isCanfd){
+        std::vector<SimEvent> events;
+
+        auto testEvent = sim_interface::SimEvent();
+        testEvent.operation = "Geschwindigkeit";
+        testEvent.value     = 30;
+
+        events.insert(events.begin(), testEvent);
+        return events;
     }
 
 }

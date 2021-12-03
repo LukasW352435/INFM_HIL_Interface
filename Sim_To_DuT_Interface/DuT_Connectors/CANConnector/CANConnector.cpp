@@ -31,6 +31,10 @@ namespace sim_interface::dut_connector::can{
             bcmSocket(createBcmSocket(config)),
             config(config){
 
+        // Create the codec
+        this->codec = CANConnectorCodecFactory::createCodec(this->config.codecName);
+        DuTLogger::logMessage("CAN Connector: Created <" + this->config.codecName + "> codec", LOG_LEVEL::INFO);
+
         // Create all receive operations
         for(auto const& [canID, receiveOperation] : config.frameToOperation){
 

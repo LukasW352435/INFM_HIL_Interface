@@ -22,9 +22,21 @@
  ******************************************************************************/
 namespace sim_interface::dut_connector::can{
 
-    canfd_frame BmwCodec::parseEventToFrame(const SimEvent &event) {
-        DuTLogger::logMessage("BMW Codec received event", LOG_LEVEL::DEBUG);
-        std::cout << "ParseEventToFrame BMW " + event.operation << std::endl;
+    std::vector<__u8> BmwCodec::convertSimEventToFrame(SimEvent event){
+        std::vector<__u8> payload;
+        return payload;
+    }
+
+    std::vector<SimEvent> BmwCodec::convertFrameToInt(struct canfd_frame frame, bool isCanfd){
+
+        std::vector<SimEvent> events;
+
+        auto testEvent = sim_interface::SimEvent();
+        testEvent.operation = "Geschwindigkeit";
+        testEvent.value     = 30;
+
+        events.insert(events.begin(), testEvent);
+        return events;
     }
 
 }

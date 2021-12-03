@@ -29,11 +29,24 @@ namespace sim_interface::dut_connector::can{
     public:
         // Function members
 
-        BmwCodec(){
-            DuTLogger::logMessage("Build Bmw Codec", LOG_LEVEL::DEBUG, false);
-        }
+        /**
+        * Converts an simulation event to a CAN/CANFD payload.
+        *
+        * @param event - The simulation event we want to transform into a CAN/CANFD frame payload.
+        *
+        * @return The CAN/CANFD frame payload.
+        */
+        virtual std::vector<__u8> convertSimEventToFrame(SimEvent event) override;;
 
-        canfd_frame parseEventToFrame(const SimEvent &event) override;
+        /**
+        * Converts a CAN/CANFD frame to the corresponding simulation events.
+        *
+        * @param frame   - The frame that we want to transform.
+        * @param isCanfd - Flag for CANFD frames.
+        *
+        * @return The simulation events that were contained in the CAN/CANFD frame.
+        */
+        virtual std::vector<SimEvent> convertFrameToInt(struct canfd_frame frame, bool isCanfd) override;
 
         // Data members
 

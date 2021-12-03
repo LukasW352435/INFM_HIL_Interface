@@ -19,6 +19,7 @@
 #include "DuTLogger.h"
 
 // System includes
+#include <vector>
 #include <linux/can.h>
 
 
@@ -28,12 +29,38 @@
 namespace sim_interface::dut_connector::can{
 
     class CANConnectorCodec{
+
     public:
-        virtual canfd_frame parseEventToFrame(const SimEvent &event) {};
+        // Function members
+
+        /**
+        * Converts an simulation event to a CAN/CANFD payload.
+        *
+        * @param event - The simulation event we want to transform into a CAN/CANFD frame payload.
+        *
+        * @return The CAN/CANFD frame payload.
+        */
+        virtual std::vector<__u8> convertSimEventToFrame(SimEvent event) = 0;
+
+        /**
+         * Converts a CAN/CANFD frame to the corresponding simulation events.
+         *
+         * @param frame   - The frame that we want to transform.
+         * @param isCanfd - Flag for CANFD frames.
+         *
+         * @return The simulation events that were contained in the CAN/CANFD frame.
+         */
+        virtual std::vector<SimEvent> convertFrameToInt(struct canfd_frame frame, bool isCanfd) = 0;
+
+        // Data members
 
     private:
-        void sendEvent(const canfd_frame &frame);
+        // Function members
+
+        // Data members
+
     };
+
 }
 
 
