@@ -24,6 +24,7 @@
  */
 
 #include "DuTConnector.h"
+#include "../DuTLogger/DuTLogger.h"
 
 #include <utility>
 #include <boost/asio.hpp>
@@ -64,7 +65,9 @@ namespace sim_interface::dut_connector {
 
     void DuTConnector::handleEvent(const SimEvent &simEvent) {
         if (canHandleSimEvent(simEvent)) {
+            DuTLogger::logMessage("DuTConnector: Handling event " + simEvent.operation, LOG_LEVEL::INFO);
             if (isPeriodicEnabled(simEvent)) {
+                DuTLogger::logMessage("DuTConnector: Enabling periodic timer for event " + simEvent.operation, LOG_LEVEL::INFO);
                 setupTimer(simEvent);
             }
             handleEventSingle(simEvent);
