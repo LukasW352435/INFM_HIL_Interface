@@ -59,6 +59,24 @@ namespace sim_interface::dut_connector::can{
     private:
         // Function members
 
+        /**
+         * Test/Demo-function.
+         *
+         * @param frame
+         * @param isCanfd
+         * @return
+         */
+        std::vector<SimEvent> handleHazardFrame(struct canfd_frame frame, bool isCanfd);
+
+        /**
+         * Test/Demo-function.
+         *
+         * @param frame
+         * @param isCanfd
+         * @return
+         */
+        std::vector<SimEvent> handleBrakeFrame(struct canfd_frame frame, bool isCanfd);
+
         // Data members
         bool hostIsBigEndian;
 

@@ -727,7 +727,7 @@ namespace sim_interface::dut_connector::can{
             case RX_CHANGED:
 
                 // Simple reception of a CAN/CANFD frame or a content change occurred.
-                DuTLogger::logMessage("CAN Connector: RX_CHANGED for CAN ID: <" + std::to_string(head->can_id) + ">" , LOG_LEVEL::INFO);
+                DuTLogger::logMessage("CAN Connector: RX_CHANGED for CAN ID: <" + convertCanIdToHex(head->can_id) + ">" , LOG_LEVEL::INFO);
 
                 // We should only receive one frame in each RX_CHANGED BCM message
                 if(nframes != 1){
@@ -880,6 +880,12 @@ namespace sim_interface::dut_connector::can{
             txSendSingleFrame(canfdFrame, sendOperation.isCANFD);
         }
 
+    }
+
+    std::string CANConnector::convertCanIdToHex(canid_t canID){
+        std::stringstream canIdHex;
+        canIdHex << "0x" << std::hex << canID;
+        return canIdHex.str();
     }
 
 }

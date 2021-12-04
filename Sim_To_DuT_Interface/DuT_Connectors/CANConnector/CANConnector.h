@@ -299,6 +299,14 @@ namespace sim_interface::dut_connector::can{
         */
         void rxDelete(canid_t canID, bool isCANFD);
 
+        /**
+         * Converts a CAN ID to a hex string.
+         *
+         * @param canID - The CAN ID that should be converted.
+         * @return The CAN ID as a hex string.
+         */
+        static std::string convertCanIdToHex(canid_t canID);
+
         // Data members
         boost::shared_ptr<boost::asio::io_context> ioContext;                           /**< The io_context used by the BCM socket.                 */
         boost::asio::generic::datagram_protocol::socket bcmSocket;                      /**< The BCM socket that is used to send and receive.       */

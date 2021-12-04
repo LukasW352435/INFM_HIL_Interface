@@ -129,10 +129,17 @@ int main(){
 
     // CAN non-cyclic send operation
     sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCan1(
-            0x789,
+            0x222,
             false,
             false
     );
+
+    // CANFD non cyclic send operation
+    sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCanfd1{
+        0x333,
+        true,
+        false,
+    };
 
     // CANFD cyclic send operation
     struct bcm_timeval ival1 = {0};
@@ -144,7 +151,7 @@ int main(){
     ival2.tv_usec = 0;
 
     sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCyclicCanfd1(
-            0x9AB,
+            0x444,
             true,
             true,
             true,
@@ -162,13 +169,14 @@ int main(){
     // CAN Connector Send Config
     std::map<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> operationToFrame = {
             {"Speed", sendOpCan1},
+            {"Door", sendOpCanfd1},
             {"Blink", sendOpCyclicCanfd1}
     };
 
     sim_interface::dut_connector::can::CANConnectorConfig canConfig(
             "vcan0",
             "BmwCodec",
-            {"Speed", "Blink", "Hazard", "Brake"},
+            {"Speed", "Door", "Blink", "Hazard", "Brake"},
             frameToOperation,
             operationToFrame,
             {},
@@ -179,10 +187,20 @@ int main(){
     interface.addConnector(&canConnector);
 
     // Test the CAN Connector
-    auto canEvent = sim_interface::SimEvent();
-    canEvent.operation = "Geschwindigkeit";
-    canEvent.value     = 30;
-    canConnector.handleEventSingle(canEvent);
+    auto canEvent1 = sim_interface::SimEvent();
+    canEvent1.operation = "Speed";
+    canEvent1.value     = 30;
+    //canConnector.handleEventSingle(canEvent1);
+
+    auto canEvent2 = sim_interface::SimEvent();
+    canEvent2.operation = "Door";
+    canEvent2.value     = 40;
+    //canConnector.handleEventSingle(canEvent2);
+
+    auto canEvent3 = sim_interface::SimEvent();
+    canEvent3.operation = "Blink";
+    canEvent3.value     = 50;
+    //canConnector.handleEventSingle(canEvent3);
 
     //+++++ End CAN Connector +++++
 
