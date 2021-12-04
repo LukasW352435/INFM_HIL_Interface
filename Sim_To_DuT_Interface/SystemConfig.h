@@ -42,8 +42,10 @@ namespace sim_interface {
          */
         SystemConfig() = default;
 
-        // TODO add Logging Config, dont forget to change the serialize methode if you add new attributes
-
+        /**
+         * Config of the logger.
+         */
+        LoggerConfig loggerConfig;
         /**
          * Address of the zmq subscriber.
          */
@@ -64,9 +66,9 @@ namespace sim_interface {
                 std::ofstream ofs(file);
                 boost::archive::xml_oarchive oa(ofs);
                 oa << BOOST_SERIALIZATION_NVP(systemConfig);
-                DuTLogger::logMessage("Successfully saved system config to <" + file + ">", LOG_LEVEL::INFO);
+                std::cout << "Successfully saved system config to <" << file << ">" << std::endl;
             } catch (...) {
-                DuTLogger::logMessage("Save system config failed.", LOG_LEVEL::ERROR);
+                std::cout << "Save system config failed." << std::endl;
             }
         }
 
@@ -83,9 +85,9 @@ namespace sim_interface {
                 std::ifstream ifs(file);
                 boost::archive::xml_iarchive ia(ifs);
                 ia >> BOOST_SERIALIZATION_NVP(systemConfig);
-                DuTLogger::logMessage("Successfully loaded system config.", LOG_LEVEL::INFO);
+                std::cout << "Successfully loaded system config from <" << file << ">" << std::endl;
             } catch (...) {
-                DuTLogger::logMessage("Load system config failed. Fallback to default values.", LOG_LEVEL::ERROR);
+                std::cout << "Load system config failed. Fallback to default values." << std::endl;
                 if (createNewIfNotFoundOrInvalid) {
                     sim_interface::SystemConfig::saveToFile(file, systemConfig);
                 }
@@ -97,9 +99,9 @@ namespace sim_interface {
 
         template<class Archive>
         void serialize(Archive &ar, const unsigned int version) {
+            ar & BOOST_SERIALIZATION_NVP(loggerConfig);
             ar & BOOST_SERIALIZATION_NVP(socketSimAddressSub);
             ar & BOOST_SERIALIZATION_NVP(socketSimAddressPub);
-            // TODO add all attributes here if they need to be saved and loaded
         }
     };
 }
