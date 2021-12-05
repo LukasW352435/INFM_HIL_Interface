@@ -55,6 +55,12 @@ namespace sim_interface {
          */
         std::string socketSimAddressPub = "tcp://*:7778";
 
+
+        /**
+         * Address of the zmq Config Reciver.
+         */
+        std::string socketSimAddressReciverConfig = "tcp://localhost:7779";
+
         /**
          * Save the config to a File.
          * Does not create a new folder if it dose not exist!

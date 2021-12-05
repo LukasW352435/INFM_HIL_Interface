@@ -54,6 +54,8 @@
 #include <boost/property_tree/ini_parser.hpp>
 #include <boost/foreach.hpp>
 
+#include "../DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
+#include "../Utility/ConfigSerializer.h"
 namespace pt = boost::property_tree;
 using namespace std;
 using boost::property_tree::ptree;
@@ -70,16 +72,22 @@ namespace sim_interface {
         std::string socketSimAddressPub = config.socketSimAddressPub;
         zmq::context_t context_pub(1);
 
+
+        // zmq Reciver Config
+       std::string socketSimAddressReciverConfig = config.socketSimAddressReciverConfig;
+      zmq::context_t context_recConfig(1);
+
         // Create Sockets
         socketSimSub_ = zmq::socket_t(context_sub, zmq::socket_type::sub);
         socketSimPub_ = zmq::socket_t(context_pub, zmq::socket_type::pub);
+       socketSimSubConfig_ = zmq::socket_t(context_recConfig, zmq::socket_type::sub);
 
         // Config Sockets
         socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
         socketSimSubConfig_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
 
         boost::scoped_ptr<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig> config2;
-        boost::scoped_ptr<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig> config(
+        boost::scoped_ptr<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig> config1(
         new sim_interface::dut_connector::rest_dummy::RESTConnectorConfig("http://abc", "http:123", 2,
                                                                     {"Test", "Angle",
                                                                      "Acceleration",
@@ -103,7 +111,7 @@ namespace sim_interface {
                                                                      {{"Test", 1000}},
                                                                      true));
 
-   //     ConfigSerializer::serialize("vergleich.xml", "conn", config);
+   //     ConfigSerializer::serialize("vergleich.xml", "conn", config1);
    //    std:stringstream testStream;
    //    std::ifstream fs("test.xml");
    //    testStream << fs.rdbuf();
@@ -115,13 +123,14 @@ namespace sim_interface {
    //    ConfigSerializer::serialize("testErgebniss.xml", "conn", config2);
         // Connect to publisher
         std::cout << "Connecting to " << socketSimAddressSub << " . . ." << std::endl;
+        std::cout << "Connecting to " << socketSimAddressReciverConfig << " . . ." << std::endl;
         //  socket_sub.connect(socketSimAdress);
 
         // Open the connection
         std::cout << "Binding to " << socketSimAddressPub << " . . ." << std::endl;
         socketSimPub_.bind(socketSimAddressPub);
         socketSimSub_.connect(socketSimAddressSub);
-        socketSimSubConfig_.connect(socketSimAddressSubConfig);
+       socketSimSubConfig_.connect(socketSimAddressReciverConfig);
 
 
     }

@@ -74,7 +74,6 @@ int main() {
     interface.setSimComHandler(&simComHandler);
 
     simComHandler.getConfig();
-
     // Create DuT Devices
     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
                                                                          "http://172.17.0.1",
