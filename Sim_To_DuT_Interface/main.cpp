@@ -89,7 +89,6 @@ ofss.close();
     //simConfigHandlerThread.detach();
     simComHandler.getConfig();
 
-    interface.setSimComHandler(&simComHandler);
 
     // Create DuT Devices
     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",

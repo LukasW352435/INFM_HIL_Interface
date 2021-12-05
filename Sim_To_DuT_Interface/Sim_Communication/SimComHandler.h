@@ -72,6 +72,8 @@ namespace sim_interface {
          * Starts the handler to asynchronously receive incoming events.
          */
         void run();
+        //void getConfig(const SimToDuTInterface::SimToDuTInterface &interface);
+        // void getConfig(sim_interface::SimToDuTInterface test);
         void getConfig();
         enum connectorType {
             RESTDummyConnector,

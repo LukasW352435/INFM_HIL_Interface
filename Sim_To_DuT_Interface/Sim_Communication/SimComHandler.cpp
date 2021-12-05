@@ -49,8 +49,9 @@
 #include <iostream>
 #include <boost/algorithm/string.hpp>
 #include "../Utility/ConfigSerializer.h"
-
-
+#include "../DuT_Connectors/RESTDummyConnector/RESTDummyConnector.h"
+#include "../DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
+#include "../SimToDuTInterface.h"
 
 
 #include <thread>
@@ -97,16 +98,16 @@ namespace sim_interface {
                                                                      {{"Test", 1000}},
                                                                      true));
 
-     ConfigSerializer::serialize("vergleich.xml", "conn", config);
-        std:stringstream testStream;
-        std::ifstream fs("test.xml");
-        testStream << fs.rdbuf();
-        fs.close();
-       // cout << testStream.str()<< endl;
-        std::istringstream iss(testStream.str());
-        //boost::archive::text_iarchive xmlInputArchive(iss);
-         ConfigSerializer::deserialize(iss, "conn", config2);
-        ConfigSerializer::serialize("testErgebniss.xml", "conn", config2);
+   //     ConfigSerializer::serialize("vergleich.xml", "conn", config);
+   //    std:stringstream testStream;
+   //    std::ifstream fs("test.xml");
+   //    testStream << fs.rdbuf();
+   //    fs.close();
+   //   // cout << testStream.str()<< endl;
+   //    std::istringstream iss(testStream.str());
+   //    //boost::archive::text_iarchive xmlInputArchive(iss);
+   //     ConfigSerializer::deserialize(iss, "conn", config2);
+   //    ConfigSerializer::serialize("testErgebniss.xml", "conn", config2);
         // Connect to publisher
         std::cout << "Connecting to " << socketSimAddressSub << " . . ." << std::endl;
         //  socket_sub.connect(socketSimAdress);
@@ -125,6 +126,7 @@ namespace sim_interface {
         return Invalid_Connector;
 
     }
+ //   void SimComHandler::getConfig(sim_interface::SimToDuTInterface &interface)
     void SimComHandler::getConfig()
     {
         zmq::message_t reply;
@@ -195,6 +197,7 @@ namespace sim_interface {
                       break;
                   }
                   case CANConnector: {
+
 
                       break;
                   }
