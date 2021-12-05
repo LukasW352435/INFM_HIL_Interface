@@ -29,6 +29,7 @@
 
 #include <utility>
 
+
 namespace sim_interface::dut_connector::v2x {
     class V2XConnectorConfig : public ConnectorConfig {
     public:

@@ -36,6 +36,7 @@
 #include "DuT_Connectors/V2XConnector/V2XConnectorConfig.h"
 #include "DuT_Connectors/V2XConnector/V2XConnector.h"
 
+
 // System includes
 #include <thread>
 #include <iostream>
@@ -103,13 +104,19 @@ int main() {
     interface.addConnector(&restDummyConnector);
 
     //V2x Connector
-    sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("wlp0s20f3");
+
+    sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("enp0s3");
 
     sim_interface::dut_connector::v2x::V2XConnector v2xConnector(interface.getQueueDuTToSim(), v2xconfig);
 
+    //Testing V2x
+    std::vector <unsigned char> value  = {"2", "3"};
+    const sim_interface::SimEvent e("V2X", value, "V2X");
+    v2xConnector.handleEventSingle(e);
+
 
     //+++++ Start CAN Connector +++++
-
+    /*
     // CAN receive operation without a mask
     sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCan1(
             "Hazard",
@@ -184,7 +191,7 @@ int main() {
     canEvent.operation = "Test";
     canEvent.value = "Value";
     canConnector.handleEventSingle(canEvent);
-
+    */
     //+++++ End CAN Connector +++++
 
 

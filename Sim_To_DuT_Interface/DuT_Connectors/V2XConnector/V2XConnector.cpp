@@ -43,17 +43,26 @@ namespace sim_interface::dut_connector::v2x {
         });
         try {
             boost::asio::generic::raw_protocol raw_protocol(AF_PACKET, SOCK_RAW);
-            ifreq data = {0};
-            std::strncpy(data.ifr_name, config.ifname.c_str(), IF_NAMESIZE);
-            data.ifr_name[IF_NAMESIZE -1] = '\0';
 
-            ioctl(socket(AF_LOCAL, SOCK_PACKET, 0), SIOCGIFINDEX, &data);
+            //parse interface name into ifreq
+            struct ifreq ifr;
+            memset(&ifr,0,sizeof(ifr));
+            strncpy(ifr.ifr_name, config.ifname.c_str(), sizeof(ifr.ifr_name));
+            int s = socket(AF_INET, SOCK_STREAM, 0);
+            ioctl(s, SIOCGIFINDEX, &ifr);
+
+            std::cout <<"index of wlan device: " << ifr.ifr_ifindex <<"\n";
+
+
             sockaddr_ll socket_address = {0};
             socket_address.sll_family = AF_PACKET;
             socket_address.sll_protocol = htons(ETH_P_ALL);
-            socket_address.sll_ifindex = data.ifr_ifindex;
+            socket_address.sll_ifindex = ifr.ifr_ifindex ;
+
             _socket.open(raw_protocol);
-            _socket.bind(boost::asio::generic::raw_protocol::endpoint(&socket_address, sizeof(sockaddr_ll)));
+
+
+            _socket.bind(boost::asio::generic::raw_protocol::endpoint(&socket_address, sizeof(socket_address)));
 
             receiveEndpoint = boost::asio::generic::raw_protocol::endpoint(_socket.local_endpoint());
         } catch (std::exception& e) {
@@ -88,9 +97,11 @@ namespace sim_interface::dut_connector::v2x {
     }
 
     void V2XConnector::handleEventSingle(const SimEvent &e) {
+
         boost::asio::const_buffer buffer = boost::asio::buffer(boost::apply_visitor(V2XVisitor(), e.value));
 
-        std::size_t ret = _socket.send(buffer);
+       std::size_t ret = _socket.send(buffer);
+        std::cout << "send message from v2x connector\n";
         if (ret != 0) {
             DuTLogger::logMessage(fmt::format("V2XConnector: Error {} sending over socket", ret), LOG_LEVEL::ERROR);
         }
