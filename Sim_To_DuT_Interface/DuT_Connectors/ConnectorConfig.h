@@ -40,7 +40,6 @@ namespace sim_interface::dut_connector {
            archive & BOOST_SERIALIZATION_NVP(operations);
           archive &  BOOST_SERIALIZATION_NVP(periodicOperations);
             archive & BOOST_SERIALIZATION_NVP(periodicTimerEnabled);
-            std::cout << "LERRRRR GLOBAL" << std::endl;
 
         }
 

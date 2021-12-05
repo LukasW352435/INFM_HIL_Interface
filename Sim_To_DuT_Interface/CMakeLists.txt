@@ -14,10 +14,11 @@ add_executable(${PROJECT_NAME} main.cpp
         Events/SimEvent.cpp Events/SimEvent.h
         Sim_Communication/SimComHandler.cpp Sim_Communication/SimComHandler.h
         Utility/SharedQueue.h
+        Utility/ConfigSerializer.h
         Utility/PeriodicTimer.cpp Utility/PeriodicTimer.h)
 
 if (CMAKE_CXX_COMPILER_VERSION GREATER_EQUAL 9)
-    target_link_libraries(${PROJECT_NAME} libs zmq quill boost_serialization)
+    target_link_libraries(${PROJECT_NAME} libs zmq quill boost_serialization -lboost_system)
 else()
     target_link_libraries(${PROJECT_NAME} libs zmq quill boost_serialization stdc++fs -lboost_system)
 endif()
