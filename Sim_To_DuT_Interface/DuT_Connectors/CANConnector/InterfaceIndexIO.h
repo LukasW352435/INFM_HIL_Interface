@@ -29,13 +29,37 @@
 class InterfaceIndexIO{
 
 public:
+
+    /**
+    * Constructor.
+    *
+    * @param interfaceName - The name of the interface which index should be resolved.
+    */
     explicit InterfaceIndexIO(std::string interfaceName);
+
+    /**
+    * Returns the POSIX ioctl() value for getting the interface index by name.
+    *
+    * @returns The value of SIOCGIFINDEX
+    */
     static int name();
+
+    /**
+    * Returns the ifreq struct that contains the interface name.
+    *
+    * @return The ifreq with the name
+    */
     void* data();
+
+    /**
+    * Returns the resolved interface index.
+    *
+    * @return The resolved interface index.
+    */
     int index() const;
 
 private:
-    ifreq ifr{};
+    ifreq ifr{}; /**< The ifreq struct used for ioctl */
 
 };
 

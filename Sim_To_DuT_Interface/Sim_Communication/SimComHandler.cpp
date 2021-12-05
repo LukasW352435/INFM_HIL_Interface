@@ -29,6 +29,16 @@
 #include <zmq.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
+
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/serialization/variant.hpp>
+
+
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
@@ -43,33 +53,28 @@
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 #include <boost/foreach.hpp>
-#include <string>
-#include <set>
-#include <exception>
-#include <iostream>
-#include <boost/algorithm/string.hpp>
-#include "../Utility/ConfigSerializer.h"
-#include "../DuT_Connectors/RESTDummyConnector/RESTDummyConnector.h"
-#include "../DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
-#include "../SimToDuTInterface.h"
-
-
-#include <thread>
-
-#include <boost/archive/xml_oarchive.hpp>
-
-#include "../DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
 
 namespace pt = boost::property_tree;
 using namespace std;
 using boost::property_tree::ptree;
 namespace sim_interface {
-    SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface,
-                                 const std::string& socketSimAddressSub, zmq::context_t &context_sub,
-                                 const std::string& socketSimAddressPub, zmq::context_t &context_pub,
-                                 const std::string& socketSimAddressSubConfig, zmq::context_t &context_subConfig)
-            : queueSimToInterface(std::move(queueSimToInterface)), socketSimSub_(context_sub, zmq::socket_type::sub) , socketSimPub_(context_pub, zmq::socket_type::pub), socketSimSubConfig_(context_subConfig,zmq::socket_type::sub)  {
 
+    SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig& config)
+            : queueSimToInterface(std::move(queueSimToInterface)) {
+
+        // zmq Subscriber
+        std::string socketSimAddressSub = config.socketSimAddressSub;
+        zmq::context_t context_sub(1);
+
+        // zmq Publisher
+        std::string socketSimAddressPub = config.socketSimAddressPub;
+        zmq::context_t context_pub(1);
+
+        // Create Sockets
+        socketSimSub_ = zmq::socket_t(context_sub, zmq::socket_type::sub);
+        socketSimPub_ = zmq::socket_t(context_pub, zmq::socket_type::pub);
+
+        // Config Sockets
         socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
         socketSimSubConfig_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
 
@@ -295,11 +300,6 @@ namespace sim_interface {
                 sendEventToInterface(event);
             }
         }
-
-
-
-
-
     }
 
     void SimComHandler::sendEventToSim(const SimEvent &simEvent) {

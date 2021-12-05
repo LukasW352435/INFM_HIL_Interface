@@ -15,6 +15,8 @@
 // Project includes
 #include "InterfaceIndexIO.h"
 
+// System includes
+
 
 /*******************************************************************************
  * FUNCTION DEFINITIONS
@@ -24,29 +26,14 @@ InterfaceIndexIO::InterfaceIndexIO(std::string interfaceName) : ifr(){
     std::strncpy(ifr.ifr_name, interfaceName.c_str(), IF_NAMESIZE);
 }
 
-/**
- * Returns the POSIX ioctl() value for getting the interface index by name.
- *
- * @returns The value of SIOCGIFINDEX
- */
 int InterfaceIndexIO::name(){
     return SIOCGIFINDEX;
 }
 
-/**
- * Returns the ifreq struct that contains the interface name.
- *
- * @return The ifreq with the name
- */
 void* InterfaceIndexIO::data(){
     return &ifr;
 }
 
-/**
- * Returns the resolved interface index.
- *
- * @return The interface index
- */
 int InterfaceIndexIO::index() const{
     return ifr.ifr_ifindex;
 }

@@ -26,11 +26,15 @@
 #ifndef SIM_TO_DUT_INTERFACE_CONNECTORCONFIG_H
 #define SIM_TO_DUT_INTERFACE_CONNECTORCONFIG_H
 
+#include <set>
+#include <map>
 #include <string>
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/serialization/set.hpp>
 #include <boost/serialization/map.hpp>
+#include <cassert>
+
 namespace sim_interface::dut_connector {
     class ConnectorConfig {
     private:

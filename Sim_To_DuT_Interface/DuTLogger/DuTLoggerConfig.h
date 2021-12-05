@@ -3,6 +3,7 @@
  * Every value will be explained in the documentation of this file.
  *
  * @author Marco Keul
+ * @author Lukas Wagenlehner
  * @version 1.0
  */
 
@@ -10,60 +11,72 @@
 #define SIM_TO_DUT_INTERFACE_DUTLOGGERCONFIG_H
 
 #include <string>
-#include "quill/Quill.h"
+#include <cassert>
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/nvp.hpp>
 
 /**
- * If this constant is true, the debug mode for logging is activated. In debug mode the console will show all
- * debug messages and write all of them in the logfile. The default logging level will be ignored.
+ * Defines the level of logging
  */
-static const bool ENABLE_DEBUG_MODE = false;
+enum LOG_LEVEL {
+    NONE, DEBUG, INFO, WARNING, ERROR, CRITICAL
+};
 
 /**
- * Defines the path where the console messages will be logged.
- * It is possible to use a relative path. In this case the configured below will be appended on the path of
- * application's execution. An example for a relative path is "/logs/console".
- * Please notice that there is no '/' at the end.
- * If you rather want to define an absolute path please add an additional '#' in front of your absolute path.
- * An example for an absolute path is "#/home/user/project/logs/console"
+ * The logger needs a configuration before it can start logging. This configuration has to store all required
+ * information that the logger needs. Default settings are provided.
  */
-static const std::string PATH_CONSOLE_LOG = "/logs/console";
+class LoggerConfig {
+public:
 
-/**
- * Defines the path where the data objects will be logged.
- * It is possible to use a relative path. In this case the configured below will be appended on the path of
- * application's execution. An example for a relative path is "/logs/data".
- * Please notice that there is no '/' at the end.
- * If you rather want to define an absolute path please add an additional '#' in front of your absolute path.
- * An example for an absolute path is "#/home/user/project/logs/data"
- */
-static const std::string PATH_DATA_LOG = "/logs/data";
+    /**
+     * Creates the essential configuration for the logger with default settings.
+     */
+    LoggerConfig() = default;
 
-/**
- * This constant defines the maximum number of files in a logging directory. If there are more
- * logfiles under the underlying path, old ones will be deleted. (like a date based file rotation)
- */
-static const int FILE_BACKUP_COUNT = 10;
+    /**
+     * Create the essential configuration for the logger.
+     * <br>
+     * For the logging paths it's possible to enter relative and absolute file paths. Both variants will be accepted.
+     * An example for a relative path is "/logs/console". Please notice that there is no '/' at the end.
+     * If you rather want to define an absolute path please add an additional '#' in front of your absolute path.
+     * An example for an absolute path is "#/home/user/project/logs/console"
+     *
+     * @param enableDebugMode   - enables debug mode for logging. Logging levels will be ignored.
+     * @param pathConsoleLog    - contains the path to write the console log into a file
+     * @param pathDataLog       - contains the path to write the data log into a file
+     * @param fileBackupCount   - defines maximum amount of files in a logging directory. Old files will be deleted.
+     * @param fileLogLevel      - defines the logging level for the file log
+     * @param consoleLogLevel   - defines the logging level for the console log
+     */
+    LoggerConfig(bool enableDebugMode, std::string pathConsoleLog, std::string pathDataLog, int fileBackupCount,
+                 LOG_LEVEL fileLogLevel, LOG_LEVEL consoleLogLevel)
+            : enableDebugMode(std::move(enableDebugMode)), pathConsoleLog(std::move(pathConsoleLog)),
+              pathDataLog(std::move(pathDataLog)), fileBackupCount(std::move(fileBackupCount)),
+              fileLogLevel(std::move(fileLogLevel)), consoleLogLevel(std::move(consoleLogLevel)) {
+        assert (this->fileBackupCount > 0);
+        assert (!this->pathConsoleLog.empty());
+        assert (!this->pathDataLog.empty());
+    }
 
-/**
- * This constant stores the default level for console logging.
- * Please define here the start logging level you would like to log with.
- * If the debug mode is on, this level will be ignored!
- *
- * During the execution the level can be manually changed by the function below.
- *
- * @see void changeLogLevel(LOG_LEVEL_CHANGE_ON typ, LOG_LEVEL level)
- */
-static const quill::LogLevel DEFAULT_CONSOLE_LOG_LEVEL = quill::LogLevel::Info;
+    bool enableDebugMode = false;
+    std::string pathConsoleLog = "/logs/console";
+    std::string pathDataLog = "/logs/data";
+    int fileBackupCount = 10;
+    LOG_LEVEL fileLogLevel = LOG_LEVEL::INFO;
+    LOG_LEVEL consoleLogLevel = LOG_LEVEL::INFO;
+private:
+    friend class boost::serialization::access;
 
-/**
- * This constant stores the default level for console file logging.
- * Please define here the start logging level you would like to log with.
- * If the debug mode is on, this level will be ignored!
- *
- * During the execution the level can be manually changed by the function below.
- *
- * @see void changeLogLevel(LOG_LEVEL_CHANGE_ON typ, LOG_LEVEL level)
- */
-static const quill::LogLevel DEFAULT_FILE_LOG_LEVEL = quill::LogLevel::Info;
+    template<class Archive>
+    void serialize(Archive &ar, const unsigned int version) {
+        ar & BOOST_SERIALIZATION_NVP(enableDebugMode);
+        ar & BOOST_SERIALIZATION_NVP(pathConsoleLog);
+        ar & BOOST_SERIALIZATION_NVP(pathDataLog);
+        ar & BOOST_SERIALIZATION_NVP(fileBackupCount);
+        ar & BOOST_SERIALIZATION_NVP(fileLogLevel);
+        ar & BOOST_SERIALIZATION_NVP(consoleLogLevel);
+    }
+};
 
 #endif //SIM_TO_DUT_INTERFACE_DUTLOGGERCONFIG_H

@@ -20,75 +20,60 @@
  *
  * @author Lukas Wagenlehner
  * @author Michael Schmitz
+ * @author Matthias Bank
+ * @author Fabian Genes
+ * @author Thanaancheyan Thavapalan
  * // TODO add all authors
  * @version 1.0
  */
 
-#include <iostream>
+// Project includes
 #include "SimToDuTInterface.h"
-#include <thread>
+#include "Sim_Communication/SimComHandler.h"
 #include "DuT_Connectors/RESTDummyConnector/RESTDummyConnector.h"
 #include "DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
 #include "DuT_Connectors/CANConnector/CANConnector.h"
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
-#include "Sim_Communication/SimComHandler.h"
 #include "DuTLogger/DuTLogger.h"
+#include "SystemConfig.h"
+
+// System includes
+#include <thread>
+#include <iostream>
+
 #include <boost/archive/xml_oarchive.hpp>
 
 int main() {
+    // System config
+    sim_interface::SystemConfig systemConfig;
+    std::string configPath = std::filesystem::canonical("/proc/self/exe").parent_path().string();
+    sim_interface::SystemConfig::loadFromFile(configPath + "/SystemConfig.xml", systemConfig, true);
 
-
-
-
-
-/*
-
-   std::ifstream in("XMLTESTGenerated.xml");
-//
-  // std::ostringstream t;
-  // t << in.rdbuf();
-  //   std::string s = t.str();
-//std::istringstream stringStream(in);
-boost::archive::xml_iarchive xmlInputArchive(in);
-  //sim_interface::dut_connector::ConnectorConfig ccc = sim_interface::dut_connector::ConnectorConfig({"Penis","Speed"},{{"Penis",1}});
-
-  //xmlInputArchive & BOOST_SERIALIZATION_NVP(ccc);
-    sim_interface::dut_connector::rest_dummy::RESTConnectorConfig restConnectorConfig =     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig("baseUURL//", "baseCallback//", 222, {"Operation"},{{"Operation",1}} );
-
-    xmlInputArchive & BOOST_SERIALIZATION_NVP(restConnectorConfig);
-  in.close();
-
-//
-sim_interface::dut_connector::rest_dummy::RESTConnectorConfig restConnectorConfig =     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig("baseUURL//", "baseCallback//", 222, {"Operation"},{{"Operation",1}} );
-
- std::ofstream ofss("XMLTESTGenerated.xml");
-boost::archive::xml_oarchive xmlArchivee(ofss);
-//
-    xmlArchivee & BOOST_SERIALIZATION_NVP(restConnectorConfig);
-//xmlArchivee & BOOST_SERIALIZATION_NVP(ccc);
-//
-ofss.close();
-  */
-
-    //xmlArchive << cc;
+    // initialize the logger
+    DuTLogger::initializeLogger(systemConfig.loggerConfig);
 
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
 
+
     // Create interface
     sim_interface::SimToDuTInterface interface;
+
     // Create simComHandler
-    std::string socketSimAddressSub = "tcp://localhost:7777";
-    zmq::context_t context_sub(1);
-    std::string socketSimAddressPub = "tcp://*:7778";
-    zmq::context_t context_pub(1);
-    std::string socketSimAddressSubConfig = "tcp://localhost:7779";
-    zmq::context_t context_subConfig(1);
-    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddressSub, context_sub, socketSimAddressPub , context_pub,socketSimAddressSubConfig, context_subConfig);
+    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), systemConfig);
 
-   // std::thread simConfigHandlerThread (&sim_interface::SimComHandler::getConfig, &simComHandler);
-    //simConfigHandlerThread.detach();
+
+   // std::string socketSimAddressSub = "tcp://localhost:7777";
+   // zmq::context_t context_sub(1);
+   // std::string socketSimAddressPub = "tcp://*:7778";
+   // zmq::context_t context_pub(1);
+   // std::string socketSimAddressSubConfig = "tcp://localhost:7779";
+   // zmq::context_t context_subConfig(1);
+   // sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddressSub, context_sub, socketSimAddressPub , context_pub,socketSimAddressSubConfig, context_subConfig);
+
+    // Init interface with SimComHandler
+    interface.setSimComHandler(&simComHandler);
+
     simComHandler.getConfig();
-
 
     // Create DuT Devices
     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
@@ -139,9 +124,72 @@ ofss.close();
 
     interface.addConnector(&restDummyConnector);
 
-    // Create a new CAN Connector config
-    sim_interface::dut_connector::can::CANConnectorConfig canConfig({"Test"});
-    canConfig.interfaceName = "vcan0";
+    //+++++ Start CAN Connector +++++
+
+    // CAN receive operation without a mask
+    sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCan1(
+            "Hazard",
+            false,
+            false
+    );
+
+    // CANFD receive operation mask
+    int mask1Len = 1;
+    __u8 mask1[1] = {0xFF};
+
+    sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCanfd1(
+            "Brake",
+            true,
+            true,
+            mask1Len,
+            mask1
+    );
+
+    // CAN non-cyclic send operation
+    sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCan1(
+            0x789,
+            false,
+            false
+    );
+
+    // CANFD cyclic send operation
+    struct bcm_timeval ival1 = {0};
+    ival1.tv_sec = 1;
+    ival1.tv_usec = 0;
+
+    struct bcm_timeval ival2 = {0};
+    ival2.tv_sec = 3;
+    ival2.tv_usec = 0;
+
+    sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCyclicCanfd1(
+            0x9AB,
+            true,
+            true,
+            true,
+            10,
+            ival1,
+            ival2
+    );
+
+    // CAN Connector Receive Config
+    std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> frameToOperation = {
+            {0x123, recvOpCan1},
+            {0x456, recvOpCanfd1}
+    };
+
+    // CAN Connector Send Config
+    std::map<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> operationToFrame = {
+            {"Speed", sendOpCan1},
+            {"Blink", sendOpCyclicCanfd1}
+    };
+
+    sim_interface::dut_connector::can::CANConnectorConfig canConfig(
+            "vcan0",
+            {"Speed", "Blink", "Hazard", "Brake"},
+            frameToOperation,
+            operationToFrame,
+            {},
+            false);
 
     // Create a new CAN Connector and add it to the interface
     sim_interface::dut_connector::can::CANConnector canConnector(interface.getQueueDuTToSim(), canConfig);
@@ -151,7 +199,9 @@ ofss.close();
     auto canEvent = sim_interface::SimEvent();
     canEvent.operation = "Test";
     canEvent.value = "Value";
-    canConnector.handleEvent(canEvent);
+    canConnector.handleEventSingle(canEvent);
+
+    //+++++ End CAN Connector +++++
 
     std::cout << interface << std::endl;
 
