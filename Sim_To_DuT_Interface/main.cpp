@@ -190,17 +190,17 @@ int main(){
     auto canEvent1 = sim_interface::SimEvent();
     canEvent1.operation = "Speed";
     canEvent1.value     = 30;
-    //canConnector.handleEventSingle(canEvent1);
+    canConnector.handleEventSingle(canEvent1);
 
     auto canEvent2 = sim_interface::SimEvent();
     canEvent2.operation = "Door";
     canEvent2.value     = 40;
-    //canConnector.handleEventSingle(canEvent2);
+    canConnector.handleEventSingle(canEvent2);
 
     auto canEvent3 = sim_interface::SimEvent();
     canEvent3.operation = "Blink";
     canEvent3.value     = 50;
-    //canConnector.handleEventSingle(canEvent3);
+    canConnector.handleEventSingle(canEvent3);
 
     //+++++ End CAN Connector +++++
 

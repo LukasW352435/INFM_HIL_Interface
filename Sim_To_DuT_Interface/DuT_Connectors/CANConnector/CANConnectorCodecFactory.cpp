@@ -53,7 +53,7 @@ namespace sim_interface::dut_connector::can{
         }else if(CODEC_NAME_SUZUKI == codecName){
             return new SuzukiCodec();
         }else{
-            // Unkown CAN codec name
+            // Unknown CAN codec name
             DuTLogger::logMessage("CAN Connector: Unknown CAN codec name <" + codecName + ">. Could not create the CAN codec", LOG_LEVEL::ERROR);
             throw std::invalid_argument("CAN Connector: Unknown CAN codec name <" + codecName + ">. Could not create the CAN codec");
         }
