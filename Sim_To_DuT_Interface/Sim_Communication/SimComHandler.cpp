@@ -57,12 +57,14 @@
 #include "../DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
 #include "../DuT_Connectors/CANConnector/CANConnectorConfig.h"
 #include "../Utility/ConfigSerializer.h"
-namespace pt = boost::property_tree;
-using namespace std;
-using boost::property_tree::ptree;
-zmq::context_t context_subb(1);
+
+
 namespace sim_interface {
 
+    namespace pt = boost::property_tree;
+
+using boost::property_tree::ptree;
+zmq::context_t context_subb(1);
     SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig& config)
             : queueSimToInterface(std::move(queueSimToInterface)), socketSimPub_(context_subb,zmq::socket_type::pub), socketSimSub_(context_subb,zmq::socket_type::sub),socketSimSubConfig_(context_subb,zmq::socket_type::sub) {
 
@@ -80,50 +82,12 @@ namespace sim_interface {
        std::string socketSimAddressReciverConfig = config.socketSimAddressReciverConfig;
       zmq::context_t context_recConfig(1);
 
-        // Create Sockets
-       //   socketSimSub_ = zmq::socket_t(context_sub, zmq::socket_type::sub);
-        //        socketSimPub_ = zmq::socket_t(context_pub, zmq::socket_type::pub);
-        // socketSimSubConfig_ = zmq::socket_t(context_recConfig, zmq::socket_type::sub);
+
 
         // Config Sockets
          socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
          socketSimSubConfig_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
-/*
-        boost::scoped_ptr<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig> config2;
-        boost::scoped_ptr<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig> config1(
-        new sim_interface::dut_connector::rest_dummy::RESTConnectorConfig("http://abc", "http:123", 2,
-                                                                    {"Test", "Angle",
-                                                                     "Acceleration",
-                                                                     "Decel",
-                                                                     "Distance",
-                                                                     "Height",
-                                                                     "LaneID",
-                                                                     "LaneIndex",
-                                                                     "LanePosition",
-                                                                     "Length",
-                                                                     "Position_X-Coordinate",
-                                                                     "Position_Y-Coordinate",
-                                                                     "Position_Z-Coordinate",
-                                                                     "RoadID",
-                                                                     "RouteIndex",
-                                                                     "Signals",
-                                                                     "Speed",
-                                                                     "Width",
-                                                                     "current",
-                                                                     "origin"},
-                                                                     {{"Test", 1000}},
-                                                                     true));
-*/
-   //     ConfigSerializer::serialize("vergleich.xml", "conn", config1);
-   //    std:stringstream testStream;
-   //    std::ifstream fs("test.xml");
-   //    testStream << fs.rdbuf();
-   //    fs.close();
-   //   // cout << testStream.str()<< endl;
-   //    std::istringstream iss(testStream.str());
-   //    //boost::archive::text_iarchive xmlInputArchive(iss);
-   //     ConfigSerializer::deserialize(iss, "conn", config2);
-   //    ConfigSerializer::serialize("testErgebniss.xml", "conn", config2);
+
 
 
         // Connect to publisher
@@ -146,7 +110,7 @@ namespace sim_interface {
 
     }
  //   void SimComHandler::getConfig(sim_interface::SimToDuTInterface &interface)
-    void SimComHandler::getConfig()
+    void SimComHandler::getConfig(std::vector<sim_interface::dut_connector::ConnectorConfig> *connectorConfig)
     {
         zmq::message_t reply;
         try {
@@ -161,7 +125,7 @@ namespace sim_interface {
 
 
         const char *buf = static_cast<const char*>(reply.data());
-         std::cout << "CHAR [" << buf << "]" << std::endl;
+    //     std::cout << "CHAR [" << buf << "]" << std::endl;
         pt::ptree tree;
         //  pt::basic_ptree
 
@@ -176,7 +140,7 @@ namespace sim_interface {
         std::string connectorTypeS;
         for (pt::ptree::value_type &v: tree.get_child("connectors")) {
               connectorTypeS =v.second.get<std::string>("<xmlattr>.classType");
-              cout << "HALLOOOOOO" <<connectorTypeS << endl;
+              std::cout << "HALLOOOOOO" <<connectorTypeS <<  std::endl;
 
               switch (resolveConnectorTypeForSwitch(connectorTypeS)) {
                   case RESTDummyConnector: {
@@ -210,13 +174,14 @@ namespace sim_interface {
                         boost::scoped_ptr<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig> restConnectorConfig;
 
                       ConfigSerializer::deserialize(xmlStringStream, "conn", restConnectorConfig);
-                      ConfigSerializer::serialize("Hallo.xml", "conn", restConnectorConfig);
+                  //    ConfigSerializer::serialize("Hallo.xml", "conn", restConnectorConfig);
 
+                        connectorConfig->push_back(*restConnectorConfig.get());
 
                       break;
                   }
                   case CANConnector: {
-                       cout << "DOOF" <<connectorTypeS << endl;
+                        std::cout << "DOOF" <<connectorTypeS <<  std::endl;
                         auto optionszzz = pt::xml_writer_make_settings<std::string>(' ', 4);
 
                         std::stringstream test;
@@ -245,8 +210,8 @@ namespace sim_interface {
                         boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConnectorConfig;
 
                       ConfigSerializer::deserialize(xmlStringStream, "conn", canConnectorConfig);
-                      ConfigSerializer::serialize("HalloCanVonSim.xml", "conn", canConnectorConfig);
-
+               //       ConfigSerializer::serialize("HalloCanVonSim.xml", "conn", canConnectorConfig);
+                      connectorConfig->push_back(*canConnectorConfig.get());
                       break;
                   }
                   default: {
@@ -325,7 +290,7 @@ namespace sim_interface {
                 auto valueAsAny =   element.second;
                 std::stringstream stringStreamValue ;
                 stringStreamValue <<  valueAsAny;
-
+                //TODO "Simulation Traci" würde man auch aus dem Archive bekommen vllt anpassen
                 SimEvent event(keyAsString, stringStreamValue.str(), "Simulation Traci");
                 sendEventToInterface(event);
             }
@@ -339,6 +304,7 @@ namespace sim_interface {
                 stringStreamValue <<  valueAsAny;
                 // std::cout << "KEY: " << keyAsString << std::endl;
                 //std::cout << "value: " << stringStreamValue.str() << std::endl;
+                //TODO "Simulation Traci" würde man auch aus dem Archive bekommen vllt anpassen
                 SimEvent event(keyAsString, stringStreamValue.str(), "Simulation Dynamics");
                 sendEventToInterface(event);
             }

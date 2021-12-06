@@ -61,13 +61,13 @@ namespace sim_interface::dut_connector {
 
 
 
-            ::new (configPtr) ConnectorConfig (     _operations, _periodicOperations,  _periodicTimerEnabled );
+            ::new (configPtr) ConnectorConfig (     _operations,"ConnectorConfig", _periodicOperations,  _periodicTimerEnabled );
 
         }
 
     public:
-        explicit ConnectorConfig(std::set<std::string> operations, std::map<std::string, int> periodicOperations = {}, bool periodicTimerEnabled = false)
-        : operations(std::move(operations)), periodicOperations(std::move(periodicOperations)), periodicTimerEnabled(periodicTimerEnabled) {
+        explicit ConnectorConfig(std::set<std::string> operations, std::string connectorType, std::map<std::string, int> periodicOperations = {}, bool periodicTimerEnabled = false)
+        : operations(std::move(operations)), connectorType(connectorType), periodicOperations(std::move(periodicOperations)), periodicTimerEnabled(periodicTimerEnabled) {
 
             assert(!this->operations.empty()); // Set of operations cannot be empty
             for(const auto& periodicOperation : this->periodicOperations) {
@@ -85,6 +85,8 @@ namespace sim_interface::dut_connector {
 
         /** Enable periodic timer on Connector level */
         bool periodicTimerEnabled = false;
+
+        std::string connectorType;
     };
 
 }

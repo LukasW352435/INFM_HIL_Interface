@@ -43,7 +43,8 @@
 #include <zmq.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/variant.hpp>
-
+#include <vector>
+#include "../DuT_Connectors/ConnectorConfig.h"
 namespace sim_interface {
     /**
      * Handler between interface and simulation.
@@ -74,9 +75,7 @@ namespace sim_interface {
          */
         void run();
 
-        //void getConfig(const SimToDuTInterface::SimToDuTInterface &interface);
-        // void getConfig(sim_interface::SimToDuTInterface test);
-        void getConfig();
+        void getConfig(  std::vector<sim_interface::dut_connector::ConnectorConfig> *connectorConfig);
         enum connectorType {
             RESTDummyConnector,
             CANConnector,

@@ -78,9 +78,8 @@ namespace sim_interface::dut_connector::rest_dummy {
          RESTConnectorConfig(std::string baseUrlDuT, std::string baseCallbackUrl, int port,
                                      std::set<std::string> operations, std::map<std::string, int> periodicOperations = {},
                                      bool periodicTimerEnabled = false)
-                : ConnectorConfig(std::move(operations), std::move(periodicOperations), periodicTimerEnabled),
+                : ConnectorConfig(std::move(operations),"RESTConnectorConfig", std::move(periodicOperations), periodicTimerEnabled),
                   baseUrlDuT(std::move(baseUrlDuT)), baseCallbackUrl(std::move(baseCallbackUrl)), port(port) {
-            std::cout << "ES ist so dunnn" << std::endl;
            assert(!this->baseUrlDuT.empty()); // url cannot be empty
            assert(!this->baseCallbackUrl.empty()); // url cannot be empty
            assert(this->port > 0); // ports are only valid > 0

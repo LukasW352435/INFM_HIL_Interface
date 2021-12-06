@@ -42,7 +42,7 @@
 #include <iostream>
 #include "Utility/ConfigSerializer.h"
 #include <boost/archive/xml_oarchive.hpp>
-
+#include <typeinfo>
 int main() {
     // System config
     sim_interface::SystemConfig systemConfig;
@@ -72,9 +72,14 @@ int main() {
 
     // Init interface with SimComHandler
     interface.setSimComHandler(&simComHandler);
+    std::vector<sim_interface::dut_connector::ConnectorConfig> connectorConfig;
+    simComHandler.getConfig(&connectorConfig);
+    std::cout << "TEST!!!: " << connectorConfig.size() << std::endl;
+    for(const auto &c: connectorConfig) {
+     // std::cout << "Namen: !!" << typeid(c).name() <<  c.connectorType << std::endl;
 
-   simComHandler.getConfig();
-    std::cout << "okey lets gooo" << std::endl;
+    }
+
     // Create DuT Devices
     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
                                                                          "http://172.17.0.1",

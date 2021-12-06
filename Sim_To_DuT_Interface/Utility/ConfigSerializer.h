@@ -69,25 +69,7 @@ namespace sim_interface {
                 }
             }
 
-/*
-        template<typename T>
-        static void deserialize(const std::string &file, const std::string &objName, boost::scoped_ptr<T> &obj) {
-            std::ifstream ifs(file);
-            if (ifs.good()) {
-                try {
-                    boost::archive::xml_iarchive ia(ifs, boost::archive::no_header);
-                   // ia & boost::serialization::make_nvp(objName.c_str(), obj);
-                    ia >> BOOST_SERIALIZATION_NVP(obj);
-                } catch (boost::archive::archive_exception const &e) {
-                    DuTLogger::logMessage(std::string("ConfigSerializer: Exception on deserialize: ", e.what()),
-                                          LOG_LEVEL::ERROR);
-                }
-                ifs.close();
-            } else {
-                DuTLogger::logMessage("ConfigSerializer: input filestream not good", LOG_LEVEL::ERROR);
-            }
-        }
-  */
+
 
             template<typename T>
             static void serialize(const std::string &file, const std::string &objName, boost::scoped_ptr<T> &obj) {
@@ -170,7 +152,7 @@ namespace boost::serialization {
         ar >> boost::serialization::make_nvp("periodicOperations", _periodicOperations);
         ar >> boost::serialization::make_nvp("periodicTimerEnabled", _periodicTimerEnabled);
 
-        ::new(instance)sim_interface::dut_connector::ConnectorConfig(_operations, _periodicOperations,
+        ::new(instance)sim_interface::dut_connector::ConnectorConfig(_operations,"ConnectorConfig" ,_periodicOperations,
                                                                      _periodicTimerEnabled);
         }
 }
