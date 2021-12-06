@@ -33,35 +33,36 @@
 #include "DuT_Connectors/CANConnector/CANConnector.h"
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
 #include "DuTLogger/DuTLogger.h"
+#include "SystemConfig.h"
 
 // System includes
 #include <thread>
 #include <iostream>
 
 
-int main(){
+int main() {
+    // System config
+    sim_interface::SystemConfig systemConfig;
+    std::string configPath = std::filesystem::canonical("/proc/self/exe").parent_path().string();
+    sim_interface::SystemConfig::loadFromFile(configPath + "/SystemConfig.xml", systemConfig, true);
 
-    // Initialize the logger
-    DuTLogger::initializeLogger(LoggerConfig());
-    DuTLogger::changeLogLevel(LOG_TYPE::CONSOLE_LOG, LOG_LEVEL::DEBUG);
+    // initialize the logger
+    DuTLogger::initializeLogger(systemConfig.loggerConfig);
+
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
 
-    // Create the interface
+    // Create interface
     sim_interface::SimToDuTInterface interface;
 
-    // Create the simComHandler
-    std::string socketSimAddressSub = "tcp://localhost:7777";
-    zmq::context_t context_sub(1);
-    std::string socketSimAddressPub = "tcp://*:7778";
-    zmq::context_t context_pub(1);
-    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddressSub, context_sub,
-                                               socketSimAddressPub, context_pub);
+    // Create simComHandler
+    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), systemConfig);
 
+    // Init interface with SimComHandler
     interface.setSimComHandler(&simComHandler);
 
     // Create DuT Devices
 
-    /*
+    
     // Create the REST connector
     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
                                                                          "http://172.17.0.1",
@@ -116,7 +117,7 @@ int main(){
     );
 
     // CANFD receive operation mask
-    int mask1Len  = 1;
+    int mask1Len = 1;
     __u8 mask1[1] = {0xFF};
 
     sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCanfd1(
@@ -143,11 +144,11 @@ int main(){
 
     // CANFD cyclic send operation
     struct bcm_timeval ival1 = {0};
-    ival1.tv_sec  = 1;
+    ival1.tv_sec = 1;
     ival1.tv_usec = 0;
 
     struct bcm_timeval ival2 = {0};
-    ival2.tv_sec  = 3;
+    ival2.tv_sec = 3;
     ival2.tv_usec = 0;
 
     sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCyclicCanfd1(
