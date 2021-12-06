@@ -41,6 +41,7 @@
 
 
 int main() {
+
     // System config
     sim_interface::SystemConfig systemConfig;
     std::string configPath = std::filesystem::canonical("/proc/self/exe").parent_path().string();
@@ -48,7 +49,6 @@ int main() {
 
     // initialize the logger
     DuTLogger::initializeLogger(systemConfig.loggerConfig);
-
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
 
     // Create interface
@@ -104,8 +104,7 @@ int main() {
 
     // Add the REST connector to the interface
     interface.addConnector(&restDummyConnector);
-    */
-
+    
 
     //+++++ Start CAN Connector +++++
 
