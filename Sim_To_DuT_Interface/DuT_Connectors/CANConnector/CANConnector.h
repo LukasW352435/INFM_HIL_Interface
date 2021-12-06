@@ -17,7 +17,9 @@
 // Project includes
 #include "../DuTConnector.h"
 #include "InterfaceIndexIO.h"
+#include "CANConnectorCodec.h"
 #include "CANConnectorConfig.h"
+#include "CANConnectorCodecFactory.h"
 #include "../../DuTLogger/DuTLogger.h"
 
 // System includes
@@ -166,6 +168,15 @@ namespace sim_interface::dut_connector::can{
         void handleReceivedData(const bcm_msg_head* head, void* frames, uint32_t nframes, bool isCANFD);
 
         /**
+        * Handles received RX_CHANGED BCM messages.
+        *
+        * @param head    - The received bcm msg head.
+        * @param frame   - The received CAN or CANFD frame.
+        * @param isCANFD - Flag for CANFD frames.
+        */
+        void handleRxChanged(const bcm_msg_head* head, void* frames, bool isCANFD);
+
+        /**
         * Create a non cyclic transmission task for a single CAN/CANFD frame.
         *
         * @param frame   - The frame that should be send.
@@ -288,12 +299,22 @@ namespace sim_interface::dut_connector::can{
         */
         void rxDelete(canid_t canID, bool isCANFD);
 
+        /**
+         * Converts a CAN ID to a hex string.
+         *
+         * @param canID - The CAN ID that should be converted.
+         * @return The CAN ID as a hex string.
+         */
+        static std::string convertCanIdToHex(canid_t canID);
+
         // Data members
-        boost::shared_ptr<boost::asio::io_context> ioContext;                           /**< The io_context used by the BCM socket.           */
-        boost::asio::generic::datagram_protocol::socket bcmSocket;                      /**< The BCM socket that is used to send and receive. */
-        std::array<std::uint8_t, sizeof(struct bcmMsgMultipleFramesCanFD)> rxBuffer{0}; /**< Buffer that stores the received data.            */
-        std::thread ioContextThread;                                                    /**< Thread for the io_context loop.                  */
-        CANConnectorConfig config;
+        boost::shared_ptr<boost::asio::io_context> ioContext;                           /**< The io_context used by the BCM socket.                 */
+        boost::asio::generic::datagram_protocol::socket bcmSocket;                      /**< The BCM socket that is used to send and receive.       */
+        std::array<std::uint8_t, sizeof(struct bcmMsgMultipleFramesCanFD)> rxBuffer{0}; /**< Buffer that stores the received data.                  */
+        std::thread ioContextThread;                                                    /**< Thread for the io_context loop.                        */
+        CANConnectorConfig config;                                                      /**< The config of the CAN connector.                       */
+        CANConnectorCodec *codec;                                                       /**< The codec that is used for parsing.                    */
+        std::map<std::string, bool> isSetup;                                            /**< Map that keeps track which cyclic operation are setup. */
 
     };
 

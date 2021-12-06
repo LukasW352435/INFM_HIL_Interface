@@ -42,6 +42,7 @@ namespace sim_interface::dut_connector::can{
          *
          * @param interfaceName        - The name of the interface that should be used by the connector.
          * @param operations           - The operations supported by the CAN Connector.
+         * @param codecName            - The name of the codec that should be used by the connector.
          * @param frameToOperation     - The configurations for the receive operations.
          * @param operationToFrame     - The configurations for the send operations.
          * @param periodicOperations   - The periodic operations supported by the connector through the interface.
@@ -49,6 +50,7 @@ namespace sim_interface::dut_connector::can{
          *                               Since the BCM socket supports cyclic operations this should always be false
          */
         explicit CANConnectorConfig(std::string interfaceName,
+                                    std::string codecName,
                                     std::set<std::string> operations,
                                     std::map<canid_t, CANConnectorReceiveOperation> frameToOperation = {},
                                     std::map<std::string, CANConnectorSendOperation> operationToFrame = {},
@@ -57,6 +59,7 @@ namespace sim_interface::dut_connector::can{
 
         // Data member
         std::string interfaceName;                                         /**< The name of the interface that should be used.*/
+        std::string codecName;                                             /**< The name of the codec that should be used.    */
         std::map<canid_t, CANConnectorReceiveOperation>  frameToOperation; /**< Used for mapping a CAN frame to an operation. */
         std::map<std::string, CANConnectorSendOperation> operationToFrame; /**< Used for mapping an operation to a CAN frame. */
 
