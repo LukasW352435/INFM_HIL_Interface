@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['value_251',['value',['../classsim__interface_1_1SimEvent.html#aded0ac68333023bb6075a589791262d9',1,'sim_interface::SimEvent']]],
-  ['version_252',['version',['../classsim__interface_1_1dut__connector_1_1ConnectorInfo.html#a0dd3326791c3ba0f84376af7ba304365',1,'sim_interface::dut_connector::ConnectorInfo']]]
+  ['socketsimaddresspub_250',['socketSimAddressPub',['../classsim__interface_1_1SystemConfig.html#a6206357fe92d017661c4bff958d4834d',1,'sim_interface::SystemConfig']]],
+  ['socketsimaddresssub_251',['socketSimAddressSub',['../classsim__interface_1_1SystemConfig.html#a89afdecff21584ec38fe19a811301561',1,'sim_interface::SystemConfig']]]
 ];

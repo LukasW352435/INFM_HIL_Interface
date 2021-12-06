@@ -1,5 +1,6 @@
 <map id="sim_interface::SystemConfig" name="sim_interface::SystemConfig">
-<area shape="rect" id="node1" title=" " alt="" coords="5,200,215,227"/>
-<area shape="rect" id="node2" title="STL class." alt="" coords="67,96,153,123"/>
-<area shape="rect" id="node3" title="STL class." alt="" coords="41,5,179,47"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,292,215,319"/>
+<area shape="rect" id="node2" href="$classLoggerConfig.html" title=" " alt="" coords="261,201,367,228"/>
+<area shape="rect" id="node3" title="STL class." alt="" coords="67,96,153,123"/>
+<area shape="rect" id="node4" title="STL class." alt="" coords="41,5,179,47"/>
 </map>

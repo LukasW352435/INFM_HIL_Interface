@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['periodicoperations_246',['periodicOperations',['../classsim__interface_1_1dut__connector_1_1ConnectorConfig.html#a6ab4aee84ecd1a0f8fb22e4097e58860',1,'sim_interface::dut_connector::ConnectorConfig']]],
-  ['periodictimerenabled_247',['periodicTimerEnabled',['../classsim__interface_1_1dut__connector_1_1ConnectorConfig.html#ab22cfa188a247771db532ce056f492da',1,'sim_interface::dut_connector::ConnectorConfig']]],
-  ['port_248',['port',['../classsim__interface_1_1dut__connector_1_1rest__dummy_1_1RESTConnectorConfig.html#a4a9f74086886c833eb3623c91749eb84',1,'sim_interface::dut_connector::rest_dummy::RESTConnectorConfig']]]
+  ['operation_243',['operation',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorReceiveOperation.html#ae6aa900429cbe41278e9f4db38e99d99',1,'sim_interface::dut_connector::can::CANConnectorReceiveOperation::operation()'],['../classsim__interface_1_1SimEvent.html#ae641ea4d5c20ef735069e1d247c2266c',1,'sim_interface::SimEvent::operation()']]],
+  ['operations_244',['operations',['../classsim__interface_1_1dut__connector_1_1ConnectorConfig.html#a77e14f58da623a57d4290d6472bc7462',1,'sim_interface::dut_connector::ConnectorConfig']]],
+  ['operationtoframe_245',['operationToFrame',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorConfig.html#a6ca9236d5ae3ceb575a5008b88a3e854',1,'sim_interface::dut_connector::can::CANConnectorConfig']]],
+  ['origin_246',['origin',['../classsim__interface_1_1SimEvent.html#af15292b622e70bdcab99cdd8fde1f88d',1,'sim_interface::SimEvent']]]
 ];
