@@ -125,7 +125,7 @@ zmq::context_t context_subb(1);
 
 
         const char *buf = static_cast<const char*>(reply.data());
-    //     std::cout << "CHAR [" << buf << "]" << std::endl;
+         std::cout << "CHAR [" << buf << "]" << std::endl;
         pt::ptree tree;
         //  pt::basic_ptree
 
@@ -140,7 +140,7 @@ zmq::context_t context_subb(1);
         std::string connectorTypeS;
         for (pt::ptree::value_type &v: tree.get_child("connectors")) {
               connectorTypeS =v.second.get<std::string>("<xmlattr>.classType");
-              std::cout << "HALLOOOOOO" <<connectorTypeS <<  std::endl;
+
 
               switch (resolveConnectorTypeForSwitch(connectorTypeS)) {
                   case RESTDummyConnector: {
@@ -181,7 +181,7 @@ zmq::context_t context_subb(1);
                       break;
                   }
                   case CANConnector: {
-                        std::cout << "DOOF" <<connectorTypeS <<  std::endl;
+
                         auto optionszzz = pt::xml_writer_make_settings<std::string>(' ', 4);
 
                         std::stringstream test;

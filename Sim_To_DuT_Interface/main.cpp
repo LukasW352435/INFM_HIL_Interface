@@ -112,7 +112,7 @@ int main() {
                                                                                     config);
 
     // Test the REST connector
-    /*
+/*
     auto event = sim_interface::SimEvent();
     event.operation = "Test";
     event.value = "Test";
@@ -121,6 +121,7 @@ int main() {
     event.operation = "Indicator Right";
     event.value = "xyz";
     restDummyConnector.handleEvent(event);
+*/
 
     // Add the REST connector to the interface
     interface.addConnector(&restDummyConnector);

@@ -74,6 +74,7 @@ namespace sim_interface::dut_connector::can{
         void serialize(Archive & archive, const unsigned int version){
            // std::cout << "WTFFFFF" << std::endl;
             archive & BOOST_SERIALIZATION_NVP(interfaceName);
+            archive & BOOST_SERIALIZATION_NVP(codecName);
             archive & BOOST_SERIALIZATION_NVP(operations);
             archive & BOOST_SERIALIZATION_NVP(frameToOperation);
             archive & BOOST_SERIALIZATION_NVP(operationToFrame);
@@ -89,6 +90,7 @@ namespace sim_interface::dut_connector::can{
         template<class Archive>
         inline void load_construct_data(Archive & archive, CANConnectorConfig * configPtr, const unsigned int version)
         {   std::string _interfaceName;
+           std::string _codecName;
              std::set<std::string> _operations;
              std::map<canid_t, CANConnectorReceiveOperation>  _frameToOperation;
               std::map<std::string, CANConnectorSendOperation> _operationToFrame;
@@ -98,6 +100,7 @@ namespace sim_interface::dut_connector::can{
 
 
             archive >> BOOST_SERIALIZATION_NVP(_interfaceName);
+             archive >> BOOST_SERIALIZATION_NVP(_codecName);
             archive >>BOOST_SERIALIZATION_NVP (_operations);
             archive >> BOOST_SERIALIZATION_NVP(_frameToOperation);
             archive >> BOOST_SERIALIZATION_NVP(_operationToFrame);
@@ -106,7 +109,7 @@ namespace sim_interface::dut_connector::can{
 
 
 
-            ::new (configPtr) CANConnectorConfig ( _interfaceName, _operations,  _frameToOperation,
+            ::new (configPtr) CANConnectorConfig ( _interfaceName, _codecName,_operations,  _frameToOperation,
                     _operationToFrame, _periodicOperations,  _periodicTimerEnabled );
 
         }
