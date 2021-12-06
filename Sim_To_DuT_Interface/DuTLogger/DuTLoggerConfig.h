@@ -3,6 +3,7 @@
  * Every value will be explained in the documentation of this file.
  *
  * @author Marco Keul
+ * @author Lukas Wagenlehner
  * @version 1.0
  */
 
@@ -11,11 +12,13 @@
 
 #include <string>
 #include <cassert>
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/nvp.hpp>
 
 /**
  * Defines the level of logging
  */
-enum LOG_LEVEL{
+enum LOG_LEVEL {
     NONE, DEBUG, INFO, WARNING, ERROR, CRITICAL
 };
 
@@ -29,7 +32,7 @@ public:
     /**
      * Creates the essential configuration for the logger with default settings.
      */
-    LoggerConfig() {}
+    LoggerConfig() = default;
 
     /**
      * Create the essential configuration for the logger.
@@ -48,9 +51,9 @@ public:
      */
     LoggerConfig(bool enableDebugMode, std::string pathConsoleLog, std::string pathDataLog, int fileBackupCount,
                  LOG_LEVEL fileLogLevel, LOG_LEVEL consoleLogLevel)
-                 : enableDebugMode(std::move(enableDebugMode)), pathConsoleLog(std::move(pathConsoleLog)),
-                 pathDataLog(std::move(pathDataLog)), fileBackupCount(std::move(fileBackupCount)),
-                 fileLogLevel(std::move(fileLogLevel)), consoleLogLevel(std::move(consoleLogLevel)) {
+            : enableDebugMode(std::move(enableDebugMode)), pathConsoleLog(std::move(pathConsoleLog)),
+              pathDataLog(std::move(pathDataLog)), fileBackupCount(std::move(fileBackupCount)),
+              fileLogLevel(std::move(fileLogLevel)), consoleLogLevel(std::move(consoleLogLevel)) {
         assert (this->fileBackupCount > 0);
         assert (!this->pathConsoleLog.empty());
         assert (!this->pathDataLog.empty());
@@ -62,7 +65,18 @@ public:
     int fileBackupCount = 10;
     LOG_LEVEL fileLogLevel = LOG_LEVEL::INFO;
     LOG_LEVEL consoleLogLevel = LOG_LEVEL::INFO;
-};
+private:
+    friend class boost::serialization::access;
 
+    template<class Archive>
+    void serialize(Archive &ar, const unsigned int version) {
+        ar & BOOST_SERIALIZATION_NVP(enableDebugMode);
+        ar & BOOST_SERIALIZATION_NVP(pathConsoleLog);
+        ar & BOOST_SERIALIZATION_NVP(pathDataLog);
+        ar & BOOST_SERIALIZATION_NVP(fileBackupCount);
+        ar & BOOST_SERIALIZATION_NVP(fileLogLevel);
+        ar & BOOST_SERIALIZATION_NVP(consoleLogLevel);
+    }
+};
 
 #endif //SIM_TO_DUT_INTERFACE_DUTLOGGERCONFIG_H

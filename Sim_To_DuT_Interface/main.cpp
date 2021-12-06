@@ -41,15 +41,16 @@
 
 
 int main() {
-    // initialize the logger
-    DuTLogger::initializeLogger(LoggerConfig());
-
-    DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
-
     // System config
     sim_interface::SystemConfig systemConfig;
     std::string configPath = std::filesystem::canonical("/proc/self/exe").parent_path().string();
-    sim_interface::SystemConfig::loadFromFile(configPath + "/SystemConfig.xml",systemConfig, true);
+    sim_interface::SystemConfig::loadFromFile(configPath + "/SystemConfig.xml", systemConfig, true);
+
+    // initialize the logger
+    DuTLogger::initializeLogger(systemConfig.loggerConfig);
+
+    DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
+
 
     // Create interface
     sim_interface::SimToDuTInterface interface;
@@ -111,7 +112,7 @@ int main() {
     );
 
     // CANFD receive operation mask
-    int mask1Len  = 1;
+    int mask1Len = 1;
     __u8 mask1[1] = {0xFF};
 
     sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCanfd1(
@@ -131,11 +132,11 @@ int main() {
 
     // CANFD cyclic send operation
     struct bcm_timeval ival1 = {0};
-    ival1.tv_sec  = 1;
+    ival1.tv_sec = 1;
     ival1.tv_usec = 0;
 
     struct bcm_timeval ival2 = {0};
-    ival2.tv_sec  = 3;
+    ival2.tv_sec = 3;
     ival2.tv_usec = 0;
 
     sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCyclicCanfd1(
