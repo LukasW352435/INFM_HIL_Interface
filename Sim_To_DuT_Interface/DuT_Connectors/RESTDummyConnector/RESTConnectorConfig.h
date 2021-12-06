@@ -39,7 +39,6 @@ namespace sim_interface::dut_connector::rest_dummy {
         friend class boost::serialization::access;
         template<class Archive>
         void serialize(Archive & archive, const unsigned int version){
-            std::cout << "WTFFFFF" << std::endl;
             archive & BOOST_SERIALIZATION_NVP(baseUrlDuT);
             archive & BOOST_SERIALIZATION_NVP(baseCallbackUrl);
             archive & BOOST_SERIALIZATION_NVP(port);

@@ -24,7 +24,8 @@
 #include <vector>
 #include <string>
 #include <cassert>
-
+#include <boost/serialization/set.hpp>
+#include <boost/serialization/map.hpp>
 
 /*******************************************************************************
  * CLASS DECLARATIONS
@@ -59,10 +60,54 @@ namespace sim_interface::dut_connector::can{
         std::map<canid_t, CANConnectorReceiveOperation>  frameToOperation; /**< Used for mapping a CAN frame to an operation. */
         std::map<std::string, CANConnectorSendOperation> operationToFrame; /**< Used for mapping an operation to a CAN frame. */
 
+        CANConnectorConfig(): ConnectorConfig(){};
     private:
         // Function members
 
         // Data member
+
+        friend class boost::serialization::access;
+        template<class Archive>
+        void serialize(Archive & archive, const unsigned int version){
+           // std::cout << "WTFFFFF" << std::endl;
+            archive & BOOST_SERIALIZATION_NVP(interfaceName);
+            archive & BOOST_SERIALIZATION_NVP(operations);
+            archive & BOOST_SERIALIZATION_NVP(frameToOperation);
+            archive & BOOST_SERIALIZATION_NVP(operationToFrame);
+            archive &  BOOST_SERIALIZATION_NVP(periodicOperations);
+            archive & BOOST_SERIALIZATION_NVP(periodicTimerEnabled);
+
+
+
+
+
+
+        }
+        template<class Archive>
+        inline void load_construct_data(Archive & archive, CANConnectorConfig * configPtr, const unsigned int version)
+        {   std::string _interfaceName;
+             std::set<std::string> _operations;
+             std::map<canid_t, CANConnectorReceiveOperation>  _frameToOperation;
+              std::map<std::string, CANConnectorSendOperation> _operationToFrame;
+               std::map<std::string, int> _periodicOperations;
+               bool _periodicTimerEnabled;
+
+
+
+            archive >> BOOST_SERIALIZATION_NVP(_interfaceName);
+            archive >>BOOST_SERIALIZATION_NVP (_operations);
+            archive >> BOOST_SERIALIZATION_NVP(_frameToOperation);
+            archive >> BOOST_SERIALIZATION_NVP(_operationToFrame);
+            archive >> BOOST_SERIALIZATION_NVP(_periodicOperations);
+            archive >>BOOST_SERIALIZATION_NVP( _periodicTimerEnabled);
+
+
+
+            ::new (configPtr) CANConnectorConfig ( _interfaceName, _operations,  _frameToOperation,
+                    _operationToFrame, _periodicOperations,  _periodicTimerEnabled );
+
+        }
+
 
     };
 

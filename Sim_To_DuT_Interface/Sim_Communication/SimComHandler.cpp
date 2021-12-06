@@ -55,14 +55,17 @@
 #include <boost/foreach.hpp>
 
 #include "../DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
+#include "../DuT_Connectors/CANConnector/CANConnectorConfig.h"
 #include "../Utility/ConfigSerializer.h"
 namespace pt = boost::property_tree;
 using namespace std;
 using boost::property_tree::ptree;
+zmq::context_t context_subb(1);
 namespace sim_interface {
 
     SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig& config)
-            : queueSimToInterface(std::move(queueSimToInterface)) {
+            : queueSimToInterface(std::move(queueSimToInterface)), socketSimPub_(context_subb,zmq::socket_type::pub), socketSimSub_(context_subb,zmq::socket_type::sub),socketSimSubConfig_(context_subb,zmq::socket_type::sub) {
+
 
         // zmq Subscriber
         std::string socketSimAddressSub = config.socketSimAddressSub;
@@ -78,14 +81,14 @@ namespace sim_interface {
       zmq::context_t context_recConfig(1);
 
         // Create Sockets
-        socketSimSub_ = zmq::socket_t(context_sub, zmq::socket_type::sub);
-        socketSimPub_ = zmq::socket_t(context_pub, zmq::socket_type::pub);
-       socketSimSubConfig_ = zmq::socket_t(context_recConfig, zmq::socket_type::sub);
+       //   socketSimSub_ = zmq::socket_t(context_sub, zmq::socket_type::sub);
+        //        socketSimPub_ = zmq::socket_t(context_pub, zmq::socket_type::pub);
+        // socketSimSubConfig_ = zmq::socket_t(context_recConfig, zmq::socket_type::sub);
 
         // Config Sockets
-        socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
-        socketSimSubConfig_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
-
+         socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
+         socketSimSubConfig_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
+/*
         boost::scoped_ptr<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig> config2;
         boost::scoped_ptr<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig> config1(
         new sim_interface::dut_connector::rest_dummy::RESTConnectorConfig("http://abc", "http:123", 2,
@@ -110,7 +113,7 @@ namespace sim_interface {
                                                                      "origin"},
                                                                      {{"Test", 1000}},
                                                                      true));
-
+*/
    //     ConfigSerializer::serialize("vergleich.xml", "conn", config1);
    //    std:stringstream testStream;
    //    std::ifstream fs("test.xml");
@@ -121,15 +124,17 @@ namespace sim_interface {
    //    //boost::archive::text_iarchive xmlInputArchive(iss);
    //     ConfigSerializer::deserialize(iss, "conn", config2);
    //    ConfigSerializer::serialize("testErgebniss.xml", "conn", config2);
-        // Connect to publisher
-        std::cout << "Connecting to " << socketSimAddressSub << " . . ." << std::endl;
-        std::cout << "Connecting to " << socketSimAddressReciverConfig << " . . ." << std::endl;
-        //  socket_sub.connect(socketSimAdress);
 
-        // Open the connection
-        std::cout << "Binding to " << socketSimAddressPub << " . . ." << std::endl;
-        socketSimPub_.bind(socketSimAddressPub);
-        socketSimSub_.connect(socketSimAddressSub);
+
+        // Connect to publisher
+       std::cout << "Connecting to " << socketSimAddressSub << " . . ." << std::endl;
+       std::cout << "Connecting to " << socketSimAddressReciverConfig << " . . ." << std::endl;
+       //  socket_sub.connect(socketSimAdress);
+
+       // Open the connection
+       std::cout << "Binding to " << socketSimAddressPub << " . . ." << std::endl;
+       socketSimPub_.bind(socketSimAddressPub);
+       socketSimSub_.connect(socketSimAddressSub);
        socketSimSubConfig_.connect(socketSimAddressReciverConfig);
 
 
@@ -156,7 +161,7 @@ namespace sim_interface {
 
 
         const char *buf = static_cast<const char*>(reply.data());
-      //   std::cout << "CHAR [" << buf << "]" << std::endl;
+         std::cout << "CHAR [" << buf << "]" << std::endl;
         pt::ptree tree;
         //  pt::basic_ptree
 
@@ -211,7 +216,36 @@ namespace sim_interface {
                       break;
                   }
                   case CANConnector: {
+                       cout << "DOOF" <<connectorTypeS << endl;
+                        auto optionszzz = pt::xml_writer_make_settings<std::string>(' ', 4);
 
+                        std::stringstream test;
+                        boost::property_tree::xml_parser::write_xml(test,v.second,optionszzz);
+
+
+                        std::stringstream s ;
+                        pt::ptree testBaum;
+
+                      //XML String in richtige Form bringen
+                        testBaum.add_child("scoped_ptr",v.second);
+                        boost::property_tree::xml_parser::write_xml(s,testBaum,optionszzz);
+                        std::string s1 = R"(<?xml version="1.0" encoding="utf-8"?>)";
+                        std::string s3 = s.str();
+                        s3.replace(s.str().find(s1),s1.length(),"");
+                        std::string s4 = R"(classType=")"  +connectorTypeS + R"(")";
+                        s3.replace(s3.find(s4), s4.length(),"");
+
+
+
+
+                        std::istringstream xmlStringStream(s3);
+
+
+
+                        boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConnectorConfig;
+
+                      ConfigSerializer::deserialize(xmlStringStream, "conn", canConnectorConfig);
+                      ConfigSerializer::serialize("HalloCanVonSim.xml", "conn", canConnectorConfig);
 
                       break;
                   }

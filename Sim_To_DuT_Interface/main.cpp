@@ -40,7 +40,7 @@
 // System includes
 #include <thread>
 #include <iostream>
-
+#include "Utility/ConfigSerializer.h"
 #include <boost/archive/xml_oarchive.hpp>
 
 int main() {
@@ -73,7 +73,8 @@ int main() {
     // Init interface with SimComHandler
     interface.setSimComHandler(&simComHandler);
 
-    simComHandler.getConfig();
+   simComHandler.getConfig();
+    std::cout << "okey lets gooo" << std::endl;
     // Create DuT Devices
     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
                                                                          "http://172.17.0.1",
@@ -189,6 +190,14 @@ int main() {
             operationToFrame,
             {},
             false);
+   //  boost::scoped_ptr<  sim_interface::dut_connector::can::CANConnectorConfig> test(
+   //          new   sim_interface::dut_connector::can::CANConnectorConfig(   "vcan0",
+   //         {"Speed", "Blink", "Hazard", "Brake"},
+   //         frameToOperation,
+   //         operationToFrame,
+   //         {},
+   //         false) );
+  //  sim_interface::ConfigSerializer::serialize("can.xml","canConfig",test);
 
     // Create a new CAN Connector and add it to the interface
     sim_interface::dut_connector::can::CANConnector canConnector(interface.getQueueDuTToSim(), canConfig);

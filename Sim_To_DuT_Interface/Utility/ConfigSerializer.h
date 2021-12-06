@@ -34,6 +34,7 @@
 #include <fstream>
 
 #include "../DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
+#include "../DuT_Connectors/CANConnector/CANConnectorConfig.h"
 #include "../DuT_Connectors/ConnectorConfig.h"
 #include "../DuTLogger/DuTLogger.h"
 
