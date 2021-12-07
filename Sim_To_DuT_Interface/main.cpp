@@ -44,6 +44,7 @@
 #include "Utility/ConfigSerializer.h"
 #include <boost/archive/xml_oarchive.hpp>
 #include <typeinfo>
+#include <memory>
 int main() {
 
     // System config
@@ -63,14 +64,30 @@ int main() {
 
     // Init interface with SimComHandler
     interface.setSimComHandler(&simComHandler);
-    std::vector<sim_interface::dut_connector::ConnectorConfig> connectorConfig;
-    simComHandler.getConfig(&connectorConfig);
+    std::vector<sim_interface::dut_connector::ConnectorConfig*> connectorConfig;
+ //   std::vector<boost::variant< sim_interface::dut_connector::ConnectorConfig,sim_interface::dut_connector::rest_dummy::RESTConnectorConfig, sim_interface::dut_connector::can::CANConnectorConfig>> connectorConfig;
+    /*
+ simComHandler.getConfig(&connectorConfig);
     std::cout << "TEST!!!: " << connectorConfig.size() << std::endl;
+
+
+   // sim_interface::dut_connector::rest_dummy::RESTConnectorConfig * config2;
+
+
     for(const auto &c: connectorConfig) {
-     // std::cout << "Namen: !!" << typeid(c).name() <<  c.connectorType << std::endl;
+      std::cout << "Namen: !!" << typeid(c).name() << c->connectorType<< std::endl;
+        if (c->connectorType == "RESTConnectorConfig") {
 
+  //         sim_interface::dut_connector::rest_dummy::RESTConnectorConfig* config2 = dynamic_cast<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig*>(c);
+  //       //  boost::scoped_ptr<  sim_interface::dut_connector::rest_dummy::RESTConnectorConfig> config2 ;
+  //       //  config2.reset(c);
+//
+  //            sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), *config2);
+  //          interface.addConnector(&restDummyConnector);
+
+        }
     }
-
+*/
     // Create DuT Devices
 
 
@@ -108,8 +125,7 @@ int main() {
                                                                          {{"Test", 1000}},
                                                                          true);
 
-    sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(),
-                                                                                    config);
+  // sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), *config2);
 
     // Test the REST connector
 /*
@@ -124,7 +140,7 @@ int main() {
 */
 
     // Add the REST connector to the interface
-    interface.addConnector(&restDummyConnector);
+  //  interface.addConnector(&restDummyConnector);
 
 
     //+++++ Start CAN Connector +++++
@@ -212,7 +228,9 @@ int main() {
             operationToFrame,
             {},
             false));
- //  sim_interface::ConfigSerializer::serialize("TEST.xml", "test", canConfigTest);
+    sim_interface::ConfigSerializer::serialize("TEST.xml", "conn", canConfigTest);
+ //   boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConnectorConfig;
+ //   sim_interface::ConfigSerializer::deserialize("TEST.xml", "conn", canConfigTest);
 //
   //  std::ifstream is("TEST.xml");
   //  std::stringstream ss;

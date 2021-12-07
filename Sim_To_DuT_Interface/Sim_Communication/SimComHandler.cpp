@@ -110,7 +110,7 @@ zmq::context_t context_subb(1);
 
     }
  //   void SimComHandler::getConfig(sim_interface::SimToDuTInterface &interface)
-    void SimComHandler::getConfig(std::vector<sim_interface::dut_connector::ConnectorConfig> *connectorConfig)
+    void SimComHandler::getConfig(std::vector<sim_interface::dut_connector::ConnectorConfig*> *connectorConfig)
     {
         zmq::message_t reply;
         try {
@@ -179,7 +179,7 @@ zmq::context_t context_subb(1);
                      ConfigSerializer::deserialize(fileName, "conn", restConnectorConfig);
                  //  ConfigSerializer::serialize("DasGehtSafeNicht.xml", "conn", restConnectorConfig);
 
-                    //   connectorConfig->push_back(*restConnectorConfig.get());
+                       connectorConfig->push_back(restConnectorConfig.get());
 
                       break;
                   }
@@ -217,8 +217,8 @@ zmq::context_t context_subb(1);
 
                       std::cout << "WTF " << s3 << std::endl;
                       boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConnectorConfig;
-                      ConfigSerializer::deserialize(fileNameCan, "conn", canConnectorConfig);
-               //       ConfigSerializer::serialize("HalloCanVonSim.xml", "conn", canConnectorConfig);
+                  //  ConfigSerializer::deserialize(fileNameCan, "conn", canConnectorConfig);
+                //       ConfigSerializer::serialize("HalloCanVonSim.xml", "conn", canConnectorConfig);
                     //  connectorConfig->push_back(*canConnectorConfig.get());
                       break;
                   }

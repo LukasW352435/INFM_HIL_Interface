@@ -75,7 +75,7 @@ namespace sim_interface::dut_connector {
                 assert(this->operations.find(periodicOperation.first) != this->operations.end()); // Periodic operation not found in operations
             }
         };
-
+        virtual ~ConnectorConfig() = default;
 
 
         /** Set of processable operations */

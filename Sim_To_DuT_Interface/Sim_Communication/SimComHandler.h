@@ -75,7 +75,7 @@ namespace sim_interface {
          */
         void run();
 
-        void getConfig(  std::vector<sim_interface::dut_connector::ConnectorConfig> *connectorConfig);
+        void getConfig(  std::vector<sim_interface::dut_connector::ConnectorConfig*> *connectorConfig);
         enum connectorType {
             RESTDummyConnector,
             CANConnector,
