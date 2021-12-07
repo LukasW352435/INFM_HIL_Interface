@@ -125,7 +125,7 @@ zmq::context_t context_subb(1);
 
 
         const char *buf = static_cast<const char*>(reply.data());
-         std::cout << "CHAR [" << buf << "]" << std::endl;
+    //     std::cout << "CHAR [" << buf << "]" << std::endl;
         pt::ptree tree;
         //  pt::basic_ptree
 
@@ -169,14 +169,17 @@ zmq::context_t context_subb(1);
 
                         std::istringstream xmlStringStream(s3);
 
+                        std::string fileName = connectorTypeS + ".xml";
+                        std::ofstream RESTConnectorConfigXMLFile(fileName);
+                        RESTConnectorConfigXMLFile << xmlStringStream.rdbuf();
 
-
+                        // TODO Make smart try catch
                         boost::scoped_ptr<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig> restConnectorConfig;
 
-                      ConfigSerializer::deserialize(xmlStringStream, "conn", restConnectorConfig);
-                  //    ConfigSerializer::serialize("Hallo.xml", "conn", restConnectorConfig);
+                     ConfigSerializer::deserialize(fileName, "conn", restConnectorConfig);
+                 //  ConfigSerializer::serialize("DasGehtSafeNicht.xml", "conn", restConnectorConfig);
 
-                        connectorConfig->push_back(*restConnectorConfig.get());
+                    //   connectorConfig->push_back(*restConnectorConfig.get());
 
                       break;
                   }
@@ -203,15 +206,20 @@ zmq::context_t context_subb(1);
 
 
 
-                        std::istringstream xmlStringStream(s3);
+                        std::istringstream xmlStringStreamCanConnector(s3);
 
 
 
-                        boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConnectorConfig;
 
-                      ConfigSerializer::deserialize(xmlStringStream, "conn", canConnectorConfig);
+                      std::string fileNameCan = connectorTypeS + ".xml";
+                      std::ofstream canConnectorConfigXMLFile(fileNameCan);
+                      canConnectorConfigXMLFile << xmlStringStreamCanConnector.rdbuf();
+
+                      std::cout << "WTF " << s3 << std::endl;
+                      boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConnectorConfig;
+                      ConfigSerializer::deserialize(fileNameCan, "conn", canConnectorConfig);
                //       ConfigSerializer::serialize("HalloCanVonSim.xml", "conn", canConnectorConfig);
-                      connectorConfig->push_back(*canConnectorConfig.get());
+                    //  connectorConfig->push_back(*canConnectorConfig.get());
                       break;
                   }
                   default: {

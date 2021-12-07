@@ -36,44 +36,7 @@
 namespace sim_interface::dut_connector::rest_dummy {
     class  RESTConnectorConfig : public ConnectorConfig {
     private:
-        friend class boost::serialization::access;
-        template<class Archive>
-        void serialize(Archive & archive, const unsigned int version){
-            archive & BOOST_SERIALIZATION_NVP(baseUrlDuT);
-            archive & BOOST_SERIALIZATION_NVP(baseCallbackUrl);
-            archive & BOOST_SERIALIZATION_NVP(port);
-            archive & BOOST_SERIALIZATION_NVP(operations);
-            archive &  BOOST_SERIALIZATION_NVP(periodicOperations);
-            archive & BOOST_SERIALIZATION_NVP(periodicTimerEnabled);
 
-
-
-
-
-
-        }
-        template<class Archive>
-        inline void load_construct_data(Archive & archive, RESTConnectorConfig * configPtr, const unsigned int version)
-        {   std::string _baseUrlDuT;
-            std::string _baseCallbackUrl;
-            int _port;
-            std::set<std::string> _operations;
-           std::map<std::string, int> _periodicOperations;
-            bool _periodicTimerEnabled;
-
-            archive >> BOOST_SERIALIZATION_NVP(_baseUrlDuT);
-            archive >>BOOST_SERIALIZATION_NVP (_baseCallbackUrl);
-            archive >> BOOST_SERIALIZATION_NVP(_port);
-            archive >> BOOST_SERIALIZATION_NVP(_operations);
-            archive >> BOOST_SERIALIZATION_NVP(_periodicOperations);
-            archive >>BOOST_SERIALIZATION_NVP( _periodicTimerEnabled);
-
-
-
-            ::new (configPtr) RESTConnectorConfig ( _baseUrlDuT, _baseCallbackUrl,  _port,
-                    _operations, _periodicOperations,  _periodicTimerEnabled );
-
-        }
     public:
          RESTConnectorConfig(std::string baseUrlDuT, std::string baseCallbackUrl, int port,
                                      std::set<std::string> operations, std::map<std::string, int> periodicOperations = {},
@@ -85,7 +48,7 @@ namespace sim_interface::dut_connector::rest_dummy {
            assert(this->port > 0); // ports are only valid > 0
         }
 
-      RESTConnectorConfig(): ConnectorConfig(){};
+
 
 
 

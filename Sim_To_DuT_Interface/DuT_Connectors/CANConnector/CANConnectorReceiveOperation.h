@@ -22,8 +22,6 @@
 #include <cassert>
 #include <linux/can.h>
 #include <linux/can/bcm.h>
-#include <boost/serialization/set.hpp>
-#include <boost/serialization/map.hpp>
 #include <iostream>
 /*******************************************************************************
  * CLASS DECLARATIONS
@@ -57,7 +55,7 @@ namespace sim_interface::dut_connector::can{
         int maskLength;                   /**< The length of the mask data.   */
         struct canfd_frame mask = {0};    /**< The mask that should be used.  */
 
-    CANConnectorReceiveOperation() = default;
+
     private:
 
 
@@ -66,28 +64,21 @@ namespace sim_interface::dut_connector::can{
         // Functions members
 
         // Data members
+        /*
      friend class boost::serialization::access;
         template<class Archive>
         void serialize(Archive & archive, const unsigned int version){
-            archive & BOOST_SERIALIZATION_NVP(operation);
-            archive & BOOST_SERIALIZATION_NVP(isCANFD);
-            archive & BOOST_SERIALIZATION_NVP(hasMask);
-            archive & BOOST_SERIALIZATION_NVP(maskLength);
-
-          archive &  BOOST_SERIALIZATION_NVP(mask.can_id);
-          archive &  BOOST_SERIALIZATION_NVP(mask.len);
-          archive &  BOOST_SERIALIZATION_NVP(mask.flags);
-          archive &  BOOST_SERIALIZATION_NVP(mask.__res0);
-          archive &  BOOST_SERIALIZATION_NVP(mask.__res1);
-          archive &  BOOST_SERIALIZATION_NVP(mask.data);
-
-
-
-
-
-
-
-
+     //       archive & BOOST_SERIALIZATION_NVP(operation);
+     //       archive & BOOST_SERIALIZATION_NVP(isCANFD);
+     //       archive & BOOST_SERIALIZATION_NVP(hasMask);
+     //       archive & BOOST_SERIALIZATION_NVP(maskLength);
+//
+     //     archive &  BOOST_SERIALIZATION_NVP(mask.can_id);
+     //     archive &  BOOST_SERIALIZATION_NVP(mask.len);
+     //     archive &  BOOST_SERIALIZATION_NVP(mask.flags);
+     //     archive &  BOOST_SERIALIZATION_NVP(mask.__res0);
+     //     archive &  BOOST_SERIALIZATION_NVP(mask.__res1);
+     //     archive &  BOOST_SERIALIZATION_NVP(mask.data);
 
         }
         template<class Archive>
@@ -98,23 +89,18 @@ namespace sim_interface::dut_connector::can{
               int _maskLength;
                 __u8* _maskData  ;
 
-
-
-
-
-            archive >> BOOST_SERIALIZATION_NVP(_operation);
-            archive >>BOOST_SERIALIZATION_NVP (_isCANFD);
-            archive >> BOOST_SERIALIZATION_NVP(_hasMask);
-            archive >> BOOST_SERIALIZATION_NVP(_maskLength);
-            archive >> BOOST_SERIALIZATION_NVP(_maskData);
-
-
-
+        //    archive >> BOOST_SERIALIZATION_NVP(_operation);
+        //    archive >>BOOST_SERIALIZATION_NVP (_isCANFD);
+        //    archive >> BOOST_SERIALIZATION_NVP(_hasMask);
+        //    archive >> BOOST_SERIALIZATION_NVP(_maskLength);
+        //    archive >> BOOST_SERIALIZATION_NVP(_maskData);
+//
 
             ::new (configPtr) CANConnectorReceiveOperation ( _operation, _isCANFD,  _hasMask,
                     _maskLength, _maskData );
 
         }
+*/
     };
 
 }

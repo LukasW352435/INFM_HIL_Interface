@@ -20,9 +20,6 @@
 #include <string>
 #include <linux/can.h>
 #include <linux/can/bcm.h>
-#include <boost/serialization/set.hpp>
-#include <boost/serialization/map.hpp>
-
 /*******************************************************************************
  * CLASS DECLARATIONS
  ******************************************************************************/
@@ -60,16 +57,16 @@ namespace sim_interface::dut_connector::can{
         __u32 count;                    /**< Number of times the frame is send with the first interval. */
         struct bcm_timeval ival1;       /**< First Interval.                                            */
         struct bcm_timeval ival2;       /**< Second Interval.                                           */
-    CANConnectorSendOperation() = default;
+
     private:
         // Functions members
 
         // Data members
-
+/*
          friend class boost::serialization::access;
         template<class Archive>
         void serialize(Archive & archive, const unsigned int version){
-            archive & BOOST_SERIALIZATION_NVP(canID);
+         //   archive & BOOST_SERIALIZATION_NVP(canID);
             archive & BOOST_SERIALIZATION_NVP(isCANFD);
             archive & BOOST_SERIALIZATION_NVP(isCyclic);
             archive & BOOST_SERIALIZATION_NVP(announce);
@@ -92,7 +89,7 @@ namespace sim_interface::dut_connector::can{
             bool _isCyclic;
             bool _announce;
             __u32 _count;
-            struct bcm_timeval _ival1 ;
+            struct bcm_timeval _ival1;
             struct bcm_timeval _ival2;
 
 
@@ -112,7 +109,7 @@ namespace sim_interface::dut_connector::can{
 
         }
 
-
+*/
     };
 
 }

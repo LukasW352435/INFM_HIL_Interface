@@ -108,6 +108,7 @@ namespace sim_interface {
             ar & BOOST_SERIALIZATION_NVP(loggerConfig);
             ar & BOOST_SERIALIZATION_NVP(socketSimAddressSub);
             ar & BOOST_SERIALIZATION_NVP(socketSimAddressPub);
+            ar & BOOST_SERIALIZATION_NVP(socketSimAddressReciverConfig);
         }
     };
 }

@@ -203,8 +203,29 @@ int main() {
             {},
             false);
 
-    // Create a new CAN Connector and add it to the interface
-    sim_interface::dut_connector::can::CANConnector canConnector(interface.getQueueDuTToSim(), canConfig);
+
+    boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConfigTest ( new sim_interface::dut_connector::can::CANConnectorConfig(
+            "vcan0",
+            "BmwCodec",
+            {"Speed", "Door", "Blink", "Hazard", "Brake"},
+            frameToOperation,
+            operationToFrame,
+            {},
+            false));
+ //  sim_interface::ConfigSerializer::serialize("TEST.xml", "test", canConfigTest);
+//
+  //  std::ifstream is("TEST.xml");
+  //  std::stringstream ss;
+//
+  //  ss << is.rdbuf();
+  //  std::istringstream iss(ss.str());
+  //  std::cout << "TEST: " << iss.str() << std::endl;
+  //  sim_interface::ConfigSerializer::deserialize(iss, "test", canConfigTest);
+  //  sim_interface::ConfigSerializer::serialize("TESTTEST.xml", "test", canConfigTest);
+
+
+  // Create a new CAN Connector and add it to the interface
+   sim_interface::dut_connector::can::CANConnector canConnector(interface.getQueueDuTToSim(), canConfig);
     interface.addConnector(&canConnector);
 
     // Test the CAN Connector

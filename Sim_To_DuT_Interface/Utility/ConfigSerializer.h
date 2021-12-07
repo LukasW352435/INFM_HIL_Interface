@@ -32,9 +32,13 @@
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/scoped_ptr.hpp>
 #include <fstream>
+#include <linux/can.h>
+#include <linux/can/bcm.h>
 
 #include "../DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
 #include "../DuT_Connectors/CANConnector/CANConnectorConfig.h"
+#include "../DuT_Connectors/CANConnector/CANConnectorReceiveOperation.h"
+#include "../DuT_Connectors/CANConnector/CANConnectorSendOperation.h"
 #include "../DuT_Connectors/ConnectorConfig.h"
 #include "../DuTLogger/DuTLogger.h"
 
@@ -44,6 +48,32 @@ namespace sim_interface {
         public:
 
             template<typename T>
+            static void deserialize( const std::string &file, const std::string &objName, boost::scoped_ptr<T> &obj) {
+                std::ifstream ifs(file);
+                //  std::ifstream ifs(file);
+                //   boost::archive::xml_iarchive ia(ifs,boost::archive::no_header);
+                //   ia & boost::serialization::make_nvp(objName.c_str(), obj);
+                boost::archive::xml_iarchive ia(ifs,boost::archive::no_header);
+                ia & boost::serialization::make_nvp(objName.c_str(), obj);
+
+
+                if (ifs.good()) {
+                    try {
+
+                    }
+                    catch (boost::archive::archive_exception const &e) {
+                        DuTLogger::logMessage(std::string("ConfigSerializer: Exception on deserialize: ", e.what()),
+                                              LOG_LEVEL::ERROR);
+                    }
+
+                    //   ifs.close();
+                }
+
+                else {
+                    DuTLogger::logMessage("ConfigSerializer: input filestream not good", LOG_LEVEL::ERROR);
+                }
+            }
+            /*
             static void deserialize( std::istringstream &ifs, const std::string &objName, boost::scoped_ptr<T> &obj) {
               //  std::ifstream ifs(file);
              //   boost::archive::xml_iarchive ia(ifs,boost::archive::no_header);
@@ -68,6 +98,7 @@ namespace sim_interface {
                     DuTLogger::logMessage("ConfigSerializer: input filestream not good", LOG_LEVEL::ERROR);
                 }
             }
+            */
 
 
 
@@ -155,6 +186,160 @@ namespace boost::serialization {
         ::new(instance)sim_interface::dut_connector::ConnectorConfig(_operations,"ConnectorConfig" ,_periodicOperations,
                                                                      _periodicTimerEnabled);
         }
+
+    template<class Archive>
+    void serialize(Archive &ar, sim_interface::dut_connector::can::CANConnectorConfig &config,
+                   const unsigned int version) {}
+
+    template<class Archive>
+    inline void
+    save_construct_data(Archive &ar, const sim_interface::dut_connector::can::CANConnectorConfig *config,
+                        const unsigned int version) {
+        std::cout << "serialize" << std::endl;
+        ar & boost::serialization::make_nvp("interfaceName", config->interfaceName);
+        ar & boost::serialization::make_nvp("codecName", config->codecName);
+        ar & boost::serialization::make_nvp("operations", config->operations);
+       ar & boost::serialization::make_nvp("frameToOperation", config->frameToOperation);
+       ar & boost::serialization::make_nvp("operationToFrame", config->operationToFrame);
+        ar & boost::serialization::make_nvp("periodicOperations", config->periodicOperations);
+        ar & boost::serialization::make_nvp("periodicTimerEnabled", config->periodicTimerEnabled);
+    }
+
+    template<class Archive>
+    inline void load_construct_data(Archive &ar, sim_interface::dut_connector::can::CANConnectorConfig *instance,
+                                    const unsigned int file_version) {
+        std::cout << "deserialize" << std::endl;
+        std::string _interfaceName;
+        std::string _codecName;
+        std::set<std::string> _operations;
+        std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> _frameToOperation;
+        std::map<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> _operationToFrame;
+        std::map<std::string, int> _periodicOperations;
+        bool _periodicTimerEnabled;
+
+        ar & boost::serialization::make_nvp("interfaceName", _interfaceName);
+        ar & boost::serialization::make_nvp("codecName", _codecName);
+        ar & boost::serialization::make_nvp("operations", _operations);
+        ar & boost::serialization::make_nvp("frameToOperation", _frameToOperation);
+        ar & boost::serialization::make_nvp("operationToFrame", _operationToFrame);
+        ar & boost::serialization::make_nvp("periodicOperations", _periodicOperations);
+        ar & boost::serialization::make_nvp("periodicTimerEnabled", _periodicTimerEnabled);
+
+
+        ::new(instance)sim_interface::dut_connector::can::CANConnectorConfig(_interfaceName, _codecName,
+                                                                                      _operations, _frameToOperation,
+                                                                                     _operationToFrame,
+                                                                                     _periodicOperations,
+                                                                                     _periodicTimerEnabled);
+    }
+
+
+    template<class Archive>
+    void serialize(Archive &ar, sim_interface::dut_connector::can::CANConnectorReceiveOperation &config,
+                   const unsigned int version) {}
+
+    template<class Archive>
+    inline void
+    save_construct_data(Archive &ar, const sim_interface::dut_connector::can::CANConnectorReceiveOperation *config,
+                        const unsigned int version) {
+
+
+
+        ar & boost::serialization::make_nvp("operation", config->operation);
+        ar & boost::serialization::make_nvp("isCANFD", config->isCANFD);
+        ar & boost::serialization::make_nvp("hasMask", config->hasMask);
+        ar & boost::serialization::make_nvp("maskLength", config->maskLength);
+        ar & boost::serialization::make_nvp("mask.can_id)", config->mask.can_id);
+        ar & boost::serialization::make_nvp("mask.len", config->mask.len);
+        ar & boost::serialization::make_nvp("mask.flags", config->mask.flags);
+        ar & boost::serialization::make_nvp("mask.__res0", config->mask.__res0);
+        ar & boost::serialization::make_nvp("mask.__res1", config->mask.__res1);
+        ar & boost::serialization::make_nvp("mask.data", config->mask.data);
+
+    }
+
+    template<class Archive>
+    inline void load_construct_data(Archive &ar, sim_interface::dut_connector::can::CANConnectorReceiveOperation *instance,
+                                    const unsigned int file_version) {
+        std::string _operation;
+        bool _isCANFD;
+        bool _hasMask;
+        int _maskLength;
+        __u8 *_maskData = nullptr;
+        struct canfd_frame _mask = {0};
+
+
+        ar & boost::serialization::make_nvp("operation", _operation);
+        ar & boost::serialization::make_nvp("isCANFD", _isCANFD);
+        ar & boost::serialization::make_nvp("hasMask", _hasMask);
+        ar & boost::serialization::make_nvp("maskLength", _maskLength);
+        ar & boost::serialization::make_nvp("mask.can_id)", _mask.can_id);
+        ar & boost::serialization::make_nvp("mask.len", _mask.len);
+        ar & boost::serialization::make_nvp("mask.flags", _mask.flags);
+        ar & boost::serialization::make_nvp("mask.__res0", _mask.__res0);
+        ar & boost::serialization::make_nvp("mask.__res1", _mask.__res1);
+        ar & boost::serialization::make_nvp("mask.data", _mask.data);
+
+
+        ::new(instance)sim_interface::dut_connector::can::CANConnectorReceiveOperation(_operation, _isCANFD,
+                                                                             _hasMask, _maskLength,
+                                                                             _maskData
+                                                                             );
+    }
+
+    template<class Archive>
+    void serialize(Archive &ar, sim_interface::dut_connector::can::CANConnectorSendOperation &config,
+                   const unsigned int version) {}
+
+
+    template<class Archive>
+    inline void
+    save_construct_data(Archive &ar, const sim_interface::dut_connector::can::CANConnectorSendOperation *config,
+                        const unsigned int version) {
+
+        std::cout << "DESERIA" << std::endl;
+      ar & boost::serialization::make_nvp("canID", config->canID);
+      ar & boost::serialization::make_nvp("isCANFD", config->isCANFD);
+      ar & boost::serialization::make_nvp("isCyclic", config->isCyclic);
+      ar & boost::serialization::make_nvp("announce", config->announce);
+      ar & boost::serialization::make_nvp("count)", config->count);
+      ar & boost::serialization::make_nvp("ival1.tv_sec", config->ival1.tv_sec);
+      ar & boost::serialization::make_nvp("ival1.tv_usec", config->ival1.tv_usec);
+      ar & boost::serialization::make_nvp("mask.flags", config->ival2.tv_sec);
+      ar & boost::serialization::make_nvp("mask.flags", config->ival2.tv_usec);
+
+    }
+
+    template<class Archive>
+    inline void load_construct_data(Archive &ar, sim_interface::dut_connector::can::CANConnectorSendOperation *instance,
+                                    const unsigned int file_version) {
+        canid_t _canID;
+        bool _isCANFD;
+        bool _isCyclic;
+        bool _announce;
+        __u32 _count;
+        struct bcm_timeval _ival1;
+        struct bcm_timeval _ival2;
+
+
+        ar & boost::serialization::make_nvp("canID", _canID);
+        ar & boost::serialization::make_nvp("isCANFD", _isCANFD);
+        ar & boost::serialization::make_nvp("isCyclic", _isCyclic);
+        ar & boost::serialization::make_nvp("announce", _announce);
+        ar & boost::serialization::make_nvp("count)", _count);
+        ar & boost::serialization::make_nvp("ival1.tv_sec", _ival1.tv_sec);
+        ar & boost::serialization::make_nvp("ival1.tv_usec", _ival1.tv_usec);
+        ar & boost::serialization::make_nvp("mask.flags", _ival2.tv_sec);
+        ar & boost::serialization::make_nvp("mask.flags", _ival2.tv_usec);
+
+
+
+        ::new(instance)sim_interface::dut_connector::can::CANConnectorSendOperation(_canID, _isCANFD,
+                                                                                    _isCyclic, _announce,
+                                                                                    _count, _ival1, _ival2
+                                                                                    );
+    }
+
 }
 
 #endif //SIM_TO_DUT_INTERFACE_CONFIGSERIALIZER_H
