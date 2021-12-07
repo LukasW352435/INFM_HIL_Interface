@@ -1,0 +1,5 @@
+<map id="sim_interface::dut_connector::can::CANConnectorCodec" name="sim_interface::dut_connector::can::CANConnectorCodec">
+<area shape="rect" id="node1" title=" " alt="" coords="5,31,232,87"/>
+<area shape="rect" id="node2" href="$classsim__interface_1_1dut__connector_1_1can_1_1BmwCodec.html" title=" " alt="" coords="285,5,490,47"/>
+<area shape="rect" id="node3" href="$classsim__interface_1_1dut__connector_1_1can_1_1SuzukiCodec.html" title=" " alt="" coords="280,71,495,112"/>
+</map>

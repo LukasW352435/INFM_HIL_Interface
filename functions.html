@@ -87,6 +87,9 @@ $(function() {
 <li>baseUrlDuT
 : <a class="el" href="classsim__interface_1_1dut__connector_1_1rest__dummy_1_1RESTConnectorConfig.html#a73507582b15cd8668524fc8285501ff3">sim_interface::dut_connector::rest_dummy::RESTConnectorConfig</a>
 </li>
+<li>BmwCodec()
+: <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1BmwCodec.html#a0955903a33695c6e5c4b336400932049">sim_interface::dut_connector::can::BmwCodec</a>
+</li>
 </ul>
 
 
@@ -95,7 +98,7 @@ $(function() {
 : <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#adf87e0238e92e870a3284cc7e7d59f78">sim_interface::dut_connector::can::CANConnector</a>
 </li>
 <li>CANConnectorConfig()
-: <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorConfig.html#ae1f1d3ebf95cc03ee13e59fd3f8e40b6">sim_interface::dut_connector::can::CANConnectorConfig</a>
+: <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorConfig.html#a435a364b261ae7aefb3954a01a258e34">sim_interface::dut_connector::can::CANConnectorConfig</a>
 </li>
 <li>CANConnectorReceiveOperation()
 : <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorReceiveOperation.html#a5c6e72b8f778ddafc91265645651ea82">sim_interface::dut_connector::can::CANConnectorReceiveOperation</a>
@@ -109,14 +112,36 @@ $(function() {
 <li>changeLogLevel()
 : <a class="el" href="classDuTLogger.html#ad2f1e07c2d8a9324440f39554f926fad">DuTLogger</a>
 </li>
+<li>checkEndianness()
+: <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CodecUtilities.html#adfda753f29aa0ed993e4c9290867bda4">sim_interface::dut_connector::can::CodecUtilities</a>
+</li>
 <li>checkForSpecialChars()
 : <a class="el" href="classEventVisitor.html#a2ede9abc8287d445a16bea3317600262">EventVisitor</a>
+</li>
+<li>codecName
+: <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorConfig.html#a16afda3ea5aae2fae68caae4e0e08e9f">sim_interface::dut_connector::can::CANConnectorConfig</a>
 </li>
 <li>ConnectorInfo()
 : <a class="el" href="classsim__interface_1_1dut__connector_1_1ConnectorInfo.html#aa730ec35ad692b16ed97ccef4b7038a6">sim_interface::dut_connector::ConnectorInfo</a>
 </li>
+<li>convertEndianness()
+: <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CodecUtilities.html#a29b0c3ca3bc203c5d2d9232b1662b7a3">sim_interface::dut_connector::can::CodecUtilities</a>
+</li>
+<li>convertFrameToSimEvent()
+: <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1BmwCodec.html#acc5e86c7e47e15a075461b10f1cc75d6">sim_interface::dut_connector::can::BmwCodec</a>
+, <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorCodec.html#ae39e7a4a5a34737123d60935bc33409b">sim_interface::dut_connector::can::CANConnectorCodec</a>
+, <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1SuzukiCodec.html#aaed3aba7a5223d7ee0f3098ae3c01b14">sim_interface::dut_connector::can::SuzukiCodec</a>
+</li>
+<li>convertSimEventToFrame()
+: <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1BmwCodec.html#a0a39dd429945dfcfd590f5adc2f933d5">sim_interface::dut_connector::can::BmwCodec</a>
+, <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorCodec.html#a4d243d3d80eb687266cef5b619063327">sim_interface::dut_connector::can::CANConnectorCodec</a>
+, <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1SuzukiCodec.html#a5c40265329a1a587eeacaa85d3dec38a">sim_interface::dut_connector::can::SuzukiCodec</a>
+</li>
 <li>count
 : <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorSendOperation.html#a499cfd7cfa9943ab69fecbb3c812bcc5">sim_interface::dut_connector::can::CANConnectorSendOperation</a>
+</li>
+<li>createCodec()
+: <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorCodecFactory.html#a5f7852fd06e549ac7863322c334c3aa7">sim_interface::dut_connector::can::CANConnectorCodecFactory</a>
 </li>
 <li>current
 : <a class="el" href="classsim__interface_1_1SimEvent.html#a27093b5db7e5427b548d1b755dff8588">sim_interface::SimEvent</a>
@@ -422,7 +447,7 @@ $(function() {
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 6 2021 11:21:14 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Dec 7 2021 16:42:35 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
