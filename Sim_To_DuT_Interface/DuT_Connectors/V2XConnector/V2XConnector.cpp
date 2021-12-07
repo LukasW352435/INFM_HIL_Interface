@@ -38,9 +38,7 @@ namespace sim_interface::dut_connector::v2x {
                                const V2XConnectorConfig &config)
             : DuTConnector(std::move(queueDuTToSim), config),
               _socket(ioService) {
-        sockRunner = std::thread([&]() {
-            this->ioService.run();
-        });
+
         try {
             boost::asio::generic::raw_protocol raw_protocol(AF_PACKET, SOCK_RAW);
 
@@ -70,6 +68,10 @@ namespace sim_interface::dut_connector::v2x {
             exit(1);
         }
         startReceive();
+        sockRunner = std::thread([&]() {
+            this->ioService.run();
+        });
+
     }
 
     V2XConnector::~V2XConnector() {
@@ -79,9 +81,11 @@ namespace sim_interface::dut_connector::v2x {
 
 
     void V2XConnector::startReceive() {
+        
         _socket.async_receive_from(
                 boost::asio::buffer(receiveBuffer), receiveEndpoint,
                 [this](auto && PH1, auto && PH2) { onReceive(std::forward<decltype(PH1)>(PH1), std::forward<decltype(PH2)>(PH2)); });
+
     }
 
 
@@ -99,7 +103,7 @@ namespace sim_interface::dut_connector::v2x {
     void V2XConnector::handleEventSingle(const SimEvent &e) {
 
         boost::asio::const_buffer buffer = boost::asio::buffer(boost::apply_visitor(V2XVisitor(), e.value));
-
+        auto data = boost::apply_visitor(V2XVisitor(), e.value);
        std::size_t ret = _socket.send(buffer);
         std::cout << "send message from v2x connector\n";
         if (ret != 0) {

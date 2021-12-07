@@ -105,12 +105,12 @@ int main() {
 
     //V2x Connector
 
-    sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("enp0s3");
+    sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("enp0s8");
 
     sim_interface::dut_connector::v2x::V2XConnector v2xConnector(interface.getQueueDuTToSim(), v2xconfig);
 
     //Testing V2x
-    std::vector <unsigned char> value  = {"2", "3"};
+    std::vector <unsigned char> value  = {'2', '3'};
     const sim_interface::SimEvent e("V2X", value, "V2X");
     v2xConnector.handleEventSingle(e);
 
