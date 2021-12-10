@@ -21,7 +21,7 @@
  * @author Lukas Wagenlehner
  * @author Michael Schmitz
  * @author Matthias Bank
- * // TODO add all authors
+ * @author Marco Keul
  * @version 1.0
  */
 
@@ -35,7 +35,7 @@
 #include "DuTLogger/DuTLogger.h"
 #include "DuT_Connectors/V2XConnector/V2XConnectorConfig.h"
 #include "DuT_Connectors/V2XConnector/V2XConnector.h"
-
+#include "SystemConfig.h"
 
 // System includes
 #include <thread>
@@ -43,26 +43,30 @@
 
 
 int main() {
-    // initialize the logger
-    DuTLogger::initializeLogger(LoggerConfig());
 
+    // System config
+    sim_interface::SystemConfig systemConfig;
+    std::string configPath = std::filesystem::canonical("/proc/self/exe").parent_path().string();
+    sim_interface::SystemConfig::loadFromFile(configPath + "/SystemConfig.xml", systemConfig, true);
+
+    // initialize the logger
+    DuTLogger::initializeLogger(systemConfig.loggerConfig);
     DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
 
     // Create interface
     sim_interface::SimToDuTInterface interface;
 
     // Create simComHandler
-    std::string socketSimAddressSub = "tcp://localhost:7777";
-    zmq::context_t context_sub(1);
-    std::string socketSimAddressPub = "tcp://*:7778";
-    zmq::context_t context_pub(1);
-    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), socketSimAddressSub, context_sub,
-                                               socketSimAddressPub, context_pub);
+    sim_interface::SimComHandler simComHandler(interface.getQueueSimToInterface(), systemConfig);
 
+    // Init interface with SimComHandler
     interface.setSimComHandler(&simComHandler);
 
 
     // Create DuT Devices
+
+    
+    // Create the REST connector
     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
                                                                          "http://172.17.0.1",
                                                                          9091,
@@ -90,7 +94,8 @@ int main() {
 
     sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(),
                                                                                     config);
-    /*
+
+    // Test the REST connector
     auto event = sim_interface::SimEvent();
     event.operation = "Test";
     event.value = "Test";
@@ -99,9 +104,10 @@ int main() {
     event.operation = "Indicator Right";
     event.value = "xyz";
     restDummyConnector.handleEvent(event);
-    */
 
+    // Add the REST connector to the interface
     interface.addConnector(&restDummyConnector);
+    
 
     //V2x Connector
 
@@ -126,7 +132,7 @@ int main() {
     );
 
     // CANFD receive operation mask
-    int mask1Len  = 1;
+    int mask1Len = 1;
     __u8 mask1[1] = {0xFF};
 
     sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCanfd1(
@@ -139,22 +145,29 @@ int main() {
 
     // CAN non-cyclic send operation
     sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCan1(
-            0x789,
+            0x222,
             false,
             false
     );
 
+    // CANFD non cyclic send operation
+    sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCanfd1{
+        0x333,
+        true,
+        false,
+    };
+
     // CANFD cyclic send operation
     struct bcm_timeval ival1 = {0};
-    ival1.tv_sec  = 1;
+    ival1.tv_sec = 1;
     ival1.tv_usec = 0;
 
     struct bcm_timeval ival2 = {0};
-    ival2.tv_sec  = 3;
+    ival2.tv_sec = 3;
     ival2.tv_usec = 0;
 
     sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCyclicCanfd1(
-            0x9AB,
+            0x444,
             true,
             true,
             true,
@@ -172,12 +185,14 @@ int main() {
     // CAN Connector Send Config
     std::map<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> operationToFrame = {
             {"Speed", sendOpCan1},
+            {"Door", sendOpCanfd1},
             {"Blink", sendOpCyclicCanfd1}
     };
 
     sim_interface::dut_connector::can::CANConnectorConfig canConfig(
             "vcan0",
-            {"Speed", "Blink", "Hazard", "Brake"},
+            "BmwCodec",
+            {"Speed", "Door", "Blink", "Hazard", "Brake"},
             frameToOperation,
             operationToFrame,
             {},
@@ -188,13 +203,23 @@ int main() {
     interface.addConnector(&canConnector);
 
     // Test the CAN Connector
-    auto canEvent = sim_interface::SimEvent();
-    canEvent.operation = "Test";
-    canEvent.value = "Value";
-    canConnector.handleEventSingle(canEvent);
-    */
-    //+++++ End CAN Connector +++++
+    auto canEvent1 = sim_interface::SimEvent();
+    canEvent1.operation = "Speed";
+    canEvent1.value     = 30;
+    canConnector.handleEventSingle(canEvent1);
 
+    auto canEvent2 = sim_interface::SimEvent();
+    canEvent2.operation = "Door";
+    canEvent2.value     = 40;
+    canConnector.handleEventSingle(canEvent2);
+
+    auto canEvent3 = sim_interface::SimEvent();
+    canEvent3.operation = "Blink";
+    canEvent3.value     = 50;
+    canConnector.handleEventSingle(canEvent3);
+
+    //+++++ End CAN Connector +++++
+    */
 
     std::cout << interface << std::endl;
 

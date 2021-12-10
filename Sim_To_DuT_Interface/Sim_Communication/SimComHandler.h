@@ -29,6 +29,7 @@
 #include "../Events/SimEvent.h"
 #include <string>
 #include "../Utility/SharedQueue.h"
+#include "../SystemConfig.h"
 #include <thread>
 #include <chrono>
 #include <zmq.hpp>
@@ -37,6 +38,12 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
+#include "../SystemConfig.h"
+#include <utility>
+#include <zmq.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/serialization/variant.hpp>
+
 namespace sim_interface {
     /**
      * Handler between interface and simulation.
@@ -47,14 +54,9 @@ namespace sim_interface {
         /**
          * Create a new handler.
          * @param queueSimToInterface A queue to communicate with the interface.
-         * @param socketSimAddressSub
-         * @param context_sub
-         * @param socketSimAddressPub
-         * @param context_pub
+         * @param config System configuration.
          */
-        SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const std::string& socketSimAddressSub,
-                      zmq::context_t &context_sub , const std::string& socketSimAddressPub,
-                      zmq::context_t &context_pub);
+        SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig& config);
 
         /**
          * Destroys the handler and stops all threads.
@@ -71,6 +73,7 @@ namespace sim_interface {
          * Starts the handler to asynchronously receive incoming events.
          */
         void run();
+
     private:
         // send an event to the interface
         void sendEventToInterface(const SimEvent &simEvent);
