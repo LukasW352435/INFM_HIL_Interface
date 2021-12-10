@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with "HIL - REST Dummy Connector".  If not, see <http://www.gnu.org/licenses/>.
+ * along with "HIL - V2X Connector".  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Franziska Ihrler
  * @author Michael Schmitz
@@ -31,41 +31,37 @@
 #include <linux/if_ether.h>
 #include <linux/if_packet.h>
 #include <net/if.h>
-#include "../../DuTLogger/DuTLogger.h"
+#include "EthernetPacket.h"
 
 namespace sim_interface::dut_connector::v2x {
     V2XConnector::V2XConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
                                const V2XConnectorConfig &config)
             : DuTConnector(std::move(queueDuTToSim), config),
-              _socket(ioService) {
-
+              _socket(ioService, boost::asio::generic::raw_protocol(AF_PACKET, SOCK_RAW)),
+              receiveBuffer(2048, 0x00) {
         try {
-            boost::asio::generic::raw_protocol raw_protocol(AF_PACKET, SOCK_RAW);
-
-            //parse interface name into ifreq
-            struct ifreq ifr;
-            memset(&ifr,0,sizeof(ifr));
+            // Get index of device
+            struct ifreq ifr{};
+            memset(&ifr, 0, sizeof(ifr));
             strncpy(ifr.ifr_name, config.ifname.c_str(), sizeof(ifr.ifr_name));
             int s = socket(AF_INET, SOCK_STREAM, 0);
             ioctl(s, SIOCGIFINDEX, &ifr);
+            close(s);
+            DuTLogger::logMessage(
+                    fmt::format("V2XConnector: index of interface {}: {}", config.ifname, ifr.ifr_ifindex),
+                    LOG_LEVEL::INFO);
 
-            std::cout <<"index of wlan device: " << ifr.ifr_ifindex <<"\n";
-
-
-            sockaddr_ll socket_address = {0};
+            // Configure socket to receive all ethernet frames
+            struct sockaddr_ll socket_address = {0};
             socket_address.sll_family = AF_PACKET;
             socket_address.sll_protocol = htons(ETH_P_ALL);
-            socket_address.sll_ifindex = ifr.ifr_ifindex ;
+            socket_address.sll_ifindex = ifr.ifr_ifindex;
 
-            _socket.open(raw_protocol);
-
-
-            _socket.bind(boost::asio::generic::raw_protocol::endpoint(&socket_address, sizeof(socket_address)));
-
-            receiveEndpoint = boost::asio::generic::raw_protocol::endpoint(_socket.local_endpoint());
-        } catch (std::exception& e) {
-            DuTLogger::logMessage(fmt::format("V2XConnector: Exception on opening socket: {}", e.what()), LOG_LEVEL::ERROR);
-            exit(1);
+            _socket.bind(boost::asio::generic::raw_protocol::endpoint(&socket_address, sizeof(sockaddr_ll)));
+            receiveEndpoint = _socket.local_endpoint();
+        } catch (std::exception &e) {
+            DuTLogger::logMessage(fmt::format("V2XConnector: Exception on opening socket: {}", e.what()),
+                                  LOG_LEVEL::ERROR);
         }
         startReceive();
         sockRunner = std::thread([&]() {
@@ -79,35 +75,41 @@ namespace sim_interface::dut_connector::v2x {
         sockRunner.join();
     }
 
-
-    void V2XConnector::startReceive() {
-        
-        _socket.async_receive_from(
-                boost::asio::buffer(receiveBuffer), receiveEndpoint,
-                [this](auto && PH1, auto && PH2) { onReceive(std::forward<decltype(PH1)>(PH1), std::forward<decltype(PH2)>(PH2)); });
-
+    void V2XConnector::receiveCallback(const std::vector<unsigned char> &msg) {
+        sendEventToSim(SimEvent("V2X", EthernetPacket(msg).ToMap(), "V2X"));
     }
 
+    void V2XConnector::startReceive() {
+        _socket.async_receive_from(
+                boost::asio::buffer(receiveBuffer),
+                receiveEndpoint,
+                [this](auto &&PH1, auto &&PH2) {
+                    onReceive(std::forward<decltype(PH1)>(PH1), std::forward<decltype(PH2)>(PH2));
+                });
+    }
 
-    void V2XConnector::onReceive(const boost::system::error_code& ec, std::size_t read_bytes)
-    {
+    void V2XConnector::onReceive(const boost::system::error_code &ec, std::size_t read_bytes) {
         if (!ec) {
-            DuTLogger::logMessage(fmt::format("V2XConnector: received {} bytes", read_bytes), LOG_LEVEL::DEBUG);
-            std::vector<unsigned char> msg = std::vector(receiveBuffer.begin(), receiveBuffer.begin() + read_bytes);
+            if (read_bytes > 0) {
+                DuTLogger::logMessage(fmt::format("V2XConnector: received {} bytes", read_bytes), LOG_LEVEL::DEBUG);
+                std::vector<unsigned char> msg = std::vector(receiveBuffer.begin(), receiveBuffer.begin() + read_bytes);
 
-            receiveCallback(msg);
+                receiveCallback(msg);
+            }
             startReceive();
+        } else {
+            DuTLogger::logMessage(fmt::format("V2XConnector: Got boost::system::error_code {}, stopping receive", ec), LOG_LEVEL::ERROR);
         }
     }
 
     void V2XConnector::handleEventSingle(const SimEvent &e) {
-
-        boost::asio::const_buffer buffer = boost::asio::buffer(boost::apply_visitor(V2XVisitor(), e.value));
-        auto data = boost::apply_visitor(V2XVisitor(), e.value);
-       std::size_t ret = _socket.send(buffer);
+        EthernetPacket packet = EthernetPacket(boost::apply_visitor(V2XVisitor(), e.value));
+        auto bytes = packet.ToBytes();
+        boost::asio::const_buffer buffer = boost::asio::buffer(bytes, bytes.size() * sizeof(unsigned char));
+        std::size_t ret = _socket.send(buffer);
         std::cout << "send message from v2x connector\n";
-        if (ret != 0) {
-            DuTLogger::logMessage(fmt::format("V2XConnector: Error {} sending over socket", ret), LOG_LEVEL::ERROR);
+        if (ret == 0) {
+            DuTLogger::logMessage("V2XConnector: Error sending over socket, no bytes send", LOG_LEVEL::ERROR);
         }
     }
 
@@ -116,9 +118,5 @@ namespace sim_interface::dut_connector::v2x {
                 "V2X Connector",
                 0x0000001,
                 " "};
-    }
-
-    void V2XConnector::receiveCallback(const std::vector<unsigned char>& msg) {
-        sendEventToSim(SimEvent("V2X", msg, "V2X"));
     }
 }

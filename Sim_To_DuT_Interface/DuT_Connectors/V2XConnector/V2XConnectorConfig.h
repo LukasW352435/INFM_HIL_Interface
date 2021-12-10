@@ -33,6 +33,12 @@
 namespace sim_interface::dut_connector::v2x {
     class V2XConnectorConfig : public ConnectorConfig {
     public:
+        /**
+         * Create the connector config for the V2X connector
+         *
+         * Responds only to V2X events
+         * @param ifname ifname of device to receive and send over
+         */
         explicit V2XConnectorConfig(std::string ifname)
                 : ConnectorConfig({"V2X"}, {}, false),
                   ifname(std::move(ifname)) {

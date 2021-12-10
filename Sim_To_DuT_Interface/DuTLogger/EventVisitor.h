@@ -10,6 +10,7 @@
 #define SIM_TO_DUT_INTERFACE_EVENTVISITOR_H
 
 #include <string>
+#include <map>
 #include <sstream>
 #include "boost/variant.hpp"
 
@@ -39,6 +40,16 @@ public:
 
     std::string operator() (const std::string &str) const {
         return checkForSpecialChars(str);
+    }
+
+    std::string operator() (const std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>>& map) const {
+        std::stringstream out;
+        out << '{';
+        for(const auto& c : map) {
+            out << ' ' << c.first << ": " << boost::apply_visitor(EventVisitor(), c.second);
+        }
+        out << " }";
+        return out.str();
     }
 
     /**

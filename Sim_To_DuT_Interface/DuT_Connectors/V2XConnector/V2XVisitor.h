@@ -28,26 +28,37 @@
 #ifndef SIM_TO_DUT_INTERFACE_V2XVISITOR_H
 #define SIM_TO_DUT_INTERFACE_V2XVISITOR_H
 
-#include "boost/variant.hpp"
+#include <boost/variant.hpp>
+#include <map>
+#include <vector>
+#include "../../DuTLogger/DuTLogger.h"
 
 namespace sim_interface::dut_connector::v2x {
-    class V2XVisitor : public boost::static_visitor<std::vector<unsigned char>> {
+    /**
+     * Visitor to extract map of type string, variant<string, vector<unsigned char>> from SimEvent.value, logs warnings if type is not the required map
+     */
+    class V2XVisitor
+            : public boost::static_visitor<std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>>> {
 
     public:
-
-        std::vector<unsigned char> operator()(std::vector<unsigned char> val) const {
+        std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>>
+        operator()(std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>> val) const {
             return val;
         }
 
-        std::vector<unsigned char> operator()(int i) const {
+        std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>> operator()(int i) const {
+            DuTLogger::logMessage("V2XConnector: Visitor called on int instead of std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>>", LOG_LEVEL::WARNING);
             return {};
         }
 
-        std::vector<unsigned char> operator()(double d) const {
+        std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>> operator()(double d) const {
+            DuTLogger::logMessage("V2XConnector: Visitor called on double instead of std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>>", LOG_LEVEL::WARNING);
             return {};
         }
 
-        std::vector<unsigned char> operator()(const std::string &str) const {
+        std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>>
+        operator()(const std::string &str) const {
+            DuTLogger::logMessage("V2XConnector: Visitor called on string instead of std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>>", LOG_LEVEL::WARNING);
             return {};
         }
     };

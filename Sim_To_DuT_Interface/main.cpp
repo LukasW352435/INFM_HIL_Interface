@@ -105,13 +105,14 @@ int main() {
 
     //V2x Connector
 
-    sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("enp0s8");
+    sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("lo");
 
     sim_interface::dut_connector::v2x::V2XConnector v2xConnector(interface.getQueueDuTToSim(), v2xconfig);
 
     //Testing V2x
-    std::vector <unsigned char> value  = {'2', '3'};
-    const sim_interface::SimEvent e("V2X", value, "V2X");
+    std::vector <unsigned char> value  = {0x12, 0x34};
+    std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>> map {{"sourceMAC", "aa:bb:cc:dd:ee:ff"}, {"destinationMAC", "11:22:33:44:55:66"}, {"payload", value}};
+    const sim_interface::SimEvent e("V2X", map, "Simulation");
     v2xConnector.handleEventSingle(e);
 
 
