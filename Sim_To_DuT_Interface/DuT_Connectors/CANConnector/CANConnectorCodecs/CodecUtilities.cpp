@@ -22,7 +22,7 @@
  ******************************************************************************/
 namespace sim_interface::dut_connector::can{
 
-    bool CodecUtilities::checkEndianness(){
+    bool CodecUtilities::checkBigEndianness(){
 
         // Note: If the project is upgraded from C++17 to C++20
         // one could have also used std::endian instead.

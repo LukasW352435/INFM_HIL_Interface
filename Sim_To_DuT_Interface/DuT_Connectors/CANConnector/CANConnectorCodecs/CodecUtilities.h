@@ -37,7 +37,7 @@ namespace sim_interface::dut_connector::can{
         *
         * @return The endianness of the system.
         */
-        static bool checkEndianness();
+        static bool checkBigEndianness();
 
         /**
          *  Converts the endianness of a uint16_t, uint32_t or uint64_t.
