@@ -57,6 +57,7 @@ namespace sim_interface::dut_connector::v2x {
         std::stringstream ss;
 
         boost::archive::text_oarchive ar(ss);
+        ar << payload.size();
         for (const auto& byte : payload)
         {
             ar << byte;
