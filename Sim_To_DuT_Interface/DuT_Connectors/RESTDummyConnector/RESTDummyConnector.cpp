@@ -26,7 +26,7 @@
 #include <iostream>
 #include <utility>
 #include <boost/lexical_cast.hpp>
-#include <EventVisitor.h>
+#include "../../Events/EventVisitor.h"
 #include "RESTDummyConnector.h"
 #include "ReceiveEndpoint.h"
 #include "../../DuTLogger/DuTLogger.h"

@@ -12,7 +12,7 @@
 #define SIM_TO_DUT_INTERFACE_DUTLOGGER_H
 
 #include "DuTLoggerConfig.h"
-#include "EventVisitor.h"
+#include "../Events/EventVisitor.h"
 #include <string>
 #include "quill/Quill.h"
 #include "../Events/SimEvent.h"

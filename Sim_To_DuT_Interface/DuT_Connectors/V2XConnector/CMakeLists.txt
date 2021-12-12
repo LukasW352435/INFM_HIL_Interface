@@ -5,7 +5,6 @@ target_sources(libs
         EthernetPacket.cpp
         EthernetPacket.h
         V2XConnector.cpp
-        V2XVisitor.h
         PUBLIC
         V2XConnector.h
         V2XConnectorConfig.h)

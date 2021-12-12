@@ -28,28 +28,8 @@ public:
         return std::to_string(d);
     }
 
-    std::string operator() (const std::vector<unsigned char>& vect) const {
-        std::stringstream out;
-        out << '[';
-        for(const auto& c : vect) {
-            out << ' ' << std::hex << (int) c;
-        }
-        out << " ]";
-        return out.str();
-    }
-
     std::string operator() (const std::string &str) const {
         return checkForSpecialChars(str);
-    }
-
-    std::string operator() (const std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>>& map) const {
-        std::stringstream out;
-        out << '{';
-        for(const auto& c : map) {
-            out << ' ' << c.first << ": " << boost::apply_visitor(EventVisitor(), c.second);
-        }
-        out << " }";
-        return out.str();
     }
 
     /**

@@ -86,6 +86,14 @@ namespace sim_interface::dut_connector::v2x {
         void onReceive(const boost::system::error_code &ec, std::size_t read_bytes);
 
         /**
+         * Get index of given interface
+         *
+         * @param ifname interface name to get index for
+         * @return index of interface
+         */
+        static int getIfnameIndex(const std::string &ifname);
+
+        /**
          * ioService handle to process async operations
          */
         boost::asio::io_service ioService;

@@ -27,12 +27,12 @@
 #include <utility>
 #include <boost/asio.hpp>
 #include "V2XConnector.h"
-#include "V2XVisitor.h"
 #include <linux/if_ether.h>
 #include <linux/if_packet.h>
 #include <net/if.h>
 #include "EthernetPacket.h"
 #include "../../Sim_Communication/EventToSimVisitor.h"
+#include "../../DuTLogger/DuTLogger.h"
 
 namespace sim_interface::dut_connector::v2x {
     V2XConnector::V2XConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
@@ -41,22 +41,13 @@ namespace sim_interface::dut_connector::v2x {
               _socket(ioService, boost::asio::generic::raw_protocol(AF_PACKET, SOCK_RAW)),
               receiveBuffer(2048, 0x00) {
         try {
-            // Get index of device
-            struct ifreq ifr{};
-            memset(&ifr, 0, sizeof(ifr));
-            strncpy(ifr.ifr_name, config.ifname.c_str(), sizeof(ifr.ifr_name));
-            int s = socket(AF_INET, SOCK_STREAM, 0);
-            ioctl(s, SIOCGIFINDEX, &ifr);
-            close(s);
-            DuTLogger::logMessage(
-                    fmt::format("V2XConnector: index of interface {}: {}", config.ifname, ifr.ifr_ifindex),
-                    LOG_LEVEL::INFO);
+            int index = getIfnameIndex(config.ifname);
 
             // Configure socket to receive all ethernet frames
             struct sockaddr_ll socket_address = {0};
             socket_address.sll_family = AF_PACKET;
             socket_address.sll_protocol = htons(ETH_P_ALL);
-            socket_address.sll_ifindex = ifr.ifr_ifindex;
+            socket_address.sll_ifindex = index;
 
             _socket.bind(boost::asio::generic::raw_protocol::endpoint(&socket_address, sizeof(sockaddr_ll)));
             receiveEndpoint = _socket.local_endpoint();
@@ -71,15 +62,26 @@ namespace sim_interface::dut_connector::v2x {
 
     }
 
+    int V2XConnector::getIfnameIndex(const std::string &ifname) {
+        struct ifreq ifr{};
+        memset(&ifr, 0, sizeof(ifr));
+        strncpy(ifr.ifr_name, ifname.c_str(), sizeof(ifr.ifr_name));
+        int s = socket(AF_INET, SOCK_STREAM, 0);
+        ioctl(s, SIOCGIFINDEX, &ifr);
+        close(s);
+        DuTLogger::logMessage(
+                fmt::format("V2XConnector: index of interface {}: {}", ifname, ifr.ifr_ifindex),
+                INFO);
+        return ifr.ifr_ifindex;
+    }
+
     V2XConnector::~V2XConnector() {
         ioService.stop();
         sockRunner.join();
     }
 
     void V2XConnector::receiveCallback(const std::vector<unsigned char> &msg) {
-        auto event = SimEvent("V2X", EthernetPacket(msg).ToMap(), "V2X");
-        DuTLogger::logMessage(boost::apply_visitor(EventToSimVisitor(), event.value) , LOG_LEVEL::INFO);
-        sendEventToSim(event);
+        sendEventToSim(SimEvent("V2X", EthernetPacket(msg).getPayloadAsArchive(), "V2X"));
     }
 
     void V2XConnector::startReceive() {
@@ -101,16 +103,16 @@ namespace sim_interface::dut_connector::v2x {
             }
             startReceive();
         } else {
-            DuTLogger::logMessage(fmt::format("V2XConnector: Got boost::system::error_code {}, stopping receive", ec), LOG_LEVEL::ERROR);
+            DuTLogger::logMessage(fmt::format("V2XConnector: Got boost::system::error_code {}, stopping receive", ec),
+                                  LOG_LEVEL::ERROR);
         }
     }
 
     void V2XConnector::handleEventSingle(const SimEvent &e) {
-        EthernetPacket packet = EthernetPacket(boost::apply_visitor(V2XVisitor(), e.value));
-        auto bytes = packet.ToBytes();
+        EthernetPacket packet = EthernetPacket(boost::apply_visitor(EventVisitor(), e.value));
+        auto bytes = packet.toBytes();
         boost::asio::const_buffer buffer = boost::asio::buffer(bytes, bytes.size() * sizeof(unsigned char));
         std::size_t ret = _socket.send(buffer);
-        std::cout << "send message from v2x connector\n";
         if (ret == 0) {
             DuTLogger::logMessage("V2XConnector: Error sending over socket, no bytes send", LOG_LEVEL::ERROR);
         }

@@ -20,6 +20,7 @@
  *
  * @author Lukas Wagenlehner
  * @author Michael Schmitz
+ * @author Franziska Ihrler
  * @author Matthias Bank
  * @author Marco Keul
  * @version 1.0
@@ -40,6 +41,7 @@
 // System includes
 #include <thread>
 #include <iostream>
+#include <boost/archive/text_oarchive.hpp>
 
 
 int main() {
@@ -111,14 +113,25 @@ int main() {
 
     //V2x Connector
 
-    sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("lo");
+    sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("veth0");
 
     sim_interface::dut_connector::v2x::V2XConnector v2xConnector(interface.getQueueDuTToSim(), v2xconfig);
+    interface.addConnector(&v2xConnector);
 
     //Testing V2x
-    std::vector <unsigned char> value  = {0x12, 0x34};
-    std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>> map {{"sourceMAC", "aa:bb:cc:dd:ee:ff"}, {"destinationMAC", "11:22:33:44:55:66"}, {"payload", value}};
-    const sim_interface::SimEvent e("V2X", map, "Simulation");
+    std::stringstream ss;
+    boost::archive::text_oarchive ar(ss);
+    std::string sourceMAC = "aa:bb:cc:dd:ee:ff";
+    std::string destinationMAC = "11:22:33:44:55:66";
+    int payload_length = 2;
+    std::vector<unsigned char> payload = {0x12, 0x34};
+    ar << sourceMAC;
+    ar << destinationMAC;
+    ar << payload_length;
+    ar << payload[0];
+    ar << payload[1];
+    std::string archive = ss.str();
+    const sim_interface::SimEvent e("V2X", ss.str(), "Simulation");
     v2xConnector.handleEventSingle(e);
 
 

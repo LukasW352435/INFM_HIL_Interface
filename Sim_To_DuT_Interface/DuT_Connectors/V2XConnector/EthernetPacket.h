@@ -20,6 +20,7 @@
  * along with "HIL - V2X Connector".  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Michael Schmitz
+ * @author Franziska Ihrler
  * @version 1.0
  */
 
@@ -40,9 +41,9 @@ namespace sim_interface::dut_connector::v2x {
         /**
          * Create an ethernet packet with already parsed data from map with required keys sourceMAC, destinationMAC, payload
          *
-         * @param map containing sourceMAC, destinationMAC as strings and payload as vector<unsigned char>
+         * @param text_archive boost::archive string containing sourceMAC, destinationMAC, length of payload and payload
          */
-        explicit EthernetPacket(std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>> map);
+        explicit EthernetPacket(const std::string& text_archive);
 
         /**
          * Create an ethernet packet from the raw received data (extract source and destination MAC)
@@ -52,11 +53,11 @@ namespace sim_interface::dut_connector::v2x {
         explicit EthernetPacket(std::vector<unsigned char> rawData);
 
         /**
-         * Create generic map based on object to encapsulate logic in connector
+         * Encode bytes of payload as text archive (byte for byte)
          *
-         * @return map with source and destination MAC and the payload as key value pairs
+         * @return text archive of payload
          */
-        std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>> ToMap();
+        std::string getPayloadAsArchive();
 
         /**
          * Convert object to byte vector of the following structure:
@@ -67,7 +68,7 @@ namespace sim_interface::dut_connector::v2x {
          *
          * @return vector of bytes
          */
-        std::vector<unsigned char> ToBytes();
+        std::vector<unsigned char> toBytes();
     private:
         /**
          * source MAC of ethernet header
@@ -83,21 +84,6 @@ namespace sim_interface::dut_connector::v2x {
          * bytes to send after the ethernet header
          */
         std::vector<unsigned char> payload;
-
-        /**
-         * Extract the ethernet header from the first bytes (sizeof(ethhdr) = 13) of the raw data
-         *
-         * @param rawData vector of bytes containing ethernet header and payload
-         */
-        void extractEthernetHeader(std::vector<unsigned char> rawData);
-
-        /**
-         * Convert the given bytes to hex encoded string in format aa:bb:cc:dd:ee:ff
-         *
-         * @param bytes Bytes of MAC address to encode
-         * @return hex encoded MAC
-         */
-        static std::string getHexEncodedMAC(unsigned char bytes[]);
 
         /**
          * Convert the given hex string in format aa:bb:cc:dd:ee:ff to byte array

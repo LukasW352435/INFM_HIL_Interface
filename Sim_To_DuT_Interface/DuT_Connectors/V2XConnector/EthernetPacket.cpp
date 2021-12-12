@@ -20,107 +20,64 @@
  * along with "HIL - V2X Connector".  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Michael Schmitz
+ * @author Franziska Ihrler
  * @version 1.0
  */
 
 #include <sstream>
-#include <iomanip>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 #include "../../DuTLogger/DuTLogger.h"
 #include "EthernetPacket.h"
 
 namespace sim_interface::dut_connector::v2x {
-    /**
-     * Extract strings from boost variant type of map, log warnings if type is wrong
-     */
-    struct StringMapVisitor : public boost::static_visitor<std::string>
-    {
-        std::string operator()(std::string operand) const
-        {
-            return operand;
-        }
-
-        std::string operator()(const std::vector<unsigned char>& operand) const
-        {
-            DuTLogger::logMessage("V2XConnector: EthernetPacket: Visitor called on vector<unsigned char> instead of string", LOG_LEVEL::WARNING);
-            return "";
-        }
-    };
-
-    /**
-     * Extract vector<unsigned char> from boost variant type of map, log warnings if type is wrong
-     */
-    struct VectorMapVisitor : public boost::static_visitor<std::vector<unsigned char>>
-    {
-        std::vector<unsigned char> operator()(const std::string& operand) const
-        {
-            DuTLogger::logMessage("V2XConnector: EthernetPacket: Visitor called on string instead of vector<unsigned char>", LOG_LEVEL::WARNING);
-            return {};
-        }
-
-        std::vector<unsigned char> operator()(std::vector<unsigned char> operand) const
-        {
-            return operand;
-        }
-    };
-
-    EthernetPacket::EthernetPacket(std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>> map) {
-        if (map.count("sourceMAC") == 1 && map.count("destinationMAC") == 1 && map.count("payload") == 1) {
-            sourceMAC = boost::apply_visitor(StringMapVisitor(), map["sourceMAC"]);
-            destinationMAC = boost::apply_visitor(StringMapVisitor(), map["destinationMAC"]);
-            payload = boost::apply_visitor(VectorMapVisitor(), map["payload"]);
-        } else {
-            DuTLogger::logMessage("V2XConnector: EthernetPacket: Couldn't construct packet, missing entries in map (required: sourceMAC, destinationMAC, payload).", LOG_LEVEL::ERROR);
+    EthernetPacket::EthernetPacket(const std::string& text_archive) {
+        int payload_length;
+        try {
+            std::stringstream ss(text_archive);
+            boost::archive::text_iarchive ar(ss);
+            ar >> sourceMAC;
+            ar >> destinationMAC;
+            ar >> payload_length;
+            unsigned char byte;
+            for (int i = 0; i < payload_length; i++) {
+                ar >> byte;
+                payload.push_back(byte);
+            }
+        } catch (boost::archive::archive_exception &_) {
+            DuTLogger::logMessage("V2XConnector: EthernetPacket: Couldn't construct packet, malformed text_archive.", LOG_LEVEL::ERROR);
         }
     }
 
     EthernetPacket::EthernetPacket(std::vector<unsigned char> rawData) {
-        extractEthernetHeader(rawData);
-        payload = std::vector<unsigned char>(rawData.begin() + sizeof(ethhdr), rawData.end());
+        payload = std::vector<unsigned char>(rawData.begin(), rawData.end());
     }
 
-    std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>> EthernetPacket::ToMap() {
-        std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>> map = {};
-        map["sourceMAC"] = sourceMAC;
-        map["destinationMAC"] = destinationMAC;
-        map["payload"] = payload;
-        return map;
+    std::string EthernetPacket::getPayloadAsArchive() {
+        std::stringstream ss;
+
+        boost::archive::text_oarchive ar(ss);
+        for (const auto& byte : payload)
+        {
+            ar << byte;
+        }
+        return ss.str();
     }
 
-    std::vector<unsigned char> EthernetPacket::ToBytes() {
+    std::vector<unsigned char> EthernetPacket::toBytes() {
         std::vector<unsigned char> bytes;
         auto sourceMACBytes = getBytesOfHexEncodedMAC(sourceMAC);
         auto destinationMACBytes = getBytesOfHexEncodedMAC(destinationMAC);
-        for (unsigned char & byte : sourceMACBytes) {
+        for (unsigned char & byte : destinationMACBytes) {
             bytes.push_back(byte);
         }
-        for (unsigned char & byte : destinationMACBytes) {
+        for (unsigned char & byte : sourceMACBytes) {
             bytes.push_back(byte);
         }
         bytes.push_back(0x00);
         bytes.push_back(0x00);
         bytes.insert(bytes.end(), payload.begin(), payload.end());
         return bytes;
-    }
-
-    void EthernetPacket::extractEthernetHeader(std::vector<unsigned char> rawData) {
-        if (rawData.size() < sizeof(ethhdr)) {
-            return;
-        }
-        auto header = (struct ethhdr *)(rawData.data());
-        sourceMAC = getHexEncodedMAC(header->h_source);
-        destinationMAC = getHexEncodedMAC(header->h_dest);
-    }
-
-    std::string EthernetPacket::getHexEncodedMAC(unsigned char bytes[]) {
-        std::stringstream hex;
-        hex << std::hex;
-        for (int i = 0; i < ETH_ALEN; i++) {
-            hex << std::setw(2) << std::setfill('0') << (int)bytes[i];
-            if (ETH_ALEN - i >  1) {
-                hex << ':';
-            }
-        }
-        return hex.str();
     }
 
     std::vector<unsigned char> EthernetPacket::getBytesOfHexEncodedMAC(std::string hex) {

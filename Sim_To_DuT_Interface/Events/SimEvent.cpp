@@ -25,13 +25,13 @@
 #include "SimEvent.h"
 
 #include <utility>
-#include <EventVisitor.h>
+#include "EventVisitor.h"
 
 namespace sim_interface {
     SimEvent::SimEvent() : SimEvent("", "", "") {
     }
 
-    SimEvent::SimEvent(std::string operation, boost::variant<int, double, std::string, std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>>> value, std::string origin) :
+    SimEvent::SimEvent(std::string operation, boost::variant<int, double, std::string> value, std::string origin) :
             operation(std::move(operation)),
             value(std::move(value)),
             origin(std::move(origin)) {

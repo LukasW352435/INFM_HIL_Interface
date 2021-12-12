@@ -9,6 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
+
+    std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>> EthernetPacket::ToMap() {
+        std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>> map = {};
+        map["sourceMAC"] = sourceMAC;
+        map["destinationMAC"] = destinationMAC;
+        map["payload"] = payload;
+        return map;
+    }
  *
  * "Sim To DuT Interface" is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -49,7 +57,7 @@ namespace sim_interface {
          * @param value The value of the event.
          * @param origin The origin of the event.
          */
-        SimEvent(std::string operation, boost::variant<int, double, std::string, std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>>> value, std::string origin);
+        SimEvent(std::string operation, boost::variant<int, double, std::string> value, std::string origin);
 
         /**
          * Operation of the event.
@@ -58,7 +66,7 @@ namespace sim_interface {
         /**
          * Value of the event.
          */
-        boost::variant<int, double, std::string, std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>>> value;
+        boost::variant<int, double, std::string> value;
         /**
          * Time when the event was created.
          */
