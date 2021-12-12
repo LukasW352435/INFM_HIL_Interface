@@ -32,6 +32,7 @@
 #include <linux/if_packet.h>
 #include <net/if.h>
 #include "EthernetPacket.h"
+#include "../../Sim_Communication/EventToSimVisitor.h"
 
 namespace sim_interface::dut_connector::v2x {
     V2XConnector::V2XConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
@@ -76,7 +77,9 @@ namespace sim_interface::dut_connector::v2x {
     }
 
     void V2XConnector::receiveCallback(const std::vector<unsigned char> &msg) {
-        sendEventToSim(SimEvent("V2X", EthernetPacket(msg).ToMap(), "V2X"));
+        auto event = SimEvent("V2X", EthernetPacket(msg).ToMap(), "V2X");
+        DuTLogger::logMessage(boost::apply_visitor(EventToSimVisitor(), event.value) , LOG_LEVEL::INFO);
+        sendEventToSim(event);
     }
 
     void V2XConnector::startReceive() {
