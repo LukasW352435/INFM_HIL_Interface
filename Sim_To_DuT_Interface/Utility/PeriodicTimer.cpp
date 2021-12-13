@@ -58,7 +58,7 @@ namespace sim_interface {
      */
     void PeriodicTimer::tick(const boost::system::error_code &e) {
         if (e == boost::asio::error::operation_aborted) return;
-        DuTLogger::logMessage("PeriodicTimer: Period elapsed for " + event.operation, LOG_LEVEL::DEBUG);
+        DuTLogger::logMessage(fmt::format("PeriodicTimer: Period elapsed for {}", event.operation), LOG_LEVEL::DEBUG);
         callback(event);
         timer.expires_from_now(boost::asio::chrono::milliseconds(periodMs));
         timer.async_wait([&](boost::system::error_code e) { this->tick(e); });
