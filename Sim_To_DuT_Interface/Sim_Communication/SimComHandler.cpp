@@ -132,11 +132,7 @@ namespace sim_interface {
         simEventMap["Operation"] = simEvent.operation;
         simEventMap["Value"]     = boost::apply_visitor(EventToSimVisitor(), simEvent.value);
         simEventMap["Origin"]    = simEvent.origin;
-        std::stringstream time;
-        time << simEvent.current;
-        // Time in Secondss
-        // TODO Microsekunden
-        simEventMap["Currrent"]   = time.str();
+        simEventMap["Current"]   = simEvent.current;
         //serialize map
         std::ostringstream ss;
         boost::archive::text_oarchive archive(ss);
