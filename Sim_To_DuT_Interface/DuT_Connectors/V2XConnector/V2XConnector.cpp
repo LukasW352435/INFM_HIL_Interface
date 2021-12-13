@@ -81,7 +81,7 @@ namespace sim_interface::dut_connector::v2x {
     }
 
     void V2XConnector::receiveCallback(const std::vector<unsigned char> &msg) {
-        sendEventToSim(SimEvent("V2X", EthernetPacket(msg).getPayloadAsArchive(), "V2X"));
+        sendEventToSim(SimEvent("V2X", EthernetPacket(msg).getPacketAsArchive(), "V2X"));
     }
 
     void V2XConnector::startReceive() {

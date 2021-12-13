@@ -57,7 +57,7 @@ namespace sim_interface::dut_connector::v2x {
          *
          * @return text archive of payload
          */
-        std::string getPayloadAsArchive();
+        std::string getPacketAsArchive();
 
         /**
          * Convert object to byte vector of the following structure:
@@ -85,6 +85,21 @@ namespace sim_interface::dut_connector::v2x {
          * bytes to send after the ethernet header
          */
         std::vector<unsigned char> payload;
+
+        /**
+         * Extract the ethernet header from the first bytes (sizeof(ethhdr) = 13) of the raw data
+         *
+         * @param rawData vector of bytes containing ethernet header and payload
+         */
+        void extractEthernetHeader(std::vector<unsigned char> rawData);
+
+        /**
+         * Convert the given bytes to hex encoded string in format aa:bb:cc:dd:ee:ff
+         *
+         * @param bytes Bytes of MAC address to encode
+         * @return hex encoded MAC
+         */
+        static std::string getHexEncodedMAC(unsigned char bytes[]);
 
         /**
          * Convert the given hex string in format aa:bb:cc:dd:ee:ff to byte array

@@ -50,13 +50,17 @@ namespace sim_interface::dut_connector::v2x {
     }
 
     EthernetPacket::EthernetPacket(std::vector<unsigned char> rawData) {
-        payload = std::vector<unsigned char>(rawData.begin(), rawData.end());
+        extractEthernetHeader(rawData);
+        payload = std::vector<unsigned char>(rawData.begin() + sizeof(ethhdr), rawData.end());
+
     }
 
-    std::string EthernetPacket::getPayloadAsArchive() {
+    std::string EthernetPacket::getPacketAsArchive() {
         std::stringstream ss;
 
         boost::archive::text_oarchive ar(ss);
+        ar << sourceMAC;
+        ar << destinationMAC;
         ar << payload.size();
         for (const auto& byte : payload)
         {
@@ -79,6 +83,27 @@ namespace sim_interface::dut_connector::v2x {
         bytes.push_back((unsigned char) ethernetFrameType);
         bytes.insert(bytes.end(), payload.begin(), payload.end());
         return bytes;
+    }
+
+    void EthernetPacket::extractEthernetHeader(std::vector<unsigned char> rawData) {
+        if (rawData.size() < sizeof(ethhdr)) {
+            return;
+        }
+        auto header = (struct ethhdr *)(rawData.data());
+        sourceMAC = getHexEncodedMAC(header->h_source);
+        destinationMAC = getHexEncodedMAC(header->h_dest);
+    }
+
+    std::string EthernetPacket::getHexEncodedMAC(unsigned char bytes[]) {
+        std::stringstream hex;
+        hex << std::hex;
+        for (int i = 0; i < ETH_ALEN; i++) {
+            hex << std::setw(2) << std::setfill('0') << (int)bytes[i];
+            if (ETH_ALEN - i >  1) {
+                hex << ':';
+            }
+        }
+        return hex.str();
     }
 
     std::vector<unsigned char> EthernetPacket::getBytesOfHexEncodedMAC(std::string hex) {
