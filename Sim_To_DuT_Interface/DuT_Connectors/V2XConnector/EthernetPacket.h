@@ -66,9 +66,10 @@ namespace sim_interface::dut_connector::v2x {
          * Byte 12+13: Ethernet Frame Type
          * Rest:       Payload
          *
+         * @param ethernetFrameType two bytes to set the ethernet frame type with
          * @return vector of bytes
          */
-        std::vector<unsigned char> toBytes();
+        std::vector<unsigned char> toBytes(unsigned short ethernetFrameType);
     private:
         /**
          * source MAC of ethernet header

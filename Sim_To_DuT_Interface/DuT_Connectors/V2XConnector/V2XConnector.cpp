@@ -39,7 +39,7 @@ namespace sim_interface::dut_connector::v2x {
                                const V2XConnectorConfig &config)
             : DuTConnector(std::move(queueDuTToSim), config),
               _socket(ioService, boost::asio::generic::raw_protocol(AF_PACKET, SOCK_RAW)),
-              receiveBuffer(2048, 0x00) {
+              receiveBuffer(2048, 0x00), ethernetFrameType(config.ethernetFrameType) {
         try {
             int index = getIfnameIndex(config.ifname);
 
@@ -110,7 +110,7 @@ namespace sim_interface::dut_connector::v2x {
 
     void V2XConnector::handleEventSingle(const SimEvent &e) {
         EthernetPacket packet = EthernetPacket(boost::apply_visitor(EventVisitor(), e.value));
-        auto bytes = packet.toBytes();
+        auto bytes = packet.toBytes(ethernetFrameType);
         boost::asio::const_buffer buffer = boost::asio::buffer(bytes, bytes.size() * sizeof(unsigned char));
         std::size_t ret = _socket.send(buffer);
         if (ret == 0) {

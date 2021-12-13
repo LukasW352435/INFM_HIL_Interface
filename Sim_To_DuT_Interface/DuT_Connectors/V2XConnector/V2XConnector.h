@@ -117,6 +117,11 @@ namespace sim_interface::dut_connector::v2x {
          * Thread to run ioService in
          */
         std::thread sockRunner;
+
+        /**
+         * two bytes to set the ethernet frame type with
+         */
+        unsigned short ethernetFrameType;
     };
 }
 

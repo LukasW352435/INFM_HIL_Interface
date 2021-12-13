@@ -65,7 +65,7 @@ namespace sim_interface::dut_connector::v2x {
         return ss.str();
     }
 
-    std::vector<unsigned char> EthernetPacket::toBytes() {
+    std::vector<unsigned char> EthernetPacket::toBytes(unsigned short ethernetFrameType) {
         std::vector<unsigned char> bytes;
         auto sourceMACBytes = getBytesOfHexEncodedMAC(sourceMAC);
         auto destinationMACBytes = getBytesOfHexEncodedMAC(destinationMAC);
@@ -75,8 +75,8 @@ namespace sim_interface::dut_connector::v2x {
         for (unsigned char & byte : sourceMACBytes) {
             bytes.push_back(byte);
         }
-        bytes.push_back(0x00);
-        bytes.push_back(0x00);
+        bytes.push_back((unsigned char) ethernetFrameType >> 8);
+        bytes.push_back((unsigned char) ethernetFrameType);
         bytes.insert(bytes.end(), payload.begin(), payload.end());
         return bytes;
     }

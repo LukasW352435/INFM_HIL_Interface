@@ -38,10 +38,11 @@ namespace sim_interface::dut_connector::v2x {
          *
          * Responds only to V2X events
          * @param ifname ifname of device to receive and send over
+         * @param ethernetFrameType two bytes to set the ethernet frame type with
          */
-        explicit V2XConnectorConfig(std::string ifname)
+        explicit V2XConnectorConfig(std::string ifname, unsigned short ethernetFrameType)
                 : ConnectorConfig({"V2X"}, {}, false),
-                  ifname(std::move(ifname)) {
+                  ifname(std::move(ifname)), ethernetFrameType(ethernetFrameType) {
             assert(!this->ifname.empty());
         }
 
@@ -49,6 +50,11 @@ namespace sim_interface::dut_connector::v2x {
          * Network interface to send and receive V2X to/from
          */
         std::string ifname;
+
+        /**
+         * Frame type to set on frames sent to network interface
+         */
+        unsigned short ethernetFrameType;
     };
 }
 
