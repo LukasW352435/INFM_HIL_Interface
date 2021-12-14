@@ -2,7 +2,10 @@
 
 This dummy provides the possibility to send and receive messages.
 
-To build and execute you can use docker (optionally mount config file).
+To build and execute you can use docker (optionally mount a config file).
+
+The config file found in this folder is used as default.
+Every line represents one supported operation, everything that is not found in this list is rejected by the DuT.
 
 ```shell
 docker build -t your-image-name .
