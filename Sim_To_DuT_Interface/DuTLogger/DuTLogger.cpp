@@ -36,6 +36,10 @@ quill::Logger* DuTLogger::consoleLogger;
 quill::Logger* DuTLogger::consoleFileLogger;
 quill::Logger* DuTLogger::dataLogger;
 
+/**
+ * Using std::chrono clock instead of the default rdtsc clock
+ */
+#define QUILL_CHRONO_CLOCK
 
 void DuTLogger::initializeLogger(const LoggerConfig &con) {
     if (initialized) {
@@ -325,7 +329,7 @@ std::string DuTLogger::getCurrentTimestamp() {
 
     // write it formatted in a stream and convert that to a string, so we can return it
     std::ostringstream oss;
-    oss << std::put_time(&timer, "%Y-%m-%d_%H-%M-%S");
+    oss << std::put_time(&timer, "%Y-%m-%d_%H:%M:%S");
     return oss.str();
 }
 

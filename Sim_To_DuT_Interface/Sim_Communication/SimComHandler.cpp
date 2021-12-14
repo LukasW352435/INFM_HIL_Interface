@@ -149,6 +149,7 @@ namespace sim_interface {
     }
 
     void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
+        DuTLogger::logEvent(simEvent);
         queueSimToInterface->push(simEvent);
     }
 
