@@ -35,7 +35,6 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/variant.hpp>
-#include "EventToSimVisitor.h"
 
 namespace sim_interface {
     zmq::context_t context_sub(1);
@@ -130,7 +129,7 @@ namespace sim_interface {
        //Not working with curreent time
         std::map<std::string , boost::variant<int, double, std::string>> simEventMap;
         simEventMap["Operation"] = simEvent.operation;
-        simEventMap["Value"]     = boost::apply_visitor(EventToSimVisitor(), simEvent.value);
+        simEventMap["Value"]     = boost::apply_visitor(EventVisitor(), simEvent.value);
         simEventMap["Origin"]    = simEvent.origin;
         std::stringstream time;
         time << simEvent.current;
