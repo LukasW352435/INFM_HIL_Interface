@@ -20,6 +20,7 @@
  *
  * @author Lukas Wagenlehner
  * @author Michael Schmitz
+ * @author Franziska Ihrler
  * @author Matthias Bank
  * @author Marco Keul
  * @version 1.0
@@ -33,11 +34,14 @@
 #include "DuT_Connectors/CANConnector/CANConnector.h"
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
 #include "DuTLogger/DuTLogger.h"
+#include "DuT_Connectors/V2XConnector/V2XConnectorConfig.h"
+#include "DuT_Connectors/V2XConnector/V2XConnector.h"
 #include "SystemConfig.h"
 
 // System includes
 #include <thread>
 #include <iostream>
+#include <boost/archive/text_oarchive.hpp>
 
 
 int main() {
@@ -59,6 +63,7 @@ int main() {
 
     // Init interface with SimComHandler
     interface.setSimComHandler(&simComHandler);
+
 
     // Create DuT Devices
 
@@ -106,8 +111,32 @@ int main() {
     interface.addConnector(&restDummyConnector);
     
 
-    //+++++ Start CAN Connector +++++
+    //V2x Connector
 
+    sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("veth0", 0x0000);
+
+    sim_interface::dut_connector::v2x::V2XConnector v2xConnector(interface.getQueueDuTToSim(), v2xconfig);
+    interface.addConnector(&v2xConnector);
+
+    //Testing V2x
+    std::stringstream ss;
+    boost::archive::text_oarchive ar(ss);
+    std::string sourceMAC = "aa:bb:cc:dd:ee:ff";
+    std::string destinationMAC = "11:22:33:44:55:66";
+    int payload_length = 2;
+    std::vector<unsigned char> payload = {0x12, 0x34};
+    ar << sourceMAC;
+    ar << destinationMAC;
+    ar << payload_length;
+    ar << payload[0];
+    ar << payload[1];
+    std::string archive = ss.str();
+    const sim_interface::SimEvent e("V2X", ss.str(), "Simulation");
+    v2xConnector.handleEventSingle(e);
+
+
+    //+++++ Start CAN Connector +++++
+    /*
     // CAN receive operation without a mask
     sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCan1(
             "Hazard",
@@ -203,8 +232,9 @@ int main() {
     canConnector.handleEventSingle(canEvent3);
 
     //+++++ End CAN Connector +++++
+    */
 
-    //std::cout << interface << std::endl;
+    std::cout << interface << std::endl;
 
     // Start simComHandler to receive events from the simulation
     std::thread simComHandlerThread(&sim_interface::SimComHandler::run, &simComHandler);

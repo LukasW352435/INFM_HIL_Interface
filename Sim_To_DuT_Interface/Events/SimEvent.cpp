@@ -25,6 +25,7 @@
 #include "SimEvent.h"
 
 #include <utility>
+#include "EventVisitor.h"
 
 namespace sim_interface {
     SimEvent::SimEvent() : SimEvent("", "", "") {
@@ -39,7 +40,7 @@ namespace sim_interface {
 
     std::ostream &operator<<(std::ostream &os, const SimEvent &simEvent) {
         os << "Operation: " << simEvent.operation << std::endl;
-        os << "Value: " << simEvent.value << std::endl;
+        os << "Value: " << boost::apply_visitor(EventVisitor(), simEvent.value) << std::endl;
         os << "Origin: " << simEvent.origin << std::endl;
         os << "Current: " << std::ctime(&simEvent.current) << std::endl;
         return os;

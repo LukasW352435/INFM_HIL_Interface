@@ -9,6 +9,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
+
+    std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>> EthernetPacket::ToMap() {
+        std::map<std::string, boost::variant<std::string, std::vector<unsigned char>>> map = {};
+        map["sourceMAC"] = sourceMAC;
+        map["destinationMAC"] = destinationMAC;
+        map["payload"] = payload;
+        return map;
+    }
  *
  * "Sim To DuT Interface" is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,6 +34,7 @@
 #define INFM_HIL_INTERFACE_SIMEVENT_H
 
 #include <ctime>
+#include <map>
 #include <string>
 #include <iostream>
 #include <boost/variant.hpp>

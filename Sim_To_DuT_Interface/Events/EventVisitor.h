@@ -26,6 +26,8 @@
 #define SIM_TO_DUT_INTERFACE_EVENTVISITOR_H
 
 #include <string>
+#include <map>
+#include <sstream>
 #include "boost/variant.hpp"
 
 /**

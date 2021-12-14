@@ -25,10 +25,22 @@
 
 #include "SimComHandler.h"
 
-namespace sim_interface {
+#include <utility>
+#include <zmq.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
 
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/serialization/variant.hpp>
+#include "EventToSimVisitor.h"
+
+namespace sim_interface {
+    zmq::context_t context_sub(1);
     SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig& config)
-            : queueSimToInterface(std::move(queueSimToInterface)) {
+            : queueSimToInterface(std::move(queueSimToInterface)),  socketSimPub_(context_sub,zmq::socket_type::pub), socketSimSub_(context_sub,zmq::socket_type::sub){
 
         // zmq Subscriber
         std::string socketSimAddressSub = config.socketSimAddressSub;
@@ -39,8 +51,8 @@ namespace sim_interface {
         zmq::context_t context_pub(1);
 
         // Create Sockets
-        socketSimSub_ = zmq::socket_t(context_sub, zmq::socket_type::sub);
-        socketSimPub_ = zmq::socket_t(context_pub, zmq::socket_type::pub);
+      //  socketSimSub_ = zmq::socket_t(context_sub, zmq::socket_type::sub);
+      //  socketSimPub_ = zmq::socket_t(context_pub, zmq::socket_type::pub);
 
         // Config Sockets
         socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
@@ -118,7 +130,7 @@ namespace sim_interface {
        //Not working with curreent time
         std::map<std::string , boost::variant<int, double, std::string>> simEventMap;
         simEventMap["Operation"] = simEvent.operation;
-        simEventMap["Value"]     = simEvent.value;
+        simEventMap["Value"]     = boost::apply_visitor(EventToSimVisitor(), simEvent.value);
         simEventMap["Origin"]    = simEvent.origin;
         std::stringstream time;
         time << simEvent.current;
