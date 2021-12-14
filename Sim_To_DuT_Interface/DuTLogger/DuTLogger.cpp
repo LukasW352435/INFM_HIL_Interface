@@ -36,16 +36,14 @@ quill::Logger* DuTLogger::consoleLogger;
 quill::Logger* DuTLogger::consoleFileLogger;
 quill::Logger* DuTLogger::dataLogger;
 
-/**
- * Using std::chrono clock instead of the default rdtsc clock
- */
-#define QUILL_CHRONO_CLOCK
 
 void DuTLogger::initializeLogger(const LoggerConfig &con) {
     if (initialized) {
         logMessage("Logger can't be initialized again!", LOG_LEVEL::ERROR);
         return;
     }
+    quill::enable_console_colours();
+
     // start the quill engine
     quill::start();
 
@@ -81,7 +79,7 @@ void DuTLogger::initializeLogger(const LoggerConfig &con) {
 
 quill::Handler* DuTLogger::buildConsoleHandler(bool enableDebugMode) {
     // build a handler for the console
-    quill::Handler* newHandler = quill::stdout_handler("consoleHandler");
+    quill::Handler* newHandler = quill::stdout_handler("stdout");
 
     // Check if debug mode is enabled. If not use the configured default level
     if (enableDebugMode) {
