@@ -41,7 +41,7 @@ namespace sim_interface::dut_connector {
                 enablePeriodicSending(operation.first, operation.second);
             }
             // have one timer (doing nothing) running at any given time to avoid io->run() to return
-            aliveTimer = std::make_unique<PeriodicTimer>(io, 1000000000000, SimEvent(), [](const SimEvent &event) {});
+            aliveTimer = std::make_unique<PeriodicTimer>(io, 1000000000, SimEvent(), [](const SimEvent &event) {});
             aliveTimer->start();
             timerRunner = std::thread([&]() {
                 this->io->run();

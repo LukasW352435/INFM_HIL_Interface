@@ -67,7 +67,6 @@ namespace sim_interface::dut_connector::rest_dummy {
             curl_easy_setopt(handle, CURLOPT_URL, sendCallbackDuT.data());
             curl_easy_setopt(handle, CURLOPT_USERAGENT, "RESTDummyConnector");
             auto payload = EventToRESTMessage(e);
-            std::cout << payload << std::endl;
             curl_easy_setopt(handle, CURLOPT_POSTFIELDS, payload.data());
             curl_easy_setopt(handle, CURLOPT_HTTPHEADER, curlJsonHeader);
             curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, "PUT");
