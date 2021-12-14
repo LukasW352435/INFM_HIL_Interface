@@ -81,13 +81,19 @@ Config</h1>
 <ul>
 <li><b>ifname</b> network interface to use for sending and receiving</li>
 <li><b>ethernetFrameType</b> two bytes for the indication of frameType after the source and destination MAC in the ethernet header</li>
-<li><b>operations</b>, <b>periodicOperations</b>, <b>periodicTimerEnabled</b> from ../ReadMe.md "Base Connector" are not used (fixed operation of "V2X", no periodic sending) </li>
+<li><b>operations</b>, <b>periodicOperations</b>, <b>periodicTimerEnabled</b> from ../ReadMe.md "Base Connector" are not used (fixed operation of "V2X", no periodic sending)</li>
 </ul>
+<h1><a class="anchor" id="autotoc_md8"></a>
+Testing</h1>
+<p>To test the V2X Connector two virtual interfaces can be created and linked together with the following commands. </p><div class="fragment"><div class="line">sudo ip link add veth0 type veth peer name veth1</div>
+<div class="line">sudo ip link set veth0 up</div>
+<div class="line">sudo ip link set veth1 up</div>
+</div><!-- fragment --><p>Packets send to veth0 are received on veth1 and vice versa. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 14 2021 11:47:38 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Dec 14 2021 18:39:22 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
