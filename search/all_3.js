@@ -13,6 +13,7 @@ var searchData=
   ['dutlogger_41',['DuTLogger',['../classDuTLogger.html',1,'']]],
   ['impl_42',['impl',['../namespacedummy__dut_1_1rest_1_1impl.html',1,'dummy_dut::rest']]],
   ['dummy_5fcan_5fdut_43',['Dummy_CAN_DuT',['../md_Dummy_DuT_Dummy_CAN_DuT_README.html',1,'']]],
-  ['messages_44',['messages',['../namespacedummy__dut_1_1rest_1_1messages.html',1,'dummy_dut::rest']]],
-  ['model_45',['model',['../namespacedummy__dut_1_1rest_1_1model.html',1,'dummy_dut::rest']]]
+  ['dut_20connector_44',['DuT Connector',['../md_Sim_To_DuT_Interface_DuT_Connectors_ReadMe.html',1,'']]],
+  ['messages_45',['messages',['../namespacedummy__dut_1_1rest_1_1messages.html',1,'dummy_dut::rest']]],
+  ['model_46',['model',['../namespacedummy__dut_1_1rest_1_1model.html',1,'dummy_dut::rest']]]
 ];

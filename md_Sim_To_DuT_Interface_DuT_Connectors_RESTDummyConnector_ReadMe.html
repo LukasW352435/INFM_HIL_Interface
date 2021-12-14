@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>INFM HIL Interface: bcmMsgMultipleFramesCan Struct Reference</title>
+<title>INFM HIL Interface: REST Dummy Connector</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,32 +61,30 @@ $(function() {
 </div>
 
 </div><!-- top -->
-<div class="header">
-  <div class="summary">
-<a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="structbcmMsgMultipleFramesCan-members.html">List of all members</a>  </div>
+<div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">bcmMsgMultipleFramesCan Struct Reference</div>  </div>
+<div class="title">REST Dummy Connector </div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;CANConnector.h&gt;</code></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a7d5a48c054e3b009c479f9838fa09f4d"><td class="memItemLeft" align="right" valign="top"><a id="a7d5a48c054e3b009c479f9838fa09f4d"></a>
-struct bcm_msg_head&#160;</td><td class="memItemRight" valign="bottom"><b>msg_head</b></td></tr>
-<tr class="separator:a7d5a48c054e3b009c479f9838fa09f4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a960a261feb09bfd755fa9a04e086aaeb"><td class="memItemLeft" align="right" valign="top"><a id="a960a261feb09bfd755fa9a04e086aaeb"></a>
-struct can_frame&#160;</td><td class="memItemRight" valign="bottom"><b>canFrames</b> [256]</td></tr>
-<tr class="separator:a960a261feb09bfd755fa9a04e086aaeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Struct for a BCM message with multiple CAN frames. </p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Sim_To_DuT_Interface/DuT_Connectors/CANConnector/CANConnector.h</li>
+<div class="textblock"><p>This connector provides an interface between the ../../../Dummy_DuT/REST_Dummy_DuT/ReadMe.md "REST Dummy DuT" and this interface.</p>
+<p>A REST endpoint is started on the configured port and registered with the DuT to receive and send messages.</p>
+<h1><a class="anchor" id="autotoc_md3"></a>
+Requirements</h1>
+<ul>
+<li>REST_Dummy_DuT</li>
+<li>restbed</li>
+<li>libcurl</li>
 </ul>
-</div><!-- contents -->
+<h1><a class="anchor" id="autotoc_md4"></a>
+Config</h1>
+<ul>
+<li><b>baseUrlDuT</b> to this http address the received events are sent, gets prepended with <code>/send</code> or <code>/read</code> for sending/receiving events</li>
+<li><b>baseCallbackUrl</b> URL that the DuT should call to send events to this interface (e.g. <a href="http://localhost">http://localhost</a>), gets prepended with <code>:{port}/rest/DuT</code></li>
+<li><b>port</b> port the baseCallbackUrl listens on</li>
+<li><b>operations</b>, <b>periodicOperations</b>, <b>periodicTimerEnabled</b> see ../ReadMe.md "Base Connector" </li>
+</ul>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated on Tue Dec 14 2021 11:47:38 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
