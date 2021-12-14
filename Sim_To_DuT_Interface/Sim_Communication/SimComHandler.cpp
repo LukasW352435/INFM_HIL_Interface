@@ -19,6 +19,8 @@
  * along with "Sim To DuT Interface".  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Lukas Wagenlehner
+ * @author Fabian Andre Genes
+ * @author Thanaancheyan Thavapalan
  * // TODO add all authors
  * @version 1.0
  */
@@ -110,7 +112,7 @@ zmq::context_t context_subb(1);
 
     }
  //   void SimComHandler::getConfig(sim_interface::SimToDuTInterface &interface)
-    void SimComHandler::getConfig(std::vector<sim_interface::dut_connector::ConnectorConfig*> *connectorConfig)
+    void SimComHandler::getConfig(std::vector<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig*> *RESTConnectorVektor, std::vector<sim_interface::dut_connector::can::CANConnectorConfig*> *CanConnectorVektor)
     {
         zmq::message_t reply;
         try {
@@ -155,7 +157,7 @@ zmq::context_t context_subb(1);
                         std::stringstream s ;
                         pt::ptree testBaum;
 
-                      //XML String in richtige Form bringen
+                        //XML String in richtige Form bringen
                         testBaum.add_child("scoped_ptr",v.second);
                         boost::property_tree::xml_parser::write_xml(s,testBaum,optionszzz);
                         std::string s1 = R"(<?xml version="1.0" encoding="utf-8"?>)";
@@ -176,10 +178,48 @@ zmq::context_t context_subb(1);
                         // TODO Make smart try catch
                         boost::scoped_ptr<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig> restConnectorConfig;
 
-                     ConfigSerializer::deserialize(fileName, "conn", restConnectorConfig);
-                 //  ConfigSerializer::serialize("DasGehtSafeNicht.xml", "conn", restConnectorConfig);
+                        ConfigSerializer::deserialize(fileName, "conn", restConnectorConfig);
+                        //  ConfigSerializer::serialize("DasGehtSafeNicht.xml", "conn", restConnectorConfig);
 
-                       connectorConfig->push_back(restConnectorConfig.get());
+                        // Create the REST connector
+                        // Push into vector
+                        RESTConnectorVektor->push_back(  new sim_interface::dut_connector::rest_dummy::RESTConnectorConfig ("http://localhost:9090",
+                                                                                                                  "http://172.17.0.1",
+                                                                                                                  9091,
+                                                                                                                  {"Test", "Angle",
+                                                                                                                   "Acceleration",
+                                                                                                                   "Decel",
+                                                                                                                   "Distance",
+                                                                                                                   "Height",
+                                                                                                                   "LaneID",
+                                                                                                                   "LaneIndex",
+                                                                                                                   "LanePosition",
+                                                                                                                   "Length",
+                                                                                                                   "Position_X-Coordinate",
+                                                                                                                   "Position_Y-Coordinate",
+                                                                                                                   "Position_Z-Coordinate",
+                                                                                                                   "RoadID",
+                                                                                                                   "RouteIndex",
+                                                                                                                   "Signals",
+                                                                                                                   "Speed",
+                                                                                                                   "Width",
+                                                                                                                   "current",
+                                                                                                                   "origin",
+                                                                                                                   "SpeedDynamics",
+                                                                                                                   "YawRateDynamics",
+                                                                                                                   "AccelerationDynamics",
+                                                                                                                   "HeadingDynamics",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                     "LatitudeDynamics",
+                                                                                                                   "LongitudeDynamics",
+                                                                                                                   "PosXDynamics",
+                                                                                                                   "PoYDynamics"},
+                                                                                                                  {{"Test", 1000}},
+                                                                                                                  true));
+
+
+
+
+                       //connectorConfig->push_back(restConnectorConfig.get());
 
                       break;
                   }
@@ -215,11 +255,145 @@ zmq::context_t context_subb(1);
                       std::ofstream canConnectorConfigXMLFile(fileNameCan);
                       canConnectorConfigXMLFile << xmlStringStreamCanConnector.rdbuf();
 
-                      std::cout << "WTF " << s3 << std::endl;
-                      boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConnectorConfig;
-                  //  ConfigSerializer::deserialize(fileNameCan, "conn", canConnectorConfig);
-                //       ConfigSerializer::serialize("HalloCanVonSim.xml", "conn", canConnectorConfig);
-                    //  connectorConfig->push_back(*canConnectorConfig.get());
+                        //   std::cout << "WTF " << s3 << std::endl;
+                        //   boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConnectorConfig;
+                        //   ConfigSerializer::deserialize(fileNameCan, "conn", canConnectorConfig);
+                        //   ConfigSerializer::serialize("HalloCanVonSim.xml", "conn", canConnectorConfig);
+                        //   connectorConfig->push_back(canConnectorConfig.get());
+
+                      // CAN receive operation without a mask
+                      sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCan1(
+                              "Hazard",
+                              false,
+                              false
+                      );
+
+                      // CANFD receive operation mask
+                      int mask1Len = 1;
+                      __u8 mask1[1] = {0xFF};
+
+                      sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCanfd1(
+                              "Brake",
+                              true,
+                              true,
+                              mask1Len,
+                              mask1
+                      );
+
+                      // CAN non-cyclic send operation
+                      sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCan1(
+                              0x222,
+                              false,
+                              false
+                      );
+
+                      // CANFD non cyclic send operation
+                      sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCanfd1{
+                              0x333,
+                              true,
+                              false,
+                      };
+
+                      // CANFD cyclic send operation
+                      struct bcm_timeval ival1 = {0};
+                      ival1.tv_sec = 1;
+                      ival1.tv_usec = 0;
+
+                      struct bcm_timeval ival2 = {0};
+                      ival2.tv_sec = 3;
+                      ival2.tv_usec = 0;
+
+                      sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCyclicCanfd1(
+                              0x444,
+                              true,
+                              true,
+                              true,
+                              10,
+                              ival1,
+                              ival2
+                      );
+
+                      // CAN Connector Receive Config
+                      std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> frameToOperation = {
+                              {0x123, recvOpCan1},
+                              {0x456, recvOpCanfd1}
+                      };
+
+                      // CAN Connector Send Config
+                      std::map<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> operationToFrame = {
+                              {"Speed", sendOpCan1},
+                              {"Door", sendOpCanfd1},
+                              {"Blink", sendOpCyclicCanfd1}
+                      };
+
+
+
+
+                      boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConfigTest ( new sim_interface::dut_connector::can::CANConnectorConfig(
+                              "vcan0",
+                              "BmwCodec",
+                              {"Speed", "Door", "Blink", "Hazard", "Brake"},
+                              frameToOperation,
+                              operationToFrame,
+                              {},
+                              false));
+
+
+                      CanConnectorVektor->push_back( new  sim_interface::dut_connector::can::CANConnectorConfig (
+                              "vcan0",
+                              "BmwCodec",
+                              {"Speed", "Door", "Blink", "Hazard", "Brake"},
+                              frameToOperation,
+                              operationToFrame,
+                              {},
+                              false));
+
+
+
+                      break;
+                  }
+
+                  case V2XConnector: {
+
+                      auto optionszzz = pt::xml_writer_make_settings<std::string>(' ', 4);
+
+                      std::stringstream test;
+                      boost::property_tree::xml_parser::write_xml(test,v.second,optionszzz);
+
+
+                      std::stringstream s ;
+                      pt::ptree testBaum;
+
+                      //XML String in richtige Form bringen
+                      testBaum.add_child("scoped_ptr",v.second);
+                      boost::property_tree::xml_parser::write_xml(s,testBaum,optionszzz);
+                      std::string s1 = R"(<?xml version="1.0" encoding="utf-8"?>)";
+                      std::string s3 = s.str();
+                      s3.replace(s.str().find(s1),s1.length(),"");
+                      std::string s4 = R"(classType=")"  +connectorTypeS + R"(")";
+                      s3.replace(s3.find(s4), s4.length(),"");
+
+
+
+
+                      std::istringstream xmlStringStreamV2XConnector(s3);
+
+
+
+
+                      std::string fileNameV2X = connectorTypeS + ".xml";
+                      std::ofstream V2XConnectorConfigXMLFile(fileNameV2X);
+                      V2XConnectorConfigXMLFile << xmlStringStreamV2XConnector.rdbuf();
+
+                      //   std::cout << "WTF " << s3 << std::endl;
+                      //   boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConnectorConfig;
+                      //   ConfigSerializer::deserialize(fileNameCan, "conn", canConnectorConfig);
+                      //   ConfigSerializer::serialize("HalloCanVonSim.xml", "conn", canConnectorConfig);
+                      //   connectorConfig->push_back(canConnectorConfig.get());
+
+
+
+
                       break;
                   }
                   default: {
@@ -230,27 +404,27 @@ zmq::context_t context_subb(1);
 
               }
         }
-    //    std::string input_data_( buf, reply.size() );
-    //    std::istringstream archive_stream(input_data_);
-    //    boost::archive::xml_iarchive archive(archive_stream);
-    //    //std::map <std::string, std::string> receiveMap;
-    //   std::map<std::string,std::multimap<std::string,std::string>> receiveMap;
+        //    std::string input_data_( buf, reply.size() );
+        //    std::istringstream archive_stream(input_data_);
+        //    boost::archive::xml_iarchive archive(archive_stream);
+        //    //std::map <std::string, std::string> receiveMap;
+        //   std::map<std::string,std::multimap<std::string,std::string>> receiveMap;
 
-    //   try
-    //   {
-    //       archive >> receiveMap;
-    //   } catch (boost::archive::archive_exception& ex) {
-    //       std::cout << "Archive Exception during deserializing:" << std::endl;
-    //       std::cout << ex.what() << std::endl;
-    //   } catch (int e) {
-    //       std::cout << "EXCEPTION " << e << std::endl;
-    //   }
+        //   try
+        //   {
+        //       archive >> receiveMap;
+        //   } catch (boost::archive::archive_exception& ex) {
+        //       std::cout << "Archive Exception during deserializing:" << std::endl;
+        //       std::cout << ex.what() << std::endl;
+        //   } catch (int e) {
+        //       std::cout << "EXCEPTION " << e << std::endl;
+        //   }
 
-    //   //  std::string test  = receiveMap["Speed"].which();
-    //   std::vector<std::string> keyVector;
-    //   std::vector<std::string> valueVector;
-    //   std::multimap<std::string,std::string> testCanMap;
-    //   testCanMap  = receiveMap.at("CANConnector");
+        //   //  std::string test  = receiveMap["Speed"].which();
+        //   std::vector<std::string> keyVector;
+        //   std::vector<std::string> valueVector;
+        //   std::multimap<std::string,std::string> testCanMap;
+        //   testCanMap  = receiveMap.at("CANConnector");
 
 
     }

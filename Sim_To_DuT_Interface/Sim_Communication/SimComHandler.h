@@ -45,6 +45,9 @@
 #include <boost/serialization/variant.hpp>
 #include <vector>
 #include "../DuT_Connectors/ConnectorConfig.h"
+#include "../DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
+#include "../DuT_Connectors/CANConnector/CANConnectorConfig.h"
+
 namespace sim_interface {
     /**
      * Handler between interface and simulation.
@@ -74,11 +77,12 @@ namespace sim_interface {
          * Starts the handler to asynchronously receive incoming events.
          */
         void run();
-
+        void getConfig(std::vector<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig*> *RESTConnectorVektor, std::vector<sim_interface::dut_connector::can::CANConnectorConfig*> *CanConnectorVektor);
         void getConfig(  std::vector<sim_interface::dut_connector::ConnectorConfig*> *connectorConfig);
         enum connectorType {
             RESTDummyConnector,
             CANConnector,
+            V2XConnector,
             Invalid_Connector
         };
         connectorType resolveConnectorTypeForSwitch(std::string connectorTypeS);

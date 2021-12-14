@@ -64,35 +64,38 @@ int main() {
 
     // Init interface with SimComHandler
     interface.setSimComHandler(&simComHandler);
-    std::vector<sim_interface::dut_connector::ConnectorConfig*> connectorConfig;
- //   std::vector<boost::variant< sim_interface::dut_connector::ConnectorConfig,sim_interface::dut_connector::rest_dummy::RESTConnectorConfig, sim_interface::dut_connector::can::CANConnectorConfig>> connectorConfig;
+    std::vector<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig*> RESTConnectorVec;
+    std::vector<sim_interface::dut_connector::can::CANConnectorConfig*> CanConnectorVec;
+    //std::vector<sim_interface::dut_connector::ConnectorConfig*> connectorConfig;
+    //   std::vector<boost::variant< sim_interface::dut_connector::ConnectorConfig,sim_interface::dut_connector::rest_dummy::RESTConnectorConfig, sim_interface::dut_connector::can::CANConnectorConfig>> connectorConfig;
+    std::cout << "Laenge des REST-Vektor vor dem Hinzufuegen: " << RESTConnectorVec.size() << std::endl;
+    std::cout << "Laenge des CAN-Vektor vor dem Hinzufuegen: " << CanConnectorVec.size() << std::endl;
+    simComHandler.getConfig(&RESTConnectorVec, &CanConnectorVec);
+    std::cout << "Laenge des CAN-Vektor nach dem Hinzufuegen: " << CanConnectorVec.size() << std::endl;
+    std::cout << "Laenge des REST-Vektor nach dem Hinzufuegen: " << RESTConnectorVec.size() << std::endl;
+    // std::cout << "TEST!!!: " << connectorConfig.size() << std::endl;
     /*
- simComHandler.getConfig(&connectorConfig);
-    std::cout << "TEST!!!: " << connectorConfig.size() << std::endl;
 
-
-   // sim_interface::dut_connector::rest_dummy::RESTConnectorConfig * config2;
-
-
+    sim_interface::dut_connector::rest_dummy::RESTConnectorConfig * config2;
     for(const auto &c: connectorConfig) {
-      std::cout << "Namen: !!" << typeid(c).name() << c->connectorType<< std::endl;
+        std::cout << "Namen: !!" << typeid(c).name() << c->connectorType<< std::endl;
         if (c->connectorType == "RESTConnectorConfig") {
 
-  //         sim_interface::dut_connector::rest_dummy::RESTConnectorConfig* config2 = dynamic_cast<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig*>(c);
-  //       //  boost::scoped_ptr<  sim_interface::dut_connector::rest_dummy::RESTConnectorConfig> config2 ;
-  //       //  config2.reset(c);
-//
-  //            sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), *config2);
-  //          interface.addConnector(&restDummyConnector);
+            sim_interface::dut_connector::rest_dummy::RESTConnectorConfig* config2 = dynamic_cast<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig*>(c);
+            boost::scoped_ptr<  sim_interface::dut_connector::rest_dummy::RESTConnectorConfig> config2 ;
+            config2.reset(c);
+            sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), *config2);
+            interface.addConnector(&restDummyConnector);
 
         }
+
     }
-*/
+    */
     // Create DuT Devices
 
 
     // Create the REST connector
-    sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
+    /*sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
                                                                          "http://172.17.0.1",
                                                                          9091,
                                                                          {"Test", "Angle",
@@ -124,7 +127,7 @@ int main() {
                                                                  "PoYDynamics"},
                                                                          {{"Test", 1000}},
                                                                          true);
-
+    +/
   // sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), *config2);
 
     // Test the REST connector
@@ -146,7 +149,7 @@ int main() {
     //+++++ Start CAN Connector +++++
 
     // CAN receive operation without a mask
-    sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCan1(
+    /* sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCan1(
             "Hazard",
             false,
             false
@@ -228,22 +231,35 @@ int main() {
             operationToFrame,
             {},
             false));
-    sim_interface::ConfigSerializer::serialize("TEST.xml", "conn", canConfigTest);
- //   boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConnectorConfig;
- //   sim_interface::ConfigSerializer::deserialize("TEST.xml", "conn", canConfigTest);
-//
-  //  std::ifstream is("TEST.xml");
-  //  std::stringstream ss;
-//
-  //  ss << is.rdbuf();
-  //  std::istringstream iss(ss.str());
-  //  std::cout << "TEST: " << iss.str() << std::endl;
-  //  sim_interface::ConfigSerializer::deserialize(iss, "test", canConfigTest);
-  //  sim_interface::ConfigSerializer::serialize("TESTTEST.xml", "test", canConfigTest);
+    */
+    // sim_interface::ConfigSerializer::serialize("TEST.xml", "conn", canConfigTest);
+    // sim_interface::ConfigSerializer::deserialize("TESTPET.xml", "conn", canConfigTest);
+
+    // sim_interface::ConfigSerializer::deserialize("CANConnector.xml", "conn", canConfigTest);
+    // sim_interface::ConfigSerializer::serialize("TESTFuckingGo.xml", "conn", canConfigTest);
+    // boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConnectorConfig;
+    // sim_interface::ConfigSerializer::deserialize("TEST.xml", "conn", canConfigTest);
+
+    //  std::ifstream is("TEST.xml");
+    //  std::stringstream ss;
+
+    //  ss << is.rdbuf();
+    //  std::istringstream iss(ss.str());
+    //  std::cout << "TEST: " << iss.str() << std::endl;
+    //  sim_interface::ConfigSerializer::deserialize(iss, "test", canConfigTest);
+    //  sim_interface::ConfigSerializer::serialize("TESTTEST.xml", "test", canConfigTest);
+
+    sim_interface::dut_connector::can::CANConnectorConfig canConfig( CanConnectorVec.at(0)->interfaceName,
+                                                                     CanConnectorVec.at(0)->codecName,
+                                                                     CanConnectorVec.at(0)->operations,
+                                                                     CanConnectorVec.at(0)->frameToOperation,
+                                                                     CanConnectorVec.at(0)->operationToFrame,
+                                                                     CanConnectorVec.at(0)->periodicOperations,
+                                                                     CanConnectorVec.at(0)->periodicTimerEnabled);
 
 
-  // Create a new CAN Connector and add it to the interface
-   sim_interface::dut_connector::can::CANConnector canConnector(interface.getQueueDuTToSim(), canConfig);
+    // Create a new CAN Connector and add it to the interface
+    sim_interface::dut_connector::can::CANConnector canConnector(interface.getQueueDuTToSim(), canConfig);
     interface.addConnector(&canConnector);
 
     // Test the CAN Connector

@@ -41,7 +41,6 @@ namespace sim_interface::dut_connector::can{
         // Assert that at least one map has an entry
         assert(!this->frameToOperation.empty() || !this->operationToFrame.empty());
     }
-
 }
 
 
