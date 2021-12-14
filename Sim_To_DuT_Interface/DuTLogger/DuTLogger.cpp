@@ -42,6 +42,8 @@ void DuTLogger::initializeLogger(const LoggerConfig &con) {
         logMessage("Logger can't be initialized again!", LOG_LEVEL::ERROR);
         return;
     }
+    quill::enable_console_colours();
+
     // start the quill engine
     quill::start();
 
@@ -77,7 +79,7 @@ void DuTLogger::initializeLogger(const LoggerConfig &con) {
 
 quill::Handler* DuTLogger::buildConsoleHandler(bool enableDebugMode) {
     // build a handler for the console
-    quill::Handler* newHandler = quill::stdout_handler("consoleHandler");
+    quill::Handler* newHandler = quill::stdout_handler("stdout");
 
     // Check if debug mode is enabled. If not use the configured default level
     if (enableDebugMode) {
@@ -325,7 +327,7 @@ std::string DuTLogger::getCurrentTimestamp() {
 
     // write it formatted in a stream and convert that to a string, so we can return it
     std::ostringstream oss;
-    oss << std::put_time(&timer, "%Y-%m-%d_%H-%M-%S");
+    oss << std::put_time(&timer, "%Y-%m-%d_%H:%M:%S");
     return oss.str();
 }
 

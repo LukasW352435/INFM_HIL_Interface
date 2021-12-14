@@ -31,7 +31,6 @@
 #include <linux/if_packet.h>
 #include <net/if.h>
 #include "EthernetPacket.h"
-#include "../../Sim_Communication/EventToSimVisitor.h"
 #include "../../DuTLogger/DuTLogger.h"
 
 namespace sim_interface::dut_connector::v2x {
