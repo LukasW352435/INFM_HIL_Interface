@@ -69,7 +69,7 @@ $(function() {
 <div class="textblock"><p>This dummy provides the possibility to send and receive messages.</p>
 <p>To build and execute you can use docker (optionally mount config file).</p>
 <div class="fragment"><div class="line">docker build -t your-image-name .</div>
-<div class="line">docker run -it --rm -p 9090:9090 -v $(pwd)/config:/opt/config your-image-name:ro</div>
+<div class="line">docker run -it --rm -p 9090:9090 -v $(pwd)/config:/opt/config:ro your-image-name</div>
 </div><!-- fragment --><p>If you want to compile locally the following libraries are needed:</p>
 <ul>
 <li>libasio-dev</li>
@@ -82,7 +82,7 @@ $(function() {
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 13 2021 18:27:35 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Dec 14 2021 10:56:19 for INFM HIL Interface by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['name_265',['name',['../classsim__interface_1_1dut__connector_1_1ConnectorInfo.html#a844f64a1e3e962169b3d7b6f67b321f8',1,'sim_interface::dut_connector::ConnectorInfo']]]
+  ['m_5fspreceiveapiresource_286',['m_spReceiveApiResource',['../classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveEndpoint.html#ad79fc6116ddee9f3a1d4061f4b4597f4',1,'sim_interface::dut_connector::rest_dummy::ReceiveEndpoint']]],
+  ['mask_287',['mask',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorReceiveOperation.html#aca33c0cfb7600336ccf7da07712cd86a',1,'sim_interface::dut_connector::can::CANConnectorReceiveOperation']]],
+  ['masklength_288',['maskLength',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorReceiveOperation.html#ac945fd6760feeac36be0870236fe3098',1,'sim_interface::dut_connector::can::CANConnectorReceiveOperation']]]
 ];

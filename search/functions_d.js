@@ -1,15 +1,8 @@
 var searchData=
 [
-  ['savetofile_225',['saveToFile',['../classsim__interface_1_1SystemConfig.html#ab869cdc92afd0abc3897d898bbff27dd',1,'sim_interface::SystemConfig']]],
-  ['sendeventtosim_226',['sendEventToSim',['../classsim__interface_1_1dut__connector_1_1DuTConnector.html#a0333f023233d13481e0ef72a9245370b',1,'sim_interface::dut_connector::DuTConnector::sendEventToSim()'],['../classsim__interface_1_1SimComHandler.html#a2064c6154aa11da9f9d0c815f45cd270',1,'sim_interface::SimComHandler::sendEventToSim()']]],
-  ['setsimcomhandler_227',['setSimComHandler',['../classsim__interface_1_1SimToDuTInterface.html#ad3fb2ac3fd31022c2a6035d36f439833',1,'sim_interface::SimToDuTInterface']]],
-  ['sharedqueue_228',['SharedQueue',['../classsim__interface_1_1SharedQueue.html#ad4628711bf33c87ba9fcf8952332c7d5',1,'sim_interface::SharedQueue::SharedQueue()=default'],['../classsim__interface_1_1SharedQueue.html#a116bd0f0785aced4f837663745844d77',1,'sim_interface::SharedQueue::SharedQueue(const SharedQueue&lt; T &gt; &amp;)=delete']]],
-  ['simcomhandler_229',['SimComHandler',['../classsim__interface_1_1SimComHandler.html#a7a2479fc313fa89e6c0accded35430c2',1,'sim_interface::SimComHandler']]],
-  ['simevent_230',['SimEvent',['../classsim__interface_1_1SimEvent.html#a066f75ffc76c04cff8950d33c4d4214d',1,'sim_interface::SimEvent::SimEvent()'],['../classsim__interface_1_1SimEvent.html#a0d72e5c568dc3a56947281cfdae11e8e',1,'sim_interface::SimEvent::SimEvent(std::string operation, boost::variant&lt; int, double, std::string &gt; value, std::string origin)']]],
-  ['simtodutinterface_231',['SimToDuTInterface',['../classsim__interface_1_1SimToDuTInterface.html#ab6afddedac9d240b086f38c58d566393',1,'sim_interface::SimToDuTInterface']]],
-  ['start_232',['start',['../classsim__interface_1_1PeriodicTimer.html#a8a4af89ff3a9f914986956848425ef70',1,'sim_interface::PeriodicTimer']]],
-  ['startservice_233',['startService',['../classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveEndpoint.html#a4cae90989d22c26e84f3734a5b76b757',1,'sim_interface::dut_connector::rest_dummy::ReceiveEndpoint']]],
-  ['stop_234',['stop',['../classsim__interface_1_1PeriodicTimer.html#a25f285eef20fa9a1d109f3bd3bbc7ac7',1,'sim_interface::PeriodicTimer::stop()'],['../classsim__interface_1_1SharedQueue.html#a128dcade8cffcfe9c0a6ac387bcfc432',1,'sim_interface::SharedQueue::Stop()']]],
-  ['stopservice_235',['stopService',['../classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveEndpoint.html#a101dc63540619f7126cbf2871f966088',1,'sim_interface::dut_connector::rest_dummy::ReceiveEndpoint']]],
-  ['systemconfig_236',['SystemConfig',['../classsim__interface_1_1SystemConfig.html#ade448e920e19a548f9046154ed07cc51',1,'sim_interface::SystemConfig']]]
+  ['receiveapiresource_238',['ReceiveApiResource',['../classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveApiResource.html#a46b524832cab7b942c6f10b51696112d',1,'sim_interface::dut_connector::rest_dummy::ReceiveApiResource']]],
+  ['removeinterfacecallback_239',['removeInterfaceCallback',['../classdummy__dut_1_1rest_1_1impl_1_1RegisteredInterface.html#aa6f9ab3659395647d859b0bdc7414f3f',1,'dummy_dut::rest::impl::RegisteredInterface']]],
+  ['replaceall_240',['replaceAll',['../classEventVisitor.html#a520b999c641b36e55fa0a9336569c9bf',1,'EventVisitor']]],
+  ['restdummyconnector_241',['RESTDummyConnector',['../classsim__interface_1_1dut__connector_1_1rest__dummy_1_1RESTDummyConnector.html#a62ef128389c3c69e0c3b5a8ad0135ac4',1,'sim_interface::dut_connector::rest_dummy::RESTDummyConnector']]],
+  ['run_242',['run',['../classsim__interface_1_1SimComHandler.html#a9e3045aec9762d50b256b8c27058f9ab',1,'sim_interface::SimComHandler::run()'],['../classsim__interface_1_1SimToDuTInterface.html#a09dedf083656d44e57032c323873672a',1,'sim_interface::SimToDuTInterface::run()']]]
 ];
