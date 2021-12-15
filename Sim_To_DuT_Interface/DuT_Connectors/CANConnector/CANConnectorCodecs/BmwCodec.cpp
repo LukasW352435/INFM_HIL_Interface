@@ -121,8 +121,8 @@ namespace sim_interface::dut_connector::can{
         // Apply the scaling and offset
         auto rawSpeed           = (uint16_t) (realSpeed           / V_VEHCOG_SCALING - V_VEHCOG_OFFSET);
         auto rawAngularVelocity = (uint16_t) (realAngularVelocity / VYAWVEH_SCALING  -  VYAWVEH_OFFSET);
-        auto rawAccelerationY   = (uint16_t) (realAccelerationY   / ACLNYCOG_SCALING + ACLNYCOG_OFFSET);
-        auto rawAccelerationX   = (uint16_t) (realAccelerationX   / ACLNXCOG_SCALING + ACLNXCOG_OFFSET);
+        auto rawAccelerationY   = (uint16_t) (realAccelerationY   / ACLNYCOG_SCALING - ACLNYCOG_OFFSET);
+        auto rawAccelerationX   = (uint16_t) (realAccelerationX   / ACLNXCOG_SCALING - ACLNXCOG_OFFSET);
 
         // Convert to host order
         if(hostIsBigEndian){
@@ -160,7 +160,7 @@ namespace sim_interface::dut_connector::can{
 
         // Apply the scaling and offset
         auto rawLongitude = (int32_t) (realLongitude / ST_LONGNAVI_SCALING - ST_LONGNAVI_OFFSET);
-        auto rawLatitude  = (int32_t) (realLatitude / ST_LATNAVI_SCALING - ST_LATNAVI_OFFSET);
+        auto rawLatitude  = (int32_t) (realLatitude  / ST_LATNAVI_SCALING  - ST_LATNAVI_OFFSET);
 
         // Convert to host order
         if(hostIsBigEndian){

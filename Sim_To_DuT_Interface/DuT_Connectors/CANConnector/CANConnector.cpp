@@ -359,6 +359,8 @@ namespace sim_interface::dut_connector::can{
             msgCAN->canFrame[0]        = *canFrame;
         }
 
+        DuTLogger::logMessage("CAN Connector: TX_SETUP created for the CAN ID: " + convertCanIdToHex(frame.can_id), LOG_LEVEL::INFO);
+
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), msgSize);
 
@@ -517,6 +519,8 @@ namespace sim_interface::dut_connector::can{
             }
 
         }
+
+        DuTLogger::logMessage("CAN Connector: TX_SETUP (update) created for the CAN ID: " + convertCanIdToHex(frame.can_id), LOG_LEVEL::INFO);
 
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), msgSize);
@@ -865,12 +869,12 @@ namespace sim_interface::dut_connector::can{
         if(sendOperation.isCyclic){
 
             // Check if a cyclic send operation was set up already
-            if(this->isSetup.at(event.operation)){
+            if(this->isSetup.at(data.second)){
                 // Update the cyclic send operation with the new frame payload
                 txSetupUpdateSingleFrame(canfdFrame, sendOperation.isCANFD, sendOperation.announce);
             }else{
                 // Create a new cyclic send operation and remember that we already set it up
-                this->isSetup[event.operation] = true;
+                this->isSetup[data.second] = true;
                 txSetupSingleFrame(canfdFrame, sendOperation.count, sendOperation.ival1, sendOperation.ival2, sendOperation.isCANFD);
             }
 
