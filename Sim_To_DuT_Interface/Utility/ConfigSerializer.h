@@ -19,6 +19,8 @@
  * along with "Sim To DuT Interface".  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Michael Schmitz
+ * @author Fabian Andre Genes
+ * @author Thanaanncheyan Thavapalan
  * @version 1.0
  */
 

@@ -21,52 +21,25 @@
  * @author Lukas Wagenlehner
  * @author Fabian Andre Genes
  * @author Thanaancheyan Thavapalan
- * // TODO add all authors
  * @version 1.0
  */
 
+/**
+ * Included Headerfiles
+ *
+ * 1) Created Headerfiles
+ *      - SimComHandler: Headerfile from this class
+ *
+**/
 #include "SimComHandler.h"
-
-#include <utility>
-#include <zmq.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/archive/binary_iarchive.hpp>
-
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/serialization/map.hpp>
-#include <boost/serialization/variant.hpp>
-
-
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/archive/binary_iarchive.hpp>
-
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/serialization/map.hpp>
-#include <boost/serialization/variant.hpp>
-
-#include <boost/property_tree/ptree_serialization.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/xml_parser.hpp>
-#include <boost/property_tree/ini_parser.hpp>
-#include <boost/foreach.hpp>
-
-#include "../DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
-#include "../DuT_Connectors/CANConnector/CANConnectorConfig.h"
-#include "../Utility/ConfigSerializer.h"
 
 
 namespace sim_interface {
 
     namespace pt = boost::property_tree;
+    using boost::property_tree::ptree;
+    zmq::context_t context_subb(1);
 
-using boost::property_tree::ptree;
-zmq::context_t context_subb(1);
     SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig& config)
             : queueSimToInterface(std::move(queueSimToInterface)), socketSimPub_(context_subb,zmq::socket_type::pub), socketSimSub_(context_subb,zmq::socket_type::sub),socketSimSubConfig_(context_subb,zmq::socket_type::sub) {
 
@@ -82,13 +55,14 @@ zmq::context_t context_subb(1);
 
         // zmq Reciver Config
        std::string socketSimAddressReciverConfig = config.socketSimAddressReciverConfig;
-      zmq::context_t context_recConfig(1);
+        zmq::context_t context_recConfig(1);
 
 
 
         // Config Sockets
-         socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
-         socketSimSubConfig_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
+        socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
+        socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
+        socketSimSubConfig_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
 
 
 
@@ -105,9 +79,11 @@ zmq::context_t context_subb(1);
 
 
     }
+
     SimComHandler::connectorType SimComHandler::resolveConnectorTypeForSwitch(std::string connectorTypeS) {
         if(connectorTypeS == "RESTDummyConnector") return RESTDummyConnector;
         if(connectorTypeS == "CANConnector") return CANConnector;
+        if(connectorTypeS == "V2XConnector") return V2XConnector;
         return Invalid_Connector;
 
     }

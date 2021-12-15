@@ -21,9 +21,8 @@
  * @author Lukas Wagenlehner
  * @author Michael Schmitz
  * @author Matthias Bank
- * @author Fabian Genes
+ * @author Fabian Andre Genes
  * @author Thanaancheyan Thavapalan
- * // TODO add all authors
  * @author Marco Keul
  * @version 1.0
  */
