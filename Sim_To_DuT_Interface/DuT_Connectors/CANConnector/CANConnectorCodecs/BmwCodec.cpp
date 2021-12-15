@@ -67,25 +67,25 @@ namespace sim_interface::dut_connector::can{
 
         switch(frame.can_id){
 
-            case 0x275:
+            case 0x111:
 
                 // 0x275 GESCHWINDIGKEIT frame
                 events = decodeGeschwindigkeit(frame, isCanfd);
                 break;
 
-            case 0x273:
+            case 0x222:
 
                 // 0x273 GPS_LOCA frame
                 events = decodeGPS_LOCA(frame, isCanfd);
                 break;
 
-            case 0x274:
+            case 0x333:
 
                 // 0x274 GPS_LOCB frame
                 events = decodeGPS_LOCB(frame, isCanfd);
                 break;
 
-            case 0x279:
+            case 0x444:
 
                 // 0x279 LICHTER frame
                 events = decodeLichter(frame, isCanfd);

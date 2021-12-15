@@ -810,7 +810,7 @@ namespace sim_interface::dut_connector::can{
 
         // Sanity check
         if(events.empty()){
-            DuTLogger::logMessage("CAN Connector: Codec returned no simulation events a frame", LOG_LEVEL::WARNING);
+            DuTLogger::logMessage("CAN Connector: Codec returned no simulation events for the received frame", LOG_LEVEL::WARNING);
         }
 
         // Send the received simulation events to the simulation
