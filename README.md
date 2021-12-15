@@ -1,6 +1,6 @@
 # INFM HIL Interface
 Interface between the Artery V2X Simulation Framework and DuT (Device under Test).  
-The interface should support standards like:
+The interface supports standards like:
 
 - CAN
 - V2X
