@@ -52,8 +52,8 @@ int main() {
     sim_interface::SystemConfig::loadFromFile(configPath + "/SystemConfig.xml", systemConfig, true);
 
     // initialize the logger
-    InterfaceLogger::initializeLogger(systemConfig.loggerConfig);
-    InterfaceLogger::logMessage("Start Application", LOG_LEVEL::INFO);
+    sim_interface::InterfaceLogger::initializeLogger(systemConfig.loggerConfig);
+    sim_interface::InterfaceLogger::logMessage("Start Application", sim_interface::LOG_LEVEL::INFO);
 
     // Create interface
     sim_interface::SimToDuTInterface interface;
@@ -244,6 +244,6 @@ int main() {
     interface.run();
 
     std::cin.get();
-    InterfaceLogger::logMessage("Shut down application", LOG_LEVEL::INFO);
+    sim_interface::InterfaceLogger::logMessage("Shut down application", sim_interface::LOG_LEVEL::INFO);
     return 0;
 }
