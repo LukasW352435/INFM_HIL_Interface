@@ -819,11 +819,10 @@ namespace sim_interface::dut_connector::can{
 
     void CANConnector::handleEventSingle(const SimEvent &event){
 
-        // Get the data from the config that we need for the send operation
-        CANConnectorSendOperation sendOperation = this->config.operationToFrame.at(event.operation);
-
-        // Convert the simulation event to a CAN/CANFD frame payload
-        std::vector<__u8> frameData = codec->convertSimEventToFrame(event);
+        // Convert the simulation event to a CAN/CANFD frame payload and the sendOperation name
+        auto data = codec->convertSimEventToFrame(event);
+        auto frameData = data.first;
+        CANConnectorSendOperation sendOperation = this->config.operationToFrame.at(data.second);
 
         // Sanity checks to identify errors made by the user written codec
         if(frameData.empty()){

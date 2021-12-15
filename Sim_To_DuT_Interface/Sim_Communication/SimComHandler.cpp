@@ -39,20 +39,20 @@ namespace sim_interface {
         zmq::context_t context_pub(1);
 
         // Create Sockets
-        socketSimSub_ = zmq::socket_t(context_sub, zmq::socket_type::sub);
-        socketSimPub_ = zmq::socket_t(context_pub, zmq::socket_type::pub);
+        //socketSimSub_ = zmq::socket_t(context_sub, zmq::socket_type::sub);
+        //socketSimPub_ = zmq::socket_t(context_pub, zmq::socket_type::pub);
 
         // Config Sockets
-        socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
+        //socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
 
         // Connect to publisher
-        std::cout << "Connecting to " << socketSimAddressSub << " . . ." << std::endl;
+        //std::cout << "Connecting to " << socketSimAddressSub << " . . ." << std::endl;
         //  socket_sub.connect(socketSimAdress);
 
         // Open the connection
-        std::cout << "Binding to " << socketSimAddressPub << " . . ." << std::endl;
-        socketSimPub_.bind(socketSimAddressPub);
-        socketSimSub_.connect(socketSimAddressSub);
+        //std::cout << "Binding to " << socketSimAddressPub << " . . ." << std::endl;
+        //socketSimPub_.bind(socketSimAddressPub);
+        //socketSimSub_.connect(socketSimAddressSub);
     }
 
     void SimComHandler::run() {
