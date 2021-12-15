@@ -1,7 +1,0 @@
-<map id="sim_interface::dut_connector::rest_dummy::ReceiveEndpoint" name="sim_interface::dut_connector::rest_dummy::ReceiveEndpoint">
-<area shape="rect" id="node1" title=" " alt="" coords="879,23,1061,79"/>
-<area shape="rect" id="node2" title=" " alt="" coords="489,5,559,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="391,56,657,112"/>
-<area shape="rect" id="node4" href="$classsim__interface_1_1dut__connector_1_1rest__dummy_1_1ReceiveApiResource.html" title=" " alt="" coords="137,56,320,112"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,71,88,97"/>
-</map>

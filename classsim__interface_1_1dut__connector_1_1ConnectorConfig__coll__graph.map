@@ -1,7 +1,0 @@
-<map id="sim_interface::dut_connector::ConnectorConfig" name="sim_interface::dut_connector::ConnectorConfig">
-<area shape="rect" id="node1" title=" " alt="" coords="76,289,284,331"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,185,168,227"/>
-<area shape="rect" id="node3" title="STL class." alt="" coords="137,96,223,123"/>
-<area shape="rect" id="node5" title=" " alt="" coords="192,193,357,219"/>
-<area shape="rect" id="node4" title="STL class." alt="" coords="111,5,249,47"/>
-</map>
