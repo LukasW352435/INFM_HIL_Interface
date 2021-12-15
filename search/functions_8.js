@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['loadfromfile_228',['loadFromFile',['../classsim__interface_1_1SystemConfig.html#a97531ce3b2c5922a7dd0d7cf58b42cc0',1,'sim_interface::SystemConfig']]],
-  ['logevent_229',['logEvent',['../classDuTLogger.html#a8114c09c6e023f973d3b08b6f02ced36',1,'DuTLogger']]],
-  ['loggerconfig_230',['LoggerConfig',['../classLoggerConfig.html#a281bca410d17550ba6123c8fdb6189b1',1,'LoggerConfig::LoggerConfig()=default'],['../classLoggerConfig.html#a6409b51b2091ea7be94c34e9e6deda54',1,'LoggerConfig::LoggerConfig(bool enableDebugMode, std::string pathConsoleLog, std::string pathDataLog, int fileBackupCount, LOG_LEVEL fileLogLevel, LOG_LEVEL consoleLogLevel)']]],
-  ['logmessage_231',['logMessage',['../classDuTLogger.html#a9758a49895c8b32767f74e4b03a0f9d6',1,'DuTLogger::logMessage(const std::string &amp;msg, LOG_LEVEL level)'],['../classDuTLogger.html#a8d5cee2616636923ebc8dae0c11e13d9',1,'DuTLogger::logMessage(const std::string &amp;msg, LOG_LEVEL level, bool writeToFile)']]]
+  ['loadfromfile_230',['loadFromFile',['../classsim__interface_1_1SystemConfig.html#a97531ce3b2c5922a7dd0d7cf58b42cc0',1,'sim_interface::SystemConfig']]],
+  ['logevent_231',['logEvent',['../classsim__interface_1_1InterfaceLogger.html#adc8424929eb2a4385c110c0d3d0ae9ed',1,'sim_interface::InterfaceLogger']]],
+  ['loggerconfig_232',['LoggerConfig',['../classsim__interface_1_1LoggerConfig.html#a7dd6e0e8854b84e4578e06ab53fc943a',1,'sim_interface::LoggerConfig::LoggerConfig()=default'],['../classsim__interface_1_1LoggerConfig.html#a5437d1e6609d473c183a682763a1c659',1,'sim_interface::LoggerConfig::LoggerConfig(bool enableDebugMode, std::string pathConsoleLog, std::string pathDataLog, int fileBackupCount, LOG_LEVEL fileLogLevel, LOG_LEVEL consoleLogLevel)']]],
+  ['logmessage_233',['logMessage',['../classsim__interface_1_1InterfaceLogger.html#a7e12b559a70f5110f926709127ef8baf',1,'sim_interface::InterfaceLogger::logMessage(const std::string &amp;msg, LOG_LEVEL level)'],['../classsim__interface_1_1InterfaceLogger.html#aca49784cee6425cf2be38471f35dcb45',1,'sim_interface::InterfaceLogger::logMessage(const std::string &amp;msg, LOG_LEVEL level, bool writeToFile)']]]
 ];
