@@ -26,7 +26,7 @@
 #include <chrono>
 #include <utility>
 #include "PeriodicTimer.h"
-#include "../DuTLogger/DuTLogger.h"
+#include "../Interface_Logger/DuTLogger.h"
 
 namespace sim_interface {
     PeriodicTimer::PeriodicTimer(const std::shared_ptr<boost::asio::io_service> &io, int periodMs,

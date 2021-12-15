@@ -29,7 +29,7 @@
 #include <iostream>
 #include <utility>
 #include "ReceiveEndpoint.h"
-#include "../../DuTLogger/DuTLogger.h"
+#include "../../Interface_Logger/DuTLogger.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 

@@ -27,7 +27,7 @@
 #include <sstream>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
-#include "../../DuTLogger/DuTLogger.h"
+#include "../../Interface_Logger/DuTLogger.h"
 #include "EthernetPacket.h"
 
 namespace sim_interface::dut_connector::v2x {

@@ -20,7 +20,7 @@
 #include "CANConnectorCodec.h"
 #include "CANConnectorConfig.h"
 #include "CANConnectorCodecFactory.h"
-#include "../../DuTLogger/DuTLogger.h"
+#include "../../Interface_Logger/DuTLogger.h"
 
 // System includes
 #include <thread>

@@ -24,7 +24,7 @@
  */
 
 #include "DuTConnector.h"
-#include "../DuTLogger/DuTLogger.h"
+#include "../Interface_Logger/DuTLogger.h"
 
 #include <utility>
 #include <boost/asio.hpp>

@@ -33,7 +33,7 @@
 #include "DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
 #include "DuT_Connectors/CANConnector/CANConnector.h"
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
-#include "DuTLogger/DuTLogger.h"
+#include "Interface_Logger/DuTLogger.h"
 #include "DuT_Connectors/V2XConnector/V2XConnectorConfig.h"
 #include "DuT_Connectors/V2XConnector/V2XConnector.h"
 #include "SystemConfig.h"

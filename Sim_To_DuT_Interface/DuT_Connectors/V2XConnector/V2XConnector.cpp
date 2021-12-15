@@ -31,7 +31,7 @@
 #include <linux/if_packet.h>
 #include <net/if.h>
 #include "EthernetPacket.h"
-#include "../../DuTLogger/DuTLogger.h"
+#include "../../Interface_Logger/DuTLogger.h"
 
 namespace sim_interface::dut_connector::v2x {
     V2XConnector::V2XConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,

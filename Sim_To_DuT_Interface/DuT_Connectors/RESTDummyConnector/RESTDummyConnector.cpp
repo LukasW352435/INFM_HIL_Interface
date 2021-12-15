@@ -29,7 +29,7 @@
 #include "../../Events/EventVisitor.h"
 #include "RESTDummyConnector.h"
 #include "ReceiveEndpoint.h"
-#include "../../DuTLogger/DuTLogger.h"
+#include "../../Interface_Logger/DuTLogger.h"
 
 namespace sim_interface::dut_connector::rest_dummy {
     RESTDummyConnector::RESTDummyConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
