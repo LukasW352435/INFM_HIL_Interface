@@ -35,38 +35,31 @@
 #include <fstream>
 
 namespace sim_interface {
-
-/**
- * This constant contains the header of the csv files. This header will be printed in the first line of the files and
- * represents the order and meaning of the logged values.
- */
-    static const std::string CSV_HEADER = "Operation,Value,Origin,Timestamp";
-
-/**
- * This enum collects all types of logger whose level can be changed.
- * So there is a log level for logging messages in the console and another one to log messages in a file.
- * Please notice that you can't change the level of the data logging, because all data objects will be logged with
- * the same level.
- */
+    /**
+     * This enum collects all types of logger whose level can be changed.
+     * So there is a log level for logging messages in the console and another one to log messages in a file.
+     * Please notice that you can't change the level of the data logging, because all data objects will be logged with
+     * the same level.
+     */
     enum LOG_TYPE {
         CONSOLE_LOG, FILE_LOG
     };
 
-/**
- * This logger is a tool with specialized functions to log and store messages for all elements of the
- * Sim_To_DuT_Interface. The logger and all of it's functions are static so it's not necessary to create instances
- * of the logger to write a message. Please notice that the logger has to be initialised in a first call by a valid
- * configuration before using it.
- *
- * With logger's functionality it's possible to log messages and events during the execution.
- *
- * The logger will create files if necessary in which the messages will be stored. The message provider can choose if the
- * message should be logged in the file or not. The logger notices old logfiles and will remove them if the real
- * number of logfiles is higher than the configured backup count.
- *
- * @author Marco Keul
- * @version 1.0
- */
+    /**
+     * This logger is a tool with specialized functions to log and store messages for all elements of the
+     * Sim_To_DuT_Interface. The logger and all of it's functions are static so it's not necessary to create instances
+     * of the logger to write a message. Please notice that the logger has to be initialised in a first call by a valid
+     * configuration before using it.
+     *
+     * With logger's functionality it's possible to log messages and events during the execution.
+     *
+     * The logger will create files if necessary in which the messages will be stored. The message provider can choose if the
+     * message should be logged in the file or not. The logger notices old logfiles and will remove them if the real
+     * number of logfiles is higher than the configured backup count.
+     *
+     * @author Marco Keul
+     * @version 1.0
+     */
     class InterfaceLogger {
 
     public:
@@ -120,6 +113,12 @@ namespace sim_interface {
         static void logEvent(sim_interface::SimEvent event);
 
     private:
+        /**
+         * This constant contains the header of the csv files. This header will be printed in the first line of the files and
+         * represents the order and meaning of the logged values.
+         */
+        static std::string CSV_HEADER;
+
         // variable to remember if the logger has been initialized yet
         static bool initialized;
 

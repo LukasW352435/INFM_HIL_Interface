@@ -25,15 +25,16 @@
 #include "InterfaceLogger.h"
 
 namespace sim_interface {
+    std::string InterfaceLogger::CSV_HEADER = "Operation,Value,Origin,Timestamp";
 
-// set the initialized variable to false at start
+    // set the initialized variable to false at start
     bool InterfaceLogger::initialized = false;
 
-// initialize the static handlers
+    // initialize the static handlers
     quill::Handler *InterfaceLogger::consoleHandler;
     quill::Handler *InterfaceLogger::consoleFileHandler;
 
-// initialize the static loggers
+    // initialize the static loggers
     quill::Logger *InterfaceLogger::consoleLogger;
     quill::Logger *InterfaceLogger::consoleFileLogger;
     quill::Logger *InterfaceLogger::dataLogger;
@@ -65,7 +66,7 @@ namespace sim_interface {
         removeOldLogfiles(logPathData, con.fileBackupCount);
 
         // initialize the CSV file for data logging
-        LOG_INFO(dataLogger, "{}", CSV_HEADER);
+        LOG_INFO(dataLogger, "{}", InterfaceLogger::CSV_HEADER);
 
         // remember that we've initialized the logger
         initialized = true;
