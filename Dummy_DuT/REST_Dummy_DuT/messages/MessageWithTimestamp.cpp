@@ -25,14 +25,25 @@
 
 #include "MessageWithTimestamp.h"
 
+#include <chrono>
+#include <iomanip>
+
 using namespace dummy_dut::rest::model;
 
 namespace dummy_dut::rest::messages {
     MessageWithTimestamp::MessageWithTimestamp(Message *message) {
         this->m_Key = message->getKey();
         this->m_Status = message->getStatus();
-        time_t res = std::time(nullptr);
-        this->timestamp = std::localtime(&res);
+        std::chrono::system_clock::time_point time_point = std::chrono::system_clock::now();
+        std::chrono::system_clock::duration duration = time_point.time_since_epoch();
+        int64_t timestamp = duration.count();
+        std:: time_t  time_t = std::chrono::system_clock::to_time_t (time_point);
+        std:: tm * tm = std::localtime (& time_t );
+
+        std::stringstream ss;
+        ss << std::put_time (tm , "%Y-%m-%d %X") << "." << std::to_string((timestamp / 1000) % 1000000);
+
+        this->timestamp = ss.str();
     }
 
     std::string MessageWithTimestamp::toTableEntry() {
@@ -40,12 +51,12 @@ namespace dummy_dut::rest::messages {
                 <tr>
                     <td>)" + this->m_Key + R"(</td>
                     <td>)" + this->m_Status + R"(</td>
-                    <td>)" + std::asctime(this->timestamp) + R"(</td>
+                    <td>)" + this->timestamp + R"(</td>
                 </tr>)";
     }
 
     std::string MessageWithTimestamp::toTableEntryWithoutNewline() {
-        return "<tr><td>" + this->m_Key + "</td><td>" + this->m_Status + "</td><td>" + std::asctime(this->timestamp) +
+        return "<tr><td>" + this->m_Key + "</td><td>" + this->m_Status + "</td><td>" + this->timestamp +
                "</td></tr>";
     }
 }

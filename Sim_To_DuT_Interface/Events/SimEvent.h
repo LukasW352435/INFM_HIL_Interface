@@ -33,7 +33,6 @@
 #ifndef INFM_HIL_INTERFACE_SIMEVENT_H
 #define INFM_HIL_INTERFACE_SIMEVENT_H
 
-#include <ctime>
 #include <map>
 #include <string>
 #include <iostream>
@@ -70,7 +69,7 @@ namespace sim_interface {
         /**
          * Time when the event was created.
          */
-        std::time_t current;
+        std::string current;
         /**
          * Origin of the event.
          */
