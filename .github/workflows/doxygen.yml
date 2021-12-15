@@ -2,7 +2,7 @@ name: Generate doxyGen and publish to gh pages
 on:
   push:
     branches:
-      - doxygen_upgrade
+      - main
 defaults:
   run:
     working-directory: ./doxygen
