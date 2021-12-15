@@ -15,7 +15,7 @@
  ******************************************************************************/
 // Project includes
 #include "CANConnectorCodec.h"
-#include "DuTLogger.h"
+#include "InterfaceLogger.h"
 
 // System includes
 

@@ -7,7 +7,7 @@ set(CMAKE_C_FLAGS -pthread)
 
 add_library(libs "")
 
-add_subdirectory(DuTLogger)
+add_subdirectory(Interface_Logger)
 
 add_subdirectory(DuT_Connectors)
 
@@ -17,8 +17,6 @@ add_executable(${PROJECT_NAME} main.cpp
         Sim_Communication/SimComHandler.cpp Sim_Communication/SimComHandler.h
         Utility/SharedQueue.h
         Utility/PeriodicTimer.cpp Utility/PeriodicTimer.h
-        DuTLogger/DuTLogger.cpp DuTLogger/DuTLogger.h
-        DuTLogger/DuTLoggerConfig.h
         SystemConfig.h)
 
 

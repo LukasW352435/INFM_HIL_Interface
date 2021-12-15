@@ -33,7 +33,7 @@ namespace sim_interface::dut_connector::can{
 
         // Create the codec
         this->codec = CANConnectorCodecFactory::createCodec(this->config.codecName);
-        DuTLogger::logMessage("CAN Connector: Created <" + this->config.codecName + "> codec", LOG_LEVEL::INFO);
+        InterfaceLogger::logMessage("CAN Connector: Created <" + this->config.codecName + "> codec", LOG_LEVEL::INFO);
 
         // Create all receive operations
         for(auto const& [canID, receiveOperation] : config.frameToOperation){
@@ -56,7 +56,7 @@ namespace sim_interface::dut_connector::can{
 
         }
 
-        DuTLogger::logMessage("CAN Connector: Created initial RX setup", LOG_LEVEL::INFO);
+        InterfaceLogger::logMessage("CAN Connector: Created initial RX setup", LOG_LEVEL::INFO);
 
         // Create the isSetup map based on the send operations in the config.
         // This map keeps track if we already created a cyclic send operation,
@@ -70,7 +70,7 @@ namespace sim_interface::dut_connector::can{
 
         }
 
-        DuTLogger::logMessage("CAN Connector: Created initial isSetup map", LOG_LEVEL::INFO);
+        InterfaceLogger::logMessage("CAN Connector: Created initial isSetup map", LOG_LEVEL::INFO);
 
         // Start the receive loop on the socket
         receiveOnSocket();
@@ -78,7 +78,7 @@ namespace sim_interface::dut_connector::can{
         // Start the io context loop
         startProcessing();
 
-        DuTLogger::logMessage("CAN Connector: CAN Connector created", LOG_LEVEL::INFO);
+        InterfaceLogger::logMessage("CAN Connector: CAN Connector created", LOG_LEVEL::INFO);
     }
 
     CANConnector::~CANConnector(){
@@ -86,7 +86,7 @@ namespace sim_interface::dut_connector::can{
         // Stop the io context loop
         stopProcessing();
 
-        DuTLogger::logMessage("CAN Connector: CAN Connector destroyed", LOG_LEVEL::INFO);
+        InterfaceLogger::logMessage("CAN Connector: CAN Connector destroyed", LOG_LEVEL::INFO);
     }
 
     boost::asio::generic::datagram_protocol::socket CANConnector::createBcmSocket(const CANConnectorConfig &connectorConfig){
@@ -106,7 +106,7 @@ namespace sim_interface::dut_connector::can{
 
         // Check if we could resolve the interface correctly
         if(errorCode){
-            DuTLogger::logMessage("CAN Connector: An error occurred on the io control operation: " + errorCode.message(), LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("CAN Connector: An error occurred on the io control operation: " + errorCode.message(), LOG_LEVEL::ERROR);
             throw std::invalid_argument("CAN Connector: Could not resolve the interface name correctly");
         }
 
@@ -120,7 +120,7 @@ namespace sim_interface::dut_connector::can{
 
         // Check if we could connect correctly
         if(errorCode){
-            DuTLogger::logMessage("CAN Connector: An error occurred on the connect operation: " + errorCode.message(), LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("CAN Connector: An error occurred on the connect operation: " + errorCode.message(), LOG_LEVEL::ERROR);
             throw std::runtime_error("CAN Connector: Could not connect to the interface");
         }
 
@@ -135,7 +135,7 @@ namespace sim_interface::dut_connector::can{
         // Run the io context in its own thread
         ioContextThread = std::thread(&CANConnector::ioContextThreadFunction, this, std::ref(ioContext));
 
-        DuTLogger::logMessage("CAN Connector: Starting the io context loop", LOG_LEVEL::INFO);
+        InterfaceLogger::logMessage("CAN Connector: Starting the io context loop", LOG_LEVEL::INFO);
     }
 
     void CANConnector::stopProcessing(){
@@ -149,10 +149,10 @@ namespace sim_interface::dut_connector::can{
         if(ioContextThread.joinable()){
             ioContextThread.join();
         }else{
-            DuTLogger::logMessage("CAN Connector: ioContextThread was not joinable", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("CAN Connector: ioContextThread was not joinable", LOG_LEVEL::ERROR);
         }
 
-        DuTLogger::logMessage("CAN Connector: Stopped the io context loop", LOG_LEVEL::INFO);
+        InterfaceLogger::logMessage("CAN Connector: Stopped the io context loop", LOG_LEVEL::INFO);
     }
 
     void CANConnector::ioContextThreadFunction(const boost::shared_ptr<boost::asio::io_context>& context){
@@ -171,7 +171,7 @@ namespace sim_interface::dut_connector::can{
 
     void CANConnector::receiveOnSocket(){
 
-        DuTLogger::logMessage("CAN Connector: Creating a new receive operation on the socket", LOG_LEVEL::INFO);
+        InterfaceLogger::logMessage("CAN Connector: Creating a new receive operation on the socket", LOG_LEVEL::INFO);
 
         // Create an async receive operation on the BCM socket
         bcmSocket.async_receive(boost::asio::buffer(rxBuffer),
@@ -182,7 +182,7 @@ namespace sim_interface::dut_connector::can{
             // Check the error code of the operation
             if(!errorCode){
 
-                DuTLogger::logMessage("CAN Connector: Received " + std::to_string(receivedBytes) + " bytes on the socket", LOG_LEVEL::INFO);
+                InterfaceLogger::logMessage("CAN Connector: Received " + std::to_string(receivedBytes) + " bytes on the socket", LOG_LEVEL::INFO);
 
                 // We need to receive at least a whole bcm_msg_head
                 if(receivedBytes >= sizeof(bcm_msg_head)){
@@ -214,13 +214,13 @@ namespace sim_interface::dut_connector::can{
                         handleReceivedData(head, frames, head->nframes, isCANFD);
 
                     }else{
-                        DuTLogger::logMessage("CAN Connector: The expected amount of bytes is not equal to the received bytes", LOG_LEVEL::ERROR);
+                        InterfaceLogger::logMessage("CAN Connector: The expected amount of bytes is not equal to the received bytes", LOG_LEVEL::ERROR);
                     }
 
                 }
 
             }else{
-                DuTLogger::logMessage("CAN Connector: An error occurred on the async receive operation: " + errorCode.message(), LOG_LEVEL::ERROR);
+                InterfaceLogger::logMessage("CAN Connector: An error occurred on the async receive operation: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
             // Create the next receive operation
@@ -250,7 +250,7 @@ namespace sim_interface::dut_connector::can{
 
         // Error handling / Sanity check
         if(msg == nullptr){
-            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
             return;
         }
 
@@ -286,9 +286,9 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                DuTLogger::logMessage("CAN Connector: TX_SEND completed successfully", LOG_LEVEL::INFO);
+                InterfaceLogger::logMessage("CAN Connector: TX_SEND completed successfully", LOG_LEVEL::INFO);
             }else{
-                DuTLogger::logMessage("CAN Connector: TX_SEND failed: " + errorCode.message(), LOG_LEVEL::ERROR);
+                InterfaceLogger::logMessage("CAN Connector: TX_SEND failed: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
         });
@@ -326,7 +326,7 @@ namespace sim_interface::dut_connector::can{
 
         // Error handling / Sanity check
         if(msg == nullptr){
-            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
             return;
         }
 
@@ -368,9 +368,9 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                DuTLogger::logMessage("CAN Connector: TX_SETUP completed successfully", LOG_LEVEL::INFO);
+                InterfaceLogger::logMessage("CAN Connector: TX_SETUP completed successfully", LOG_LEVEL::INFO);
             }else{
-                DuTLogger::logMessage("CAN Connector: TX_SETUP failed: " + errorCode.message(), LOG_LEVEL::ERROR);
+                InterfaceLogger::logMessage("CAN Connector: TX_SETUP failed: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
         });
@@ -407,7 +407,7 @@ namespace sim_interface::dut_connector::can{
 
         // Error handling / Sanity check
         if(msg == nullptr){
-            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
             return;
         }
 
@@ -455,9 +455,9 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                DuTLogger::logMessage("CAN Connector: TX_SETUP (sequence) completed successfully", LOG_LEVEL::INFO);
+                InterfaceLogger::logMessage("CAN Connector: TX_SETUP (sequence) completed successfully", LOG_LEVEL::INFO);
             }else{
-                DuTLogger::logMessage("CAN Connector: TX_SETUP (sequence) failed: " + errorCode.message(), LOG_LEVEL::ERROR);
+                InterfaceLogger::logMessage("CAN Connector: TX_SETUP (sequence) failed: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
         });
@@ -484,7 +484,7 @@ namespace sim_interface::dut_connector::can{
 
         // Error handling / Sanity check
         if(msg == nullptr){
-            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
             return;
         }
 
@@ -527,9 +527,9 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                DuTLogger::logMessage("CAN Connector: TX_SETUP (update) completed successfully", LOG_LEVEL::INFO);
+                InterfaceLogger::logMessage("CAN Connector: TX_SETUP (update) completed successfully", LOG_LEVEL::INFO);
             }else{
-                DuTLogger::logMessage("CAN Connector: TX_SETUP (update) failed: " + errorCode.message(), LOG_LEVEL::ERROR);
+                InterfaceLogger::logMessage("CAN Connector: TX_SETUP (update) failed: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
         });
@@ -551,7 +551,7 @@ namespace sim_interface::dut_connector::can{
 
         // Error handling / Sanity check
         if(msg == nullptr){
-            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
             return;
         }
 
@@ -572,9 +572,9 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                DuTLogger::logMessage("CAN Connector: TX_DELETE completed successfully", LOG_LEVEL::INFO);
+                InterfaceLogger::logMessage("CAN Connector: TX_DELETE completed successfully", LOG_LEVEL::INFO);
             }else{
-                DuTLogger::logMessage("CAN Connector: TX_DELETE failed: " + errorCode.message(), LOG_LEVEL::ERROR);
+                InterfaceLogger::logMessage("CAN Connector: TX_DELETE failed: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
         });
@@ -588,7 +588,7 @@ namespace sim_interface::dut_connector::can{
 
         // Error handling / Sanity check
         if(msg == nullptr){
-            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
             return;
         }
 
@@ -610,9 +610,9 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                DuTLogger::logMessage("CAN Connector: RX_SETUP (CAN ID) completed successfully", LOG_LEVEL::INFO);
+                InterfaceLogger::logMessage("CAN Connector: RX_SETUP (CAN ID) completed successfully", LOG_LEVEL::INFO);
             }else{
-                DuTLogger::logMessage("CAN Connector: RX_SETUP (CAN ID) failed: " + errorCode.message(), LOG_LEVEL::ERROR);
+                InterfaceLogger::logMessage("CAN Connector: RX_SETUP (CAN ID) failed: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
         });
@@ -639,7 +639,7 @@ namespace sim_interface::dut_connector::can{
 
         // Error handling / Sanity check
         if(msg == nullptr){
-            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
             return;
         }
 
@@ -673,9 +673,9 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                DuTLogger::logMessage("CAN Connector: RX_SETUP (mask) completed successfully", LOG_LEVEL::INFO);
+                InterfaceLogger::logMessage("CAN Connector: RX_SETUP (mask) completed successfully", LOG_LEVEL::INFO);
             }else{
-                DuTLogger::logMessage("CAN Connector: RX_SETUP (mask) failed: " + errorCode.message(), LOG_LEVEL::INFO);
+                InterfaceLogger::logMessage("CAN Connector: RX_SETUP (mask) failed: " + errorCode.message(), LOG_LEVEL::INFO);
             }
 
         });
@@ -688,7 +688,7 @@ namespace sim_interface::dut_connector::can{
 
         // Error handling / Sanity check
         if(msg == nullptr){
-            DuTLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("CAN Connector: Could not make the message structure", LOG_LEVEL::ERROR);
             return;
         }
 
@@ -709,9 +709,9 @@ namespace sim_interface::dut_connector::can{
 
             // Check boost asio error code
             if(!errorCode){
-                DuTLogger::logMessage("CAN Connector: RX_DELETE completed successfully", LOG_LEVEL::INFO);
+                InterfaceLogger::logMessage("CAN Connector: RX_DELETE completed successfully", LOG_LEVEL::INFO);
             }else{
-                DuTLogger::logMessage("CAN Connector: RX_DELETE failed: " + errorCode.message(), LOG_LEVEL::ERROR);
+                InterfaceLogger::logMessage("CAN Connector: RX_DELETE failed: " + errorCode.message(), LOG_LEVEL::ERROR);
             }
 
         });
@@ -720,18 +720,18 @@ namespace sim_interface::dut_connector::can{
 
     void CANConnector::handleReceivedData(const bcm_msg_head *head, void *frames, uint32_t nframes, bool isCANFD){
 
-        DuTLogger::logMessage("CAN Connector: Handling the received data", LOG_LEVEL::INFO);
+        InterfaceLogger::logMessage("CAN Connector: Handling the received data", LOG_LEVEL::INFO);
 
         switch(head->opcode){
 
             case RX_CHANGED:
 
                 // Simple reception of a CAN/CANFD frame or a content change occurred.
-                DuTLogger::logMessage("CAN Connector: RX_CHANGED for CAN ID: <" + convertCanIdToHex(head->can_id) + ">" , LOG_LEVEL::INFO);
+                InterfaceLogger::logMessage("CAN Connector: RX_CHANGED for CAN ID: <" + convertCanIdToHex(head->can_id) + ">" , LOG_LEVEL::INFO);
 
                 // We should only receive one frame in each RX_CHANGED BCM message
                 if(nframes != 1){
-                    DuTLogger::logMessage("CAN Connector: Received an RX_CHANGED message with multiple frames", LOG_LEVEL::ERROR);
+                    InterfaceLogger::logMessage("CAN Connector: Received an RX_CHANGED message with multiple frames", LOG_LEVEL::ERROR);
                     return;
                 }
 
@@ -742,7 +742,7 @@ namespace sim_interface::dut_connector::can{
 
                 // Cyclic message is detected to be absent by the timeout monitoring.
                 // There is no function implemented yet that should cause/use this.
-                DuTLogger::logMessage("CAN Connector: RX_TIMEOUT handling is not implemented", LOG_LEVEL::WARNING);
+                InterfaceLogger::logMessage("CAN Connector: RX_TIMEOUT handling is not implemented", LOG_LEVEL::WARNING);
                 break;
 
             case TX_EXPIRED:
@@ -750,25 +750,25 @@ namespace sim_interface::dut_connector::can{
                 // Notification when counter finishes sending at ival1 interval.
                 // Requires TX_COUNTEVT flag to be set at TX_SETUP.
                 // There is no function implemented yet that should cause/use this.
-                DuTLogger::logMessage("CAN Connector: TX_EXPIRED handling is not implemented", LOG_LEVEL::WARNING);
+                InterfaceLogger::logMessage("CAN Connector: TX_EXPIRED handling is not implemented", LOG_LEVEL::WARNING);
                 break;
 
             case RX_STATUS:
 
                 // Reply to a RX_READ request that returns the RX content filter properties for a given CAN ID.
                 // This should not occur on our regular receive loop.
-                DuTLogger::logMessage("CAN Connector: Received unexpected RX_STATUS message", LOG_LEVEL::WARNING);
+                InterfaceLogger::logMessage("CAN Connector: Received unexpected RX_STATUS message", LOG_LEVEL::WARNING);
                 break;
 
             case TX_STATUS:
 
                 // Reply to a TX_READ request that returns the TX transmission properties for a given CAN ID.
                 // This should not occur on our regular receive loop.
-                DuTLogger::logMessage("CAN Connector: Received unexpected TX_STATUS message", LOG_LEVEL::WARNING);
+                InterfaceLogger::logMessage("CAN Connector: Received unexpected TX_STATUS message", LOG_LEVEL::WARNING);
                 break;
 
             default:
-                DuTLogger::logMessage("CAN Connector: Received unknown opcode", LOG_LEVEL::WARNING);
+                InterfaceLogger::logMessage("CAN Connector: Received unknown opcode", LOG_LEVEL::WARNING);
         }
 
     }
@@ -806,12 +806,12 @@ namespace sim_interface::dut_connector::can{
 
         // Sanity check
         if(events.empty()){
-            DuTLogger::logMessage("CAN Connector: Codec returned no simulation events a frame", LOG_LEVEL::WARNING);
+            InterfaceLogger::logMessage("CAN Connector: Codec returned no simulation events a frame", LOG_LEVEL::WARNING);
         }
 
         // Send the received simulation events to the simulation
         for(const auto& event: events){
-            DuTLogger::logMessage("CAN Connector: Send SimEvent: <" + event.operation + ">", LOG_LEVEL::INFO);
+            InterfaceLogger::logMessage("CAN Connector: Send SimEvent: <" + event.operation + ">", LOG_LEVEL::INFO);
             sendEventToSim(event);
         }
 
@@ -827,19 +827,19 @@ namespace sim_interface::dut_connector::can{
 
         // Sanity checks to identify errors made by the user written codec
         if(frameData.empty()){
-            DuTLogger::logMessage("CAN Connector: Codec returned an empty frame payload for a simulation event", LOG_LEVEL::WARNING);
+            InterfaceLogger::logMessage("CAN Connector: Codec returned an empty frame payload for a simulation event", LOG_LEVEL::WARNING);
             return;
         }else{
             if(sendOperation.isCANFD){
                 if(CANFD_MAX_DLEN < frameData.size()){
-                    DuTLogger::logMessage(
+                    InterfaceLogger::logMessage(
                             "CAN Connector: Codec returned a frame payload that is bigger than the CANFD frame",
                             LOG_LEVEL::ERROR);
                     return;
                 }
             }else{
                 if(CAN_MAX_DLEN < frameData.size()){
-                    DuTLogger::logMessage(
+                    InterfaceLogger::logMessage(
                             "CAN Connector: Codec returned a frame payload that is bigger than the CAN frame",
                             LOG_LEVEL::ERROR);
                     return;

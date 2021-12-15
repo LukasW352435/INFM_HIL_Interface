@@ -4,11 +4,11 @@ add_subdirectory(quill)
 
 target_sources(libs
         PRIVATE
-        DuTLogger.cpp
+        InterfaceLogger.cpp
         ../Events/EventVisitor.cpp
         PUBLIC
-        DuTLogger.h
-        DuTLoggerConfig.h
+        InterfaceLogger.h
+        InterfaceLoggerConfig.h
         ../Events/EventVisitor.h)
 
 target_include_directories(libs PUBLIC ${CMAKE_CURRENT_LIST_DIR} quill/quill/include)

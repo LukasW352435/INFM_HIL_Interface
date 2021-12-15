@@ -27,7 +27,7 @@
 #include <sstream>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
-#include "../../DuTLogger/DuTLogger.h"
+#include "../../Interface_Logger/InterfaceLogger.h"
 #include "EthernetPacket.h"
 
 namespace sim_interface::dut_connector::v2x {
@@ -45,7 +45,7 @@ namespace sim_interface::dut_connector::v2x {
                 payload.push_back(byte);
             }
         } catch (boost::archive::archive_exception &_) {
-            DuTLogger::logMessage("V2XConnector: EthernetPacket: Couldn't construct packet, malformed text_archive.", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("V2XConnector: EthernetPacket: Couldn't construct packet, malformed text_archive.", LOG_LEVEL::ERROR);
         }
     }
 
@@ -108,7 +108,7 @@ namespace sim_interface::dut_connector::v2x {
 
     std::vector<unsigned char> EthernetPacket::getBytesOfHexEncodedMAC(std::string hex) {
         if (hex.length() != ETH_ALEN * 2 + ETH_ALEN - 1) {
-            DuTLogger::logMessage("V2XConnector: EthernetPacket: Wrong length for hex string, required length is 2*ETH_ALEN + ETH_ALEN - 1", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("V2XConnector: EthernetPacket: Wrong length for hex string, required length is 2*ETH_ALEN + ETH_ALEN - 1", LOG_LEVEL::ERROR);
             return {0, 0, 0, 0, 0, 0};
         }
         std::replace(hex.begin(), hex.end(), ':', ' ');
