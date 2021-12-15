@@ -14,7 +14,7 @@ jobs:
         with:
           submodules: true
       - name: Install dependencies
-        run: sudo apt-get update -qq && sudo apt-get install -yq graphviz libclang1-10 libclang-cpp1-9
+        run: sudo apt-get update -qq && sudo apt-get install -yq graphviz libclang1-9 libclang-cpp1-9
       - name: Install doxygen 1.9.2 # Only 1.8.17 in ubuntu 20.04 repository
         run: wget https://www.doxygen.nl/files/doxygen-1.9.2.linux.bin.tar.gz && tar -xf doxygen-1.9.2.linux.bin.tar.gz && cd doxygen-1.9.2 && sudo make install
       - name: Preparation
