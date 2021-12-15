@@ -22,22 +22,22 @@
  * @version 1.0
  */
 
-#include "DuTLogger.h"
+#include "InterfaceLogger.h"
 
 // set the initialized variable to false at start
-bool DuTLogger::initialized = false;
+bool InterfaceLogger::initialized = false;
 
 // initialize the static handlers
-quill::Handler* DuTLogger::consoleHandler;
-quill::Handler* DuTLogger::consoleFileHandler;
+quill::Handler* InterfaceLogger::consoleHandler;
+quill::Handler* InterfaceLogger::consoleFileHandler;
 
 // initialize the static loggers
-quill::Logger* DuTLogger::consoleLogger;
-quill::Logger* DuTLogger::consoleFileLogger;
-quill::Logger* DuTLogger::dataLogger;
+quill::Logger* InterfaceLogger::consoleLogger;
+quill::Logger* InterfaceLogger::consoleFileLogger;
+quill::Logger* InterfaceLogger::dataLogger;
 
 
-void DuTLogger::initializeLogger(const LoggerConfig &con) {
+void InterfaceLogger::initializeLogger(const LoggerConfig &con) {
     if (initialized) {
         logMessage("Logger can't be initialized again!", LOG_LEVEL::ERROR);
         return;
@@ -51,12 +51,12 @@ void DuTLogger::initializeLogger(const LoggerConfig &con) {
     std::string logPathConsole = initializeLoggingPath(con.pathConsoleLog);
     std::string logPathData = initializeLoggingPath(con.pathDataLog);
 
-    DuTLogger::consoleHandler = DuTLogger::buildConsoleHandler(con.enableDebugMode);
-    DuTLogger::consoleFileHandler = DuTLogger::buildFileHandler(logPathConsole, con.enableDebugMode);
+    InterfaceLogger::consoleHandler = InterfaceLogger::buildConsoleHandler(con.enableDebugMode);
+    InterfaceLogger::consoleFileHandler = InterfaceLogger::buildFileHandler(logPathConsole, con.enableDebugMode);
 
-    DuTLogger::consoleLogger = DuTLogger::createConsoleLogger("consoleLog", false);
-    DuTLogger::consoleFileLogger = DuTLogger::createConsoleLogger("consoleFileLog", true);
-    DuTLogger::dataLogger = DuTLogger::createDataLogger(logPathData);
+    InterfaceLogger::consoleLogger = InterfaceLogger::createConsoleLogger("consoleLog", false);
+    InterfaceLogger::consoleFileLogger = InterfaceLogger::createConsoleLogger("consoleFileLog", true);
+    InterfaceLogger::dataLogger = InterfaceLogger::createDataLogger(logPathData);
 
     // check if we might have to delete old logging folders
     removeOldLogfiles(logPathConsole, con.fileBackupCount);
@@ -77,7 +77,7 @@ void DuTLogger::initializeLogger(const LoggerConfig &con) {
     }
 }
 
-quill::Handler* DuTLogger::buildConsoleHandler(bool enableDebugMode) {
+quill::Handler* InterfaceLogger::buildConsoleHandler(bool enableDebugMode) {
     // build a handler for the console
     quill::Handler* newHandler = quill::stdout_handler("stdout");
 
@@ -94,7 +94,7 @@ quill::Handler* DuTLogger::buildConsoleHandler(bool enableDebugMode) {
     return newHandler;
 }
 
-quill::Handler* DuTLogger::buildFileHandler(const std::string &logPath, bool enableDebugMode) {
+quill::Handler* InterfaceLogger::buildFileHandler(const std::string &logPath, bool enableDebugMode) {
     // a second handler for the file is needed
     std::string basicPath = logPath + "/Logfile_" + getCurrentTimestamp() + ".log";
     quill::Handler* newHandler = quill::file_handler(basicPath, "w", quill::FilenameAppend::None);
@@ -114,7 +114,7 @@ quill::Handler* DuTLogger::buildFileHandler(const std::string &logPath, bool ena
     return newHandler;
 }
 
-quill::Logger* DuTLogger::createConsoleLogger(const char* name, bool withFileHandler) {
+quill::Logger* InterfaceLogger::createConsoleLogger(const char* name, bool withFileHandler) {
     // check if the new logger needs to write the console log to a file
     // if needed, we have to build the logger in a different way
     quill::Logger* newLogger;
@@ -132,7 +132,7 @@ quill::Logger* DuTLogger::createConsoleLogger(const char* name, bool withFileHan
     return newLogger;
 }
 
-quill::Logger* DuTLogger::createDataLogger(const std::string &logPath) {
+quill::Logger* InterfaceLogger::createDataLogger(const std::string &logPath) {
     // create a file handler to connect quill to a logfile
     std::string basicPath = logPath + "/Logfile_" + getCurrentTimestamp() + ".csv";
     quill::Handler* file_handler = quill::file_handler(basicPath, "w",quill::FilenameAppend::None);
@@ -146,7 +146,7 @@ quill::Logger* DuTLogger::createDataLogger(const std::string &logPath) {
     return createdLogger;
 }
 
-std::string DuTLogger::initializeLoggingPath(const std::string &logPath) {
+std::string InterfaceLogger::initializeLoggingPath(const std::string &logPath) {
     // get the wished logging path for this type of logger
     std::string path = getLoggingPath(logPath);
 
@@ -155,7 +155,7 @@ std::string DuTLogger::initializeLoggingPath(const std::string &logPath) {
     return path;
 }
 
-std::string DuTLogger::getLoggingPath(std::string logPath) {
+std::string InterfaceLogger::getLoggingPath(std::string logPath) {
     // Check if the user provided an absolute path for logging
     // If this is true -> remove the first identifier
     if (logPath.at(0) == '#') {
@@ -176,7 +176,7 @@ std::string DuTLogger::getLoggingPath(std::string logPath) {
     return result;
 }
 
-void DuTLogger::removeOldLogfiles(const std::string &directory, int backupCount) {
+void InterfaceLogger::removeOldLogfiles(const std::string &directory, int backupCount) {
     // collect all files under this directory in a list
     std::list<std::string> allLogFiles;
     for (const auto & entry : std::filesystem::directory_iterator(directory)) {
@@ -203,12 +203,12 @@ void DuTLogger::removeOldLogfiles(const std::string &directory, int backupCount)
     }
 }
 
-void DuTLogger::changeLogLevel(LOG_TYPE type, LOG_LEVEL level) {
+void InterfaceLogger::changeLogLevel(LOG_TYPE type, LOG_LEVEL level) {
     if (!initialized) {
         std::cerr << "Logger has not been initialized. Please parse a config to the logger." << std::endl;
     }
     // get the right handler. We want to make changes on this one.
-    quill::Handler* handler = DuTLogger::getHandlerType(type);
+    quill::Handler* handler = InterfaceLogger::getHandlerType(type);
 
     // log all messages before changing the level
     quill::flush();
@@ -245,7 +245,7 @@ void DuTLogger::changeLogLevel(LOG_TYPE type, LOG_LEVEL level) {
     }
 }
 
-quill::Handler* DuTLogger::getHandlerType(LOG_TYPE type) {
+quill::Handler* InterfaceLogger::getHandlerType(LOG_TYPE type) {
     quill::Handler* handler;
 
     switch (type) {
@@ -264,7 +264,7 @@ quill::Handler* DuTLogger::getHandlerType(LOG_TYPE type) {
     return handler;
 }
 
-void DuTLogger::logMessage(const std::string &msg, LOG_LEVEL level) {
+void InterfaceLogger::logMessage(const std::string &msg, LOG_LEVEL level) {
     if (!initialized) {
         std::cerr << "Logger has not been initialized. Please parse a config to the logger." << std::endl;
     }
@@ -275,7 +275,7 @@ void DuTLogger::logMessage(const std::string &msg, LOG_LEVEL level) {
     logWithLevel(consoleFileLogger, msg, level);
 }
 
-void DuTLogger::logMessage(const std::string &msg, LOG_LEVEL level, bool doNotWriteIntoFile) {
+void InterfaceLogger::logMessage(const std::string &msg, LOG_LEVEL level, bool doNotWriteIntoFile) {
     if (!initialized) {
         std::cerr << "Logger has not been initialized. Please parse a config to the logger." << std::endl;
     }
@@ -288,7 +288,7 @@ void DuTLogger::logMessage(const std::string &msg, LOG_LEVEL level, bool doNotWr
     }
 }
 
-void DuTLogger::logWithLevel(quill::Logger* log, std::string msg, LOG_LEVEL level) {
+void InterfaceLogger::logWithLevel(quill::Logger* log, std::string msg, LOG_LEVEL level) {
     // parse the message to the right will logger with the given level
     switch (level) {
         case LOG_LEVEL::NONE:
@@ -320,7 +320,7 @@ void DuTLogger::logWithLevel(quill::Logger* log, std::string msg, LOG_LEVEL leve
     }
 }
 
-std::string DuTLogger::getCurrentTimestamp() {
+std::string InterfaceLogger::getCurrentTimestamp() {
     // look up the local time
     auto t = std::time(nullptr);
     auto timer = *std::localtime(&t);
@@ -331,7 +331,7 @@ std::string DuTLogger::getCurrentTimestamp() {
     return oss.str();
 }
 
-void DuTLogger::logEvent(sim_interface::SimEvent event) {
+void InterfaceLogger::logEvent(sim_interface::SimEvent event) {
     if (!initialized) {
         std::cerr << "Logger has not been initialized. Please parse a config to the logger." << std::endl;
     }

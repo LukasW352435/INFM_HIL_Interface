@@ -26,9 +26,9 @@ namespace sim_interface::dut_connector::can{
 
         // Test:
         if(hostIsBigEndian) {
-            DuTLogger::logMessage("CAN Connector: Host uses big endian", LOG_LEVEL::INFO);
+            InterfaceLogger::logMessage("CAN Connector: Host uses big endian", LOG_LEVEL::INFO);
         }else{
-            DuTLogger::logMessage("CAN Connector: Host uses little endian", LOG_LEVEL::INFO);
+            InterfaceLogger::logMessage("CAN Connector: Host uses little endian", LOG_LEVEL::INFO);
         }
 
     }
@@ -47,7 +47,7 @@ namespace sim_interface::dut_connector::can{
             // Length:  4
             payload.insert(payload.end(), {0xBE, 0xEF, 0xDE, 0xAD});
         }else{
-            DuTLogger::logMessage("CAN Connector: BMW codec received unknown operation: <" + event.operation + ">", LOG_LEVEL::WARNING);
+            InterfaceLogger::logMessage("CAN Connector: BMW codec received unknown operation: <" + event.operation + ">", LOG_LEVEL::WARNING);
         }
 
         return payload;
@@ -72,7 +72,7 @@ namespace sim_interface::dut_connector::can{
 
             default:
 
-                DuTLogger::logMessage("CAN Connector: BMW codec did not implement a conversion for the CAN ID: "
+                InterfaceLogger::logMessage("CAN Connector: BMW codec did not implement a conversion for the CAN ID: "
                                       "<" + std::to_string(frame.can_id) + ">", LOG_LEVEL::WARNING);
 
         }

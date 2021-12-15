@@ -22,10 +22,10 @@
  * @version 1.0
  */
 
-#ifndef SIM_TO_DUT_INTERFACE_DUTLOGGER_H
-#define SIM_TO_DUT_INTERFACE_DUTLOGGER_H
+#ifndef SIM_TO_DUT_INTERFACE_INTERFACELOGGER_H
+#define SIM_TO_DUT_INTERFACE_INTERFACELOGGER_H
 
-#include "DuTLoggerConfig.h"
+#include "InterfaceLoggerConfig.h"
 #include "../Events/EventVisitor.h"
 #include <string>
 #include "quill/Quill.h"
@@ -65,7 +65,7 @@ enum LOG_TYPE {
  * @author Marco Keul
  * @version 1.0
  */
-class DuTLogger {
+class InterfaceLogger {
 
 public:
 
@@ -82,7 +82,7 @@ public:
      * into a logfile if the file logger accepts the log level. If you explicitly don't want to log this message into the
      * logfile, please use the function below.
      *
-     * @see void DuTLogger::logMessage(std::string msg, LOG_LEVEL level, bool doNotWriteIntoFile)
+     * @see void InterfaceLogger::logMessage(std::string msg, LOG_LEVEL level, bool doNotWriteIntoFile)
      * @param msg message that should be logged
      * @param level the logging level for this message
      */
@@ -222,4 +222,4 @@ private:
     static void removeOldLogfiles(const std::string &directory, int backupCount);
 };
 
-#endif //SIM_TO_DUT_INTERFACE_DUTLOGGER_H
+#endif //SIM_TO_DUT_INTERFACE_INTERFACELOGGER_H

@@ -31,7 +31,7 @@
 #include <linux/if_packet.h>
 #include <net/if.h>
 #include "EthernetPacket.h"
-#include "../../Interface_Logger/DuTLogger.h"
+#include "../../Interface_Logger/InterfaceLogger.h"
 
 namespace sim_interface::dut_connector::v2x {
     V2XConnector::V2XConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
@@ -51,7 +51,7 @@ namespace sim_interface::dut_connector::v2x {
             _socket.bind(boost::asio::generic::raw_protocol::endpoint(&socket_address, sizeof(sockaddr_ll)));
             receiveEndpoint = _socket.local_endpoint();
         } catch (std::exception &e) {
-            DuTLogger::logMessage(fmt::format("V2XConnector: Exception on opening socket: {}", e.what()),
+            InterfaceLogger::logMessage(fmt::format("V2XConnector: Exception on opening socket: {}", e.what()),
                                   LOG_LEVEL::ERROR);
         }
         startReceive();
@@ -68,7 +68,7 @@ namespace sim_interface::dut_connector::v2x {
         int s = socket(AF_INET, SOCK_STREAM, 0);
         ioctl(s, SIOCGIFINDEX, &ifr);
         close(s);
-        DuTLogger::logMessage(
+        InterfaceLogger::logMessage(
                 fmt::format("V2XConnector: index of interface {}: {}", ifname, ifr.ifr_ifindex),
                 INFO);
         return ifr.ifr_ifindex;
@@ -95,14 +95,14 @@ namespace sim_interface::dut_connector::v2x {
     void V2XConnector::onReceive(const boost::system::error_code &ec, std::size_t read_bytes) {
         if (!ec) {
             if (read_bytes > 0) {
-                DuTLogger::logMessage(fmt::format("V2XConnector: received {} bytes", read_bytes), LOG_LEVEL::DEBUG);
+                InterfaceLogger::logMessage(fmt::format("V2XConnector: received {} bytes", read_bytes), LOG_LEVEL::DEBUG);
                 std::vector<unsigned char> msg = std::vector(receiveBuffer.begin(), receiveBuffer.begin() + read_bytes);
 
                 receiveCallback(msg);
             }
             startReceive();
         } else {
-            DuTLogger::logMessage(fmt::format("V2XConnector: Got boost::system::error_code {}, stopping receive", ec),
+            InterfaceLogger::logMessage(fmt::format("V2XConnector: Got boost::system::error_code {}, stopping receive", ec),
                                   LOG_LEVEL::ERROR);
         }
     }
@@ -113,7 +113,7 @@ namespace sim_interface::dut_connector::v2x {
         boost::asio::const_buffer buffer = boost::asio::buffer(bytes, bytes.size() * sizeof(unsigned char));
         std::size_t ret = _socket.send(buffer);
         if (ret == 0) {
-            DuTLogger::logMessage("V2XConnector: Error sending over socket, no bytes send", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("V2XConnector: Error sending over socket, no bytes send", LOG_LEVEL::ERROR);
         }
     }
 

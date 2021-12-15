@@ -33,7 +33,7 @@
 #include "DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
 #include "DuT_Connectors/CANConnector/CANConnector.h"
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
-#include "Interface_Logger/DuTLogger.h"
+#include "Interface_Logger/InterfaceLogger.h"
 #include "DuT_Connectors/V2XConnector/V2XConnectorConfig.h"
 #include "DuT_Connectors/V2XConnector/V2XConnector.h"
 #include "SystemConfig.h"
@@ -52,8 +52,8 @@ int main() {
     sim_interface::SystemConfig::loadFromFile(configPath + "/SystemConfig.xml", systemConfig, true);
 
     // initialize the logger
-    DuTLogger::initializeLogger(systemConfig.loggerConfig);
-    DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
+    InterfaceLogger::initializeLogger(systemConfig.loggerConfig);
+    InterfaceLogger::logMessage("Start Application", LOG_LEVEL::INFO);
 
     // Create interface
     sim_interface::SimToDuTInterface interface;
@@ -244,6 +244,6 @@ int main() {
     interface.run();
 
     std::cin.get();
-    DuTLogger::logMessage("Shut down application", LOG_LEVEL::INFO);
+    InterfaceLogger::logMessage("Shut down application", LOG_LEVEL::INFO);
     return 0;
 }
