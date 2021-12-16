@@ -273,12 +273,12 @@ int main() {
 
     // Create a new CAN Connector and add it to the interface
     sim_interface::dut_connector::can::CANConnector canConnector(interface.getQueueDuTToSim(), canConfig);
-    interface.addConnector(&canConnector);
+    //interface.addConnector(&canConnector);
 
     // Test the CAN Connector
-    interface.getQueueSimToInterface()->push(sim_interface::SimEvent("Speed_Dynamics",2.0,"TEST"));
-    interface.getQueueSimToInterface()->push(sim_interface::SimEvent("Latitude_Dynamics",3.0,"TEST"));
-    interface.getQueueSimToInterface()->push(sim_interface::SimEvent("Latitude_Dynamics",4.0,"TEST"));
+    //interface.getQueueSimToInterface()->push(sim_interface::SimEvent("Speed_Dynamics",2.0,"TEST"));
+    //interface.getQueueSimToInterface()->push(sim_interface::SimEvent("Latitude_Dynamics",3.0,"TEST"));
+    //interface.getQueueSimToInterface()->push(sim_interface::SimEvent("Latitude_Dynamics",4.0,"TEST"));
 
     //+++++ End CAN Connector +++++
     
