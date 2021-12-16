@@ -34,13 +34,13 @@ namespace sim_interface::dut_connector::can{
         // Function members
 
         /**
-        * Converts an simulation event to a CAN/CANFD payload.
+        * Converts an simulation event to a CAN/CANFD payload and determines the sendOperation name.
         *
         * @param event - The simulation event we want to transform into a CAN/CANFD frame payload.
         *
         * @return The CAN/CANFD frame payload.
         */
-        virtual std::vector<__u8> convertSimEventToFrame(SimEvent event) = 0;
+        virtual std::pair<std::vector<__u8>, std::string> convertSimEventToFrame(SimEvent event) = 0;
 
         /**
          * Converts a CAN/CANFD frame to the corresponding simulation events.

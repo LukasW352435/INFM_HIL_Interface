@@ -11,12 +11,10 @@
 
 /*******************************************************************************
  * INCLUDES
- ******************************************************************************/#
+ ******************************************************************************/
 // Project includes
 #include "CANConnectorSendOperation.h"
 
-// System includes
-#include <cassert>
 
 /*******************************************************************************
  * FUNCTION DEFINITIONS
@@ -42,21 +40,26 @@ namespace sim_interface::dut_connector::can{
         if(this->isCyclic){
 
             // Assert that the elements of ival1 and ival2 are not negative
-            assert(0 <= this->ival1.tv_sec && 0 <= this->ival1.tv_usec);
-            assert(0 <= this->ival2.tv_sec && 0 <= this->ival2.tv_usec);
+            if(this->ival1.tv_sec < 0 || this->ival1.tv_usec < 0 || this->ival2.tv_sec < 0 || this->ival2.tv_usec < 0){
+                throw std::invalid_argument("CAN Connector Send Operation: ival value must not be negative");
+            }
 
             // Assert: that at least one value of ival2 is greater than zero
             if(this->count == 0){
 
-                // - that at least one value of ival2 is greater than zero
                 // Note: If count is zero only ival2 is being used
-                assert(0 < this->ival2.tv_sec || 0 < this->ival2.tv_usec);
+                // - that at least one value of ival2 is greater than zero
+                if(this->ival2.tv_sec == 0 && this->ival2.tv_usec == 0){
+                    throw std::invalid_argument("CAN Connector Send Operation: ival must contain at least one value greater than zero");
+                }
 
             }else{
 
-                // - that one value of each ival is greater than zero
-                assert(0 < this->ival1.tv_sec || 0 < this->ival1.tv_usec);
-                assert(0 < this->ival2.tv_sec || 0 < this->ival2.tv_usec);
+                // - that at least one value of each ival is greater than zero
+                if( (this->ival1.tv_sec == 0 && this->ival1.tv_usec == 0) || (this->ival2.tv_sec == 0 && this->ival2.tv_usec == 0) ){
+                    throw std::invalid_argument("CAN Connector Send Operation: ival must contain at least one value greater than zero");
+                }
+
             }
 
         }
