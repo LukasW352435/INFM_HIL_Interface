@@ -239,7 +239,7 @@ int main() {
             operationToFrame,
             {},
             false);
-     sim_interface::ConfigSerializer::serialize("TEST.xml", "conn", canConfigTest);
+  //   sim_interface::ConfigSerializer::serialize("TEST.xml", "conn", canConfigTest);
      sim_interface::ConfigSerializer::deserialize("TEST.xml", "conn", &canConfigTest);
 
     sim_interface::ConfigSerializer::serialize("TESTGGWASGEHT.xml", "conn", canConfigTest);
