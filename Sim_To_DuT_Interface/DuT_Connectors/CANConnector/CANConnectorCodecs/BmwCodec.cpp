@@ -180,25 +180,28 @@ namespace sim_interface::dut_connector::can{
     }
 
     std::pair<std::vector<__u8>, std::string> BmwCodec::encodeGPS_LOCB(SimEvent event){
+
         auto result = std::pair<std::vector<__u8>, std::string>();
 
         if(event.value.type() != typeid(double)){
             throw std::invalid_argument("BMW Codec: SimEvent value type invalid");
         }
+
+        // Cash the value of the event
         cachedSimEventValues[event.operation] = boost::get<double>(event.value);
 
         double realAltitude = cachedSimEventValues["Position_Z-Coordinate_DUT"];
-        double realHeading = cachedSimEventValues["Heading_Dynamics"];
-        double realDvcoveh = 0;
+        double realHeading  = cachedSimEventValues["Heading_Dynamics"];
+        double realDvcoveh  = 0;
 
-        auto rawAltitude = (int16_t) (realAltitude / ST_HGNAVI_SCALING - ST_HGNAVI_OFFSET);
-        auto rawHeading = (uint8_t) (realHeading / ST_HDG_HRZTLABSL_SCALING - ST_HDG_HRZTLABSL_OFFSET);
-        auto rawDvcoveh = (uint8_t) (realDvcoveh / DVCOVEH_SCALING - DVCOVEH_OFFSET);
+        auto rawAltitude = (int16_t) (realAltitude / ST_HGNAVI_SCALING        - ST_HGNAVI_OFFSET);
+        auto rawHeading  = (uint8_t) (realHeading  / ST_HDG_HRZTLABSL_SCALING - ST_HDG_HRZTLABSL_OFFSET);
+        auto rawDvcoveh  = (uint8_t) (realDvcoveh  / DVCOVEH_SCALING          - DVCOVEH_OFFSET);
 
         // Convert to host order
         if(hostIsBigEndian){
             rawAltitude = CodecUtilities::convertEndianness(rawAltitude);
-            // No need to convert an uint8_t because it is a single byte
+            // No need to convert rawHeading or rawDvcoveh (uint8_t) because it is a single byte
         }
 
         result.first = std::vector<__u8>{
@@ -206,13 +209,14 @@ namespace sim_interface::dut_connector::can{
                 (uint8_t) rawHeading,
                 (uint8_t) rawDvcoveh,
         };
+
         result.second = GPS_LOCB_SENDOPERATION;
         return result;
     }
 
     std::pair<std::vector<__u8>, std::string> BmwCodec::encodeLichter(SimEvent event){
+
         auto result = std::pair<std::vector<__u8>, std::string>();
-        result.second = LICHTER_SENDOPERATION;
 
         if(event.value.type() != typeid(int)){
             throw std::invalid_argument("BMW Codec: SimEvent value type invalid");
@@ -222,29 +226,34 @@ namespace sim_interface::dut_connector::can{
         uint8_t canDataByte1 = 0;
         uint8_t canDataByte2 = 0;
 
-        // Bit Pos traci: 7  6  5  4  3  2  1  0 | 15  14  13  12  11  10  9  8
+        // DBC and traci:
+        // Bit positions are counted from byte 0 upwards by their significance, regardless of the endianness.
+        // The first message byte has bits 0…7 with bit 7 being the most significant bit of the byte.
+        // Bit Pos: 7  6  5  4  3  2  1  0 | 15  14  13  12  11  10  9  8
 
-        // Blinker Right    sumo bit 0      bmw bit 4
+        // Blinker Right:    Sumo bit 0      BMW bit 4
         if(rawSignals & 0x0001){
             canDataByte1 |= 0x10;
         }
-        // Blinker Left     sumo bit 1      bmw bit 3
+
+        // Blinker Left:     Sumo bit 1      BMW bit 3
         if(rawSignals & 0x0002){
             canDataByte1 |= 0x04;
         }
-        // Tagfahrlicht     sumo bit 4      bmw bit 10
+
+        // Tagfahrlicht:     Sumo bit 4      Bmw bit 10
         if(rawSignals & 0x0008){
             canDataByte2 |= 0x04;
         }
 
-        result.first = std::vector<__u8> { canDataByte1, canDataByte2};
+        result.first  = std::vector<__u8> { canDataByte1, canDataByte2};
+        result.second = LICHTER_SENDOPERATION;
         return result;
     }
 
 
     std::vector<SimEvent> BmwCodec::decodeGeschwindigkeit(struct canfd_frame frame, bool isCanfd){
 
-        struct can_frame canframe = {0};
         std::vector<SimEvent> events;
 
         // Check if we got a CAN frame
@@ -253,7 +262,7 @@ namespace sim_interface::dut_connector::can{
             return events;
         }
 
-        struct can_frame canFrame =  *((struct can_frame*) &frame);
+        struct can_frame canFrame = *((struct can_frame*) &frame);
 
         // Get the raw values that should be in little endian order
         uint16_t rawSpeed           = canFrame.data[0] | (canFrame.data[1] << 8);
@@ -275,10 +284,10 @@ namespace sim_interface::dut_connector::can{
         uint16_t realAccelerationY   = rawAccelerationY   * ACLNYCOG_SCALING + ACLNYCOG_OFFSET;
         uint16_t realAccelerationX   = rawAccelerationX   * ACLNXCOG_SCALING + ACLNXCOG_OFFSET;
 
-        // Create the SimEvents and add them to the vector that will be sent to the simulation
+        // Create the SimEvents and add them to the vector that will be sent to the simulation.
         // The simulation has only one acceleration. We only use the Y acceleration.
-        SimEvent speed  = SimEvent("Speed_DUT", static_cast<double>(realSpeed),"CanConnector");
-        SimEvent yawRateDynamics = SimEvent("YawRate_Dynamics", static_cast<double>(realAngularVelocity),"CanConnector");
+        SimEvent speed                = SimEvent("Speed_DUT", static_cast<double>(realSpeed),"CanConnector");
+        SimEvent yawRateDynamics      = SimEvent("YawRate_Dynamics", static_cast<double>(realAngularVelocity),"CanConnector");
         SimEvent accelerationDynamics = SimEvent("Acceleration_Dynamics", static_cast<double>(realAccelerationY), "CanConnector");
 
         events.push_back(speed);
@@ -297,7 +306,7 @@ namespace sim_interface::dut_connector::can{
             return events;
         }
 
-        struct can_frame canFrame =  *((struct can_frame*) &frame);
+        struct can_frame canFrame = *((struct can_frame*) &frame);
 
         // Get the raw value that should be in little endian order
         int32_t rawLongitude = canFrame.data[0] | (canFrame.data[1] << 8) | (canFrame.data[2] << 16) | (canFrame.data[3] << 24);
@@ -332,27 +341,27 @@ namespace sim_interface::dut_connector::can{
             return events;
         }
 
-        struct can_frame canFrame =  *((struct can_frame*) &frame);
+        struct can_frame canFrame = *((struct can_frame*) &frame);
 
         // Get the raw value that should be in little endian order
         int16_t rawAltitude = canFrame.data[0] | (canFrame.data[1] << 8);
-        uint8_t  rawHeading  = canFrame.data[2];
-        uint8_t  rawDvcoveh  = canFrame.data[3];
+        uint8_t rawHeading  = canFrame.data[2];
+        uint8_t rawDvcoveh  = canFrame.data[3];
 
         // Convert to host order
         if(hostIsBigEndian){
             rawAltitude = CodecUtilities::convertEndianness(rawAltitude);
-            // No need to convert a uint8_t because it is a single byte
+            // No need to convert rawHeading and rawDvcoveh (uint8_t) because it is a single byte
         }
 
         // Apply the scaling and offset
-        int16_t realAltitude  = rawAltitude * ST_HGNAVI_SCALING        + ST_HGNAVI_OFFSET;
-        uint8_t  realHeaing   = rawHeading  * ST_HDG_HRZTLABSL_SCALING + ST_HDG_HRZTLABSL_OFFSET;
-        uint8_t  realDvcoveh  = rawDvcoveh  * DVCOVEH_SCALING          + DVCOVEH_OFFSET;
+        int16_t realAltitude = rawAltitude * ST_HGNAVI_SCALING        + ST_HGNAVI_OFFSET;
+        uint8_t realHeading  = rawHeading  * ST_HDG_HRZTLABSL_SCALING + ST_HDG_HRZTLABSL_OFFSET;
+        uint8_t realDvcoveh  = rawDvcoveh  * DVCOVEH_SCALING          + DVCOVEH_OFFSET;
 
         // Create the SimEvents and add them to the vector that will be sent to the simulation
-        SimEvent altitude  = SimEvent("Position_Z-Coordinate_DUT", static_cast<double>(realAltitude),"CanConnector");
-        SimEvent heading = SimEvent("Heading_Dynamics", static_cast<double>(realHeaing),"CanConnector");
+        SimEvent altitude = SimEvent("Position_Z-Coordinate_DUT", static_cast<double>(realAltitude),"CanConnector");
+        SimEvent heading  = SimEvent("Heading_Dynamics", static_cast<double>(realHeading),"CanConnector");
 
         events.push_back(altitude);
         events.push_back(heading);
@@ -365,55 +374,35 @@ namespace sim_interface::dut_connector::can{
         std::vector<SimEvent> events;
 
         if(isCanfd){
-            InterfaceLogger::logMessage("Got a CANFD frame but expected a CAN frame for the CAN ID 0x279 L", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("Got a CANFD frame but expected a CAN frame for the CAN ID 0x279 LICHTER", LOG_LEVEL::ERROR);
             return events;
         }
 
         struct can_frame canFrame =  *((struct can_frame*) &frame);
 
         // Get the raw value that should be in little endian order
-        uint16_t rawsignals = canFrame.data[0] | (canFrame.data[1] << 8);
-
-        // Create the SimEvents
+        uint16_t rawSignals = canFrame.data[0] | (canFrame.data[1] << 8);
 
         // DBC and traci:
         // Bit positions are counted from byte 0 upwards by their significance, regardless of the endianness.
-        // The first message byte has bits 0…7 with bit 7 being the most significant bit of the byte
-
-        // ST_PLILH (Blinker Right):
+        // The first message byte has bits 0…7 with bit 7 being the most significant bit of the byte.
         // Bit Pos: 7  6  5  4  3  2  1  0 | 15  14  13  12  11  10  9  8
-        // Mask:    0  0  0  0  1  0  0  0 | 0   0   0   0   0   0   0  0
-
-        // ST_PLIRH (Blinker Left):
-        // Bit Pos: 7  6  5  4  3  2  1  0 | 15  14  13  12  11  10  9  8
-        // Mask:    0  0  0  1  0  0  0  0 | 0   0   0   0   0   0   0  0
-
-        // ST_LOWBDAY (Daytime running lights):
-        // Bit Pos: 7  6  5  4  3  2  1  0 | 15  14  13  12  11  10  9  8
-        // Mask:    0  0  0  0  0  0  0  0 | 0   0   0   0   0   1   0  0
-
         uint16_t simSignals = 0;
-        if(rawsignals & 0x0800){
-            // VEH_SIGNAL_BLINKER_RIGHT:
-            // Bit Pos: 7  6  5  4  3  2  1  0 | 15  14  13  12  11  10  9  8
-            // Mask:    0  0  0  0  0  0  0  1 | 0   0   0   0   0   0   0  0
+
+        if(rawSignals & 0x0800){
             simSignals |= 0x0100;
         }
-        if(rawsignals & 0x1000) {
-            // VEH_SIGNAL_BLINKER_LEFT
-            // Bit Pos: 7  6  5  4  3  2  1  0 | 15  14  13  12  11  10  9  8
-            // Mask:    0  0  0  0  0  0  1  0 | 0   0   0   0   0   0   0  0
+
+        if(rawSignals & 0x1000) {
             simSignals |= 0x0200;
         }
-        if(rawsignals & 0x0004) {
-            // VEH_SIGNAL_FRONTLIGHT
-            // Bit Pos: 7  6  5  4  3  2  1  0 | 15  14  13  12  11  10  9  8
-            // Mask:    0  0  0  1  0  0  0  0 | 0   0   0   0   0   0   0  0
+
+        if(rawSignals & 0x0004){
             simSignals |= 0x1000;
         }
 
         // Create the SimEvents and add them to the vector that will be sent to the simulation
-        SimEvent signals  = SimEvent("Signals_DUT", static_cast<double>(simSignals),"CanConnector");
+        SimEvent signals = SimEvent("Signals_DUT", static_cast<double>(simSignals),"CanConnector");
         events.push_back(signals);
 
         return events;

@@ -273,6 +273,8 @@ namespace sim_interface::dut_connector::can{
             msgCAN->canFrame[0]        = *canFrame;
         }
 
+        InterfaceLogger::logMessage("CAN Connector: TX_SEND created for the CAN ID: " + convertCanIdToHex(frame.can_id), LOG_LEVEL::INFO);
+
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), msgSize);
 
@@ -448,6 +450,8 @@ namespace sim_interface::dut_connector::can{
             }
         }
 
+        InterfaceLogger::logMessage("CAN Connector: TX_SETUP (sequence) created for the CAN ID: " + convertCanIdToHex(frames[0].can_id), LOG_LEVEL::INFO);
+
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), msgSize);
 
@@ -567,6 +571,8 @@ namespace sim_interface::dut_connector::can{
             msg->flags = CAN_FD_FRAME;
         }
 
+        InterfaceLogger::logMessage("CAN Connector: TX_DELETE created for the CAN ID: " + convertCanIdToHex(canID), LOG_LEVEL::INFO);
+
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), sizeof(bcm_msg_head));
 
@@ -604,6 +610,8 @@ namespace sim_interface::dut_connector::can{
         if(isCANFD){
             msg->flags = msg->flags | CAN_FD_FRAME;
         }
+
+        InterfaceLogger::logMessage("CAN Connector: RX_SETUP (CAN ID) created for the CAN ID: " + convertCanIdToHex(canID), LOG_LEVEL::INFO);
 
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), sizeof(bcm_msg_head));
@@ -668,6 +676,8 @@ namespace sim_interface::dut_connector::can{
             msgCAN->canFrame[0]        = *maskCAN;
         }
 
+        InterfaceLogger::logMessage("CAN Connector: RX_SETUP (Mask) created for the CAN ID: " + convertCanIdToHex(canID), LOG_LEVEL::INFO);
+
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), msgSize);
 
@@ -703,6 +713,8 @@ namespace sim_interface::dut_connector::can{
         if(isCANFD){
             msg->flags = CAN_FD_FRAME;
         }
+
+        InterfaceLogger::logMessage("CAN Connector: RX_DELETE created for the CAN ID: " + convertCanIdToHex(canID), LOG_LEVEL::INFO);
 
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), sizeof(bcm_msg_head));
