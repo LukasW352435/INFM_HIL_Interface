@@ -76,10 +76,16 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:adfda753f29aa0ed993e4c9290867bda4"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CodecUtilities.html#adfda753f29aa0ed993e4c9290867bda4">checkEndianness</a> ()</td></tr>
-<tr class="separator:adfda753f29aa0ed993e4c9290867bda4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29b0c3ca3bc203c5d2d9232b1662b7a3"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CodecUtilities.html#a29b0c3ca3bc203c5d2d9232b1662b7a3">convertEndianness</a> (uint16_t number)</td></tr>
+<tr class="memitem:a86601ae100829e88913995a285d35f4b"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CodecUtilities.html#a86601ae100829e88913995a285d35f4b">checkBigEndianness</a> ()</td></tr>
+<tr class="separator:a86601ae100829e88913995a285d35f4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cab85c459764820339664e8e91da0d5"><td class="memItemLeft" align="right" valign="top">static int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CodecUtilities.html#a9cab85c459764820339664e8e91da0d5">convertEndianness</a> (int16_t number)</td></tr>
+<tr class="separator:a9cab85c459764820339664e8e91da0d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29b0c3ca3bc203c5d2d9232b1662b7a3"><td class="memItemLeft" align="right" valign="top"><a id="a29b0c3ca3bc203c5d2d9232b1662b7a3" name="a29b0c3ca3bc203c5d2d9232b1662b7a3"></a>
+static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>convertEndianness</b> (uint16_t number)</td></tr>
 <tr class="separator:a29b0c3ca3bc203c5d2d9232b1662b7a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac30adbc48a31779d1dddb461d9681606"><td class="memItemLeft" align="right" valign="top"><a id="ac30adbc48a31779d1dddb461d9681606" name="ac30adbc48a31779d1dddb461d9681606"></a>
+static int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>convertEndianness</b> (int32_t number)</td></tr>
+<tr class="separator:ac30adbc48a31779d1dddb461d9681606"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2364c518d075ac4a615deeff884eaf32"><td class="memItemLeft" align="right" valign="top"><a id="a2364c518d075ac4a615deeff884eaf32" name="a2364c518d075ac4a615deeff884eaf32"></a>
 static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>convertEndianness</b> (uint32_t number)</td></tr>
 <tr class="separator:a2364c518d075ac4a615deeff884eaf32"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -88,8 +94,8 @@ static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>convertEnd
 <tr class="separator:a12fdd992ce8f3d5bf90c453750e5da01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="adfda753f29aa0ed993e4c9290867bda4" name="adfda753f29aa0ed993e4c9290867bda4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adfda753f29aa0ed993e4c9290867bda4">&#9670;&nbsp;</a></span>checkEndianness()</h2>
+<a id="a86601ae100829e88913995a285d35f4b" name="a86601ae100829e88913995a285d35f4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86601ae100829e88913995a285d35f4b">&#9670;&nbsp;</a></span>checkBigEndianness()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -98,7 +104,7 @@ static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>convertEnd
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool sim_interface::dut_connector::can::CodecUtilities::checkEndianness </td>
+          <td class="memname">bool sim_interface::dut_connector::can::CodecUtilities::checkBigEndianness </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -115,8 +121,8 @@ static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>convertEnd
 
 </div>
 </div>
-<a id="a29b0c3ca3bc203c5d2d9232b1662b7a3" name="a29b0c3ca3bc203c5d2d9232b1662b7a3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29b0c3ca3bc203c5d2d9232b1662b7a3">&#9670;&nbsp;</a></span>convertEndianness()</h2>
+<a id="a9cab85c459764820339664e8e91da0d5" name="a9cab85c459764820339664e8e91da0d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cab85c459764820339664e8e91da0d5">&#9670;&nbsp;</a></span>convertEndianness()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -125,9 +131,9 @@ static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>convertEnd
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t sim_interface::dut_connector::can::CodecUtilities::convertEndianness </td>
+          <td class="memname">int16_t sim_interface::dut_connector::can::CodecUtilities::convertEndianness </td>
           <td>(</td>
-          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>number</em></td><td>)</td>
           <td></td>
         </tr>
@@ -156,7 +162,7 @@ static uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>convertEnd
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Dec 15 2021 20:06:34 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+Generated on Thu Dec 16 2021 21:27:58 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
 </small></address>
 </body>
 </html>
