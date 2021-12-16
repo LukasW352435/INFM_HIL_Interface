@@ -38,6 +38,7 @@
 #include <fstream>
 #include <linux/can.h>
 #include <linux/can/bcm.h>
+#include <boost/concept_check.hpp>
 
 #include "../DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
 #include "../DuT_Connectors/CANConnector/CANConnectorConfig.h"
@@ -177,11 +178,13 @@ namespace boost::serialization {
         std::cout << "serialize" << std::endl;
 
 
+       const std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>*  frameToOperationHelpPointer = reinterpret_cast<const std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *>(&config->frameToOperation);
+
         ar & boost::serialization::make_nvp("interfaceName", config->interfaceName);
         ar & boost::serialization::make_nvp("codecName", config->codecName);
         ar & boost::serialization::make_nvp("operations", config->operations);
-        ar & boost::serialization::make_nvp("frameToOperation", config->frameToOperation);
-       ar & boost::serialization::make_nvp("operationToFrame",  config->operationToFrame);
+        ar & boost::serialization::make_nvp("frameToOperation", frameToOperationHelpPointer );
+     //   ar & boost::serialization::make_nvp("operationToFrame",  config->operationToFrame );
         ar & boost::serialization::make_nvp("periodicOperations", config->periodicOperations);
         ar & boost::serialization::make_nvp("periodicTimerEnabled", config->periodicTimerEnabled);
     }
@@ -194,21 +197,31 @@ namespace boost::serialization {
         std::string _codecName;
         std::set<std::string> _operations;
         std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> _frameToOperation = {};
+      //  const std::map<unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>  _test = _frameToOperation;
+
         std::map<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> _operationToFrame = {};
         std::map<std::string, int> _periodicOperations;
         bool _periodicTimerEnabled;
 
+
+      //  boost::shared_ptr< const std::map<unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>>  frameToOperationHelpPointer;
+
+   //   sim_interface::dut_connector::can::CANConnectorReceiveOperation* test;
+      //  std::map<unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>* test;
+         std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>*  test;
+      //   std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation>*  test;
         ar & boost::serialization::make_nvp("interfaceName", _interfaceName);
         ar & boost::serialization::make_nvp("codecName", _codecName);
         ar & boost::serialization::make_nvp("operations", _operations);
-        ar & boost::serialization::make_nvp("frameToOperation", _frameToOperation);
-        ar & boost::serialization::make_nvp("operationToFrame", _operationToFrame);
+        ar & boost::serialization::make_nvp("frameToOperation", test);
+      //  ar & boost::serialization::make_nvp("operationToFrame", _operationToFrame);
         ar & boost::serialization::make_nvp("periodicOperations", _periodicOperations);
         ar & boost::serialization::make_nvp("periodicTimerEnabled", _periodicTimerEnabled);
 
-
-        ::new(instance)sim_interface::dut_connector::can::CANConnectorConfig(_interfaceName, _codecName,
-                                                                                      _operations, _frameToOperation,
+        std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation>* test2(
+                reinterpret_cast<std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *>(test));
+                ::new(instance)sim_interface::dut_connector::can::CANConnectorConfig(_interfaceName, _codecName,
+                                                                                      _operations, *test2,
                                                                                      _operationToFrame,
                                                                                      _periodicOperations,
                                                                                      _periodicTimerEnabled);
@@ -218,6 +231,7 @@ namespace boost::serialization {
     template<class Archive>
     void serialize(Archive &ar, sim_interface::dut_connector::can::CANConnectorReceiveOperation &config,
                    const unsigned int version) {}
+
 
   template<class Archive>
   inline void save_construct_data(Archive &ar, const sim_interface::dut_connector::can::CANConnectorReceiveOperation *config,
@@ -234,6 +248,9 @@ namespace boost::serialization {
 
   }
 
+
+
+
     template<class Archive>
     void serialize(Archive &ar, canfd_frame &config,
                    const unsigned int version) {
@@ -243,6 +260,7 @@ namespace boost::serialization {
         ar & boost::serialization::make_nvp("__res1", config.__res1);
         ar & boost::serialization::make_nvp("data", config.data);
     }
+
 
     template<class Archive>
     void serialize(Archive &ar, bcm_timeval &config,
@@ -274,7 +292,7 @@ namespace boost::serialization {
 
         ::new(instance)sim_interface::dut_connector::can::CANConnectorReceiveOperation(_operation, _isCANFD,
                                                                              _hasMask, _maskLength,
-                                                                             _maskData
+                                                                                      _mask.data
                                                                              );
     }
 
@@ -348,24 +366,25 @@ namespace boost::serialization {
     template<class Archive>
     inline void load_construct_data(Archive &ar, std::pair<const unsigned int,  sim_interface::dut_connector::can::CANConnectorReceiveOperation> *pair,
                                     const unsigned int file_version) {
-       unsigned int _key;
+        unsigned int _key;
       //  Workaround  that the key can be Hex value
       std::string _interpretHex;
-        boost::shared_ptr< sim_interface::dut_connector::can::CANConnectorReceiveOperation>  _value;
+     //   boost::shared_ptr< sim_interface::dut_connector::can::CANConnectorReceiveOperation>  _value;
 
+        sim_interface::dut_connector::can::CANConnectorReceiveOperation *_value;
         std::cout << "HIER load_construct_data CANConnectorReceiveOperation" << std::endl;
 
-        ar & boost::serialization::make_nvp("key", _interpretHex);
-        ar & boost::serialization::make_nvp("value", _value);
+        ar & boost::serialization::make_nvp("canid", _key);
+        ar & boost::serialization::make_nvp("CANConnectorReceiveOperation", _value);
 
-        std::stringstream ss;
-        ss  << std::hex << _interpretHex;
-                        //  ss << _interpretHex;
-        ss >> _key;
+    //   std::stringstream ss;
+    //   ss  << std::hex << _interpretHex;
+    //                   //  ss << _interpretHex;
+    //   ss >> _key;
 
 
 
-        ::new(pair)std::pair<const unsigned int,  sim_interface::dut_connector::can::CANConnectorReceiveOperation>(_key,*_value.get());
+        ::new(pair)std::pair<const unsigned int,  sim_interface::dut_connector::can::CANConnectorReceiveOperation>(_key,*_value);
 
 
 
@@ -390,8 +409,46 @@ namespace boost::serialization {
     }
     template <class Archive>
     void serialize(Archive& ar, std::map<const std::string, sim_interface::dut_connector::can::CANConnectorSendOperation>& p, unsigned) {
+        std::cout <<"WWTF!!!! LETSGOOOO" << std::endl;
+    }
+    template <class Archive>
+    void serialize(Archive& ar, std::map< const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>& config, unsigned) {
     }
 
+    template <class Archive>
+    void save_construct_data(Archive& ar, const std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>* config, unsigned) {
+        std::cout <<"Läuft "<< std::endl;
+     //   ar & boost::serialization::make_nvp("item", config);
+           unsigned long count = config->size();
+        ar &  boost::serialization::make_nvp("count", count);
+          for(auto const  &iter: *config)
+     {
+
+         const std::pair< const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *test = &iter;
+      //   const  sim_interface::dut_connector::can::CANConnectorReceiveOperation* helpPointer  = &iter.second;
+         ar &   boost::serialization::make_nvp("item", test);
+       //  ar &   boost::serialization::make_nvp("value", helpPointer);
+     }
+
+    }
+
+    template <class Archive>
+    void load_construct_data(Archive& ar,  std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>* config, unsigned) {
+        std::cout <<"Hier müssen wir hin "<< std::endl;
+        std::pair<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>* _pair;
+        unsigned long _count;
+       std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation> _map = {};
+       // ::new(config)std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>();
+        ar &   boost::serialization::make_nvp("count", _count);
+        for (int i = 0; i < _count ; i++) {
+            ar &   boost::serialization::make_nvp("item", _pair);
+            _map.insert(*_pair);
+        }
+       // config = &_map;
+        ::new(config)std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>(_map);
+      // ::new(config)std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>({_pair->first, _pair->second});
+
+    }
 
 
 
@@ -420,22 +477,14 @@ namespace boost::serialization {
 
     }
     template<class Archive>
-    inline void save_construct_data(Archive &ar, const std::pair<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *pair,
+    inline void save_construct_data(Archive &ar, const std::pair< const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *pair,
                                     const unsigned int file_version) {
 
 
         std::cout << "HIER save_construct_data CANConnectorSendOperation" << std::endl;
-        __u8* test =(unsigned char*)pair->second.mask.data;
-        boost::shared_ptr< sim_interface::dut_connector::can::CANConnectorReceiveOperation> helpPointer(new sim_interface::dut_connector::can::CANConnectorReceiveOperation(
-                pair->second.operation,
-                pair->second.isCANFD,
-                pair->second.hasMask,
-                pair->second.maskLength,
-                (unsigned char*)pair->second.mask.data
-                ));
-
-        ar &   boost::serialization::make_nvp("key", pair->first);
-        ar &   boost::serialization::make_nvp("value", helpPointer);
+       const sim_interface::dut_connector::can::CANConnectorReceiveOperation* pointer = &pair->second;
+        ar &   boost::serialization::make_nvp("canid", pair->first);
+        ar &   boost::serialization::make_nvp("CANConnectorReceiveOperation", pointer);
 
     }
 

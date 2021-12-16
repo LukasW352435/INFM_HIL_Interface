@@ -69,7 +69,7 @@ int main() {
     //   std::vector<boost::variant< sim_interface::dut_connector::ConnectorConfig,sim_interface::dut_connector::rest_dummy::RESTConnectorConfig, sim_interface::dut_connector::can::CANConnectorConfig>> connectorConfig;
     std::cout << "Laenge des REST-Vektor vor dem Hinzufuegen: " << RESTConnectorVec.size() << std::endl;
     std::cout << "Laenge des CAN-Vektor vor dem Hinzufuegen: " << CanConnectorVec.size() << std::endl;
-    simComHandler.getConfig(&RESTConnectorVec, &CanConnectorVec);
+  //  simComHandler.getConfig(&RESTConnectorVec, &CanConnectorVec);
     std::cout << "Laenge des CAN-Vektor nach dem Hinzufuegen: " << CanConnectorVec.size() << std::endl;
     std::cout << "Laenge des REST-Vektor nach dem Hinzufuegen: " << RESTConnectorVec.size() << std::endl;
     // std::cout << "TEST!!!: " << connectorConfig.size() << std::endl;
@@ -148,7 +148,7 @@ int main() {
     //+++++ Start CAN Connector +++++
 
     // CAN receive operation without a mask
-    /* sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCan1(
+    sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCan1(
             "Hazard",
             false,
             false
@@ -230,10 +230,11 @@ int main() {
             operationToFrame,
             {},
             false));
-    */
-    // sim_interface::ConfigSerializer::serialize("TEST.xml", "conn", canConfigTest);
-    // sim_interface::ConfigSerializer::deserialize("TESTPET.xml", "conn", canConfigTest);
 
+   //  sim_interface::ConfigSerializer::serialize("TEST.xml", "conn", canConfigTest);
+   //  sim_interface::ConfigSerializer::deserialize("TEST.xml", "conn", canConfigTest);
+
+    sim_interface::ConfigSerializer::serialize("TESTGGWASGEHT.xml", "conn", canConfigTest);
     // sim_interface::ConfigSerializer::deserialize("CANConnector.xml", "conn", canConfigTest);
     // sim_interface::ConfigSerializer::serialize("TESTFuckingGo.xml", "conn", canConfigTest);
     // boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConnectorConfig;
@@ -248,13 +249,13 @@ int main() {
     //  sim_interface::ConfigSerializer::deserialize(iss, "test", canConfigTest);
     //  sim_interface::ConfigSerializer::serialize("TESTTEST.xml", "test", canConfigTest);
 
-    sim_interface::dut_connector::can::CANConnectorConfig canConfig( CanConnectorVec.at(0)->interfaceName,
-                                                                     CanConnectorVec.at(0)->codecName,
-                                                                     CanConnectorVec.at(0)->operations,
-                                                                     CanConnectorVec.at(0)->frameToOperation,
-                                                                     CanConnectorVec.at(0)->operationToFrame,
-                                                                     CanConnectorVec.at(0)->periodicOperations,
-                                                                     CanConnectorVec.at(0)->periodicTimerEnabled);
+//  sim_interface::dut_connector::can::CANConnectorConfig canConfig( CanConnectorVec.at(0)->interfaceName,
+//                                                                   CanConnectorVec.at(0)->codecName,
+//                                                                   CanConnectorVec.at(0)->operations,
+//                                                                   CanConnectorVec.at(0)->frameToOperation,
+//                                                                   CanConnectorVec.at(0)->operationToFrame,
+//                                                                   CanConnectorVec.at(0)->periodicOperations,
+//                                                                   CanConnectorVec.at(0)->periodicTimerEnabled);
 
 
     // Create a new CAN Connector and add it to the interface
