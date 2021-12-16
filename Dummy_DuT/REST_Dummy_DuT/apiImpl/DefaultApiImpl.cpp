@@ -234,7 +234,7 @@ namespace dummy_dut::rest::impl {
 </head>
 <body>
     <nav class="navbar navbar-fixed-top navbar-dark bg-dark mb-4">
-        <span class="navbar-nav navbar-brand h1 text-light container-fluid">REST Dummy DutT</span>
+        <span class="navbar-nav navbar-brand h1 text-light container-fluid">REST Dummy DuT</span>
     </nav>
     <form class="container-fluid" action="" id="sendForm">
         <label>Send a message</label>

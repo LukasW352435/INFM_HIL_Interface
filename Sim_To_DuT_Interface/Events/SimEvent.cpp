@@ -25,6 +25,9 @@
 #include "SimEvent.h"
 
 #include <utility>
+#include <chrono>
+#include <iomanip>
+#include "EventVisitor.h"
 
 namespace sim_interface {
     SimEvent::SimEvent() : SimEvent("", "", "") {
@@ -34,14 +37,23 @@ namespace sim_interface {
             operation(std::move(operation)),
             value(std::move(value)),
             origin(std::move(origin)) {
-        current = std::time(nullptr);
+        std::chrono::system_clock::time_point time_point = std::chrono::system_clock::now();
+        std::chrono::system_clock::duration duration = time_point.time_since_epoch();
+        int64_t timestamp = duration.count();
+        std:: time_t  time_t = std::chrono::system_clock::to_time_t (time_point);
+        std:: tm * tm = std::localtime (& time_t );
+
+        std::stringstream ss;
+        ss << std::put_time (tm , "%Y-%m-%d %X") << "." << std::to_string((timestamp / 1000) % 1000000);
+
+        current = ss.str();
     }
 
     std::ostream &operator<<(std::ostream &os, const SimEvent &simEvent) {
         os << "Operation: " << simEvent.operation << std::endl;
-        os << "Value: " << simEvent.value << std::endl;
+        os << "Value: " << boost::apply_visitor(EventVisitor(), simEvent.value) << std::endl;
         os << "Origin: " << simEvent.origin << std::endl;
-        os << "Current: " << std::ctime(&simEvent.current) << std::endl;
+        os << "Current: " << simEvent.current << std::endl;
         return os;
     }
 }

@@ -54,7 +54,7 @@ namespace sim_interface::dut_connector::can{
         }else if(event.operation == "Signals_DUT"){
             result = encodeLichter(event);
         }else{
-            DuTLogger::logMessage("CAN Connector: BMW codec received unknown operation: <" + event.operation + ">", LOG_LEVEL::WARNING);
+            InterfaceLogger::logMessage("CAN Connector: BMW codec received unknown operation: <" + event.operation + ">", LOG_LEVEL::WARNING);
         }
 
         return result;
@@ -93,7 +93,7 @@ namespace sim_interface::dut_connector::can{
 
             default:
 
-                DuTLogger::logMessage("CAN Connector: BMW codec did not implement a conversion for the CAN ID: "
+                InterfaceLogger::logMessage("CAN Connector: BMW codec did not implement a conversion for the CAN ID: "
                                       "<" + std::to_string(frame.can_id) + ">", LOG_LEVEL::WARNING);
 
         }

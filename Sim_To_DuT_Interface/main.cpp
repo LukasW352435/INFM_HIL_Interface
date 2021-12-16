@@ -20,6 +20,7 @@
  *
  * @author Lukas Wagenlehner
  * @author Michael Schmitz
+ * @author Franziska Ihrler
  * @author Matthias Bank
  * @author Marco Keul
  * @version 1.0
@@ -32,12 +33,15 @@
 #include "DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
 #include "DuT_Connectors/CANConnector/CANConnector.h"
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
-#include "DuTLogger/DuTLogger.h"
+#include "Interface_Logger/InterfaceLogger.h"
+#include "DuT_Connectors/V2XConnector/V2XConnectorConfig.h"
+#include "DuT_Connectors/V2XConnector/V2XConnector.h"
 #include "SystemConfig.h"
 
 // System includes
 #include <thread>
 #include <iostream>
+#include <boost/archive/text_oarchive.hpp>
 
 
 int main() {
@@ -48,8 +52,8 @@ int main() {
     sim_interface::SystemConfig::loadFromFile(configPath + "/SystemConfig.xml", systemConfig, true);
 
     // initialize the logger
-    DuTLogger::initializeLogger(systemConfig.loggerConfig);
-    DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
+    sim_interface::InterfaceLogger::initializeLogger(systemConfig.loggerConfig);
+    sim_interface::InterfaceLogger::logMessage("Start Application", sim_interface::LOG_LEVEL::INFO);
 
     // Create interface
     sim_interface::SimToDuTInterface interface;
@@ -60,9 +64,10 @@ int main() {
     // Init interface with SimComHandler
     interface.setSimComHandler(&simComHandler);
 
+
     // Create DuT Devices
 
-    /**
+    
     
     // Create the REST connector
     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
@@ -106,13 +111,34 @@ int main() {
     // Add the REST connector to the interface
     interface.addConnector(&restDummyConnector);
 
-    */
+    //V2x Connector
+
+    sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("veth0", 0x0000);
+
+    sim_interface::dut_connector::v2x::V2XConnector v2xConnector(interface.getQueueDuTToSim(), v2xconfig);
+    interface.addConnector(&v2xConnector);
+    //Testing V2x
+
+    std::stringstream ss;
+    boost::archive::text_oarchive ar(ss);
+    std::string sourceMAC = "aa:bb:cc:dd:ee:ff";
+    std::string destinationMAC = "11:22:33:44:55:66";
+    int payload_length = 2;
+    ar << sourceMAC;
+    std::vector<unsigned char> payload = {0x12, 0x34};
+    ar << destinationMAC;
+    ar << payload_length;
+    ar << payload[0];
+    ar << payload[1];
+    std::string archive = ss.str();
+    const sim_interface::SimEvent e("V2X", ss.str(), "Simulation");
+    v2xConnector.handleEventSingle(e);
 
     //+++++ Start CAN Connector +++++
-
     // Example receiveOperation Config for the 0x275 GESCHWINDIGKEIT CAN frame
     sim_interface::dut_connector::can::CANConnectorReceiveOperation receiveOperationGeschwindigkeit(
             "GESCHWINDIGKEIT",
+
             false,
             false
     );
@@ -257,8 +283,9 @@ int main() {
     interface.getQueueSimToInterface()->push(sim_interface::SimEvent("Latitude_Dynamics",4.0,"TEST"));
 
     //+++++ End CAN Connector +++++
+    
 
-    //std::cout << interface << std::endl;
+    std::cout << interface << std::endl;
 
     // Start simComHandler to receive events from the simulation
     //std::thread simComHandlerThread(&sim_interface::SimComHandler::run, &simComHandler);
@@ -268,6 +295,6 @@ int main() {
     interface.run();
 
     std::cin.get();
-    DuTLogger::logMessage("Shut down application", LOG_LEVEL::INFO);
+    sim_interface::InterfaceLogger::logMessage("Shut down application", sim_interface::LOG_LEVEL::INFO);
     return 0;
 }

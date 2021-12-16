@@ -26,9 +26,10 @@
 #include <iostream>
 #include <utility>
 #include <boost/lexical_cast.hpp>
+#include "../../Events/EventVisitor.h"
 #include "RESTDummyConnector.h"
 #include "ReceiveEndpoint.h"
-#include "../../DuTLogger/DuTLogger.h"
+#include "../../Interface_Logger/InterfaceLogger.h"
 
 namespace sim_interface::dut_connector::rest_dummy {
     RESTDummyConnector::RESTDummyConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
@@ -66,7 +67,6 @@ namespace sim_interface::dut_connector::rest_dummy {
             curl_easy_setopt(handle, CURLOPT_URL, sendCallbackDuT.data());
             curl_easy_setopt(handle, CURLOPT_USERAGENT, "RESTDummyConnector");
             auto payload = EventToRESTMessage(e);
-            std::cout << payload << std::endl;
             curl_easy_setopt(handle, CURLOPT_POSTFIELDS, payload.data());
             curl_easy_setopt(handle, CURLOPT_HTTPHEADER, curlJsonHeader);
             curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, "PUT");
@@ -77,9 +77,9 @@ namespace sim_interface::dut_connector::rest_dummy {
             curl_easy_cleanup(handle);
         }
         if (responseCode == 200) {
-            DuTLogger::logMessage("RESTDummyConnector: Successfully sent event " + e.operation + " to DuT", LOG_LEVEL::DEBUG);
+            InterfaceLogger::logMessage("RESTDummyConnector: Successfully sent event " + e.operation + " to DuT", LOG_LEVEL::DEBUG);
         } else {
-            DuTLogger::logMessage("RESTDummyConnector: Error on sending event, HTTP-Code: " + std::to_string(responseCode), LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("RESTDummyConnector: Error on sending event, HTTP-Code: " + std::to_string(responseCode), LOG_LEVEL::ERROR);
         }
     }
 
@@ -91,7 +91,7 @@ namespace sim_interface::dut_connector::rest_dummy {
             receiveEndpoint->startService(this->port,
                                           [this](auto &&PH1) { sendEventToSim(std::forward<decltype(PH1)>(PH1)); });
         });
-        DuTLogger::logMessage("RESTDummyConnector: Receive endpoint started", LOG_LEVEL::DEBUG);
+        InterfaceLogger::logMessage("RESTDummyConnector: Receive endpoint started", LOG_LEVEL::DEBUG);
 
         auto handle = curl_easy_init();
 
@@ -109,11 +109,11 @@ namespace sim_interface::dut_connector::rest_dummy {
             curl_easy_cleanup(handle);
         }
         if (responseCode == 200) {
-            DuTLogger::logMessage("RESTDummyConnector: Receiving of events enabled", LOG_LEVEL::INFO);
+            InterfaceLogger::logMessage("RESTDummyConnector: Receiving of events enabled", LOG_LEVEL::INFO);
         } else if (responseCode == 208) {
-            DuTLogger::logMessage("RESTDummyConnector: Receiving of events was already enabled", LOG_LEVEL::INFO);
+            InterfaceLogger::logMessage("RESTDummyConnector: Receiving of events was already enabled", LOG_LEVEL::INFO);
         } else {
-            DuTLogger::logMessage("RESTDummyConnector: Error on enabling receive, HTTP-Code: " + std::to_string(responseCode), LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("RESTDummyConnector: Error on enabling receive, HTTP-Code: " + std::to_string(responseCode), LOG_LEVEL::ERROR);
         }
     }
 
@@ -134,13 +134,13 @@ namespace sim_interface::dut_connector::rest_dummy {
             curl_easy_cleanup(handle);
         }
         if (responseCode == 200) {
-            DuTLogger::logMessage("RESTDummyConnector: Receiving of events disabled", LOG_LEVEL::INFO);
+            InterfaceLogger::logMessage("RESTDummyConnector: Receiving of events disabled", LOG_LEVEL::INFO);
         } else {
-            DuTLogger::logMessage("RESTDummyConnector: Error on disabling receive, HTTP-Code: " + std::to_string(responseCode), LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("RESTDummyConnector: Error on disabling receive, HTTP-Code: " + std::to_string(responseCode), LOG_LEVEL::ERROR);
         }
     }
 
     std::string RESTDummyConnector::EventToRESTMessage(const SimEvent &e) {
-        return R"({"key":")" + e.operation + R"(","status":")" + boost::lexical_cast<std::string>(e.value) + R"("})";
+        return R"({"key":")" + e.operation + R"(","status":")" + boost::apply_visitor(EventVisitor(), e.value) + R"("})";
     }
 }

@@ -42,7 +42,7 @@ namespace sim_interface::dut_connector::can{
 
         // Check if the codec name is empty
         if(codecName.empty()){
-            DuTLogger::logMessage("CAN Connector: Codec name can not be empty", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("CAN Connector: Codec name can not be empty", LOG_LEVEL::ERROR);
             throw std::invalid_argument("CAN Connector: Codec name can not be empty");
         }
 
@@ -52,7 +52,7 @@ namespace sim_interface::dut_connector::can{
             return new BmwCodec();
         }else{
             // Unknown CAN codec name
-            DuTLogger::logMessage("CAN Connector: Unknown CAN codec name <" + codecName + ">. Could not create the CAN codec", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("CAN Connector: Unknown CAN codec name <" + codecName + ">. Could not create the CAN codec", LOG_LEVEL::ERROR);
             throw std::invalid_argument("CAN Connector: Unknown CAN codec name <" + codecName + ">. Could not create the CAN codec");
         }
 

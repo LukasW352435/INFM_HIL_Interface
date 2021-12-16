@@ -16,7 +16,7 @@
  ******************************************************************************/
 // Project includes
 #include "../../Events/SimEvent.h"
-#include "DuTLogger.h"
+#include "InterfaceLogger.h"
 
 // System includes
 #include <vector>
