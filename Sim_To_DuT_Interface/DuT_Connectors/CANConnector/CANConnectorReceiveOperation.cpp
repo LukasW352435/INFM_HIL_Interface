@@ -57,7 +57,7 @@ namespace sim_interface::dut_connector::can{
         if(this->hasMask){
 
             // Assert that the mask data is not a null pointer
-            if(maskData != nullptr){
+            if(maskData == nullptr){
                 throw std::invalid_argument("CAN Connector Receive Operation: Mask must not be NULL for a receive operation that has a mask");
             }
 
