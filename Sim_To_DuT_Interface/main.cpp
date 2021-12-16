@@ -287,8 +287,8 @@ int main() {
     std::cout << interface << std::endl;
 
     // Start simComHandler to receive events from the simulation
-    //std::thread simComHandlerThread(&sim_interface::SimComHandler::run, &simComHandler);
-    //simComHandlerThread.detach();
+    std::thread simComHandlerThread(&sim_interface::SimComHandler::run, &simComHandler);
+    simComHandlerThread.detach();
 
     // Start interface to receive/send events
     interface.run();
