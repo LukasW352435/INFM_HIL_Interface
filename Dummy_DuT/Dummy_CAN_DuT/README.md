@@ -1,8 +1,7 @@
 # Dummy_CAN_DuT
-
-## Overview
-This dummy application is a simple "echo server" that sends the received CAN/CANFD frames back with a different ID. 
-The dummy keeps running till it is terminated with "CTRL + C".
+This dummy application is a simple "echo server" that builds upon SocketCAN. 
+It sends received CAN/CANFD frames back with a different CAN ID. 
+The dummy keeps running till it is terminated with "CTRL + C". 
 
 ## Configuration
 The following parameters can be changed in the Dummy_CANFD_Config.h file:
@@ -17,14 +16,31 @@ The following parameters can be changed in the Dummy_CANFD_Config.h file:
 To test the dummy you can use a virtual CAN interface:
 
 ```
+// Install the can-utils 
+sudo apt-get install can-utils
+
+// Modprobe is needed in the case the vcan driver is not loaded.
+modprobe vcan
+
 // Create a virtual CAN interface
 ip link add dev vcan0 type vcan
 
-// Bring the interface up and running
+// Set the interface up and running
 ip link set vcan0 up
 
-// Start the dummy application
+// Compile the project
+cmake .
+make 
 
-// Send a frame on the virtual CAN interface
+// Start the dummy application
+./Dummy_CAN_DuT
+
+// Open another terminal and send a frame on the virtual CAN interface
 cansend vcan0 123#DEADBEEF
 ```
+
+## Documentation
+For further information look at the [documentation](https://mab0189.github.io/Dummy_CAN_DuT/index.html).
+
+## Helpful links
+[SocketCAN documentation](https://www.kernel.org/doc/Documentation/networking/can.txt)
