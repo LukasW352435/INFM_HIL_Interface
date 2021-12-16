@@ -249,7 +249,7 @@ namespace sim_interface::dut_connector::can{
 
         // Check if we got a CAN frame
         if(isCanfd){
-            DuTLogger::logMessage("Got a CANFD frame but expected a CAN frame for the CAN ID 0x275 Geschwindigkeit", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("Got a CANFD frame but expected a CAN frame for the CAN ID 0x275 Geschwindigkeit", LOG_LEVEL::ERROR);
             return events;
         }
 
@@ -293,7 +293,7 @@ namespace sim_interface::dut_connector::can{
         std::vector<SimEvent> events;
 
         if(isCanfd){
-            DuTLogger::logMessage("Got a CANFD frame but expected a CAN frame for the CAN ID 0x273 GPS_LOCA", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("Got a CANFD frame but expected a CAN frame for the CAN ID 0x273 GPS_LOCA", LOG_LEVEL::ERROR);
             return events;
         }
 
@@ -328,7 +328,7 @@ namespace sim_interface::dut_connector::can{
         std::vector<SimEvent> events;
 
         if(isCanfd){
-            DuTLogger::logMessage("Got a CANFD frame but expected a CAN frame for the CAN ID 0x274 GPS_LOCB", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("Got a CANFD frame but expected a CAN frame for the CAN ID 0x274 GPS_LOCB", LOG_LEVEL::ERROR);
             return events;
         }
 
@@ -365,7 +365,7 @@ namespace sim_interface::dut_connector::can{
         std::vector<SimEvent> events;
 
         if(isCanfd){
-            DuTLogger::logMessage("Got a CANFD frame but expected a CAN frame for the CAN ID 0x279 L", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("Got a CANFD frame but expected a CAN frame for the CAN ID 0x279 L", LOG_LEVEL::ERROR);
             return events;
         }
 
