@@ -138,7 +138,6 @@ int main() {
     // Example receiveOperation Config for the 0x275 GESCHWINDIGKEIT CAN frame
     sim_interface::dut_connector::can::CANConnectorReceiveOperation receiveOperationGeschwindigkeit(
             "GESCHWINDIGKEIT",
-
             false,
             false
     );
