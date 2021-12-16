@@ -53,12 +53,13 @@ namespace sim_interface {
         public:
 
             template<typename T>
-            static void deserialize( const std::string &file, const std::string &objName, boost::scoped_ptr<T> &obj) {
+            static void deserialize( const std::string &file, const std::string &objName, T* obj) {
                 std::ifstream ifs(file);
                 //  std::ifstream ifs(file);
                 //   boost::archive::xml_iarchive ia(ifs,boost::archive::no_header);
                 //   ia & boost::serialization::make_nvp(objName.c_str(), obj);
                 boost::archive::xml_iarchive ia(ifs,boost::archive::no_header);
+              //  T* pointer;
                 ia & boost::serialization::make_nvp(objName.c_str(), obj);
 
 
@@ -83,12 +84,13 @@ namespace sim_interface {
 
 
             template<typename T>
-            static void serialize(const std::string &file, const std::string &objName, boost::scoped_ptr<T> &obj) {
+            static void serialize(const std::string &file, const std::string &objName, T &obj) {
                 std::ofstream ofs(file);
                 if (ofs.good()) {
                 {
                     boost::archive::xml_oarchive oa(ofs, boost::archive::no_header);
-                    oa << boost::serialization::make_nvp(objName.c_str(), obj);
+                    T* pointer = &obj;
+                    oa << boost::serialization::make_nvp(objName.c_str(), pointer);
                 }
                 ofs.close();
                 }
@@ -178,7 +180,7 @@ namespace boost::serialization {
         std::cout << "serialize" << std::endl;
 
 
-       const std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>*  frameToOperationHelpPointer = reinterpret_cast<const std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *>(&config->frameToOperation);
+       const std::map<__u32, sim_interface::dut_connector::can::CANConnectorReceiveOperation>*  frameToOperationHelpPointer = reinterpret_cast<const std::map<__u32, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *>(&config->frameToOperation);
 
         ar & boost::serialization::make_nvp("interfaceName", config->interfaceName);
         ar & boost::serialization::make_nvp("codecName", config->codecName);
@@ -208,7 +210,7 @@ namespace boost::serialization {
 
    //   sim_interface::dut_connector::can::CANConnectorReceiveOperation* test;
       //  std::map<unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>* test;
-         std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>*  test;
+         std::map<__u32, sim_interface::dut_connector::can::CANConnectorReceiveOperation>*  test;
       //   std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation>*  test;
         ar & boost::serialization::make_nvp("interfaceName", _interfaceName);
         ar & boost::serialization::make_nvp("codecName", _codecName);
@@ -243,7 +245,7 @@ namespace boost::serialization {
     ar & boost::serialization::make_nvp("isCANFD", config->isCANFD);
     ar & boost::serialization::make_nvp("hasMask", config->hasMask);
     ar & boost::serialization::make_nvp("maskLength", config->maskLength);
-    ar & boost::serialization::make_nvp("mask", config->mask);
+    ar & boost::serialization::make_nvp("mask", config->mask.data);
 
 
   }
@@ -278,8 +280,9 @@ namespace boost::serialization {
         bool _isCANFD;
         bool _hasMask;
         int _maskLength;
-        __u8 *_maskData = nullptr;
-        struct canfd_frame _mask = {0};
+      //  __u8 *_mask = nullptr;
+        __u8    _mask[CANFD_MAX_DLEN];
+       // struct canfd_frame _mask = {0};
 
 
         ar & boost::serialization::make_nvp("operation", _operation);
@@ -292,7 +295,7 @@ namespace boost::serialization {
 
         ::new(instance)sim_interface::dut_connector::can::CANConnectorReceiveOperation(_operation, _isCANFD,
                                                                              _hasMask, _maskLength,
-                                                                                      _mask.data
+                                                                                      _mask
                                                                              );
     }
 
@@ -357,14 +360,14 @@ namespace boost::serialization {
     }
 
    template <class Archive>
-   void serialize(Archive& ar, std::pair<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>& p, unsigned) {
+   void serialize(Archive& ar, std::pair<__u32, sim_interface::dut_connector::can::CANConnectorReceiveOperation>& p, unsigned) {
 
    }
    template <class Archive>
    void serialize(Archive& ar, std::pair<const std::string, sim_interface::dut_connector::can::CANConnectorSendOperation>& p, unsigned) {
    }
     template<class Archive>
-    inline void load_construct_data(Archive &ar, std::pair<const unsigned int,  sim_interface::dut_connector::can::CANConnectorReceiveOperation> *pair,
+    inline void load_construct_data(Archive &ar, std::pair<__u32,  sim_interface::dut_connector::can::CANConnectorReceiveOperation> *pair,
                                     const unsigned int file_version) {
         unsigned int _key;
       //  Workaround  that the key can be Hex value
@@ -384,7 +387,7 @@ namespace boost::serialization {
 
 
 
-        ::new(pair)std::pair<const unsigned int,  sim_interface::dut_connector::can::CANConnectorReceiveOperation>(_key,*_value);
+        ::new(pair)std::pair<__u32,  sim_interface::dut_connector::can::CANConnectorReceiveOperation>(_key,*_value);
 
 
 
@@ -412,11 +415,11 @@ namespace boost::serialization {
         std::cout <<"WWTF!!!! LETSGOOOO" << std::endl;
     }
     template <class Archive>
-    void serialize(Archive& ar, std::map< const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>& config, unsigned) {
+    void serialize(Archive& ar, std::map< __u32, sim_interface::dut_connector::can::CANConnectorReceiveOperation>& config, unsigned) {
     }
 
     template <class Archive>
-    void save_construct_data(Archive& ar, const std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>* config, unsigned) {
+    void save_construct_data(Archive& ar, const std::map<__u32, sim_interface::dut_connector::can::CANConnectorReceiveOperation>* config, unsigned) {
         std::cout <<"Läuft "<< std::endl;
      //   ar & boost::serialization::make_nvp("item", config);
            unsigned long count = config->size();
@@ -424,7 +427,7 @@ namespace boost::serialization {
           for(auto const  &iter: *config)
      {
 
-         const std::pair< const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *test = &iter;
+         const std::pair< __u32, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *test = reinterpret_cast<const std::pair<__u32, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *>(&iter);
       //   const  sim_interface::dut_connector::can::CANConnectorReceiveOperation* helpPointer  = &iter.second;
          ar &   boost::serialization::make_nvp("item", test);
        //  ar &   boost::serialization::make_nvp("value", helpPointer);
@@ -433,20 +436,20 @@ namespace boost::serialization {
     }
 
     template <class Archive>
-    void load_construct_data(Archive& ar,  std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>* config, unsigned) {
+    void load_construct_data(Archive& ar,  std::map<__u32, sim_interface::dut_connector::can::CANConnectorReceiveOperation>* config, unsigned) {
         std::cout <<"Hier müssen wir hin "<< std::endl;
-        std::pair<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>* _pair;
+        std::pair<__u32, sim_interface::dut_connector::can::CANConnectorReceiveOperation>* _pair;
         unsigned long _count;
-       std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation> _map = {};
-       // ::new(config)std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>();
+       std::map<__u32, sim_interface::dut_connector::can::CANConnectorReceiveOperation> _map = {};
+       // ::new(config)std::map<__u32, sim_interface::dut_connector::can::CANConnectorReceiveOperation>();
         ar &   boost::serialization::make_nvp("count", _count);
         for (int i = 0; i < _count ; i++) {
             ar &   boost::serialization::make_nvp("item", _pair);
             _map.insert(*_pair);
         }
        // config = &_map;
-        ::new(config)std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>(_map);
-      // ::new(config)std::map<const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>({_pair->first, _pair->second});
+        ::new(config)std::map<__u32, sim_interface::dut_connector::can::CANConnectorReceiveOperation>(_map);
+      // ::new(config)std::map<__u32, sim_interface::dut_connector::can::CANConnectorReceiveOperation>({_pair->first, _pair->second});
 
     }
 
@@ -477,7 +480,7 @@ namespace boost::serialization {
 
     }
     template<class Archive>
-    inline void save_construct_data(Archive &ar, const std::pair< const unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *pair,
+    inline void save_construct_data(Archive &ar, const std::pair< __u32, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *pair,
                                     const unsigned int file_version) {
 
 

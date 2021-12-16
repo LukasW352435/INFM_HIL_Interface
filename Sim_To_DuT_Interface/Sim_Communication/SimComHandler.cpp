@@ -154,7 +154,7 @@ namespace sim_interface {
                         // TODO Make smart try catch
                         boost::scoped_ptr<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig> restConnectorConfig;
 
-                        ConfigSerializer::deserialize(fileName, "conn", restConnectorConfig);
+                      //  ConfigSerializer::deserialize(fileName, "conn", restConnectorConfig);
                         //  ConfigSerializer::serialize("DasGehtSafeNicht.xml", "conn", restConnectorConfig);
 
                         // Create the REST connector

@@ -221,7 +221,7 @@ int main() {
             {},
             false);
 
-
+/*
     boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConfigTest ( new sim_interface::dut_connector::can::CANConnectorConfig(
             "vcan0",
             "BmwCodec",
@@ -230,9 +230,17 @@ int main() {
             operationToFrame,
             {},
             false));
-
-   //  sim_interface::ConfigSerializer::serialize("TEST.xml", "conn", canConfigTest);
-   //  sim_interface::ConfigSerializer::deserialize("TEST.xml", "conn", canConfigTest);
+    */
+    sim_interface::dut_connector::can::CANConnectorConfig canConfigTest(
+            "vcan0",
+            "BmwCodec",
+            {"Speed", "Door", "Blink", "Hazard", "Brake"},
+            frameToOperation,
+            operationToFrame,
+            {},
+            false);
+     sim_interface::ConfigSerializer::serialize("TEST.xml", "conn", canConfigTest);
+     sim_interface::ConfigSerializer::deserialize("TEST.xml", "conn", &canConfigTest);
 
     sim_interface::ConfigSerializer::serialize("TESTGGWASGEHT.xml", "conn", canConfigTest);
     // sim_interface::ConfigSerializer::deserialize("CANConnector.xml", "conn", canConfigTest);
