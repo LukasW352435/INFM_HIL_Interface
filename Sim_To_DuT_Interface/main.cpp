@@ -68,7 +68,6 @@ int main() {
     // Create DuT Devices
 
     
-    
     // Create the REST connector
     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
                                                                          "http://172.17.0.1",
@@ -111,21 +110,21 @@ int main() {
     // Add the REST connector to the interface
     interface.addConnector(&restDummyConnector);
 
-    //V2x Connector
 
+    //V2x Connector
     sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("veth0", 0x0000);
 
     sim_interface::dut_connector::v2x::V2XConnector v2xConnector(interface.getQueueDuTToSim(), v2xconfig);
     interface.addConnector(&v2xConnector);
-    //Testing V2x
 
+    //Testing V2x
     std::stringstream ss;
     boost::archive::text_oarchive ar(ss);
     std::string sourceMAC = "aa:bb:cc:dd:ee:ff";
     std::string destinationMAC = "11:22:33:44:55:66";
     int payload_length = 2;
-    ar << sourceMAC;
     std::vector<unsigned char> payload = {0x12, 0x34};
+    ar << sourceMAC;
     ar << destinationMAC;
     ar << payload_length;
     ar << payload[0];
