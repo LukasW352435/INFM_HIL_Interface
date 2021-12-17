@@ -61,9 +61,8 @@ ip link add dev vcan0 type vcan
 // Set the interface up and running.
 ip link set vcan0 up
 
-// If you want to see the CAN/CANFD messages that are send by the
-// CAN Connector on the virtual CAN interface open a terminal and
-// use the candump tool.
+// To see the CAN/CANFD messages that are send by the CAN Connector on 
+// the virtual CAN interface open a terminal and use the candump tool.
 candump vcan0
 
 // Compile and start the project

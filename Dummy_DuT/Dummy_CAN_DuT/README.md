@@ -35,7 +35,12 @@ make
 // Start the dummy application
 ./Dummy_CAN_DuT
 
-// Open another terminal and send a frame on the virtual CAN interface
+// To see the CAN/CANFD messages that are send by the Dummy_CAN_DuT on 
+// the virtual CAN interface open a terminal and use the candump tool.
+candump vcan0
+
+// Open another terminal and send a frame over the virtual CAN interface
+// to the Dummy_CAN_DuT with the use of the cansend tool.
 cansend vcan0 123#DEADBEEF
 ```
 
