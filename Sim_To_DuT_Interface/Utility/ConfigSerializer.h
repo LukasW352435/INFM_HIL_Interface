@@ -56,16 +56,12 @@ namespace sim_interface {
     public:
 
         template<typename T>
-        static void deserialize(const std::string &file, const std::string &objName, T *obj) {
-            std::ifstream ifs(file);
+        static void deserialize(std::istringstream &ifs, const std::string &objName, T *obj) {
             if (ifs.good()) {
                 try {
-                    //  std::ifstream ifs(file);
-                    //   boost::archive::xml_iarchive ia(ifs,boost::archive::no_header);
-                    //   ia & boost::serialization::make_nvp(objName.c_str(), obj);
+                    std::istringstream iss;
                     boost::archive::xml_iarchive ia(ifs, boost::archive::no_header);
-                    //  T* pointer;
-                    ia & boost::serialization::make_nvp(objName.c_str(), obj);
+                    ia & boost::serialization::make_nvp(objName.c_str(), *obj);
 
                 }
                 catch (boost::archive::archive_exception const &e) {
@@ -73,7 +69,7 @@ namespace sim_interface {
                                           LOG_LEVEL::ERROR);
                 }
 
-                //   ifs.close();
+
             } else {
                 InterfaceLogger::logMessage("ConfigSerializer: input filestream not good", LOG_LEVEL::ERROR);
             }
@@ -86,8 +82,7 @@ namespace sim_interface {
             if (ofs.good()) {
                 {
                     boost::archive::xml_oarchive oa(ofs, boost::archive::no_header);
-                    T *pointer = &obj;
-                    oa << boost::serialization::make_nvp(objName.c_str(), pointer);
+                    oa << boost::serialization::make_nvp(objName.c_str(), obj);
                 }
                 ofs.close();
             } else {
@@ -193,9 +188,21 @@ namespace boost::serialization {
         std::string _ifname;
 
         unsigned short _ethernetFrameType;
-
+        std::string helper;
         ar & boost::serialization::make_nvp("ifname", _ifname);
-        ar & boost::serialization::make_nvp("ethernetFrameType", _ethernetFrameType);
+        ar & boost::serialization::make_nvp("ethernetFrameType", helper);
+
+
+        //  Logic that the key can be Hex value
+        if (boost::algorithm::contains(helper, "0x")) {
+            std::stringstream ss;
+            ss << std::hex << helper;
+            ss >> _ethernetFrameType;
+        } else {
+            std::stringstream ss;
+            ss << helper;
+            ss >> _ethernetFrameType;
+        }
 
 
         ::new(instance)sim_interface::dut_connector::v2x::V2XConnectorConfig(_ifname, _ethernetFrameType);

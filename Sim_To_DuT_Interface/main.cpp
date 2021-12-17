@@ -75,7 +75,7 @@ int main() {
     //   std::vector<boost::variant< sim_interface::dut_connector::ConnectorConfig,sim_interface::dut_connector::rest_dummy::RESTConnectorConfig, sim_interface::dut_connector::can::CANConnectorConfig>> connectorConfig;
     std::cout << "Laenge des REST-Vektor vor dem Hinzufuegen: " << RESTConnectorVec.size() << std::endl;
     std::cout << "Laenge des CAN-Vektor vor dem Hinzufuegen: " << CanConnectorVec.size() << std::endl;
-  //  simComHandler.getConfig(&RESTConnectorVec, &CanConnectorVec);
+   simComHandler.getConfig(&RESTConnectorVec, &CanConnectorVec);
     std::cout << "Laenge des CAN-Vektor nach dem Hinzufuegen: " << CanConnectorVec.size() << std::endl;
     std::cout << "Laenge des REST-Vektor nach dem Hinzufuegen: " << RESTConnectorVec.size() << std::endl;
     // std::cout << "TEST!!!: " << connectorConfig.size() << std::endl;
@@ -146,15 +146,8 @@ int main() {
     //V2x Connector
 
     sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("veth0", 0x0000);
-    sim_interface::ConfigSerializer::serialize("restTest.xml", "conn", config);
-    sim_interface::ConfigSerializer::deserialize("restTest.xml", "conn", &config);
 
-    sim_interface::ConfigSerializer::serialize("restTestWasGeht.xml", "conn", config);
 
-    sim_interface::ConfigSerializer::serialize("v2xTest.xml", "conn", v2xconfig);
-    sim_interface::ConfigSerializer::deserialize("v2xTest.xml", "conn", &v2xconfig);
-
-    sim_interface::ConfigSerializer::serialize("v2xTestWasGeht.xml", "conn", v2xconfig);
 /*
     sim_interface::dut_connector::v2x::V2XConnector v2xConnector(interface.getQueueDuTToSim(), v2xconfig);
     interface.addConnector(&v2xConnector);
@@ -330,10 +323,7 @@ int main() {
             {},
             false);
 
-    sim_interface::ConfigSerializer::serialize("TEST.xml", "conn", canConfigTest);
-    sim_interface::ConfigSerializer::deserialize("TEST.xml", "conn", &canConfigTest);
 
-    sim_interface::ConfigSerializer::serialize("TESTGGWASGEHT.xml", "conn", canConfigTest);
 
     // Create a new CAN Connector and add it to the interface
     sim_interface::dut_connector::can::CANConnector canConnector(interface.getQueueDuTToSim(), canConfig);

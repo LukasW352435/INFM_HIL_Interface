@@ -89,6 +89,8 @@
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/variant.hpp>
 
+#include <boost/algorithm/string.hpp>
+
 
 namespace sim_interface {
     /**
