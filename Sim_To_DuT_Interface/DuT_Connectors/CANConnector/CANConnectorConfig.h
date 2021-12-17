@@ -64,14 +64,14 @@ namespace sim_interface::dut_connector::can{
          * This map is used to set up the RX filters of the BCM socket based on the receive operation data
          * that was defined in the XML configuration file.
          */
-        std::map<canid_t, CANConnectorReceiveOperation>  frameToOperation;/
+        std::map<canid_t, CANConnectorReceiveOperation>  frameToOperation;
 
         /**
          * This map is used to get the send operation data (like the CAN ID, interval information etc.) that
          * was defined in the XML configuration file. The Key that is used is returned by the Codec and must
          * therefore match with a sendOperation entry that is defined in the XML configuration file.
          */
-        std::map<std::string, CANConnectorSendOperation> operationToFrame; /**< This map is used to*/
+        std::map<std::string, CANConnectorSendOperation> operationToFrame;
 
     private:
         // Function members
