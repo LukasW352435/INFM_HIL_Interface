@@ -19,7 +19,7 @@
 // System includes
 #include <string>
 #include <cstring>
-#include <cassert>
+#include <stdexcept>
 #include <linux/can.h>
 #include <linux/can/bcm.h>
 

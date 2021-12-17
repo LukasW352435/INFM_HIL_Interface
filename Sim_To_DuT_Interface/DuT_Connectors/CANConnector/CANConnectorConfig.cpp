@@ -33,13 +33,20 @@ namespace sim_interface::dut_connector::can{
                                            operationToFrame(std::move(operationToFrame)){
 
         // Assert that the interface name is not empty
-        assert(!this->interfaceName.empty());
+        if(this->interfaceName.empty()){
+            throw std::invalid_argument("CAN Connector Config: The interface name must not be empty in the config");
+        }
 
         // Assert that the codec name is not empty
-        assert(!this->codecName.empty());
+        if(this->codecName.empty()){
+            throw std::invalid_argument("CAN Connector Config: The codec name must not be empty in the config");
+        }
 
         // Assert that at least one map has an entry
-        assert(!this->frameToOperation.empty() || !this->operationToFrame.empty());
+        if(this->frameToOperation.empty() && this->operationToFrame.empty()){
+            throw std::invalid_argument("CAN Connector Config: There should be at least one sendOperation or receiveOperation in the config");
+        }
+
     }
 
 }

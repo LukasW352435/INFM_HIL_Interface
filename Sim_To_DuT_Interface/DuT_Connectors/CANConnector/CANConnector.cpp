@@ -273,6 +273,8 @@ namespace sim_interface::dut_connector::can{
             msgCAN->canFrame[0]        = *canFrame;
         }
 
+        InterfaceLogger::logMessage("CAN Connector: TX_SEND created for the CAN ID: " + convertCanIdToHex(frame.can_id), LOG_LEVEL::INFO);
+
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), msgSize);
 
@@ -358,6 +360,8 @@ namespace sim_interface::dut_connector::can{
             msgCAN->msg_head.nframes   = 1;
             msgCAN->canFrame[0]        = *canFrame;
         }
+
+        InterfaceLogger::logMessage("CAN Connector: TX_SETUP created for the CAN ID: " + convertCanIdToHex(frame.can_id), LOG_LEVEL::INFO);
 
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), msgSize);
@@ -446,6 +450,8 @@ namespace sim_interface::dut_connector::can{
             }
         }
 
+        InterfaceLogger::logMessage("CAN Connector: TX_SETUP (sequence) created for the CAN ID: " + convertCanIdToHex(frames[0].can_id), LOG_LEVEL::INFO);
+
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), msgSize);
 
@@ -518,6 +524,8 @@ namespace sim_interface::dut_connector::can{
 
         }
 
+        InterfaceLogger::logMessage("CAN Connector: TX_SETUP (update) created for the CAN ID: " + convertCanIdToHex(frame.can_id), LOG_LEVEL::INFO);
+
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), msgSize);
 
@@ -563,6 +571,8 @@ namespace sim_interface::dut_connector::can{
             msg->flags = CAN_FD_FRAME;
         }
 
+        InterfaceLogger::logMessage("CAN Connector: TX_DELETE created for the CAN ID: " + convertCanIdToHex(canID), LOG_LEVEL::INFO);
+
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), sizeof(bcm_msg_head));
 
@@ -600,6 +610,8 @@ namespace sim_interface::dut_connector::can{
         if(isCANFD){
             msg->flags = msg->flags | CAN_FD_FRAME;
         }
+
+        InterfaceLogger::logMessage("CAN Connector: RX_SETUP (CAN ID) created for the CAN ID: " + convertCanIdToHex(canID), LOG_LEVEL::INFO);
 
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), sizeof(bcm_msg_head));
@@ -664,6 +676,8 @@ namespace sim_interface::dut_connector::can{
             msgCAN->canFrame[0]        = *maskCAN;
         }
 
+        InterfaceLogger::logMessage("CAN Connector: RX_SETUP (Mask) created for the CAN ID: " + convertCanIdToHex(canID), LOG_LEVEL::INFO);
+
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), msgSize);
 
@@ -699,6 +713,8 @@ namespace sim_interface::dut_connector::can{
         if(isCANFD){
             msg->flags = CAN_FD_FRAME;
         }
+
+        InterfaceLogger::logMessage("CAN Connector: RX_DELETE created for the CAN ID: " + convertCanIdToHex(canID), LOG_LEVEL::INFO);
 
         // Note: buffer doesn't accept smart pointers. Need to use a regular pointer.
         boost::asio::const_buffer buffer = boost::asio::buffer(msg.get(), sizeof(bcm_msg_head));
@@ -806,7 +822,7 @@ namespace sim_interface::dut_connector::can{
 
         // Sanity check
         if(events.empty()){
-            InterfaceLogger::logMessage("CAN Connector: Codec returned no simulation events a frame", LOG_LEVEL::WARNING);
+            InterfaceLogger::logMessage("CAN Connector: Codec returned no simulation events for the received frame", LOG_LEVEL::WARNING);
         }
 
         // Send the received simulation events to the simulation
@@ -819,11 +835,10 @@ namespace sim_interface::dut_connector::can{
 
     void CANConnector::handleEventSingle(const SimEvent &event){
 
-        // Get the data from the config that we need for the send operation
-        CANConnectorSendOperation sendOperation = this->config.operationToFrame.at(event.operation);
-
-        // Convert the simulation event to a CAN/CANFD frame payload
-        std::vector<__u8> frameData = codec->convertSimEventToFrame(event);
+        // Convert the simulation event to a CAN/CANFD frame payload and the sendOperation name
+        auto data = codec->convertSimEventToFrame(event);
+        auto frameData = data.first;
+        CANConnectorSendOperation sendOperation = this->config.operationToFrame.at(data.second);
 
         // Sanity checks to identify errors made by the user written codec
         if(frameData.empty()){
@@ -866,12 +881,12 @@ namespace sim_interface::dut_connector::can{
         if(sendOperation.isCyclic){
 
             // Check if a cyclic send operation was set up already
-            if(this->isSetup.at(event.operation)){
+            if(this->isSetup.at(data.second)){
                 // Update the cyclic send operation with the new frame payload
                 txSetupUpdateSingleFrame(canfdFrame, sendOperation.isCANFD, sendOperation.announce);
             }else{
                 // Create a new cyclic send operation and remember that we already set it up
-                this->isSetup[event.operation] = true;
+                this->isSetup[data.second] = true;
                 txSetupSingleFrame(canfdFrame, sendOperation.count, sendOperation.ival1, sendOperation.ival2, sendOperation.isCANFD);
             }
 
