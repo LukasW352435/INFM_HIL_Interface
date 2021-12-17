@@ -24,33 +24,37 @@
  * @version 1.0
  */
 
-/**
- * Included Headerfiles
- *
- * 1) Created Headerfiles
- *      - SimComHandler: Headerfile from this class
- *
-**/
 #include "SimComHandler.h"
+
+//#include <utility>
+//#include <zmq.hpp>
+//#include <boost/archive/text_oarchive.hpp>
+//#include <boost/archive/text_iarchive.hpp>
+//#include <boost/archive/binary_oarchive.hpp>
+//#include <boost/archive/binary_iarchive.hpp>
+//
+//#include <boost/archive/text_oarchive.hpp>
+//#include <boost/serialization/map.hpp>
+//#include <boost/serialization/variant.hpp>
 
 
 namespace sim_interface {
 
     namespace pt = boost::property_tree;
     using boost::property_tree::ptree;
-    zmq::context_t context_subb(1);
 
+
+    zmq::context_t context_sub(1);
     SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig& config)
-            : queueSimToInterface(std::move(queueSimToInterface)), socketSimPub_(context_subb,zmq::socket_type::pub), socketSimSub_(context_subb,zmq::socket_type::sub),socketSimSubConfig_(context_subb,zmq::socket_type::sub) {
-
+            : queueSimToInterface(std::move(queueSimToInterface)),  socketSimPub_(context_sub,zmq::socket_type::pub), socketSimSub_(context_sub,zmq::socket_type::sub),socketSimSubConfig_(context_sub,zmq::socket_type::sub){
 
         // zmq Subscriber
         std::string socketSimAddressSub = config.socketSimAddressSub;
-        zmq::context_t context_sub(1);
+
 
         // zmq Publisher
         std::string socketSimAddressPub = config.socketSimAddressPub;
-        zmq::context_t context_pub(1);
+
 
 
         // zmq Reciver Config
@@ -69,7 +73,7 @@ namespace sim_interface {
         // Connect to publisher
        std::cout << "Connecting to " << socketSimAddressSub << " . . ." << std::endl;
        std::cout << "Connecting to " << socketSimAddressReciverConfig << " . . ." << std::endl;
-       //  socket_sub.connect(socketSimAdress);
+
 
        // Open the connection
        std::cout << "Binding to " << socketSimAddressPub << " . . ." << std::endl;
@@ -481,13 +485,9 @@ namespace sim_interface {
        //Not working with curreent time
         std::map<std::string , boost::variant<int, double, std::string>> simEventMap;
         simEventMap["Operation"] = simEvent.operation;
-        simEventMap["Value"]     = simEvent.value;
+        simEventMap["Value"]     = boost::apply_visitor(EventVisitor(), simEvent.value);
         simEventMap["Origin"]    = simEvent.origin;
-        std::stringstream time;
-        time << simEvent.current;
-        // Time in Secondss
-        // TODO Microsekunden
-        simEventMap["Currrent"]   = time.str();
+        simEventMap["Current"]   = simEvent.current;
         //serialize map
         std::ostringstream ss;
         boost::archive::text_oarchive archive(ss);
@@ -500,6 +500,7 @@ namespace sim_interface {
     }
 
     void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
+        InterfaceLogger::logEvent(simEvent);
         queueSimToInterface->push(simEvent);
     }
 

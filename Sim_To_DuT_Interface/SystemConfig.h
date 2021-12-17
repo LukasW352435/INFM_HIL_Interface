@@ -28,7 +28,7 @@
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <fstream>
-#include "DuTLogger/DuTLogger.h"
+#include "Interface_Logger/InterfaceLogger.h"
 
 namespace sim_interface {
     /**

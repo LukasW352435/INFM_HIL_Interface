@@ -1,6 +1,6 @@
 [submodule "Dummy_DuT/REST_Dummy_DuT/restbed"]
 	path = Dummy_DuT/REST_Dummy_DuT/restbed
 	url = https://github.com/Corvusoft/restbed.git
-[submodule "Sim_To_DuT_Interface/DuTLogger/quill"]
-	path = Sim_To_DuT_Interface/DuTLogger/quill
+[submodule "Sim_To_DuT_Interface/Interface_Logger/quill"]
+	path = Sim_To_DuT_Interface/Interface_Logger/quill
 	url = https://github.com/odygrd/quill.git

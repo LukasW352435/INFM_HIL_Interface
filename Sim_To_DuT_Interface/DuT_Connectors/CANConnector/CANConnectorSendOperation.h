@@ -18,6 +18,7 @@
 
 // System includes
 #include <string>
+#include <stdexcept>
 #include <linux/can.h>
 #include <linux/can/bcm.h>
 /*******************************************************************************

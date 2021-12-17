@@ -16,7 +16,6 @@
 
 // Codecs includes
 #include "BmwCodec.h"
-#include "SuzukiCodec.h"
 
 
 /*******************************************************************************
@@ -43,18 +42,17 @@ namespace sim_interface::dut_connector::can{
 
         // Check if the codec name is empty
         if(codecName.empty()){
-            DuTLogger::logMessage("CAN Connector: Codec name can not be empty", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("CAN Connector: Codec name can not be empty", LOG_LEVEL::ERROR);
             throw std::invalid_argument("CAN Connector: Codec name can not be empty");
         }
 
-        // Create the right codec with the given codec name
+        // Create the right codec based on the given codec name.
+        // Add your new codec here.
         if(CODEC_NAME_BMW == codecName){
             return new BmwCodec();
-        }else if(CODEC_NAME_SUZUKI == codecName){
-            return new SuzukiCodec();
         }else{
             // Unknown CAN codec name
-            DuTLogger::logMessage("CAN Connector: Unknown CAN codec name <" + codecName + ">. Could not create the CAN codec", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage("CAN Connector: Unknown CAN codec name <" + codecName + ">. Could not create the CAN codec", LOG_LEVEL::ERROR);
             throw std::invalid_argument("CAN Connector: Unknown CAN codec name <" + codecName + ">. Could not create the CAN codec");
         }
 

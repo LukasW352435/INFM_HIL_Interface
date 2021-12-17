@@ -24,7 +24,7 @@
  */
 
 #include "DuTConnector.h"
-#include "../DuTLogger/DuTLogger.h"
+#include "../Interface_Logger/InterfaceLogger.h"
 
 #include <utility>
 #include <boost/asio.hpp>
@@ -41,7 +41,7 @@ namespace sim_interface::dut_connector {
                 enablePeriodicSending(operation.first, operation.second);
             }
             // have one timer (doing nothing) running at any given time to avoid io->run() to return
-            aliveTimer = std::make_unique<PeriodicTimer>(io, 1000000000000, SimEvent(), [](const SimEvent &event) {});
+            aliveTimer = std::make_unique<PeriodicTimer>(io, 1000000000, SimEvent(), [](const SimEvent &event) {});
             aliveTimer->start();
             timerRunner = std::thread([&]() {
                 this->io->run();
@@ -65,9 +65,9 @@ namespace sim_interface::dut_connector {
 
     void DuTConnector::handleEvent(const SimEvent &simEvent) {
         if (canHandleSimEvent(simEvent)) {
-            DuTLogger::logMessage("DuTConnector: Handling event " + simEvent.operation, LOG_LEVEL::INFO);
+            InterfaceLogger::logMessage("DuTConnector: Handling event " + simEvent.operation, LOG_LEVEL::INFO);
             if (isPeriodicEnabled(simEvent)) {
-                DuTLogger::logMessage("DuTConnector: Enabling periodic timer for event " + simEvent.operation, LOG_LEVEL::INFO);
+                InterfaceLogger::logMessage("DuTConnector: Enabling periodic timer for event " + simEvent.operation, LOG_LEVEL::INFO);
                 setupTimer(simEvent);
             }
             handleEventSingle(simEvent);

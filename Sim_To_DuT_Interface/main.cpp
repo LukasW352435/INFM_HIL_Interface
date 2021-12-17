@@ -20,6 +20,7 @@
  *
  * @author Lukas Wagenlehner
  * @author Michael Schmitz
+ * @author Franziska Ihrler
  * @author Matthias Bank
  * @author Fabian Andre Genes
  * @author Thanaancheyan Thavapalan
@@ -34,7 +35,9 @@
 #include "DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
 #include "DuT_Connectors/CANConnector/CANConnector.h"
 #include "DuT_Connectors/CANConnector/CANConnectorConfig.h"
-#include "DuTLogger/DuTLogger.h"
+#include "Interface_Logger/InterfaceLogger.h"
+#include "DuT_Connectors/V2XConnector/V2XConnectorConfig.h"
+#include "DuT_Connectors/V2XConnector/V2XConnector.h"
 #include "SystemConfig.h"
 
 // System includes
@@ -44,6 +47,9 @@
 #include <boost/archive/xml_oarchive.hpp>
 #include <typeinfo>
 #include <memory>
+#include <boost/archive/text_oarchive.hpp>
+
+
 int main() {
 
     // System config
@@ -52,8 +58,8 @@ int main() {
     sim_interface::SystemConfig::loadFromFile(configPath + "/SystemConfig.xml", systemConfig, true);
 
     // initialize the logger
-    DuTLogger::initializeLogger(systemConfig.loggerConfig);
-    DuTLogger::logMessage("Start Application", LOG_LEVEL::INFO);
+    sim_interface::InterfaceLogger::initializeLogger(systemConfig.loggerConfig);
+    sim_interface::InterfaceLogger::logMessage("Start Application", sim_interface::LOG_LEVEL::INFO);
 
     // Create interface
     sim_interface::SimToDuTInterface interface;
@@ -80,6 +86,7 @@ int main() {
         std::cout << "Namen: !!" << typeid(c).name() << c->connectorType<< std::endl;
         if (c->connectorType == "RESTConnectorConfig") {
 
+
             sim_interface::dut_connector::rest_dummy::RESTConnectorConfig* config2 = dynamic_cast<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig*>(c);
             boost::scoped_ptr<  sim_interface::dut_connector::rest_dummy::RESTConnectorConfig> config2 ;
             config2.reset(c);
@@ -92,45 +99,37 @@ int main() {
     */
     // Create DuT Devices
 
-
+    
     // Create the REST connector
-    /*sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
+    sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
                                                                          "http://172.17.0.1",
                                                                          9091,
                                                                          {"Test", "Angle",
-                                                                 "Acceleration",
-                                                                 "Decel",
-                                                                 "Distance",
-                                                                 "Height",
-                                                                 "LaneID",
-                                                                 "LaneIndex",
-                                                                 "LanePosition",
-                                                                 "Length",
-                                                                 "Position_X-Coordinate",
-                                                                 "Position_Y-Coordinate",
-                                                                 "Position_Z-Coordinate",
-                                                                 "RoadID",
-                                                                 "RouteIndex",
-                                                                 "Signals",
-                                                                 "Speed",
-                                                                 "Width",
-                                                                 "current",
-                                                                 "origin",
-                                                                 "SpeedDynamics",
-                                                                 "YawRateDynamics",
-                                                                 "AccelerationDynamics",
-                                                                 "HeadingDynamics",
-                                                                 "LatitudeDynamics",
-                                                                 "LongitudeDynamics",
-                                                                 "PosXDynamics",
-                                                                 "PoYDynamics"},
+                                                                          "Acceleration",
+                                                                          "Decel",
+                                                                          "Distance",
+                                                                          "Height",
+                                                                          "LaneID",
+                                                                          "LaneIndex",
+                                                                          "LanePosition",
+                                                                          "Length",
+                                                                          "Position_X-Coordinate",
+                                                                          "Position_Y-Coordinate",
+                                                                          "Position_Z-Coordinate",
+                                                                          "RoadID",
+                                                                          "RouteIndex",
+                                                                          "Signals",
+                                                                          "Speed",
+                                                                          "Width",
+                                                                          "current",
+                                                                          "origin"},
                                                                          {{"Test", 1000}},
                                                                          true);
-    +/
-  // sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(), *config2);
+
+    sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(),
+                                                                                    config);
 
     // Test the REST connector
-/*
     auto event = sim_interface::SimEvent();
     event.operation = "Test";
     event.value = "Test";
@@ -139,156 +138,206 @@ int main() {
     event.operation = "Indicator Right";
     event.value = "xyz";
     restDummyConnector.handleEvent(event);
-*/
 
     // Add the REST connector to the interface
-  //  interface.addConnector(&restDummyConnector);
+    interface.addConnector(&restDummyConnector);
 
+
+    //V2x Connector
+    sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("veth0", 0x0000);
+
+    sim_interface::dut_connector::v2x::V2XConnector v2xConnector(interface.getQueueDuTToSim(), v2xconfig);
+    interface.addConnector(&v2xConnector);
+
+    //Testing V2x
+    std::stringstream ss;
+    boost::archive::text_oarchive ar(ss);
+    std::string sourceMAC = "aa:bb:cc:dd:ee:ff";
+    std::string destinationMAC = "11:22:33:44:55:66";
+    int payload_length = 2;
+    std::vector<unsigned char> payload = {0x12, 0x34};
+    ar << sourceMAC;
+    ar << destinationMAC;
+    ar << payload_length;
+    ar << payload[0];
+    ar << payload[1];
+    std::string archive = ss.str();
+    const sim_interface::SimEvent e("V2X", ss.str(), "Simulation");
+    v2xConnector.handleEventSingle(e);
 
     //+++++ Start CAN Connector +++++
-
-    // CAN receive operation without a mask
-    sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCan1(
-            "Hazard",
+    // Example receiveOperation Config for the 0x275 GESCHWINDIGKEIT CAN frame
+    sim_interface::dut_connector::can::CANConnectorReceiveOperation receiveOperationGeschwindigkeit(
+            "GESCHWINDIGKEIT",
             false,
             false
     );
 
-    // CANFD receive operation mask
-    int mask1Len = 1;
-    __u8 mask1[1] = {0xFF};
-
-    sim_interface::dut_connector::can::CANConnectorReceiveOperation recvOpCanfd1(
-            "Brake",
-            true,
-            true,
-            mask1Len,
-            mask1
-    );
-
-    // CAN non-cyclic send operation
-    sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCan1(
-            0x222,
+    // Example receiveOperation Config for the 0x273 GPS_LOCA CAN frame
+    sim_interface::dut_connector::can::CANConnectorReceiveOperation receiveOperationGPS_LOCA(
+            "GPS_LOCA",
             false,
             false
     );
 
-    // CANFD non cyclic send operation
-    sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCanfd1{
-        0x333,
-        true,
-        false,
-    };
+    // Example receiveOperation Config for the 0x274 GPS_LOCB CAN frame
+    sim_interface::dut_connector::can::CANConnectorReceiveOperation receiveOperationGPS_LOCB(
+            "GPS_LOCB",
+            false,
+            false
+    );
 
-    // CANFD cyclic send operation
-    struct bcm_timeval ival1 = {0};
-    ival1.tv_sec = 1;
-    ival1.tv_usec = 0;
-
-    struct bcm_timeval ival2 = {0};
-    ival2.tv_sec = 3;
-    ival2.tv_usec = 0;
-
-    sim_interface::dut_connector::can::CANConnectorSendOperation sendOpCyclicCanfd1(
-            0x444,
-            true,
-            true,
-            true,
-            10,
-            ival1,
-            ival2
+    // Example receiveOperation Config for the 0x279 LICHTER CAN frame
+    sim_interface::dut_connector::can::CANConnectorReceiveOperation receiveOperationLICHTER(
+            "LICHTER",
+            false,
+            false
     );
 
     // CAN Connector Receive Config
     std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> frameToOperation = {
-            {0x123, recvOpCan1},
-            {0x456, recvOpCanfd1}
+            {0x111, receiveOperationGeschwindigkeit},
+            {0x222, receiveOperationGPS_LOCA},
+            {0x333, receiveOperationGPS_LOCB},
+            {0x444, receiveOperationLICHTER}
+    };
+
+    // Example sendOperation Config for the 0x275 GESCHWINDIGKEIT CAN frame
+    struct bcm_timeval ival1Geschwindigkeit = {0};
+    ival1Geschwindigkeit.tv_sec  = 0;
+    ival1Geschwindigkeit.tv_usec = 0;
+
+    struct bcm_timeval ival2Geschwindigkeit = {0};
+    ival2Geschwindigkeit.tv_sec  = 3;
+    ival2Geschwindigkeit.tv_usec = 0;
+
+    sim_interface::dut_connector::can::CANConnectorSendOperation sendOperationGeschwindigkeit(
+            0x275,
+            false,
+            true,
+            false,
+            0,
+            ival1Geschwindigkeit,
+            ival2Geschwindigkeit
+    );
+
+    // Example sendOperation Config for the 0x273 GPS_LOCA CAN frame
+    struct bcm_timeval ival1GPS_LOCA = {0};
+    ival1GPS_LOCA.tv_sec  = 0;
+    ival1GPS_LOCA.tv_usec = 0;
+
+    struct bcm_timeval ival2GPS_LOCA= {0};
+    ival2GPS_LOCA.tv_sec  = 4;
+    ival2GPS_LOCA.tv_usec = 0;
+
+    sim_interface::dut_connector::can::CANConnectorSendOperation sendOperationGPS_LOCA{
+        0x273,
+        false,
+        true,
+        false,
+        0,
+        ival1GPS_LOCA,
+        ival2GPS_LOCA
+    };
+
+    // Example sendOperation Config for the 0x274 GPS_LOCB CAN frame
+    struct bcm_timeval ival1GPS_LOCB = {0};
+    ival1GPS_LOCB.tv_sec  = 0;
+    ival1GPS_LOCB.tv_usec = 0;
+
+    struct bcm_timeval ival2GPS_LOCB= {0};
+    ival2GPS_LOCB.tv_sec  = 4;
+    ival2GPS_LOCB.tv_usec = 0;
+
+    sim_interface::dut_connector::can::CANConnectorSendOperation sendOperationGPS_LOCB{
+            0X274,
+            false,
+            true,
+            false,
+            0,
+            ival1GPS_LOCB,
+            ival2GPS_LOCB
+    };
+
+    // Example sendOperation Config for the 0x279 LICHTER CAN frame
+    struct bcm_timeval ival1Lichter = {0};
+    ival1Lichter.tv_sec  = 0;
+    ival1Lichter.tv_usec = 0;
+
+    struct bcm_timeval ival2Lichter= {0};
+    ival2Lichter.tv_sec  = 4;
+    ival2Lichter.tv_usec = 0;
+
+    sim_interface::dut_connector::can::CANConnectorSendOperation sendOperationLichter{
+        0x279,
+        false,
+        true,
+        false,
+        0,
+        ival1Lichter,
+        ival2Lichter
     };
 
     // CAN Connector Send Config
     std::map<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> operationToFrame = {
-            {"Speed", sendOpCan1},
-            {"Door", sendOpCanfd1},
-            {"Blink", sendOpCyclicCanfd1}
+            {"GESCHWINDIGKEIT", sendOperationGeschwindigkeit},
+            {"GPS_LOCA", sendOperationGPS_LOCA},
+            {"GPS_LOCB", sendOperationGPS_LOCB},
+            {"LICHTER", sendOperationLichter}
     };
 
     sim_interface::dut_connector::can::CANConnectorConfig canConfig(
             "vcan0",
             "BmwCodec",
-            {"Speed", "Door", "Blink", "Hazard", "Brake"},
+            {
+                "Speed_Dynamics",
+                "YawRate_Dynamics",
+                "Acceleration_Dynamics",
+                "Longitude_Dynamics",
+                "Latitude_Dynamics",
+                "Position_Z-Coordinate_DUT",
+                "Heading_Dynamics"
+                },
             frameToOperation,
             operationToFrame,
             {},
             false);
 
-/*
-    boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConfigTest ( new sim_interface::dut_connector::can::CANConnectorConfig(
-            "vcan0",
-            "BmwCodec",
-            {"Speed", "Door", "Blink", "Hazard", "Brake"},
-            frameToOperation,
-            operationToFrame,
-            {},
-            false));
-    */
     sim_interface::dut_connector::can::CANConnectorConfig canConfigTest(
             "vcan0",
             "BmwCodec",
-            {"Speed", "Door", "Blink", "Hazard", "Brake"},
+            {
+                    "Speed_Dynamics",
+                    "YawRate_Dynamics",
+                    "Acceleration_Dynamics",
+                    "Longitude_Dynamics",
+                    "Latitude_Dynamics",
+                    "Position_Z-Coordinate_DUT",
+                    "Heading_Dynamics"
+            },
             frameToOperation,
             operationToFrame,
             {},
             false);
-     sim_interface::ConfigSerializer::serialize("TEST.xml", "conn", canConfigTest);
+
+    sim_interface::ConfigSerializer::serialize("TEST.xml", "conn", canConfigTest);
     sim_interface::ConfigSerializer::deserialize("TEST.xml", "conn", &canConfigTest);
 
-  sim_interface::ConfigSerializer::serialize("TESTGGWASGEHT.xml", "conn", canConfigTest);
-    // sim_interface::ConfigSerializer::deserialize("CANConnector.xml", "conn", canConfigTest);
-    // sim_interface::ConfigSerializer::serialize("TESTFuckingGo.xml", "conn", canConfigTest);
-    // boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConnectorConfig;
-    // sim_interface::ConfigSerializer::deserialize("TEST.xml", "conn", canConfigTest);
-
-    //  std::ifstream is("TEST.xml");
-    //  std::stringstream ss;
-
-    //  ss << is.rdbuf();
-    //  std::istringstream iss(ss.str());
-    //  std::cout << "TEST: " << iss.str() << std::endl;
-    //  sim_interface::ConfigSerializer::deserialize(iss, "test", canConfigTest);
-    //  sim_interface::ConfigSerializer::serialize("TESTTEST.xml", "test", canConfigTest);
-
-//  sim_interface::dut_connector::can::CANConnectorConfig canConfig( CanConnectorVec.at(0)->interfaceName,
-//                                                                   CanConnectorVec.at(0)->codecName,
-//                                                                   CanConnectorVec.at(0)->operations,
-//                                                                   CanConnectorVec.at(0)->frameToOperation,
-//                                                                   CanConnectorVec.at(0)->operationToFrame,
-//                                                                   CanConnectorVec.at(0)->periodicOperations,
-//                                                                   CanConnectorVec.at(0)->periodicTimerEnabled);
-
+    sim_interface::ConfigSerializer::serialize("TESTGGWASGEHT.xml", "conn", canConfigTest);
 
     // Create a new CAN Connector and add it to the interface
     sim_interface::dut_connector::can::CANConnector canConnector(interface.getQueueDuTToSim(), canConfig);
-    interface.addConnector(&canConnector);
+    //interface.addConnector(&canConnector);
 
     // Test the CAN Connector
-    auto canEvent1 = sim_interface::SimEvent();
-    canEvent1.operation = "Speed";
-    canEvent1.value     = 30;
-    canConnector.handleEventSingle(canEvent1);
-
-    auto canEvent2 = sim_interface::SimEvent();
-    canEvent2.operation = "Door";
-    canEvent2.value     = 40;
-    canConnector.handleEventSingle(canEvent2);
-
-    auto canEvent3 = sim_interface::SimEvent();
-    canEvent3.operation = "Blink";
-    canEvent3.value     = 50;
-    canConnector.handleEventSingle(canEvent3);
+    //interface.getQueueSimToInterface()->push(sim_interface::SimEvent("Speed_Dynamics",2.0,"TEST"));
+    //interface.getQueueSimToInterface()->push(sim_interface::SimEvent("Latitude_Dynamics",3.0,"TEST"));
+    //interface.getQueueSimToInterface()->push(sim_interface::SimEvent("Latitude_Dynamics",4.0,"TEST"));
 
     //+++++ End CAN Connector +++++
 
-    //std::cout << interface << std::endl;
+
+    std::cout << interface << std::endl;
 
     // Start simComHandler to receive events from the simulation
     std::thread simComHandlerThread(&sim_interface::SimComHandler::run, &simComHandler);
@@ -298,6 +347,6 @@ int main() {
     interface.run();
 
     std::cin.get();
-    DuTLogger::logMessage("Shut down application", LOG_LEVEL::INFO);
+    sim_interface::InterfaceLogger::logMessage("Shut down application", sim_interface::LOG_LEVEL::INFO);
     return 0;
 }

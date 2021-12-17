@@ -50,7 +50,7 @@ namespace dummy_dut::rest::messages {
          */
         std::string toTableEntryWithoutNewline();
 
-        std::tm *timestamp;
+        std::string timestamp;
     };
 }
 

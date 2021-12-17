@@ -29,7 +29,7 @@
 #include <iostream>
 #include <utility>
 #include "ReceiveEndpoint.h"
-#include "../../DuTLogger/DuTLogger.h"
+#include "../../Interface_Logger/InterfaceLogger.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
@@ -68,7 +68,7 @@ namespace sim_interface::dut_connector::rest_dummy {
 
                            eventToSimCallback(JsonToSimEvent(json));
 
-                           DuTLogger::logMessage("RESTDummyConnector: Successfully received event from DuT", LOG_LEVEL::DEBUG);
+                           InterfaceLogger::logMessage("RESTDummyConnector: Successfully received event from DuT", LOG_LEVEL::DEBUG);
                            session->close(200, "Event received", {{"Connection", "close"}});
                        });
     }
