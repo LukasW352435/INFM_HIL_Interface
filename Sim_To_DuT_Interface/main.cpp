@@ -144,9 +144,18 @@ int main() {
 
 
     //V2x Connector
-/*
-    sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("veth0", 0x0000);
 
+    sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("veth0", 0x0000);
+    sim_interface::ConfigSerializer::serialize("restTest.xml", "conn", config);
+    sim_interface::ConfigSerializer::deserialize("restTest.xml", "conn", &config);
+
+    sim_interface::ConfigSerializer::serialize("restTestWasGeht.xml", "conn", config);
+
+    sim_interface::ConfigSerializer::serialize("v2xTest.xml", "conn", v2xconfig);
+    sim_interface::ConfigSerializer::deserialize("v2xTest.xml", "conn", &v2xconfig);
+
+    sim_interface::ConfigSerializer::serialize("v2xTestWasGeht.xml", "conn", v2xconfig);
+/*
     sim_interface::dut_connector::v2x::V2XConnector v2xConnector(interface.getQueueDuTToSim(), v2xconfig);
     interface.addConnector(&v2xConnector);
 

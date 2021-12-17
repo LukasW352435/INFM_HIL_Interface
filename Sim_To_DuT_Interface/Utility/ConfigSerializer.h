@@ -42,6 +42,7 @@
 #include <boost/concept_check.hpp>
 
 #include "../DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
+#include "../DuT_Connectors/V2XConnector/V2XConnector.h"
 #include "../DuT_Connectors/CANConnector/CANConnectorConfig.h"
 #include "../DuT_Connectors/CANConnector/CANConnectorReceiveOperation.h"
 #include "../DuT_Connectors/CANConnector/CANConnectorSendOperation.h"
@@ -166,6 +167,40 @@ namespace boost::serialization {
                                                                                      _periodicOperations,
                                                                                      _periodicTimerEnabled);
     }
+
+
+
+
+
+    template<class Archive>
+    void serialize(Archive &ar, sim_interface::dut_connector::v2x::V2XConnectorConfig &config,
+                   const unsigned int version) {}
+
+    template<class Archive>
+    inline void
+    save_construct_data(Archive &ar, const sim_interface::dut_connector::v2x::V2XConnectorConfig *config,
+                        const unsigned int version) {
+
+        ar & boost::serialization::make_nvp("ifname", config->ifname);
+        ar & boost::serialization::make_nvp("ethernetFrameType", config->ethernetFrameType);
+
+    }
+
+    template<class Archive>
+    inline void
+    load_construct_data(Archive &ar, sim_interface::dut_connector::v2x::V2XConnectorConfig *instance,
+                        const unsigned int file_version) {
+        std::string _ifname;
+
+        unsigned short _ethernetFrameType;
+
+        ar & boost::serialization::make_nvp("ifname", _ifname);
+        ar & boost::serialization::make_nvp("ethernetFrameType", _ethernetFrameType);
+
+
+        ::new(instance)sim_interface::dut_connector::v2x::V2XConnectorConfig(_ifname, _ethernetFrameType);
+    }
+
 
 
 
