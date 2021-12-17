@@ -47,6 +47,7 @@
 #include "../DuT_Connectors/CANConnector/CANConnectorSendOperation.h"
 #include "../DuT_Connectors/ConnectorConfig.h"
 #include "../DuTLogger/DuTLogger.h"
+#include "ConfigSerializerCanConnector.h"
 
 namespace sim_interface {
 
@@ -180,12 +181,12 @@ namespace boost::serialization {
                         const unsigned int version) {
         std::cout << "serialize" << std::endl;
 
-       const std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation>*  frameToOperationHelpPointer = reinterpret_cast<const std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *>(&config->frameToOperation);
+       const std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation>*  frameToOperationPointer = (&config->frameToOperation);
 
         ar & boost::serialization::make_nvp("interfaceName", config->interfaceName);
         ar & boost::serialization::make_nvp("codecName", config->codecName);
         ar & boost::serialization::make_nvp("operations", config->operations);
-        ar & boost::serialization::make_nvp("frameToOperation", frameToOperationHelpPointer );
+        ar & boost::serialization::make_nvp("frameToOperation", frameToOperationPointer );
      //   ar & boost::serialization::make_nvp("operationToFrame",  config->operationToFrame );
         ar & boost::serialization::make_nvp("periodicOperations", config->periodicOperations);
         ar & boost::serialization::make_nvp("periodicTimerEnabled", config->periodicTimerEnabled);
@@ -198,32 +199,26 @@ namespace boost::serialization {
         std::string _interfaceName;
         std::string _codecName;
         std::set<std::string> _operations;
-        std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> _frameToOperation = {};
-      //  const std::map<unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>  _test = _frameToOperation;
 
         std::map<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> _operationToFrame = {};
         std::map<std::string, int> _periodicOperations;
         bool _periodicTimerEnabled;
 
 
-      //  boost::shared_ptr< const std::map<unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>>  frameToOperationHelpPointer;
 
-   //   sim_interface::dut_connector::can::CANConnectorReceiveOperation* test;
-      //  std::map<unsigned int, sim_interface::dut_connector::can::CANConnectorReceiveOperation>* test;
-         std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation>*  test;
-      //   std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation>*  test;
+         std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation>*  _frameToOperation;
+
         ar & boost::serialization::make_nvp("interfaceName", _interfaceName);
         ar & boost::serialization::make_nvp("codecName", _codecName);
         ar & boost::serialization::make_nvp("operations", _operations);
-        ar & boost::serialization::make_nvp("frameToOperation", test);
+        ar & boost::serialization::make_nvp("frameToOperation", _frameToOperation);
       //  ar & boost::serialization::make_nvp("operationToFrame", _operationToFrame);
         ar & boost::serialization::make_nvp("periodicOperations", _periodicOperations);
         ar & boost::serialization::make_nvp("periodicTimerEnabled", _periodicTimerEnabled);
 
-        std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation>* test2(
-                reinterpret_cast<std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *>(test));
+
                 ::new(instance)sim_interface::dut_connector::can::CANConnectorConfig(_interfaceName, _codecName,
-                                                                                      _operations, *test2,
+                                                                                      _operations, *_frameToOperation,
                                                                                      _operationToFrame,
                                                                                      _periodicOperations,
                                                                                      _periodicTimerEnabled);
