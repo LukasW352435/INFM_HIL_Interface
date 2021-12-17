@@ -57,10 +57,21 @@ namespace sim_interface::dut_connector::can{
                                     bool periodicTimerEnabled = false);
 
         // Data member
-        std::string interfaceName;                                         /**< The name of the interface that should be used.*/
-        std::string codecName;                                             /**< The name of the codec that should be used.    */
-        std::map<canid_t, CANConnectorReceiveOperation>  frameToOperation; /**< Used for mapping a CAN frame to an operation. */
-        std::map<std::string, CANConnectorSendOperation> operationToFrame; /**< Used for mapping an operation to a CAN frame. */
+        std::string interfaceName;                                         /**< The name of the interface that should be used.               */
+        std::string codecName;                                             /**< The name of the codec that should be used.                   */
+
+        /**
+         * This map is used to set up the RX filters of the BCM socket based on the receive operation data
+         * that was defined in the XML configuration file.
+         */
+        std::map<canid_t, CANConnectorReceiveOperation>  frameToOperation;
+
+        /**
+         * This map is used to get the send operation data (like the CAN ID, interval information etc.) that
+         * was defined in the XML configuration file. The Key that is used is returned by the Codec and must
+         * therefore match with a sendOperation entry that is defined in the XML configuration file.
+         */
+        std::map<std::string, CANConnectorSendOperation> operationToFrame;
 
     private:
         // Function members
