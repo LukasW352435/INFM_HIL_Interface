@@ -40,13 +40,14 @@
 
 namespace sim_interface {
 
-    namespace pt = boost::property_tree;
-    using boost::property_tree::ptree;
 
 
     zmq::context_t context_sub(1);
-    SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig& config)
-            : queueSimToInterface(std::move(queueSimToInterface)),  socketSimPub_(context_sub,zmq::socket_type::pub), socketSimSub_(context_sub,zmq::socket_type::sub),socketSimSubConfig_(context_sub,zmq::socket_type::sub){
+
+    SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig &config)
+            : queueSimToInterface(std::move(queueSimToInterface)), socketSimPub_(context_sub, zmq::socket_type::pub),
+              socketSimSub_(context_sub, zmq::socket_type::sub),
+              socketSimSubConfig_(context_sub, zmq::socket_type::sub) {
 
         // zmq Subscriber
         std::string socketSimAddressSub = config.socketSimAddressSub;
@@ -58,7 +59,7 @@ namespace sim_interface {
 
 
         // zmq Reciver Config
-       std::string socketSimAddressReciverConfig = config.socketSimAddressReciverConfig;
+        std::string socketSimAddressReciverConfig = config.socketSimAddressReciverConfig;
         zmq::context_t context_recConfig(1);
 
 
@@ -71,29 +72,34 @@ namespace sim_interface {
 
 
         // Connect to publisher
-       std::cout << "Connecting to " << socketSimAddressSub << " . . ." << std::endl;
-       std::cout << "Connecting to " << socketSimAddressReciverConfig << " . . ." << std::endl;
+        std::cout << "Connecting to " << socketSimAddressSub << " . . ." << std::endl;
+        std::cout << "Connecting to " << socketSimAddressReciverConfig << " . . ." << std::endl;
 
 
-       // Open the connection
-       std::cout << "Binding to " << socketSimAddressPub << " . . ." << std::endl;
-       socketSimPub_.bind(socketSimAddressPub);
-       socketSimSub_.connect(socketSimAddressSub);
-       socketSimSubConfig_.connect(socketSimAddressReciverConfig);
+        // Open the connection
+        std::cout << "Binding to " << socketSimAddressPub << " . . ." << std::endl;
+        socketSimPub_.bind(socketSimAddressPub);
+        socketSimSub_.connect(socketSimAddressSub);
+        socketSimSubConfig_.connect(socketSimAddressReciverConfig);
 
 
     }
 
     SimComHandler::connectorType SimComHandler::resolveConnectorTypeForSwitch(std::string connectorTypeS) {
-        if(connectorTypeS == "RESTDummyConnector") return RESTDummyConnector;
-        if(connectorTypeS == "CANConnector") return CANConnector;
-        if(connectorTypeS == "V2XConnector") return V2XConnector;
+        if (connectorTypeS == "RESTDummyConnector") return RESTDummyConnector;
+        if (connectorTypeS == "CANConnector") return CANConnector;
+        if (connectorTypeS == "V2XConnector") return V2XConnector;
         return Invalid_Connector;
 
     }
- //   void SimComHandler::getConfig(sim_interface::SimToDuTInterface &interface)
-    void SimComHandler::getConfig(std::vector<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig*> *RESTConnectorVektor, std::vector<sim_interface::dut_connector::can::CANConnectorConfig*> *CanConnectorVektor)
-    {
+
+
+
+    //   void SimComHandler::getConfig(sim_interface::SimToDuTInterface &interface)
+    void SimComHandler::getConfig(
+            std::vector<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig *> *RESTConnectorVektor,
+            std::vector<sim_interface::dut_connector::can::CANConnectorConfig *> *CanConnectorVektor,
+            std::vector<sim_interface::dut_connector::v2x::V2XConnectorConfig *> *V2XConnectorVektor) {
         zmq::message_t reply;
         try {
             std::cout << "Receiving...Config " << std::endl;
@@ -104,12 +110,10 @@ namespace sim_interface {
         }
 
 
+        const char *buf = static_cast<const char *>(reply.data());
+        //  std::cout << "CHAR [" << buf << "]" << std::endl;
+        boost::property_tree::ptree tree;
 
-
-        const char *buf = static_cast<const char*>(reply.data());
-       //  std::cout << "CHAR [" << buf << "]" << std::endl;
-        pt::ptree tree;
-        //  pt::basic_ptree
 
         std::ostringstream t;
         t << buf;
@@ -118,102 +122,100 @@ namespace sim_interface {
         //  boost::archive::xml_iarchive xmlInputArchive(stringStream);
 
         // Parse the XML into the property tree.
-        pt::read_xml(stringStream, tree);
+        boost::property_tree::read_xml(stringStream, tree);
         std::string connectorTypeS;
-        for (pt::ptree::value_type &v: tree.get_child("connectors")) {
-              connectorTypeS =v.second.get<std::string>("<xmlattr>.classType");
+        for (boost::property_tree::ptree::value_type &connector: tree.get_child("connectors")) {
+            connectorTypeS = connector.second.get<std::string>("<xmlattr>.classType");
 
 
-              switch (resolveConnectorTypeForSwitch(connectorTypeS)) {
-                  case RESTDummyConnector: {
+            switch (resolveConnectorTypeForSwitch(connectorTypeS)) {
+                case RESTDummyConnector: {
 
 
-                        auto xmlWriterSettings = pt::xml_writer_make_settings<std::string>(' ', 4);
+                    auto xmlWriterSettings = boost::property_tree::xml_writer_make_settings<std::string>(' ', 4);
 
-                        std::stringstream xmlStringStream;
-                        boost::property_tree::xml_parser::write_xml(xmlStringStream,v.second,xmlWriterSettings);
-
-
-
-                        std::string xmlString = xmlStringStream.str();
-                        boost::algorithm::replace_all(xmlString, R"(<?xml version="1.0" encoding="utf-8"?>)","");
+                    std::stringstream xmlStringStream;
+                    boost::property_tree::xml_parser::write_xml(xmlStringStream, connector.second, xmlWriterSettings);
 
 
-
-                        sim_interface::dut_connector::rest_dummy::RESTConnectorConfig* restConnectorConfig;
-                        std::istringstream xmliStringStream(xmlString);
-                        ConfigSerializer::deserialize(xmliStringStream, "conn", &restConnectorConfig);
-                        ConfigSerializer::serialize("DasGehtSafeNicht.xml", "conn", restConnectorConfig);
-
-                        // Create the REST connector
-                        // Push into vector
+                    std::string xmlString = xmlStringStream.str();
+                    boost::algorithm::replace_all(xmlString, R"(<?xml version="1.0" encoding="utf-8"?>)", "");
 
 
+                    sim_interface::dut_connector::rest_dummy::RESTConnectorConfig *restConnectorConfig;
+                    std::istringstream xmliStringStream(xmlString);
+                    ConfigSerializer::deserialize(xmliStringStream, "conn", &restConnectorConfig);
+                    //TODO REMOVE THIS
+                    ConfigSerializer::serialize("DasGehtSafeNicht.xml", "conn", restConnectorConfig);
+
+                    // Create the REST connector
+                    // Push into vector
 
 
 
-                       //connectorConfig->push_back(restConnectorConfig.get());
-
-                      break;
-                  }
-                  case CANConnector: {
+                    RESTConnectorVektor->push_back(restConnectorConfig);
 
 
-                      auto xmlWriterSettings = pt::xml_writer_make_settings<std::string>(' ', 4);
-
-                      std::stringstream xmlStringStream;
-                      boost::property_tree::xml_parser::write_xml(xmlStringStream,v.second,xmlWriterSettings);
-
+                    break;
+                }
+                case CANConnector: {
 
 
-                      std::string xmlString = xmlStringStream.str();
-                      boost::algorithm::replace_all(xmlString, R"(<?xml version="1.0" encoding="utf-8"?>)","");
-                      std::istringstream xmliStringStream(xmlString);
+                    auto xmlWriterSettings = boost::property_tree::xml_writer_make_settings<std::string>(' ', 4);
 
-                      sim_interface::dut_connector::can::CANConnectorConfig* canConnectorConfig;
-
-                      ConfigSerializer::deserialize(xmliStringStream, "conn", &canConnectorConfig);
-                      ConfigSerializer::serialize("DasGehtSafeNichtCAN.xml", "conn", canConnectorConfig);
+                    std::stringstream xmlStringStream;
+                    boost::property_tree::xml_parser::write_xml(xmlStringStream, connector.second, xmlWriterSettings);
 
 
-                      break;
-                  }
+                    std::string xmlString = xmlStringStream.str();
+                    boost::algorithm::replace_all(xmlString, R"(<?xml version="1.0" encoding="utf-8"?>)", "");
+                    std::istringstream xmliStringStream(xmlString);
 
-                  case V2XConnector: {
+                    sim_interface::dut_connector::can::CANConnectorConfig *canConnectorConfig;
 
+                    ConfigSerializer::deserialize(xmliStringStream, "conn", &canConnectorConfig);
+                    //TODO REMOVE THIS
+                    ConfigSerializer::serialize("DasGehtSafeNichtCAN.xml", "conn", canConnectorConfig);
 
-                      auto xmlWriterSettings = pt::xml_writer_make_settings<std::string>(' ', 4);
+                    CanConnectorVektor->push_back(canConnectorConfig);
+                    break;
+                }
 
-                      std::stringstream xmlStringStream;
-                      boost::property_tree::xml_parser::write_xml(xmlStringStream,v.second,xmlWriterSettings);
-
-
-
-                      std::string xmlString = xmlStringStream.str();
-                      boost::algorithm::replace_all(xmlString, R"(<?xml version="1.0" encoding="utf-8"?>)","");
-                      std::istringstream xmliStringStream(xmlString);
-
-                      sim_interface::dut_connector::v2x::V2XConnectorConfig* v2xConnectorConfig;
-
-                      ConfigSerializer::deserialize(xmliStringStream, "conn", &v2xConnectorConfig);
-                      ConfigSerializer::serialize("DasGehtSafeNichtV2X.xml", "conn", v2xConnectorConfig);
+                case V2XConnector: {
 
 
+                    auto xmlWriterSettings = boost::property_tree::xml_writer_make_settings<std::string>(' ', 4);
 
-                      break;
-                  }
-                  default: {
-
-                      break;
-                  }
+                    std::stringstream xmlStringStream;
+                    boost::property_tree::xml_parser::write_xml(xmlStringStream, connector.second, xmlWriterSettings);
 
 
-              }
+                    std::string xmlString = xmlStringStream.str();
+                    boost::algorithm::replace_all(xmlString, R"(<?xml version="1.0" encoding="utf-8"?>)", "");
+                    std::istringstream xmliStringStream(xmlString);
+
+                    sim_interface::dut_connector::v2x::V2XConnectorConfig *V2XConnectorConfig;
+
+                    ConfigSerializer::deserialize(xmliStringStream, "conn", &V2XConnectorConfig);
+                    //TODO REMOVE THIS
+                    ConfigSerializer::serialize("DasGehtSafeNichtV2X.xml", "conn", V2XConnectorConfig);
+
+
+                    V2XConnectorVektor->push_back(V2XConnectorConfig);
+                    break;
+                }
+                default: {
+
+                    break;
+                }
+
+
+            }
         }
 
 
-
     }
+
 
     void SimComHandler::run() {
         // TODO async receive events from the Simulation and send them to the interface
@@ -229,19 +231,18 @@ namespace sim_interface {
                 // TODO unbind
             }
 
-            const char *buf = static_cast<const char*>(reply.data());
+            const char *buf = static_cast<const char *>(reply.data());
             std::cout << "CHAR [" << buf << "]" << std::endl;
 
-            std::string input_data_( buf, reply.size() );
+            std::string input_data_(buf, reply.size());
             std::istringstream archive_stream(input_data_);
             boost::archive::text_iarchive archive(archive_stream);
-            std::map <std::string, boost::variant<int, double, std::string>> receiveMap , receiveMapDynamics;
+            std::map<std::string, boost::variant<int, double, std::string>> receiveMap, receiveMapDynamics;
 
-            try
-            {
-                archive >> receiveMap ;
+            try {
+                archive >> receiveMap;
                 archive >> receiveMapDynamics;
-            } catch (boost::archive::archive_exception& ex) {
+            } catch (boost::archive::archive_exception &ex) {
                 std::cout << "Archive Exception during deserializing:" << std::endl;
                 std::cout << ex.what() << std::endl;
             } catch (int e) {
@@ -250,26 +251,26 @@ namespace sim_interface {
 
             std::vector<std::string> keyVector;
             std::vector<boost::variant<int, double, std::string>> valueVector;
-            for (auto const& element: receiveMap) {
+            for (auto const &element: receiveMap) {
                 keyVector.push_back(element.first);
                 valueVector.push_back(element.second);
                 std::string keyAsString = element.first;
 
-                auto valueAsAny =   element.second;
-                std::stringstream stringStreamValue ;
-                stringStreamValue <<  valueAsAny;
+                auto valueAsAny = element.second;
+                std::stringstream stringStreamValue;
+                stringStreamValue << valueAsAny;
                 //TODO "Simulation Traci" würde man auch aus dem Archive bekommen vllt anpassen
                 SimEvent event(keyAsString, stringStreamValue.str(), "Simulation Traci");
                 sendEventToInterface(event);
             }
-            for (auto const& element: receiveMapDynamics) {
+            for (auto const &element: receiveMapDynamics) {
                 keyVector.push_back(element.first);
                 valueVector.push_back(element.second);
                 std::string keyAsString = element.first;
 
-                auto valueAsAny =   element.second;
-                std::stringstream stringStreamValue ;
-                stringStreamValue <<  valueAsAny;
+                auto valueAsAny = element.second;
+                std::stringstream stringStreamValue;
+                stringStreamValue << valueAsAny;
                 // std::cout << "KEY: " << keyAsString << std::endl;
                 //std::cout << "value: " << stringStreamValue.str() << std::endl;
                 //TODO "Simulation Traci" würde man auch aus dem Archive bekommen vllt anpassen
@@ -284,16 +285,16 @@ namespace sim_interface {
         // TODO implementation of sending an event to the simulation
         std::cout << "Async Sending of Event..." << std::endl;
         std::cout << simEvent << "lol";
-            // Send it off to any subscribers
+        // Send it off to any subscribers
         std::cout << "Waiting to Send " << std::endl;
 
-       // std::map<std::string , boost::variant<int, double, std::string, std::time_t>> simEventMap;
-       //Not working with curreent time
-        std::map<std::string , boost::variant<int, double, std::string>> simEventMap;
+        // std::map<std::string , boost::variant<int, double, std::string, std::time_t>> simEventMap;
+        //Not working with curreent time
+        std::map<std::string, boost::variant<int, double, std::string>> simEventMap;
         simEventMap["Operation"] = simEvent.operation;
-        simEventMap["Value"]     = boost::apply_visitor(EventVisitor(), simEvent.value);
-        simEventMap["Origin"]    = simEvent.origin;
-        simEventMap["Current"]   = simEvent.current;
+        simEventMap["Value"] = boost::apply_visitor(EventVisitor(), simEvent.value);
+        simEventMap["Origin"] = simEvent.origin;
+        simEventMap["Current"] = simEvent.current;
         //serialize map
         std::ostringstream ss;
         boost::archive::text_oarchive archive(ss);

@@ -104,7 +104,7 @@ namespace sim_interface {
          * @param queueSimToInterface A queue to communicate with the interface.
          * @param config System configuration.
          */
-        SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig& config);
+        SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig &config);
 
         /**
          * Destroys the handler and stops all threads.
@@ -122,21 +122,17 @@ namespace sim_interface {
          */
         void run();
 
-          /**
-         * Get the various ConnectorTypes from the config.xml
-         * @param *RESTConnectorVektor: Standardvector from Type RESTConnectorConfig Pointer
-         * @param *CanConnectorVektor: Standardvector from Type CanConnectorConfig Pointer
-         */
-        void getConfig(std::vector<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig*> *RESTConnectorVektor,
-                       std::vector<sim_interface::dut_connector::can::CANConnectorConfig*> *CanConnectorVektor);
-
         /**
-         * Get the various ConnectorTypes from the config.xml
-         * @param *connectorConfig: Standardvector from Type ConnectorConfig Pointer
-         * Problem: The Standardvector has only objects from type ConnectorConfig and not form the specifiic objectts e.g. RESTConnectorConfig
-         */
+       * Get the various ConnectorTypes from the config.xml
+       * @param *RESTConnectorVektor: Standardvector from Type RESTConnectorConfig Pointer
+       * @param *CanConnectorVektor: Standardvector from Type CanConnectorConfig Pointer
+       */
+        void
+        getConfig(std::vector<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig *> *RESTConnectorVektor,
+                  std::vector<sim_interface::dut_connector::can::CANConnectorConfig *> *CanConnectorVektor,
+                  std::vector<sim_interface::dut_connector::v2x::V2XConnectorConfig *> *V2XConnectorVektor);
 
-        void getConfig(  std::vector<sim_interface::dut_connector::ConnectorConfig*> *connectorConfig);
+
 
         /**
          * @param *connectorType: numeration for the various connectorType
@@ -157,7 +153,6 @@ namespace sim_interface {
         * @param *connectorTypeS: String for comparing the name of the connector types in the config.xml
         */
         connectorType resolveConnectorTypeForSwitch(std::string connectorTypeS);
-
 
 
     private:
