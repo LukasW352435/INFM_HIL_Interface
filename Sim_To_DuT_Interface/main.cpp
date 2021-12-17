@@ -239,10 +239,10 @@ int main() {
             operationToFrame,
             {},
             false);
-  //   sim_interface::ConfigSerializer::serialize("TEST.xml", "conn", canConfigTest);
-     sim_interface::ConfigSerializer::deserialize("TEST.xml", "conn", &canConfigTest);
+     sim_interface::ConfigSerializer::serialize("TEST.xml", "conn", canConfigTest);
+    sim_interface::ConfigSerializer::deserialize("TEST.xml", "conn", &canConfigTest);
 
-    sim_interface::ConfigSerializer::serialize("TESTGGWASGEHT.xml", "conn", canConfigTest);
+  sim_interface::ConfigSerializer::serialize("TESTGGWASGEHT.xml", "conn", canConfigTest);
     // sim_interface::ConfigSerializer::deserialize("CANConnector.xml", "conn", canConfigTest);
     // sim_interface::ConfigSerializer::serialize("TESTFuckingGo.xml", "conn", canConfigTest);
     // boost::scoped_ptr<sim_interface::dut_connector::can::CANConnectorConfig> canConnectorConfig;

@@ -18,7 +18,7 @@ add_executable(${PROJECT_NAME} main.cpp
         DuTLogger/DuTLogger.cpp DuTLogger/DuTLogger.h DuTLogger/DuTLoggerConfig.h
         SystemConfig.h
         Utility/ConfigSerializer.h
-        Utility/PeriodicTimer.cpp Utility/PeriodicTimer.h)
+        Utility/PeriodicTimer.cpp Utility/PeriodicTimer.h Utility/ConfigSerializerCanConnector.h)
 
 if (CMAKE_CXX_COMPILER_VERSION GREATER_EQUAL 9)
     target_link_libraries(${PROJECT_NAME} libs zmq quill boost_serialization -lboost_system)
