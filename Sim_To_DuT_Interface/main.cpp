@@ -144,6 +144,7 @@ int main() {
 
 
     //V2x Connector
+/*
     sim_interface::dut_connector::v2x::V2XConnectorConfig v2xconfig("veth0", 0x0000);
 
     sim_interface::dut_connector::v2x::V2XConnector v2xConnector(interface.getQueueDuTToSim(), v2xconfig);
@@ -164,7 +165,7 @@ int main() {
     std::string archive = ss.str();
     const sim_interface::SimEvent e("V2X", ss.str(), "Simulation");
     v2xConnector.handleEventSingle(e);
-
+*/
     //+++++ Start CAN Connector +++++
     // Example receiveOperation Config for the 0x275 GESCHWINDIGKEIT CAN frame
     sim_interface::dut_connector::can::CANConnectorReceiveOperation receiveOperationGeschwindigkeit(

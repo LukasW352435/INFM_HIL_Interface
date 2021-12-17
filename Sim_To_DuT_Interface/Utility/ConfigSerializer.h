@@ -46,7 +46,7 @@
 #include "../DuT_Connectors/CANConnector/CANConnectorReceiveOperation.h"
 #include "../DuT_Connectors/CANConnector/CANConnectorSendOperation.h"
 #include "../DuT_Connectors/ConnectorConfig.h"
-#include "../DuTLogger/DuTLogger.h"
+#include "../Interface_Logger/InterfaceLogger.h"
 #include "ConfigSerializerCanConnector.h"
 
 namespace sim_interface {
@@ -68,13 +68,13 @@ namespace sim_interface {
 
                 }
                 catch (boost::archive::archive_exception const &e) {
-                    DuTLogger::logMessage(std::string("ConfigSerializer: Exception on deserialize: ", e.what()),
+                    InterfaceLogger::logMessage(std::string("ConfigSerializer: Exception on deserialize: ", e.what()),
                                           LOG_LEVEL::ERROR);
                 }
 
                 //   ifs.close();
             } else {
-                DuTLogger::logMessage("ConfigSerializer: input filestream not good", LOG_LEVEL::ERROR);
+                InterfaceLogger::logMessage("ConfigSerializer: input filestream not good", LOG_LEVEL::ERROR);
             }
         }
 
@@ -90,7 +90,7 @@ namespace sim_interface {
                 }
                 ofs.close();
             } else {
-                DuTLogger::logMessage("ConfigSerializer: output filestream not good", LOG_LEVEL::ERROR);
+                InterfaceLogger::logMessage("ConfigSerializer: output filestream not good", LOG_LEVEL::ERROR);
             }
         }
     };

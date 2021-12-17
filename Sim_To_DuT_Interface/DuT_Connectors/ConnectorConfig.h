@@ -38,34 +38,7 @@
 namespace sim_interface::dut_connector {
     class ConnectorConfig {
     private:
-        /*
-        friend class boost::serialization::access;
-        template<class Archive>
-        void serialize(Archive & archive, const unsigned int version){
-           archive & BOOST_SERIALIZATION_NVP(operations);
-          archive &  BOOST_SERIALIZATION_NVP(periodicOperations);
-            archive & BOOST_SERIALIZATION_NVP(periodicTimerEnabled);
 
-        }
-
-        template<class Archive>
-        inline void load_construct_data(Archive & archive, ConnectorConfig * configPtr, const unsigned int version)
-        {
-            std::set<std::string> _operations;
-            std::map<std::string, int> _periodicOperations;
-            bool _periodicTimerEnabled;
-
-
-            archive >> _operations;
-            archive >> _periodicOperations;
-            archive >> _periodicTimerEnabled;
-
-
-
-            ::new (configPtr) ConnectorConfig (     _operations,"ConnectorConfig", _periodicOperations,  _periodicTimerEnabled );
-
-        }
-*/
     public:
         explicit ConnectorConfig(std::set<std::string> operations, std::string connectorType, std::map<std::string, int> periodicOperations = {}, bool periodicTimerEnabled = false)
         : operations(std::move(operations)), connectorType(connectorType), periodicOperations(std::move(periodicOperations)), periodicTimerEnabled(periodicTimerEnabled) {
