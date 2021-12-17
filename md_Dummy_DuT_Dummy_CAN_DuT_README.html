@@ -66,10 +66,8 @@ $(function() {
   <div class="headertitle"><div class="title">Dummy_CAN_DuT </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md1"></a>
-Overview</h1>
-<p >This dummy application is a simple "echo server" that sends the received CAN/CANFD frames back with a different ID. The dummy keeps running till it is terminated with "CTRL + C".</p>
-<h1><a class="anchor" id="autotoc_md2"></a>
+<div class="textblock"><p >This dummy application is a simple "echo server" that builds upon SocketCAN. It sends received CAN/CANFD frames back with a different CAN ID. The dummy keeps running till it is terminated with "CTRL + C".</p>
+<h1><a class="anchor" id="autotoc_md1"></a>
 Configuration</h1>
 <p >The following parameters can be changed in the Dummy_CANFD_Config.h file: </p><table class="markdownTable">
 <tr class="markdownTableHead">
@@ -83,24 +81,49 @@ Configuration</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">VERBOSE   </td><td class="markdownTableBodyNone">Enables output to the console during the receive-send loop   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md3"></a>
+<h1><a class="anchor" id="autotoc_md2"></a>
 Example</h1>
 <p >To test the dummy you can use a virtual CAN interface:</p>
-<div class="fragment"><div class="line">// Create a virtual CAN interface</div>
+<div class="fragment"><div class="line">// Install the can-utils </div>
+<div class="line">sudo apt-get install can-utils</div>
+<div class="line"> </div>
+<div class="line">// Modprobe is needed in the case the vcan module is not loaded.</div>
+<div class="line">modprobe vcan</div>
+<div class="line"> </div>
+<div class="line">// Create a virtual CAN interface</div>
 <div class="line">ip link add dev vcan0 type vcan</div>
 <div class="line"> </div>
-<div class="line">// Bring the interface up and running</div>
+<div class="line">// Set the interface up and running</div>
 <div class="line">ip link set vcan0 up</div>
 <div class="line"> </div>
-<div class="line">// Start the dummy application</div>
+<div class="line">// Compile the project</div>
+<div class="line">cmake .</div>
+<div class="line">make </div>
 <div class="line"> </div>
-<div class="line">// Send a frame on the virtual CAN interface</div>
+<div class="line">// Start the dummy application</div>
+<div class="line">./Dummy_CAN_DuT</div>
+<div class="line"> </div>
+<div class="line">// To see the CAN/CANFD messages that are send by the Dummy_CAN_DuT on </div>
+<div class="line">// the virtual CAN interface open a terminal and use the candump tool.</div>
+<div class="line">candump vcan0</div>
+<div class="line"> </div>
+<div class="line">// Open another terminal and send a frame over the virtual CAN interface</div>
+<div class="line">// to the Dummy_CAN_DuT with the use of the cansend tool.</div>
 <div class="line">cansend vcan0 123#DEADBEEF</div>
-</div><!-- fragment --> </div></div><!-- contents -->
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
+Documentation</h1>
+<p >For further information look at the <a href="https://mab0189.github.io/Dummy_CAN_DuT/index.html">documentation</a>.</p>
+<h1><a class="anchor" id="autotoc_md4"></a>
+Helpful links</h1>
+<ul>
+<li><a href="https://www.kernel.org/doc/Documentation/networking/can.txt">SocketCAN documentation</a></li>
+<li><a href="https://github.com/linux-can/can-utils">SocketCAN userspace utilities and tools</a> </li>
+</ul>
+</div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 16 2021 21:27:57 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+Generated on Fri Dec 17 2021 18:47:17 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
 </small></address>
 </body>
 </html>

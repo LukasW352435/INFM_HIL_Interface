@@ -71,19 +71,19 @@ $(function() {
 <blockquote class="doxtable">
 <p >⚠ The raw socket requires root privileges to be opened, alternatively the CAP_NET_RAW capability needs to be given to the executable </p>
 </blockquote>
-<h1><a class="anchor" id="autotoc_md17"></a>
+<h1><a class="anchor" id="autotoc_md24"></a>
 Requirements</h1>
 <ul>
 <li>root or CAP_NET_RAW capability, can be set via <code>sudo setcap cap_net_raw=ep executable</code></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md18"></a>
+<h1><a class="anchor" id="autotoc_md25"></a>
 Config</h1>
 <ul>
 <li><b>ifname</b> network interface to use for sending and receiving</li>
 <li><b>ethernetFrameType</b> two bytes for the indication of frameType after the source and destination MAC in the ethernet header</li>
 <li><b>operations</b>, <b>periodicOperations</b>, <b>periodicTimerEnabled</b> from <a class="el" href="md_Sim_To_DuT_Interface_DuT_Connectors_ReadMe.html">Base Connector</a> are not used (fixed operation of "V2X", no periodic sending)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md19"></a>
+<h1><a class="anchor" id="autotoc_md26"></a>
 Testing</h1>
 <p >To test the V2X Connector two virtual interfaces can be created and linked together with the following commands. </p><div class="fragment"><div class="line">sudo ip link add veth0 type veth peer name veth1</div>
 <div class="line">sudo ip link set veth0 up</div>
@@ -93,7 +93,7 @@ Testing</h1>
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 16 2021 21:27:57 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+Generated on Fri Dec 17 2021 18:47:17 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
 </small></address>
 </body>
 </html>
