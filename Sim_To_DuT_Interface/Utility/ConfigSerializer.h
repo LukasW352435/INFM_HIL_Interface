@@ -50,6 +50,28 @@
 #include "../Interface_Logger/InterfaceLogger.h"
 #include "ConfigSerializerCanConnector.h"
 
+
+/**
+ * ConfigSerializer: This class is for de-/ serializing the different connectorConfig types
+ * and overwrites the boost:serialization methods
+ * @param T: Templates for any type, so that the following methods can be used by them
+ *
+ */
+
+/**
+* method:deserialize
+ * @param &ifs: address of an input stringstream
+ * @param &objName: address of a string
+ * @param *obj: pointer of any type of object
+ *
+ * if: when the input string stream is available
+ * exception handling: catching archive exception and start InterfaceLogger:
+ *  @param iss: create an input stringstream
+ *  @param ia: create an xml input archive with the input stringstream and no header
+ *  deserialize now the object
+*
+*  else: start InterfaceLogger:
+*/
 namespace sim_interface {
 
     class ConfigSerializer {
@@ -66,7 +88,7 @@ namespace sim_interface {
                 }
                 catch (boost::archive::archive_exception const &e) {
                     InterfaceLogger::logMessage(std::string("ConfigSerializer: Exception on deserialize: ", e.what()),
-                                          LOG_LEVEL::ERROR);
+                                                LOG_LEVEL::ERROR);
                 }
 
 
@@ -74,6 +96,21 @@ namespace sim_interface {
                 InterfaceLogger::logMessage("ConfigSerializer: input filestream not good", LOG_LEVEL::ERROR);
             }
         }
+
+
+        /**
+* method:serialize
+ * @param &objName: address of a string --> name of the object
+ * @param &file: address of a string --> file
+ * @param *obj: pointer of any type of object
+ * @param ofs: create an output file stream
+ *
+ * if: when the output file stream is available
+ *  @param oa: create an xml output archive with the output stringstream and no header
+ *  serialize now the object in the outputarchive and close file
+*
+*  else: start InterfaceLogger:
+*/
 
 
         template<typename T>
@@ -92,11 +129,37 @@ namespace sim_interface {
     };
 }
 
+/**
+* namespace boost::serialization: overwrite the boost:serialization methods
+* @param Archive: Templates for any class, so that the following methods can be used by them
+*
+* Implementation the boost serialization for ConnectorConfig
+*
+* method: serialize
+* @param &ar: address of an archive
+* @param &config: address of a ConnectorConfig object
+* @param version: constant unsigned int --> unused
+*  --> method is empty
+*/
+
+
+
 namespace boost::serialization {
 
 
     template<class Archive>
     void serialize(Archive &ar, sim_interface::dut_connector::ConnectorConfig &config, const unsigned int version) {}
+
+    /**
+* method: save_construct_data --> deserialize ConnectorConfig
+* @param &ar: address of an archive to deserialize
+* @param *config: pointer of a ConnectorConfig object to deserialized
+* @param version: constant unsigned int --> unused
+*
+* deserialize now the attributes of the ConnectorConfig object:
+* @param operations, periodicOperations, periodicTimerEnabled:
+* find tag in the serialized xml and get the same attribute via pointer
+*/
 
     template<class Archive>
     inline void save_construct_data(Archive &ar, const sim_interface::dut_connector::ConnectorConfig *config,
@@ -105,6 +168,19 @@ namespace boost::serialization {
         ar & boost::serialization::make_nvp("periodicOperations", config->periodicOperations);
         ar & boost::serialization::make_nvp("periodicTimerEnabled", config->periodicTimerEnabled);
     }
+
+
+    /**
+* method: load_construct_data --> serialize ConnectorConfig
+* @param &ar: address of an archive to deserialize
+* @param *instance: pointer of a ConnectorConfig object to serialized
+* @param file_version: constant unsigned int --> unused
+*
+* @param _operations, _periodicOperations, _periodicTimerEnabled:
+* create helping attributes for serializing and creating a new xml-file for checking
+* serialize now the helping attributes of the ConnectorConfig object
+* creating a new object from class with the helping variables
+*/
 
     template<class Archive>
     inline void load_construct_data(Archive &ar, sim_interface::dut_connector::ConnectorConfig *instance,
@@ -122,10 +198,33 @@ namespace boost::serialization {
                                                                      _periodicTimerEnabled);
     }
 
+    /**
+* @param Archive: Templates for any class, so that the following methods can be used by them
+*
+* Implementation the boost serialization for RESTConnectorConfig
+*
+* method: serialize
+* @param &ar: address of an archive
+* @param &config: address of a RESTConnectorConfig object
+* @param version: constant unsigned int --> unused
+*  --> method is empty
+*/
+
+
     template<class Archive>
     void serialize(Archive &ar, sim_interface::dut_connector::rest_dummy::RESTConnectorConfig &config,
                    const unsigned int version) {}
 
+    /**
+* method: save_construct_data --> deserialize RESTConnectorConfig
+* @param &ar: address of an archive to deserialize
+* @param *config: pointer of a RESTConnectorConfig object to deserialized
+* @param version: constant unsigned int --> unused
+*
+* deserialize now the attributes of the RESTConnectorConfig object:
+* @param baseUrlDuT, baseCallbackUrl, port, operations, periodicOperations, periodicTimerEnabled:
+* find tag in the serialized xml and get the same attribute via pointer
+*/
     template<class Archive>
     inline void
     save_construct_data(Archive &ar, const sim_interface::dut_connector::rest_dummy::RESTConnectorConfig *config,
@@ -139,6 +238,17 @@ namespace boost::serialization {
         ar & boost::serialization::make_nvp("periodicTimerEnabled", config->periodicTimerEnabled);
     }
 
+    /**
+* method: load_construct_data --> serialize RESTConnectorConfig
+* @param &ar: address of an archive to deserialize
+* @param *instance: pointer of a RESTConnectorConfig object to serialized
+* @param file_version: constant unsigned int --> unused
+*
+* @param _baseUrlDuT, _baseCallbackUrl, _port, _operations, _periodicOperations, _periodicTimerEnabled:
+* create helping attributes for serializing and creating a new xml-file for checking
+* serialize now the helping attributes of the RESTConnectorConfig object
+* creating a new object from class with the helping variables
+*/
     template<class Archive>
     inline void
     load_construct_data(Archive &ar, sim_interface::dut_connector::rest_dummy::RESTConnectorConfig *instance,
@@ -164,12 +274,32 @@ namespace boost::serialization {
     }
 
 
-
-
+    /**
+* @param Archive: Templates for any class, so that the following methods can be used by them
+*
+* Implementation the boost serialization for V2XConnectorConfig
+*
+* method: serialize
+* @param &ar: address of an archive
+* @param &config: address of a V2XConnectorConfig object
+* @param version: constant unsigned int --> unused
+*  --> method is empty
+*/
 
     template<class Archive>
     void serialize(Archive &ar, sim_interface::dut_connector::v2x::V2XConnectorConfig &config,
                    const unsigned int version) {}
+
+    /**
+* method: save_construct_data --> deserialize V2XConnectorConfig
+* @param &ar: address of an archive to deserialize
+* @param *config: pointer of a V2XConnectorConfig object to deserialized
+* @param version: constant unsigned int --> unused
+*
+* deserialize now the attributes of the V2XConnectorConfig object:
+* @param ifname, ethernetFrameType:
+* find tag in the serialized xml and get the same attribute via pointer
+*/
 
     template<class Archive>
     inline void
@@ -180,6 +310,29 @@ namespace boost::serialization {
         ar & boost::serialization::make_nvp("ethernetFrameType", config->ethernetFrameType);
 
     }
+
+    /**
+* method: load_construct_data --> serialize V2XConnectorConfig
+* @param &ar: address of an archive to deserialize
+* @param *instance: pointer of a V2XConnectorConfig object to serialized
+* @param file_version: constant unsigned int --> unused
+*
+* @param _ifname, _ethernetFrameType:
+* create helping attributes for serializing and creating a new xml-file for checking
+* serialize now the helping attributes of the V2XConnectorConfig object
+* @param _helper: String for handling hex-values
+     *
+* if the attribute ethernetFrameType is an hex-value
+     * @param ss: Stringstream for handling hex-values
+     * convert the string into hex value and put it into the stringstream
+     * put stringstream into _ethernetFrameType
+*else
+     * @param ss: Stringstream to put it into _ethernetFrameType
+     * write the string into the stringstream
+     * put stringstream into _ethernetFrameType
+*
+* creating a new object from class with the helping variables
+*/
 
     template<class Archive>
     inline void

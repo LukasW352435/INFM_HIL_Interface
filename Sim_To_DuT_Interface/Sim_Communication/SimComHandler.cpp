@@ -26,22 +26,14 @@
 
 #include "SimComHandler.h"
 
-//#include <utility>
-//#include <zmq.hpp>
-//#include <boost/archive/text_oarchive.hpp>
-//#include <boost/archive/text_iarchive.hpp>
-//#include <boost/archive/binary_oarchive.hpp>
-//#include <boost/archive/binary_iarchive.hpp>
-//
-//#include <boost/archive/text_oarchive.hpp>
-//#include <boost/serialization/map.hpp>
-//#include <boost/serialization/variant.hpp>
-
 
 namespace sim_interface {
 
 
-
+    /**
+   * Global Variable:
+   * @param context_sub: Defines the context of the zmq socket
+   */
     zmq::context_t context_sub(1);
 
     SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig &config)
@@ -256,7 +248,7 @@ namespace sim_interface {
     void SimComHandler::run() {
         // TODO async receive events from the Simulation and send them to the interface
 
-        while (1) {
+        //while (1) {
             zmq::message_t reply;
             try {
                 std::cout << "Receiving... " << std::endl;
@@ -298,7 +290,7 @@ namespace sim_interface {
                 SimEvent event(keyAsString, stringStreamValue.str(), "Simulation Traci");
                 sendEventToInterface(event);
             }
-        }
+        //}
     }
 
     void SimComHandler::sendEventToSim(const SimEvent &simEvent) {
@@ -334,6 +326,11 @@ namespace sim_interface {
 
     SimComHandler::~SimComHandler() {
         // TODO end zmq, etc.
+    }
+
+    void SimComHandler::run_thread() {
+        simComHandlerThread = std::thread(&sim_interface::SimComHandler::run, this);
+
     }
 
 

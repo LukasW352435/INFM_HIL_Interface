@@ -18,10 +18,38 @@
 #include <linux/can/bcm.h>
 #include <boost/concept_check.hpp>
 
+/**
+* ConfigSerializer: This class is for de-/ serializing the CANConnectorConfig
+* namespace boost::serialization: overwrite the boost:serialization methods
+* @param Archive: Templates for any class, so that the following methods can be used by them
+*
+* Implementation the boost serialization for CANConnectorConfig
+*
+* method: serialize
+* @param &ar: address of an archive
+* @param &config: address of a CANConnectorConfig object
+* @param version: constant unsigned int --> unused
+*  --> method is empty
+*/
+
+
 namespace boost::serialization {
     template<class Archive>
     void serialize(Archive &ar, sim_interface::dut_connector::can::CANConnectorConfig &config,
                    const unsigned int version) {}
+
+
+    /**
+* method: save_construct_data --> deserialize CANConnectorConfig
+* @param &ar: address of an archive to deserialize
+* @param *config: pointer of a CANConnectorConfig object to deserialized
+* @param version: constant unsigned int --> unused
+        *
+* deserialize now the attributes of the CANConnectorConfig object:
+* @param interfaceName, codecName, operations, *frameToOperationPointer, *operationToFramePointer, periodicOperations, periodicTimerEnabled:
+* find tag in the serialized xml and get the same attribute via pointer
+*
+  */
 
     template<class Archive>
     inline void
@@ -41,6 +69,17 @@ namespace boost::serialization {
         ar & boost::serialization::make_nvp("periodicTimerEnabled", config->periodicTimerEnabled);
     }
 
+    /**
+* method: load_construct_data --> serialize CANConnectorConfig
+* @param &ar: address of an archive to deserialize
+* @param *instance: pointer of a CANConnectorConfig object to serialized
+* @param file_version: constant unsigned int --> unused
+*
+* @param _interfaceName, _codecName, _operations, *_frameToOperationPointer, *_operationToFramePointer, _periodicOperations, _periodicTimerEnabled:
+* create helping attributes for serializing and creating a new xml-file for checking
+* serialize now the helping attributes of the CANConnectorConfig object
+* creating a new object from class with the helping variables
+*/
     template<class Archive>
     inline void load_construct_data(Archive &ar, sim_interface::dut_connector::can::CANConnectorConfig *instance,
                                     const unsigned int file_version) {
@@ -74,6 +113,18 @@ namespace boost::serialization {
                                                                              _periodicTimerEnabled);
     }
 
+/**
+* @param Archive: Templates for any class, so that the following methods can be used by them
+*
+* Implementation the boost serialization for the map with string and CANConnectorSendOperation
+*
+* method: serialize
+* @param &ar: address of an archive
+* @param &p: address of the pair with string and CANConnectorSendOperation
+* @param unsigned --> unused
+*  --> method is empty
+*/
+
 
     template<class Archive>
     void
@@ -81,6 +132,15 @@ namespace boost::serialization {
               unsigned) {
     }
 
+    /**
+* method: save_construct_data --> deserialize the map with string and CANConnectorSendOperation
+* @param &ar: address of an archive to deserialize
+* @param *pair: address of the pair with string and CANConnectorSendOperation to deserialize
+* @param file_version --> unused
+* @param *pointer: *pointer form type CANConnectorSendOperation and save CANConnectorSendOperation via *pair
+*
+* deserialize operation and CANConnectorSendOperation
+*/
     template<class Archive>
     void save_construct_data(Archive &ar,
                              const std::map<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> *config,
@@ -98,6 +158,18 @@ namespace boost::serialization {
 
     }
 
+    /**
+* method: load_construct_data --> serialize the map with string and CANConnectorSendOperation
+* @param &ar: address of an archive to serialize
+* @param *pair: address of the pair with string and CANConnectorSendOperation to deserialize
+* @param file_version: unsigned int --> unused
+*
+* @param _key, *_value:
+* create helping attributes for serializing and creating a new xml-file for checking
+* serialize _key:operation
+* serialize _value:CANConnectorSendOperation
+ * creating a new pair with the helping variables
+*/
     template<class Archive>
     void load_construct_data(Archive &ar,
                              std::map<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> *config,
@@ -118,6 +190,19 @@ namespace boost::serialization {
 
     }
 
+    /**
+* @param Archive: Templates for any class, so that the following methods can be used by them
+*
+* Implementation the boost serialization for the map with string and CANConnectorSendOperation
+*
+* method: serialize
+* @param &ar: address of an archive
+* @param &p: address of the pair with string and CANConnectorSendOperation
+* @param unsigned --> unused
+*  --> method is empty
+*/
+
+
 
     template<class Archive>
     void serialize(Archive &ar,
@@ -125,6 +210,23 @@ namespace boost::serialization {
                    unsigned) {
     }
 
+    /**
+* method: save_construct_data --> deserialize the map with string and CANConnectorSendOperation
+* @param &ar: address of an archive to deserialize
+* @param *pair: address of the pair with string and CANConnectorSendOperation to deserialize
+* @param file_version --> unused
+* @param *pointer: *pointer form type CANConnectorSendOperation and save CANConnectorSendOperation via *pair
+*
+* deserialize operation and CANConnectorSendOperation
+*//**
+* method: save_construct_data --> deserialize the map with string and CANConnectorSendOperation
+* @param &ar: address of an archive to deserialize
+* @param *pair: address of the pair with string and CANConnectorSendOperation to deserialize
+* @param file_version --> unused
+* @param *pointer: *pointer form type CANConnectorSendOperation and save CANConnectorSendOperation via *pair
+*
+* deserialize operation and CANConnectorSendOperation
+*/
 
     template<class Archive>
     inline void save_construct_data(Archive &ar,
@@ -139,6 +241,18 @@ namespace boost::serialization {
 
     }
 
+    /**
+* method: load_construct_data --> serialize the map with string and CANConnectorSendOperation
+* @param &ar: address of an archive to serialize
+* @param *pair: address of the pair with string and CANConnectorSendOperation to deserialize
+* @param file_version: unsigned int --> unused
+*
+* @param _key, *_value:
+* create helping attributes for serializing and creating a new xml-file for checking
+* serialize _key:operation
+* serialize _value:CANConnectorSendOperation
+ * creating a new pair with the helping variables
+*/
 
     template<class Archive>
     inline void load_construct_data(Archive &ar,
@@ -159,13 +273,33 @@ namespace boost::serialization {
 
     }
 
+    /**
+    * @param Archive: Templates for any class, so that the following methods can be used by them
+    *
+    * Implementation the boost serialization for CANConnectorSendOperation
+    *
+    * method: serialize
+    * @param &ar: address of an archive
+    * @param &config: address of a CANConnectorSendOperation object
+    * @param unsigned: unsigned --> unused
+    *  --> method is empty
+    */
 
     template<class Archive>
     void serialize(Archive &ar, sim_interface::dut_connector::can::CANConnectorSendOperation &config,
                    unsigned) {
     }
 
-
+    /**
+    * method: save_construct_data --> deserialize CANConnectorSendOperation
+    * @param &ar: address of an archive to deserialize
+    * @param *instance: pointer of a CANConnectorConfig object to deserialized
+    * @param version: constant unsigned int --> unused
+    *
+    * deserialize now the attributes of the CANConnectorSendOperation object:
+    * @param canID, isCANFD, isCyclic, announce, countIval1, ival1, ival2:
+    * find tag in the serialized xml and get the same attribute via pointer
+    */
     template<class Archive>
     inline void
     save_construct_data(Archive &ar, const sim_interface::dut_connector::can::CANConnectorSendOperation *instance,
@@ -182,6 +316,13 @@ namespace boost::serialization {
 
     }
 
+    /**
+    * method: serialize
+* @param &ar: address of an archive
+* @param &config: address of bcm_timeval for seconds and microseconds
+* @param version: const unsigned int --> unused
+* deserialize now the seconds and microseconds:
+*/
     template<class Archive>
     void serialize(Archive &ar, bcm_timeval &config,
                    const unsigned int version) {
@@ -189,6 +330,27 @@ namespace boost::serialization {
         ar & boost::serialization::make_nvp("tv_usec", config.tv_usec);
 
     }
+
+    /**
+    * method: load_construct_data --> serialize CANConnectorSendOperation
+    * @param &ar: address of an archive to deserialize
+    * @param *instance: pointer of a CANConnectorConfig object to serialized
+    * @param file_version: constant unsigned int --> unused
+    *
+    * @param _canID, _isCANFD, _isCyclic, _announce, _countIval1, _ival1, _ival2:
+    * create helping attributes for serializing and creating a new xml-file for checking
+    * serialize now the helping attributes of the CANConnectorSendOperation object
+    *
+    * * if the attribute _canID is an hex-value
+    * @param ss: Stringstream for handling hex-values
+    * convert the string into hex value and put it into the stringstream
+    * put stringstream into _canID
+    *else
+     * @param ss: Stringstream to put it into _canID
+     * write the string into the stringstream
+     * put stringstream into _canID
+    * creating a new object from class with the helping variables
+    */
 
     template<class Archive>
     inline void load_construct_data(Archive &ar, sim_interface::dut_connector::can::CANConnectorSendOperation *instance,
@@ -232,12 +394,42 @@ namespace boost::serialization {
         );
     }
 
+/**
+    * @param Archive: Templates for any class, so that the following methods can be used by them
+    *
+    * Implementation the boost serialization for CANConnectorReceiveOperation
+    *
+    * method: serialize
+    * @param &ar: address of an archive
+    * @param &config: address of a CANConnectorReceiveOperation object
+    * @param version: const unsigned int--> unused
+    *  --> method is empty
+    */
+
+
+    /**
+    * method: serialize
+    * @param &ar: address of an archive
+    * @param &config: address of bcm_timeval for seconds and microseconds
+    * @param version: const unsigned int --> unused
+    * deserialize now the seconds and microseconds:
+    */
 
     template<class Archive>
     void serialize(Archive &ar, sim_interface::dut_connector::can::CANConnectorReceiveOperation &config,
                    const unsigned int version) {}
 
 
+    /**
+    * method: save_construct_data --> deserialize CANConnectorReceiveOperation
+   * @param &ar: address of an archive to deserialize
+   * @param *instance: pointer of a CANConnectorReceiveOperation object to deserialized
+   * @param version: constant unsigned int --> unused
+   *
+   * deserialize now the attributes of the CANConnectorReceiveOperation object:
+   * @param operation, isCANFD, hasMask, maskLength, mask:
+   * find tag in the serialized xml and get the same attribute via pointer
+   */
     template<class Archive>
     inline void
     save_construct_data(Archive &ar, const sim_interface::dut_connector::can::CANConnectorReceiveOperation *config,
@@ -253,7 +445,17 @@ namespace boost::serialization {
 
     }
 
-
+    /**
+    * method: load_construct_data --> serialize CANConnectorReceiveOperation
+    * @param &ar: address of an archive to deserialize
+    * @param *instance: pointer of a CANConnectorReceiveOperation object to serialized
+    * @param file_version: constant unsigned int --> unused
+    *
+    * @param _operation, _isCANFD, _hasMask, _maskLength, _mask:
+    * create helping attributes for serializing and creating a new xml-file for checking
+    * serialize now the helping attributes of the CANConnectorReceiveOperation object
+    *
+    */
     template<class Archive>
     inline void
     load_construct_data(Archive &ar, sim_interface::dut_connector::can::CANConnectorReceiveOperation *instance,
@@ -280,11 +482,36 @@ namespace boost::serialization {
         );
     }
 
+    /**
+* @param Archive: Templates for any class, so that the following methods can be used by them
+*
+* Implementation the boost serialization for the map with canid_t and CANConnectorReceiveOperation
+*
+* method: serialize
+* @param &ar: address of an archive
+* @param &config: address of the map with canid_t and CANConnectorReceiveOperation
+* @param unsigned --> unused
+*  --> method is empty
+*/
+
     template<class Archive>
     void
     serialize(Archive &ar, std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> &config,
               unsigned) {
     }
+
+
+    /**
+* method: save_construct_data --> deserialize the map with canid_t and CANConnectorReceiveOperation
+* @param &ar: address of an archive to deserialize
+* @param *config: pointer of the map with canid_t and CANConnectorReceiveOperation to deserialized
+* @param  unsigned --> unused
+* @param count: contains the length of the config pointer(size of the map)
+* deserialize count
+* for each loop: run through each address in the config pointer (map)
+*  @param *pointer: const auto *pointer = make a pointer to a pair with the map and cast it
+*  deserialize every element in the map
+*/
 
     template<class Archive>
     void save_construct_data(Archive &ar,
@@ -303,6 +530,22 @@ namespace boost::serialization {
         }
 
     }
+
+    /**
+* method: load_construct_data --> serialize the map with canid_t and CANConnectorReceiveOperation
+* @param &ar: address of an archive to serialize
+* @param *config: pointer of the map with canid_t and CANConnectorReceiveOperation to serialized
+* @param unsigned: unsigned int --> unused
+*
+* @param *_pair, _count, _map:
+* create helping attributes for serializing and creating a new xml-file for checking
+* serialize count
+* for loop:
+*   serialize every element in the pair
+*  insert the pair into helping map
+*
+* creating a new object from class with the helping variables
+*/
 
     template<class Archive>
     void load_construct_data(Archive &ar,
@@ -323,6 +566,17 @@ namespace boost::serialization {
 
     }
 
+    /**
+* @param Archive: Templates for any class, so that the following methods can be used by them
+*
+* Implementation the boost serialization for the map with canid_t and CANConnectorReceiveOperation
+*
+* method: serialize
+* @param &ar: address of an archive
+* @param &p: address of the pair with canid_t and CANConnectorReceiveOperation
+* @param unsigned --> unused
+*  --> method is empty
+*/
 
     template<class Archive>
     void serialize(Archive &ar, std::pair<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> &p,
@@ -330,7 +584,15 @@ namespace boost::serialization {
 
     }
 
-
+    /**
+* method: save_construct_data --> deserialize the map with canid_t and CANConnectorReceiveOperation
+* @param &ar: address of an archive to deserialize
+* @param *pair: address of the pair with canid_t and CANConnectorSendOperation to deserialize
+* @param file_version --> unused
+* @param *pointer: *pointer form type CANConnectorReceiveOperation and save CANConnectorReceiveOperation via *pair
+*
+* deserialize operation and CANConnectorSendOperation
+*/
     template<class Archive>
     inline void save_construct_data(Archive &ar,
                                     const std::pair<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *pair,
@@ -342,6 +604,28 @@ namespace boost::serialization {
         ar & boost::serialization::make_nvp("CANConnectorReceiveOperation", pointer);
 
     }
+
+    /**
+* method: load_construct_data --> serialize the map with canid_t and CANConnectorReceiveOperation
+* @param &ar: address of an archive to serialize
+* @param *pair: address of the pair with canid_t and CANConnectorReceiveOperation to deserialize
+* @param file_version: unsigned int --> unused
+*
+* @param _key, *_value:
+* create helping attributes for serializing and creating a new xml-file for checking
+* serialize _key:canid
+* serialize _value:CANConnectorReceiveOperation
+
+     * if the attribute canid is an hex-value
+     * @param ss: Stringstream for handling hex-values
+     * convert the string into hex value and put it into the stringstream
+     * put stringstream into canid
+*else
+     * @param ss: Stringstream to put it into canid
+     * write the string into the stringstream
+     * put stringstream into canid
+* creating a new pair with the helping variables
+*/
 
     template<class Archive>
     inline void load_construct_data(Archive &ar,

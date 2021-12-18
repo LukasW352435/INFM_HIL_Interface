@@ -345,11 +345,13 @@ int main() {
     std::cout << interface << std::endl;
 
     // Start simComHandler to receive events from the simulation
-    std::thread simComHandlerThread(&sim_interface::SimComHandler::run, &simComHandler);
-    simComHandlerThread.detach();
+    //std::thread simComHandlerThread(&sim_interface::SimComHandler::run, &simComHandler);
+    //simComHandlerThread.detach();
+    simComHandler.run_thread();
 
     // Start interface to receive/send events
     interface.run();
+
 
     std::cin.get();
     sim_interface::InterfaceLogger::logMessage("Shut down application", sim_interface::LOG_LEVEL::INFO);
