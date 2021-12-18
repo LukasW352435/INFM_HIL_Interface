@@ -124,6 +124,7 @@ namespace sim_interface {
         // Parse the XML into the property tree.
         boost::property_tree::read_xml(stringStream, tree);
         std::string connectorTypeS;
+        auto xmlWriterSettings = boost::property_tree::xml_writer_make_settings<std::string>(' ', 4);
         for (boost::property_tree::ptree::value_type &connector: tree.get_child("connectors")) {
             connectorTypeS = connector.second.get<std::string>("<xmlattr>.classType");
 
@@ -131,19 +132,21 @@ namespace sim_interface {
             switch (resolveConnectorTypeForSwitch(connectorTypeS)) {
                 case RESTDummyConnector: {
 
+                    std::stringstream xmlStringStream, testStringStream;
 
-                    auto xmlWriterSettings = boost::property_tree::xml_writer_make_settings<std::string>(' ', 4);
-
-                    std::stringstream xmlStringStream;
                     boost::property_tree::xml_parser::write_xml(xmlStringStream, connector.second, xmlWriterSettings);
 
 
+
                     std::string xmlString = xmlStringStream.str();
+
+
                     boost::algorithm::replace_all(xmlString, R"(<?xml version="1.0" encoding="utf-8"?>)", "");
 
 
                     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig *restConnectorConfig;
                     std::istringstream xmliStringStream(xmlString);
+
                     ConfigSerializer::deserialize(xmliStringStream, "conn", &restConnectorConfig);
                     //TODO REMOVE THIS
                     ConfigSerializer::serialize("DasGehtSafeNicht.xml", "conn", restConnectorConfig);
@@ -161,18 +164,50 @@ namespace sim_interface {
                 case CANConnector: {
 
 
-                    auto xmlWriterSettings = boost::property_tree::xml_writer_make_settings<std::string>(' ', 4);
-
                     std::stringstream xmlStringStream;
                     boost::property_tree::xml_parser::write_xml(xmlStringStream, connector.second, xmlWriterSettings);
 
 
                     std::string xmlString = xmlStringStream.str();
+
                     boost::algorithm::replace_all(xmlString, R"(<?xml version="1.0" encoding="utf-8"?>)", "");
+
+
+                    //Workaround because frameToOperation & OperationToframe need class_id_reference to work
+
+
+                    boost::algorithm::replace_all(xmlString, R"(<frameToOperation>)",
+                                                  R"(<frameToOperation class_id="2">)");
+                    boost::algorithm::replace_all(xmlString, R"(<operationToFrame>)",
+                                                  R"(<operationToFrame class_id="5">)");
+                    boost::algorithm::replace_all(xmlString, R"(<itemOperationToFrame>)",
+                                                  R"(<itemOperationToFrame class_id_reference="6">)");
+
+                    boost::algorithm::replace_first(xmlString, R"(<itemOperationToFrame class_id_reference="6">)",
+                                                    R"(<itemOperationToFrame class_id="6">)");
+
+                    boost::algorithm::replace_all(xmlString, R"(<itemFrameToOperation>)",
+                                                  R"(<itemFrameToOperation class_id_reference="3">)");
+
+                    boost::algorithm::replace_first(xmlString, R"(<itemFrameToOperation class_id_reference=3">)",
+                                                    R"(<itemFrameToOperation class_id="3">)");
+                    boost::algorithm::replace_first(xmlString, R"(<ival1>)",
+                                                    R"(<ival1 class_id="8" tracking_level="0">)");
+                    boost::algorithm::replace_all(xmlString, R"(<CANConnectorReceiveOperation>)",
+                                                  R"(<CANConnectorReceiveOperation class_id_reference="4">)");
+                    boost::algorithm::replace_first(xmlString,
+                                                    R"(<CANConnectorReceiveOperation class_id_reference="6">)",
+                                                    R"(<CANConnectorReceiveOperation class_id="4">)");
+
+                    boost::algorithm::replace_all(xmlString, R"(<CANConnectorSendOperation>)",
+                                                  R"(<CANConnectorSendOperation class_id_reference="7">)");
+                    boost::algorithm::replace_first(xmlString, R"(<CANConnectorSendOperation class_id_reference="7">)",
+                                                    R"(<CANConnectorSendOperation class_id="7">)");
+
                     std::istringstream xmliStringStream(xmlString);
 
                     sim_interface::dut_connector::can::CANConnectorConfig *canConnectorConfig;
-
+                    std::cout << "TEST " << xmlString << std::endl;
                     ConfigSerializer::deserialize(xmliStringStream, "conn", &canConnectorConfig);
                     //TODO REMOVE THIS
                     ConfigSerializer::serialize("DasGehtSafeNichtCAN.xml", "conn", canConnectorConfig);
@@ -184,14 +219,16 @@ namespace sim_interface {
                 case V2XConnector: {
 
 
-                    auto xmlWriterSettings = boost::property_tree::xml_writer_make_settings<std::string>(' ', 4);
-
                     std::stringstream xmlStringStream;
                     boost::property_tree::xml_parser::write_xml(xmlStringStream, connector.second, xmlWriterSettings);
 
 
                     std::string xmlString = xmlStringStream.str();
                     boost::algorithm::replace_all(xmlString, R"(<?xml version="1.0" encoding="utf-8"?>)", "");
+
+                    //Fix xmlString with class_id
+                    boost::algorithm::replace_first(xmlString, R"(<conn>)", R"(<conn class_id="0">)");
+
                     std::istringstream xmliStringStream(xmlString);
 
                     sim_interface::dut_connector::v2x::V2XConnectorConfig *V2XConnectorConfig;

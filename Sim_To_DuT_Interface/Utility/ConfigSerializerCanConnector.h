@@ -90,9 +90,9 @@ namespace boost::serialization {
         for (auto const &iter: *config) {
 
             //Don't work if we define the type of iter in the for loop. Then only the first element gets saved
-            const auto *pointer = reinterpret_cast<const std::pair<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> *>(&iter);
+            auto *pointer = reinterpret_cast<const std::pair<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> *>(&iter);
 
-            ar & boost::serialization::make_nvp("item", pointer);
+            ar & boost::serialization::make_nvp("itemOperationToFrame", pointer);
 
         }
 
@@ -109,7 +109,7 @@ namespace boost::serialization {
         std::map<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> _map = {};
         ar & boost::serialization::make_nvp("count", _count);
         for (int i = 0; i < _count; i++) {
-            ar & boost::serialization::make_nvp("item", _pair);
+            ar & boost::serialization::make_nvp("itemOperationToFrame", _pair);
             _map.insert(*_pair);
         }
 
@@ -298,7 +298,7 @@ namespace boost::serialization {
             //Don't work if we define the type of iter in the for loop. Then only the first element gets saved
             const auto *pointer = reinterpret_cast<const std::pair<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> *>(&iter);
 
-            ar & boost::serialization::make_nvp("item", pointer);
+            ar & boost::serialization::make_nvp("itemFrameToOperation", pointer);
 
         }
 
@@ -314,7 +314,7 @@ namespace boost::serialization {
         std::map<canid_t, sim_interface::dut_connector::can::CANConnectorReceiveOperation> _map = {};
         ar & boost::serialization::make_nvp("count", _count);
         for (int i = 0; i < _count; i++) {
-            ar & boost::serialization::make_nvp("item", _pair);
+            ar & boost::serialization::make_nvp("itemFrameToOperation", _pair);
             _map.insert(*_pair);
         }
 

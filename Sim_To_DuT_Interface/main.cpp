@@ -107,6 +107,7 @@ int main() {
 
 
     // Create the REST connector
+    /*
     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
                                                                          "http://172.17.0.1",
                                                                          9091,
@@ -131,7 +132,7 @@ int main() {
                                                                           "origin"},
                                                                          {{"Test", 1000}},
                                                                          true);
-
+*/
     //  sim_interface::dut_connector::rest_dummy::RESTDummyConnector restDummyConnector(interface.getQueueDuTToSim(),
     //                                                                                  config);
 
@@ -327,8 +328,8 @@ int main() {
             {},
             false);
 
-
-
+    // sim_interface::dut_connector::can::CANConnectorConfig* canConfigTestPointer = &canConfig;
+    // sim_interface::ConfigSerializer::serialize("JAMOIN.xml","conn", canConfigTestPointer);
     // Create a new CAN Connector and add it to the interface
     //   sim_interface::dut_connector::can::CANConnector canConnector(interface.getQueueDuTToSim(), canConfig);
     //interface.addConnector(&canConnector);
