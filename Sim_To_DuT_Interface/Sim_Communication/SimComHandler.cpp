@@ -65,11 +65,8 @@ namespace sim_interface {
 
 
         // Config Sockets
-        socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
-        socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
-        socketSimSubConfig_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
-
-
+        socketSimSub_.set(zmq::sockopt::subscribe, "");
+        socketSimSubConfig_.set(zmq::sockopt::subscribe, "");
 
         // Connect to publisher
         std::cout << "Connecting to " << socketSimAddressSub << " . . ." << std::endl;
@@ -103,15 +100,15 @@ namespace sim_interface {
         zmq::message_t reply;
         try {
             std::cout << "Receiving...Config " << std::endl;
-            socketSimSubConfig_.recv(&reply);
-        } catch (zmq::error_t cantReceive) {
+            socketSimSubConfig_.recv(reply, zmq::recv_flags::none);
+        } catch (zmq::error_t &cantReceive) {
             std::cerr << "Socket can't receive: " << cantReceive.what() << std::endl;
             // TODO unbind
         }
 
 
         const char *buf = static_cast<const char *>(reply.data());
-        //  std::cout << "CHAR [" << buf << "]" << std::endl;
+
         boost::property_tree::ptree tree;
 
 
@@ -119,10 +116,16 @@ namespace sim_interface {
         t << buf;
         std::string s = t.str();
         std::stringstream stringStream(s);
-        //  boost::archive::xml_iarchive xmlInputArchive(stringStream);
 
         // Parse the XML into the property tree.
-        boost::property_tree::read_xml(stringStream, tree);
+
+        try {
+            std::cout << "Receiving...Config " << std::endl;
+            boost::property_tree::read_xml(stringStream, tree);
+        } catch (std::exception &e) {
+            std::cerr << "XML in wrong format " << e.what() << std::endl;
+            // TODO (unbind) start Again (and break)
+        }
         std::string connectorTypeS;
         auto xmlWriterSettings = boost::property_tree::xml_writer_make_settings<std::string>(' ', 4);
         for (boost::property_tree::ptree::value_type &connector: tree.get_child("connectors")) {
@@ -148,8 +151,7 @@ namespace sim_interface {
                     std::istringstream xmliStringStream(xmlString);
 
                     ConfigSerializer::deserialize(xmliStringStream, "conn", &restConnectorConfig);
-                    //TODO REMOVE THIS
-                    ConfigSerializer::serialize("DasGehtSafeNicht.xml", "conn", restConnectorConfig);
+
 
                     // Create the REST connector
                     // Push into vector
@@ -207,10 +209,8 @@ namespace sim_interface {
                     std::istringstream xmliStringStream(xmlString);
 
                     sim_interface::dut_connector::can::CANConnectorConfig *canConnectorConfig;
-                    std::cout << "TEST " << xmlString << std::endl;
                     ConfigSerializer::deserialize(xmliStringStream, "conn", &canConnectorConfig);
-                    //TODO REMOVE THIS
-                    ConfigSerializer::serialize("DasGehtSafeNichtCAN.xml", "conn", canConnectorConfig);
+
 
                     CanConnectorVektor->push_back(canConnectorConfig);
                     break;
@@ -234,8 +234,7 @@ namespace sim_interface {
                     sim_interface::dut_connector::v2x::V2XConnectorConfig *V2XConnectorConfig;
 
                     ConfigSerializer::deserialize(xmliStringStream, "conn", &V2XConnectorConfig);
-                    //TODO REMOVE THIS
-                    ConfigSerializer::serialize("DasGehtSafeNichtV2X.xml", "conn", V2XConnectorConfig);
+
 
 
                     V2XConnectorVektor->push_back(V2XConnectorConfig);
@@ -261,7 +260,7 @@ namespace sim_interface {
             zmq::message_t reply;
             try {
                 std::cout << "Receiving... " << std::endl;
-                socketSimSub_.recv(&reply);
+                socketSimSub_.recv(reply, zmq::recv_flags::none);
 
             } catch (zmq::error_t cantReceive) {
                 std::cerr << "Socket can't receive: " << cantReceive.what() << std::endl;
@@ -274,11 +273,10 @@ namespace sim_interface {
             std::string input_data_(buf, reply.size());
             std::istringstream archive_stream(input_data_);
             boost::archive::text_iarchive archive(archive_stream);
-            std::map<std::string, boost::variant<int, double, std::string>> receiveMap, receiveMapDynamics;
+            std::map<std::string, boost::variant<int, double, std::string>> receiveMap;
 
             try {
                 archive >> receiveMap;
-                archive >> receiveMapDynamics;
             } catch (boost::archive::archive_exception &ex) {
                 std::cout << "Archive Exception during deserializing:" << std::endl;
                 std::cout << ex.what() << std::endl;
@@ -298,20 +296,6 @@ namespace sim_interface {
                 stringStreamValue << valueAsAny;
                 //TODO "Simulation Traci" würde man auch aus dem Archive bekommen vllt anpassen
                 SimEvent event(keyAsString, stringStreamValue.str(), "Simulation Traci");
-                sendEventToInterface(event);
-            }
-            for (auto const &element: receiveMapDynamics) {
-                keyVector.push_back(element.first);
-                valueVector.push_back(element.second);
-                std::string keyAsString = element.first;
-
-                auto valueAsAny = element.second;
-                std::stringstream stringStreamValue;
-                stringStreamValue << valueAsAny;
-                // std::cout << "KEY: " << keyAsString << std::endl;
-                //std::cout << "value: " << stringStreamValue.str() << std::endl;
-                //TODO "Simulation Traci" würde man auch aus dem Archive bekommen vllt anpassen
-                SimEvent event(keyAsString, stringStreamValue.str(), "Simulation Dynamics");
                 sendEventToInterface(event);
             }
         }
@@ -340,7 +324,7 @@ namespace sim_interface {
         // create buffer size for message
         zmq::message_t msgToSend(outbound_data);
 
-        socketSimPub_.send(msgToSend);
+        socketSimPub_.send(msgToSend, zmq::send_flags::none);
     }
 
     void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {

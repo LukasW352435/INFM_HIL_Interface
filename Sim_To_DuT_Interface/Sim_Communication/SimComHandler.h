@@ -64,7 +64,7 @@
 #include "../Utility/SharedQueue.h"
 #include "../SystemConfig.h"
 
-
+#include <exception>
 #include <memory>
 #include <string>
 #include <thread>
