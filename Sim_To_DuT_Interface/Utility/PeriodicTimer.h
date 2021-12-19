@@ -31,12 +31,18 @@
 #include "../Events/SimEvent.h"
 
 namespace sim_interface {
+    /**
+     * <summary>
+     * Timer to call given callback periodically with given event
+     * </summary>
+     */
     class PeriodicTimer {
     public:
         explicit PeriodicTimer(const std::shared_ptr<boost::asio::io_service> &io, int periodMs, SimEvent event,
                                std::function<void(const SimEvent &)> callback);
 
         void start();
+
         void stop();
 
     private:

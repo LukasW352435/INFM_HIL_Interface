@@ -53,7 +53,7 @@ namespace sim_interface {
 
 
     /**
-   * Global Variable:
+   * Global Variable because: socket doesn't work, if created in constructor
    * @param context_sub: Defines the context of the zmq socket
    */
     zmq::context_t context_sub(1);

@@ -39,7 +39,9 @@
 
 namespace sim_interface::dut_connector {
     /**
+     * <summary>
      * Connector implementing all kinds of DuT devices.
+     * </summary>
      * The different connectors should implement the protocol to communicate with a specific hardware DuT.
      * Used in the interface to send/receive events to/from the device.
      */
@@ -96,11 +98,10 @@ namespace sim_interface::dut_connector {
 
         void setupTimer(const SimEvent &simEvent);
 
-        void enablePeriodicSending(const std::string& operation, int periodMs);
+        void enablePeriodicSending(const std::string &operation, int periodMs);
 
         std::shared_ptr<boost::asio::io_service> io;
-        std::thread timerRunner;
-;
+        std::thread timerRunner;;
 
         std::set<std::string> processableOperations;
 

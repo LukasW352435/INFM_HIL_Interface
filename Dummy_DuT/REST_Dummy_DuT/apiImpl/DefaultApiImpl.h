@@ -37,6 +37,11 @@
 #include "RegisteredInterface.h"
 
 namespace dummy_dut::rest::impl {
+    /**
+     * <summary>
+     * Implementation of DefaultApi, providing the functionality described in the openAPI spec
+     * </summary>
+     */
     class DefaultApiImpl : dummy_dut::rest::api::DefaultApi {
     public:
         /**
@@ -48,7 +53,7 @@ namespace dummy_dut::rest::impl {
          */
 
 
-        explicit DefaultApiImpl(int port, std::set <std::string> operations);
+        explicit DefaultApiImpl(int port, std::set<std::string> operations);
 
         /**
          * Wait for all curl threads to finish, free all global curl resources
@@ -70,7 +75,7 @@ namespace dummy_dut::rest::impl {
          * @return Status code and HTML code (empty, if stub should set based on message defined in spec)
          */
         static std::pair<int, std::string>
-        dashboardPostHandler(DefaultApiImpl *instance, const std::shared_ptr <model::Message> &message);
+        dashboardPostHandler(DefaultApiImpl *instance, const std::shared_ptr<model::Message> &message);
 
         /**
          * Handler to send Server-Sent Events (SSE) to all open sessions
@@ -104,7 +109,7 @@ namespace dummy_dut::rest::impl {
          * @return Status code and HTML code (empty, if stub should set based on message defined in spec)
          */
         static std::pair<int, std::string>
-        sendMessageHandler(DefaultApiImpl *instance, const std::shared_ptr <dummy_dut::rest::model::Message> &message);
+        sendMessageHandler(DefaultApiImpl *instance, const std::shared_ptr<dummy_dut::rest::model::Message> &message);
 
         /**
          * Send given message to given url with an timeout of 5sec
@@ -119,10 +124,10 @@ namespace dummy_dut::rest::impl {
          */
         std::string getMessages();
 
-         /**
-          * Construct all options for the select dropdown to send messages
-          * @return HTML snippet containg valid select options
-          */
+        /**
+         * Construct all options for the select dropdown to send messages
+         * @return HTML snippet containg valid select options
+         */
         std::string getOperationOptions();
 
         /**
@@ -131,11 +136,11 @@ namespace dummy_dut::rest::impl {
          */
         std::string getDashboardPage();
 
-        std::set <std::string> operations;
+        std::set<std::string> operations;
         dummy_dut::rest::messages::InterfaceMessages interfaceMessages = {};
         dummy_dut::rest::impl::RegisteredInterface registeredInterfaces = {};
         struct curl_slist *curlJsonHeader = curl_slist_append(curlJsonHeader, "Content-Type: application/json");
-        std::vector <std::thread> curlThreads = std::vector<std::thread>();
+        std::vector<std::thread> curlThreads = std::vector<std::thread>();
     };
 }
 

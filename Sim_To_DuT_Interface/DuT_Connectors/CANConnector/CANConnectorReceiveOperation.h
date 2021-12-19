@@ -1,20 +1,30 @@
-/*******************************************************************************
- \project   INFM_HIL_Interface
- \file      CANConnectorReceiveOperation.h
- \brief     Contains the necessary information to configure a receive operation.
-            Used for the configuration of the CAN Connector.
- \author    Matthias Bank
- \version   1.0.0
- \date      27.11.2021
- ******************************************************************************/
+/**
+ * CAN Connector.
+ * The Connector enables the communication over a CAN/CANFD interface.
+ *
+ * Copyright (C) 2021 Matthias Bank
+ *
+ * This file is part of "Sim To DuT Interface".
+ *
+ * "Sim To DuT Interface" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * "Sim To DuT Interface" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with "Sim To DuT Interface". If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Matthias Bank
+ * @version 1.0
+ */
+
 #ifndef SIM_TO_DUT_INTERFACE_CANCONNECTORRECEIVEOPERATION_H
 #define SIM_TO_DUT_INTERFACE_CANCONNECTORRECEIVEOPERATION_H
-
-
-/*******************************************************************************
- * INCLUDES
- ******************************************************************************/
-// Project includes
 
 // System includes
 #include <string>
@@ -22,16 +32,18 @@
 #include <stdexcept>
 #include <linux/can.h>
 #include <linux/can/bcm.h>
-#include <iostream>
-/*******************************************************************************
- * CLASS DECLARATIONS
- ******************************************************************************/
-namespace sim_interface::dut_connector::can{
 
-    class CANConnectorReceiveOperation{
+namespace sim_interface::dut_connector::can {
+
+    /**
+     * <summary>
+     * Contains the necessary information to configure a receive operation for
+     * the configuration of the CAN Connector.
+     * </summary>
+     */
+    class CANConnectorReceiveOperation {
 
     public:
-        // Functions members
 
         /**
          * Constructor for an receive operation.
@@ -46,67 +58,15 @@ namespace sim_interface::dut_connector::can{
                                      bool isCANFD,
                                      bool hasMask,
                                      int maskLength = 0,
-                                     __u8* maskData = nullptr);
+                                     __u8 *maskData = nullptr);
 
-        // Data members
-        std::string operation;            /**< The operation name.            */
-        bool isCANFD;                     /**< Flag for CANFD frames.         */
-        bool hasMask;                     /**< Flag if a mask should be used. */
-        int maskLength;                   /**< The length of the mask data.   */
-        struct canfd_frame mask = {0};    /**< The mask that should be used.  */
-
-
-    private:
-
-
-
-
-        // Functions members
-
-        // Data members
-        /*
-     friend class boost::serialization::access;
-        template<class Archive>
-        void serialize(Archive & archive, const unsigned int version){
-     //       archive & BOOST_SERIALIZATION_NVP(operation);
-     //       archive & BOOST_SERIALIZATION_NVP(isCANFD);
-     //       archive & BOOST_SERIALIZATION_NVP(hasMask);
-     //       archive & BOOST_SERIALIZATION_NVP(maskLength);
-//
-     //     archive &  BOOST_SERIALIZATION_NVP(mask.can_id);
-     //     archive &  BOOST_SERIALIZATION_NVP(mask.len);
-     //     archive &  BOOST_SERIALIZATION_NVP(mask.flags);
-     //     archive &  BOOST_SERIALIZATION_NVP(mask.__res0);
-     //     archive &  BOOST_SERIALIZATION_NVP(mask.__res1);
-     //     archive &  BOOST_SERIALIZATION_NVP(mask.data);
-
-        }
-        template<class Archive>
-        inline void load_construct_data(Archive & archive, CANConnectorReceiveOperation * configPtr, const unsigned int version)
-        {     std::string _operation;
-              bool _isCANFD;
-              bool _hasMask;
-              int _maskLength;
-                __u8* _maskData  ;
-
-        //    archive >> BOOST_SERIALIZATION_NVP(_operation);
-        //    archive >>BOOST_SERIALIZATION_NVP (_isCANFD);
-        //    archive >> BOOST_SERIALIZATION_NVP(_hasMask);
-        //    archive >> BOOST_SERIALIZATION_NVP(_maskLength);
-        //    archive >> BOOST_SERIALIZATION_NVP(_maskData);
-//
-
-            ::new (configPtr) CANConnectorReceiveOperation ( _operation, _isCANFD,  _hasMask,
-                    _maskLength, _maskData );
-
-        }
-*/
+        std::string operation;            /**< The operation name.                                                       */
+        bool isCANFD;                     /**< Flag for CANFD frames.                                                    */
+        bool hasMask;                     /**< Flag if a mask should be used to filter for content changes in the frames.*/
+        int maskLength;                   /**< The length of the mask data.                                              */
+        struct canfd_frame mask = {0};    /**< The mask that should be used to filter for content changes in the frames. */
     };
 
 }
 
-
 #endif //SIM_TO_DUT_INTERFACE_CANCONNECTORRECEIVEOPERATION_H
-/*******************************************************************************
- * END OF FILE
- ******************************************************************************/

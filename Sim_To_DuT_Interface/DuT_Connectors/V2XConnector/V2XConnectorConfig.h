@@ -31,6 +31,12 @@
 
 
 namespace sim_interface::dut_connector::v2x {
+    /**
+     * <summary>
+     * Configuration for the V2XConnector,
+     * contains all necessary setup configuration to open a raw socket and send ethernet frames over it
+     * </summary>
+     */
     class V2XConnectorConfig : public ConnectorConfig {
     public:
         /**
@@ -43,7 +49,9 @@ namespace sim_interface::dut_connector::v2x {
         explicit V2XConnectorConfig(std::string ifname, unsigned short ethernetFrameType)
                 : ConnectorConfig({"V2X"},"V2X", {}, false),
                   ifname(std::move(ifname)), ethernetFrameType(ethernetFrameType) {
-            assert(!this->ifname.empty());
+            if (this->ifname.empty()) {
+                throw std::invalid_argument("ifname cannot be empty");
+            }
         }
 
         /**

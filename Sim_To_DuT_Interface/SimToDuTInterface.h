@@ -35,7 +35,9 @@ namespace sim_interface {
     class SimComHandler;
 
     /**
+     * <summary>
      * An interface between a simulation and multiple DuT devices.
+     * </summary>
      */
     class SimToDuTInterface {
     public:

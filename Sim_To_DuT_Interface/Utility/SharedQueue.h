@@ -31,8 +31,10 @@
 
 namespace sim_interface {
     /**
+     * <summary>
      * A thread save shared queue to communicate between multiple threads.
      * The queue is a FIFO queue.
+     * </summary>
      */
     template<class T>
     class SharedQueue {

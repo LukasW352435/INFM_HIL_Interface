@@ -154,9 +154,11 @@ private:
 };
 
 
-//
-// The restbed service to actually implement the REST server
-//
+///
+/// <summary>
+/// The restbed service to actually implement the REST server
+/// </summary>
+///
 class  DefaultApi: public restbed::Service
 {
 public:

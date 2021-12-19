@@ -29,6 +29,11 @@
 #include "Message.h"
 
 namespace dummy_dut::rest::messages {
+    /**
+     * <summary>
+     * A single message received from the interface enriched with the timestamp of reception
+     * </summary>
+     */
     class MessageWithTimestamp : dummy_dut::rest::model::Message {
     public:
         /**

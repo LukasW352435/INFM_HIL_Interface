@@ -34,6 +34,11 @@
 #include "V2XConnectorConfig.h"
 
 namespace sim_interface::dut_connector::v2x {
+    /**
+     * <summary>
+     * Connector to a V2X network interface, opens a raw socket and passes received packages to simulation
+     * </summary>
+     */
     class V2XConnector : public DuTConnector {
 
     public:
@@ -43,7 +48,11 @@ namespace sim_interface::dut_connector::v2x {
          * @param queueDuTToSim queue to write received SimEvents to
          * @param config Configuration of connector containing params (Context Params from Cube Board)
          */
-        explicit V2XConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim, const V2XConnectorConfig &config);
+        explicit V2XConnector(std::shared_ptr<SharedQueue < SimEvent>>
+
+        queueDuTToSim,
+        const V2XConnectorConfig &config
+        );
 
         /**
          * Deconstructor stopping ioService and waiting for thread to join

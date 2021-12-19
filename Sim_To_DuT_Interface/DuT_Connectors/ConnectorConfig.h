@@ -29,27 +29,35 @@
 #include <set>
 #include <map>
 #include <string>
-#include <boost/archive/xml_oarchive.hpp>
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/serialization/set.hpp>
-#include <boost/serialization/map.hpp>
-#include <cassert>
+#include <stdexcept>
 
 namespace sim_interface::dut_connector {
+    /**
+     * <summary>
+     * Configuration for a single DuTConnector
+     * </summary>
+     * Base class of the Configs for any connector.
+     * Supported operations and operations to be repeated with corresponding intervals,
+     * as well as if a software timer is needed can be configured.
+     */
     class ConnectorConfig {
-    private:
-
     public:
-        explicit ConnectorConfig(std::set<std::string> operations, std::string connectorType, std::map<std::string, int> periodicOperations = {}, bool periodicTimerEnabled = false)
-        : operations(std::move(operations)), connectorType(connectorType), periodicOperations(std::move(periodicOperations)), periodicTimerEnabled(periodicTimerEnabled) {
-
-            assert(!this->operations.empty()); // Set of operations cannot be empty
-            for(const auto& periodicOperation : this->periodicOperations) {
-                assert(this->operations.find(periodicOperation.first) != this->operations.end()); // Periodic operation not found in operations
+        explicit ConnectorConfig(std::set<std::string> operations, std::string connectorType, std::map<std::string, int> periodicOperations = {},
+                                 bool periodicTimerEnabled = false)
+                : operations(std::move(operations)), connectorType(connectorType), periodicOperations(std::move(periodicOperations)),
+                  periodicTimerEnabled(periodicTimerEnabled) {
+            if (this->operations.empty()) {
+                throw std::invalid_argument("Set of operations cannot be empty");
+            }
+            for (const auto &periodicOperation: this->periodicOperations) {
+                if (this->operations.find(periodicOperation.first) == this->operations.end()) {
+                  throw std::invalid_argument("Periodic operation not found in operations");
+                };
             }
         };
-        virtual ~ConnectorConfig() = default;
 
+        /** Default destructor */
+        virtual ~ConnectorConfig() = default;
 
         /** Set of processable operations */
         std::set<std::string> operations{};
@@ -60,9 +68,9 @@ namespace sim_interface::dut_connector {
         /** Enable periodic timer on Connector level */
         bool periodicTimerEnabled = false;
 
+        /** Name of connector type */
         std::string connectorType;
     };
-
 }
 
 

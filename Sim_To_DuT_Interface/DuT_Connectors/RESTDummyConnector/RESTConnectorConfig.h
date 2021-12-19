@@ -29,29 +29,31 @@
 #include <string>
 #include <utility>
 #include "../ConnectorConfig.h"
-#include <boost/archive/xml_oarchive.hpp>
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/serialization/set.hpp>
-#include <boost/serialization/map.hpp>
-namespace sim_interface::dut_connector::rest_dummy {
-    class  RESTConnectorConfig : public ConnectorConfig {
-    private:
 
+namespace sim_interface::dut_connector::rest_dummy {
+    /**
+     * <summary>
+     * Configuration for the RESTDummyConnector,
+     * contains all necessary setup configuration to connect to DuT and receive messages from it
+     * </summary>
+     */
+    class RESTConnectorConfig : public ConnectorConfig {
     public:
-         RESTConnectorConfig(std::string baseUrlDuT, std::string baseCallbackUrl, int port,
-                                     std::set<std::string> operations, std::map<std::string, int> periodicOperations = {},
+        explicit RESTConnectorConfig(std::string baseUrlDuT, std::string baseCallbackUrl, int port,
+                                     std::set<std::string> operations,
+                                     std::map<std::string, int> periodicOperations = {},
                                      bool periodicTimerEnabled = false)
                 : ConnectorConfig(std::move(operations),"RESTConnectorConfig", std::move(periodicOperations), periodicTimerEnabled),
                   baseUrlDuT(std::move(baseUrlDuT)), baseCallbackUrl(std::move(baseCallbackUrl)), port(port) {
-           assert(!this->baseUrlDuT.empty()); // url cannot be empty
-           assert(!this->baseCallbackUrl.empty()); // url cannot be empty
-           assert(this->port > 0); // ports are only valid > 0
+            if (this->baseUrlDuT.empty()) {
+                throw std::invalid_argument("baseUrlDuT cannot be empty");
+            }
+            if (this->baseCallbackUrl.empty())
+                throw std::invalid_argument("baseCallbackUrl cannot be empty");
+            if (this->port <= 0) {
+                throw std::invalid_argument("ports are only valid > 0");
+            }
         }
-
-
-
-
-
 
         /**
          * Base URL of DuT to send to

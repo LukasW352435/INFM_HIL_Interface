@@ -57,7 +57,7 @@ void EventVisitor::replaceAll(std::string &str, const std::string &fromThis, con
 
     // if the string contains the part which should be replaced, there will be work for us.
     // we have to do this, for every appearance of 'fromThis'
-    while((index = str.find(fromThis, index)) != std::string::npos) {
+    while ((index = str.find(fromThis, index)) != std::string::npos) {
         str.replace(index, fromThis.length(), toThis);
 
         // increase the index, so we don't always handle the same part

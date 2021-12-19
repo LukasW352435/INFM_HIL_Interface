@@ -47,6 +47,9 @@ namespace sim_interface {
     };
 
     /**
+     * <summary>
+     * Logger to log to file, console and as structured data csv
+     * </summary>
      * This logger is a tool with specialized functions to log and store messages for all elements of the
      * Sim_To_DuT_Interface. The logger and all of it's functions are static so it's not necessary to create instances
      * of the logger to write a message. Please notice that the logger has to be initialised in a first call by a valid
@@ -78,7 +81,7 @@ namespace sim_interface {
          * into a logfile if the file logger accepts the log level. If you explicitly don't want to log this message into the
          * logfile, please use the function below.
          *
-         * @see void InterfaceLogger::logMessage(std::string msg, LOG_LEVEL level, bool doNotWriteIntoFile)
+         * @see void InterfaceLogger::logMessage(const std::string &msg, LOG_LEVEL level, bool writeToFile)
          * @param msg message that should be logged
          * @param level the logging level for this message
          */

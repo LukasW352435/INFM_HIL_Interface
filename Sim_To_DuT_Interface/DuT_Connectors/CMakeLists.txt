@@ -6,7 +6,6 @@ add_subdirectory(RESTDummyConnector)
 add_subdirectory(V2XConnector)
 
 
-
 target_sources(libs
         PRIVATE
         DuTConnector.cpp

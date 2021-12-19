@@ -30,13 +30,18 @@
 #include "MessageWithTimestamp.h"
 
 namespace dummy_dut::rest::messages {
+    /**
+     * <summary>
+     * Manages all messages received from the interface
+     * </summary>
+     */
     class InterfaceMessages {
     public:
         /**
          * Adds the given message to the end of the list
          * @param message Message to add to list
          */
-         void addMessage(MessageWithTimestamp message);
+        void addMessage(MessageWithTimestamp message);
 
         /**
          * Returns the list of messages

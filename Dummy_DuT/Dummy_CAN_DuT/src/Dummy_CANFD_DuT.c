@@ -40,7 +40,7 @@ volatile int keepRunning = 1; // Keep running till CTRL + F is pressed
  *
  * @param signumber Signal number which occurred
  */
-static void handleTerminationSignal(int signumber){
+static void handleTerminationSignal(int signumber) {
 
     // Stop the application
     keepRunning = 0;
@@ -53,15 +53,15 @@ static void handleTerminationSignal(int signumber){
  * @param frame    - Storage for the generated frame
  * @param socketFD - The socket file descriptor
  */
-int shutdownHandler(int retCode, void *frame, int socketFD){
+int shutdownHandler(int retCode, void *frame, int socketFD) {
 
     // Free the frame memory
-    if(frame != NULL){
+    if (frame != NULL) {
         free(frame);
     }
 
     // Close the socket
-    if(socketFD != -1){
+    if (socketFD != -1) {
         close(socketFD);
     }
 
@@ -74,16 +74,16 @@ int shutdownHandler(int retCode, void *frame, int socketFD){
  * @param buffer     - The buffer containing the hex values
  * @param bufferSize - The size of the buffer
  */
-void printHexBuffer(unsigned char *const buffer, int bufferSize){
+void printHexBuffer(unsigned char *const buffer, int bufferSize) {
 
-    for(int index = 0; index < bufferSize; index++){
+    for (int index = 0; index < bufferSize; index++) {
         printf("%x", buffer[index]);
     }
 
     printf("\n");
 }
 
-int main(){
+int main() {
 
     struct sigaction sigAction;                     // Signal action for CTRL + F
 
@@ -102,13 +102,13 @@ int main(){
     // Process termination signal for CTRL + F
     sigAction.sa_handler = handleTerminationSignal;
 
-    if(sigaction(SIGINT, &sigAction, NULL) < 0){
+    if (sigaction(SIGINT, &sigAction, NULL) < 0) {
         printf("Setting signal handler for SIGINT failed \n");
         shutdownHandler(ERR_SIGACTION_FAILED, frame, socketFD);
     }
 
     // Set up the socket
-    if(setupSocket(&socketFD, &socketAddr) != 0){
+    if (setupSocket(&socketFD, &socketAddr) != 0) {
         printf("Error could not setup the socket \n");
         shutdownHandler(ERR_SETUP_FAILED, frame, socketFD);
     }
@@ -116,16 +116,16 @@ int main(){
     printf("Setup the socket on the interface %s\n", INTERFACE);
 
     // Check which mode is selected and set values accordingly
-    if(CANFD){
+    if (CANFD) {
         frameSize = CANFD_MTU;
         frame = malloc(frameSize);
-    }else{
+    } else {
         frameSize = CAN_MTU;
         frame = malloc(frameSize);
     }
 
     // Error handling
-    if(frame == NULL){
+    if (frame == NULL) {
         printf("Error could not allocate memory \n");
         shutdownHandler(ERR_MALLOC_FAILED, frame, socketFD);
     }
@@ -133,9 +133,9 @@ int main(){
     // Send Receive Loop
     printf("\n### Starting receive-send loop: ### \n\n");
 
-    while(keepRunning){
+    while (keepRunning) {
 
-        if(VERBOSE){
+        if (VERBOSE) {
             printf("Blocking on receive! \n");
         }
 
@@ -143,34 +143,34 @@ int main(){
         numbytes = recv(socketFD, frame, frameSize, 0);
 
         // Error handling:
-        if(numbytes == -1){
+        if (numbytes == -1) {
             perror("Error recv failed");
             shutdownHandler(ERR_RECV_FAILED, frame, socketFD);
-        }else if(numbytes != CAN_MTU && numbytes != CANFD_MTU){
+        } else if (numbytes != CAN_MTU && numbytes != CANFD_MTU) {
             printf("Error received bytes are not equal to the size of a complete CAN/CANFD frame \n");
             shutdownHandler(ERR_RECV_FAILED, frame, socketFD);
         }
 
         // Get the ID and set the new ID
-        if(CANFD){
-            struct canfd_frame *canfdFrame = (struct canfd_frame*) frame;
+        if (CANFD) {
+            struct canfd_frame *canfdFrame = (struct canfd_frame *) frame;
             recvID = canfdFrame->can_id;
             canfdFrame->can_id = FRAMEID;
-        }else{
-            struct can_frame *canFrame = (struct can_frame*) frame;
+        } else {
+            struct can_frame *canFrame = (struct can_frame *) frame;
             recvID = canFrame->can_id;
             canFrame->can_id = FRAMEID;
         }
 
-        if(VERBOSE){
+        if (VERBOSE) {
 
             // Get the payload and payload size
-            if(CANFD){
-                struct canfd_frame *canfdFrame = (struct canfd_frame*) frame;
+            if (CANFD) {
+                struct canfd_frame *canfdFrame = (struct canfd_frame *) frame;
                 recvPayloadSize = canfdFrame->len;
                 memcpy(buf, canfdFrame->data, canfdFrame->len);
-            }else{
-                struct can_frame *canFrame = (struct can_frame*) frame;
+            } else {
+                struct can_frame *canFrame = (struct can_frame *) frame;
                 recvPayloadSize = canFrame->can_dlc;
                 memcpy(buf, canFrame->data, canFrame->can_dlc);
             }
@@ -184,15 +184,15 @@ int main(){
         numbytes = send(socketFD, frame, frameSize, 0);
 
         // Error handling:
-        if(numbytes == -1){
+        if (numbytes == -1) {
             perror("Error sendto failed");
             shutdownHandler(ERR_SEND_FAILED, frame, socketFD);
-        }else if(numbytes != CAN_MTU && numbytes != CANFD_MTU){
+        } else if (numbytes != CAN_MTU && numbytes != CANFD_MTU) {
             printf("Error send bytes are not equal to the size of a complete CAN/CANFD frame \n");
             shutdownHandler(ERR_SEND_FAILED, frame, socketFD);
         }
 
-        if(VERBOSE){
+        if (VERBOSE) {
             printf("Sent %d bytes total with ID 0x%x and %d bytes payload: \n", numbytes, FRAMEID, recvPayloadSize);
             printHexBuffer(buf, recvPayloadSize);
         }
