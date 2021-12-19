@@ -23,6 +23,7 @@
  */
 
 #include "InterfaceLogger.h"
+#include <iomanip>
 
 namespace sim_interface {
     std::string InterfaceLogger::CSV_HEADER = "Operation,Value,Origin,Timestamp";
