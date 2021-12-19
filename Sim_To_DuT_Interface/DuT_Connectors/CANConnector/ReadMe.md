@@ -26,31 +26,20 @@ options [SocketCAN documentation](https://www.kernel.org/doc/Documentation/netwo
 | periodicOperations   | Since the CAN Connector is handling the cyclic sending of frames itself this should always be empty.    |
 | periodicTimerEnabled | Since the CAN Connector is handling the cyclic sending of frames itself this should always be false.    |
 
-The structure of the CAN Connector Config is described
-here [CANConnectorConfig](https://lukasw352435.github.io/INFM_HIL_Interface/classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorConfig.html)
-.
+- The structure of the CAN Connector Config is described here [CANConnectorConfig](https://lukasw352435.github.io/INFM_HIL_Interface/classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorConfig.html).
 
-The structure of a send operation is described
-here [CANConnectorSendOperation](https://lukasw352435.github.io/INFM_HIL_Interface/classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorSendOperation.html)
-.
+- The structure of a send operation is described here [CANConnectorSendOperation](https://lukasw352435.github.io/INFM_HIL_Interface/classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorSendOperation.html).
 
-The structure of a receive operation is described
-here [CANConnectorReceiveOperation](https://lukasw352435.github.io/INFM_HIL_Interface/classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorReceiveOperation.html)
-.
+- The structure of a receive operation is described here [CANConnectorReceiveOperation](https://lukasw352435.github.io/INFM_HIL_Interface/classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorReceiveOperation.html).
 
 ## Codec
-
 Since the translation of simulation messages (SimEvents) and CAN/CANFD frames is complex and is also dependend on the
 DuT, this cannot be practical specified in the XML configuration file. The user must therfore implement a concret Codec
 class that handles this translation task and add it as an option in the Codec factory.
 
-The Codec interface is described
-here [CANConnectorCodec](https://lukasw352435.github.io/INFM_HIL_Interface/classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorCodec.html)
-.
+- The Codec interface is described here [CANConnectorCodec](https://lukasw352435.github.io/INFM_HIL_Interface/classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorCodec.html).
 
-The Codec factory is described
-here [CANConnectorCodecFactory](https://lukasw352435.github.io/INFM_HIL_Interface/classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorCodecFactory.html)
-.
+- The Codec factory is described here [CANConnectorCodecFactory](https://lukasw352435.github.io/INFM_HIL_Interface/classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorCodecFactory.html).
 
 ## Testing
 To test the CAN Connector you can use a virtual CAN interface. Ensure that you have the needed SocketCAN Kernel modules.
