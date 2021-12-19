@@ -51,7 +51,7 @@ int main(const int, const char **) {
     std::cout << "Reading config from " << path << std::endl;
     std::ifstream file(path + "/config");
     std::set<std::string> operations(std::istream_iterator<Line>{file}, std::istream_iterator<Line>{});
-    for (const auto& op: operations) {
+    for (const auto &op: operations) {
         std::cout << "OP: " << op << std::endl;
     }
 

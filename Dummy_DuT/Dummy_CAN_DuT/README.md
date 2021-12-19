@@ -1,9 +1,10 @@
 # Dummy_CAN_DuT
-This dummy application is a simple "echo server" that builds upon SocketCAN. 
-It sends received CAN/CANFD frames back with a different CAN ID. 
-The dummy keeps running till it is terminated with "CTRL + C". 
+
+This dummy application is a simple "echo server" that builds upon SocketCAN. It sends received CAN/CANFD frames back
+with a different CAN ID. The dummy keeps running till it is terminated with "CTRL + C".
 
 ## Configuration
+
 The following parameters can be changed in the Dummy_CANFD_Config.h file:
 | Parameter   | Description                                                  |
 | ----------- | -------------------------------------------------------------|
@@ -13,6 +14,7 @@ The following parameters can be changed in the Dummy_CANFD_Config.h file:
 | VERBOSE     | Enables output to the console during the receive-send loop   |
 
 ## Example
+
 To test the dummy you can use a virtual CAN interface:
 
 ```
@@ -45,8 +47,10 @@ cansend vcan0 123#DEADBEEF
 ```
 
 ## Documentation
+
 For further information look at the [documentation](https://mab0189.github.io/Dummy_CAN_DuT/index.html).
 
 ## Helpful links
+
 - [SocketCAN documentation](https://www.kernel.org/doc/Documentation/networking/can.txt)
 - [SocketCAN userspace utilities and tools](https://github.com/linux-can/can-utils)

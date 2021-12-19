@@ -36,7 +36,7 @@ namespace dummy_dut::rest::messages {
          * Adds the given message to the end of the list
          * @param message Message to add to list
          */
-         void addMessage(MessageWithTimestamp message);
+        void addMessage(MessageWithTimestamp message);
 
         /**
          * Returns the list of messages

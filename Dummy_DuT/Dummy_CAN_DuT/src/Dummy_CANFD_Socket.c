@@ -28,13 +28,13 @@
  * FUNCTION DEFINITIONS
  ******************************************************************************/
 
-int setupSocket(int *const socketFD, struct sockaddr_can *const addr){
+int setupSocket(int *const socketFD, struct sockaddr_can *const addr) {
 
     // Get the socket file descriptor for ioctl
     *socketFD = socket(PF_CAN, SOCK_RAW, CAN_RAW);
 
     // Error handling
-    if(*socketFD == -1){
+    if (*socketFD == -1) {
         perror("Error getting socket file descriptor failed");
         return ERR_SOCKET_FAILED;
     }
@@ -44,27 +44,27 @@ int setupSocket(int *const socketFD, struct sockaddr_can *const addr){
     snprintf(ifr.ifr_name, sizeof(ifr.ifr_name), "%s", INTERFACE);
 
     // Get the ifrindex of the interface name
-    if(ioctl(*socketFD, SIOCGIFINDEX, &ifr) < 0){
+    if (ioctl(*socketFD, SIOCGIFINDEX, &ifr) < 0) {
         printf("Error could not get ifrindex: %s\n", strerror(errno));
         return ERR_IF_NOT_FOUND;
     }
 
     // Fill in the family and ifrindex
-    addr->can_family  = AF_CAN;
+    addr->can_family = AF_CAN;
     addr->can_ifindex = ifr.ifr_ifindex;
 
     // Bind to the socket
-    if(bind(*socketFD, (struct sockaddr *) addr, sizeof(struct sockaddr_can)) != 0){
+    if (bind(*socketFD, (struct sockaddr *) addr, sizeof(struct sockaddr_can)) != 0) {
         perror("Error could not bind to the socket");
         close(*socketFD);
         return ERR_SETUP_FAILED;
     }
 
     // Check if CANFD frame support should be enabled
-    if(CANFD){
+    if (CANFD) {
 
         int can_raw_fd_frames = 1;
-        if(setsockopt(*socketFD, SOL_CAN_RAW, CAN_RAW_FD_FRAMES, &can_raw_fd_frames, sizeof(can_raw_fd_frames)) != 0){
+        if (setsockopt(*socketFD, SOL_CAN_RAW, CAN_RAW_FD_FRAMES, &can_raw_fd_frames, sizeof(can_raw_fd_frames)) != 0) {
             perror("Error setsockopt CAN_RAW_FD_FRAMES failed");
             close(*socketFD);
             return ERR_SETSOCKOPT_FAILED;
