@@ -1,23 +1,17 @@
 # CAN Connector
-
 The CAN Connector enables the communication between the simulation and a device under test (DuT) over CAN/CANFD. It
 supports one-time sending of frames as well as a cyclic sending of frames. It can be configured which frames should be
-received on the CAN/CANFD interface and it can also filter for content changes in the frames.
-
-The CAN Connector is not responsible for the configuration of the used CAN/CANFD interface (Bitrate, Sample point etc.)
-as this is dependent on the used hardware. The user must therefore ensure that the interface is configured correctly for
-the communication with the DuT.
-
-The CAN Connector builds upon the Broadcast Manager (BCM) socket of the Linux Kernel Module SocketCAN and the Boost.Asio
-network library as well as the INFM_HIL_Interface.
+received on the CAN/CANFD interface and it can also filter for content changes in the frames. The CAN Connector is not 
+responsible for the configuration of the used CAN/CANFD interface (Bitrate, Sample point etc.) as this is dependent on 
+the used hardware. The user must therefore ensure that the interface is configured correctly for the communication with 
+the DuT. The CAN Connector builds upon the Broadcast Manager (BCM) socket of the Linux Kernel Module SocketCAN and 
+the Boost.Asio network library as well as the INFM_HIL_Interface.
 
 ## Dependencies
-
 - SocketCAN
 - Boost.Asio
 
 ## Configuration
-
 The CAN Connector is configured through a XML configuration file which contains the following options. It is also
 recommended to the read the BCM socket documentation to fully understand the details of the
 options [SocketCAN documentation](https://www.kernel.org/doc/Documentation/networking/can.txt).
@@ -59,7 +53,6 @@ here [CANConnectorCodecFactory](https://lukasw352435.github.io/INFM_HIL_Interfac
 .
 
 ## Testing
-
 To test the CAN Connector you can use a virtual CAN interface. Ensure that you have the needed SocketCAN Kernel modules.
 
 ```
@@ -87,7 +80,6 @@ cansend vcan0 123#DEADBEEF
 ```
 
 ## Helpful links:
-
 - [Base Connector](https://lukasw352435.github.io/INFM_HIL_Interface/md_Sim_To_DuT_Interface_DuT_Connectors_ReadMe.html)
 - [SocketCAN documentation](https://www.kernel.org/doc/Documentation/networking/can.txt)
 - [Boost.Asio documentation](https://www.boost.org/doc/libs/1_75_0/doc/html/boost_asio.html)

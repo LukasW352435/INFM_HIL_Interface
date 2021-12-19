@@ -36,11 +36,11 @@
 namespace sim_interface::dut_connector::can {
 
     /**
-    * <summary>
-    * Contains the necessary information to configure a receive operation for
-    * the configuration of the CAN Connector.
-    * </summary>
-    */
+     * <summary>
+     * Contains the necessary information to configure a receive operation for
+     * the configuration of the CAN Connector.
+     * </summary>
+     */
     class CANConnectorReceiveOperation {
 
     public:

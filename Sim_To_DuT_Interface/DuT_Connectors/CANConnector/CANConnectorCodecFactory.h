@@ -42,21 +42,21 @@
 namespace sim_interface::dut_connector::can {
 
     /**
-    * <summary>
-    * Creates the requested CAN codec.
-    * </summary>
-    */
+     * <summary>
+     * Creates the requested CAN codec.
+     * </summary>
+     */
     class CANConnectorCodecFactory {
 
     public:
 
         /**
-        * Creates the requested CAN codec.
-        *
-        * @param codecName - The name of the codec that should be created.
-        *
-        * @return The CAN codec.
-        */
+         * Creates the requested CAN codec.
+         *
+         * @param codecName - The name of the codec that should be created.
+         *
+         * @return The CAN codec.
+         */
         static CANConnectorCodec *createCodec(const std::string &codecName);
     };
 

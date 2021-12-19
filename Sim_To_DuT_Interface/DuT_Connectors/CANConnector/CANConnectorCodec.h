@@ -37,21 +37,21 @@
 namespace sim_interface::dut_connector::can {
 
     /**
-    * <summary>
-    * The CAN Connector Codec defines the interface that each codec implementation must fulfill.
-    * </summary>
-    */
+     * <summary>
+     * The CAN Connector Codec defines the interface that each codec implementation must fulfill.
+     * </summary>
+     */
     class CANConnectorCodec {
 
     public:
 
         /**
-        * Converts an simulation event to a CAN/CANFD payload and determines the sendOperation name.
-        *
-        * @param event - The simulation event we want to transform into a CAN/CANFD frame payload.
-        *
-        * @return The CAN/CANFD frame payload and the sendOperation name.
-        */
+         * Converts an simulation event to a CAN/CANFD payload and determines the sendOperation name.
+         *
+         * @param event - The simulation event we want to transform into a CAN/CANFD frame payload.
+         *
+         * @return The CAN/CANFD frame payload and the sendOperation name.
+         */
         virtual std::pair<std::vector<__u8>, std::string> convertSimEventToFrame(SimEvent event) = 0;
 
         /**
