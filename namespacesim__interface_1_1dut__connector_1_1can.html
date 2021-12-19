@@ -76,6 +76,7 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1BmwCodec.html">BmwCodec</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements the Codec for the BMW DuT.  <a href="classsim__interface_1_1dut__connector_1_1can_1_1BmwCodec.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html">CANConnector</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Connector enables the communication over a CAN/CANFD interface. It builds upon the socketCAN BCM socket and boost::asio.  <a href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html#details">More...</a><br /></td></tr>
@@ -87,7 +88,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the requested CAN codec.  <a href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorCodecFactory.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorConfig.html">CANConnectorConfig</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The config for the <a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnector.html" title="The Connector enables the communication over a CAN/CANFD interface. It builds upon the socketCAN BCM ...">CANConnector</a>.  <a href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorConfig.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The config for the CAN Connector.  <a href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorConfig.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorReceiveOperation.html">CANConnectorReceiveOperation</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains the necessary information to configure a receive operation for the configuration of the CAN Connector.  <a href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorReceiveOperation.html#details">More...</a><br /></td></tr>
@@ -96,6 +97,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains the necessary information to configure a send operation for the configuration of the CAN Connector.  <a href="classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorSendOperation.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1CodecUtilities.html">CodecUtilities</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements some utilities for the codecs.  <a href="classsim__interface_1_1dut__connector_1_1can_1_1CodecUtilities.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1dut__connector_1_1can_1_1InterfaceIndexIO.html">InterfaceIndexIO</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">I/O control command class for getting the interface index. For further information see boost asio io_control.  <a href="classsim__interface_1_1dut__connector_1_1can_1_1InterfaceIndexIO.html#details">More...</a><br /></td></tr>
@@ -119,11 +121,33 @@ Classes</h2></td></tr>
 <dl class="section author"><dt>Author</dt><dd>Marco Keul </dd>
 <dd>
 Matthias Bank </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>1.0</dd></dl>
+<p>CAN Connector. The Connector enables the communication over a CAN/CANFD interface.</p>
+<p >Copyright (C) 2021 Matthias Bank</p>
+<p >This file is part of "Sim To DuT Interface".</p>
+<p >"Sim To DuT Interface" is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+<p >"Sim To DuT Interface" is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+<p >You should have received a copy of the GNU General Public License along with "Sim To DuT Interface". If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
+<dl class="section author"><dt>Author</dt><dd>Marco Keul </dd>
+<dd>
+Lukas Wagenlehner </dd>
+<dd>
+Matthias Bank </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>1.0</dd></dl>
+<p>CAN Connector. The Connector enables the communication over a CAN/CANFD interface.</p>
+<p >Copyright (C) 2021 Matthias Bank</p>
+<p >This file is part of "Sim To DuT Interface".</p>
+<p >"Sim To DuT Interface" is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+<p >"Sim To DuT Interface" is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+<p >You should have received a copy of the GNU General Public License along with "Sim To DuT Interface". If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
+<dl class="section author"><dt>Author</dt><dd>Matthias Bank </dd>
+<dd>
+Marco Keul </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>1.0 </dd></dl>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Dec 19 2021 14:30:42 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+Generated on Sun Dec 19 2021 15:10:41 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
 </small></address>
 </body>
 </html>
