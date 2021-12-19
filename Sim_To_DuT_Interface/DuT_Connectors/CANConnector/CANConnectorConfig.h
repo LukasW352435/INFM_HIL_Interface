@@ -41,10 +41,10 @@
 namespace sim_interface::dut_connector::can {
 
     /**
-    * <summary>
-    * The config for the CANConnector.
-    * </summary>
-    */
+     * <summary>
+     * The config for the CAN Connector.
+     * </summary>
+     */
     class CANConnectorConfig : public ConnectorConfig {
 
     public:

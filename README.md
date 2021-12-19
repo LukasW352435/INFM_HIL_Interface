@@ -2,7 +2,7 @@
 Interface between the Artery V2X Simulation Framework and DuT (Device under Test).  
 The interface supports standards like:
 
-- CAN
+- CAN/CANFD
 - V2X
 - REST (for debugging / monitoring purposes)
 
