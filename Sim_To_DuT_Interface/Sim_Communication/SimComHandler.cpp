@@ -25,17 +25,6 @@
 
 #include "SimComHandler.h"
 
-#include <utility>
-#include <zmq.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/archive/binary_iarchive.hpp>
-
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/serialization/map.hpp>
-#include <boost/serialization/variant.hpp>
-
 namespace sim_interface {
     zmq::context_t context_sub(1);
 
@@ -69,9 +58,48 @@ namespace sim_interface {
     }
 
     void SimComHandler::run() {
-        // TODO async receive events from the Simulation and send them to the interface
+        threadSimComHandler = std::thread(&SimComHandler::receiveEventsFromSimulation, this);
+    }
 
-        while (1) {
+    void SimComHandler::sendEventToSim(const SimEvent &simEvent) {
+        //BOYS hier müssen wir hin
+        // TODO implementation of sending an event to the simulation
+        std::cout << "Async Sending of Event..." << std::endl;
+        std::cout << simEvent << "lol";
+        // Send it off to any subscribers
+        std::cout << "Waiting to Send " << std::endl;
+
+        // std::map<std::string , boost::variant<int, double, std::string, std::time_t>> simEventMap;
+        //Not working with curreent time
+        std::map<std::string, boost::variant<int, double, std::string>> simEventMap;
+        simEventMap["Operation"] = simEvent.operation;
+        simEventMap["Value"] = boost::apply_visitor(EventVisitor(), simEvent.value);
+        simEventMap["Origin"] = simEvent.origin;
+        simEventMap["Current"] = simEvent.current;
+        //serialize map
+        std::ostringstream ss;
+        boost::archive::text_oarchive archive(ss);
+        archive << simEventMap;
+        std::string outbound_data = ss.str();
+        // create buffer size for message
+        zmq::message_t msgToSend(outbound_data);
+
+        socketSimPub_.send(msgToSend);
+    }
+
+    void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
+        InterfaceLogger::logEvent(simEvent);
+        queueSimToInterface->push(simEvent);
+    }
+
+    SimComHandler::~SimComHandler() {
+        // TODO Cleanup ZMQ and end the communication
+        stopThreads = false;
+        threadSimComHandler.join();
+    }
+
+    void SimComHandler::receiveEventsFromSimulation() {
+        while (stopThreads) {
             zmq::message_t reply;
             try {
                 std::cout << "Receiving... " << std::endl;
@@ -117,41 +145,4 @@ namespace sim_interface {
             }
         }
     }
-
-    void SimComHandler::sendEventToSim(const SimEvent &simEvent) {
-        //BOYS hier müssen wir hin
-        // TODO implementation of sending an event to the simulation
-        std::cout << "Async Sending of Event..." << std::endl;
-        std::cout << simEvent << "lol";
-        // Send it off to any subscribers
-        std::cout << "Waiting to Send " << std::endl;
-
-        // std::map<std::string , boost::variant<int, double, std::string, std::time_t>> simEventMap;
-        //Not working with curreent time
-        std::map<std::string, boost::variant<int, double, std::string>> simEventMap;
-        simEventMap["Operation"] = simEvent.operation;
-        simEventMap["Value"] = boost::apply_visitor(EventVisitor(), simEvent.value);
-        simEventMap["Origin"] = simEvent.origin;
-        simEventMap["Current"] = simEvent.current;
-        //serialize map
-        std::ostringstream ss;
-        boost::archive::text_oarchive archive(ss);
-        archive << simEventMap;
-        std::string outbound_data = ss.str();
-        // create buffer size for message
-        zmq::message_t msgToSend(outbound_data);
-
-        socketSimPub_.send(msgToSend);
-    }
-
-    void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
-        InterfaceLogger::logEvent(simEvent);
-        queueSimToInterface->push(simEvent);
-    }
-
-    SimComHandler::~SimComHandler() {
-        // TODO end zmq, etc.
-    }
-
-
 }

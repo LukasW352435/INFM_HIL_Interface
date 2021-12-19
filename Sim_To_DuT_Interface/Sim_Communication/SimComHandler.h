@@ -43,6 +43,15 @@
 #include <zmq.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/variant.hpp>
+#include <utility>
+#include <zmq.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/serialization/variant.hpp>
 
 namespace sim_interface {
     /**
@@ -78,9 +87,13 @@ namespace sim_interface {
         // send an event to the interface
         void sendEventToInterface(const SimEvent &simEvent);
 
+        void receiveEventsFromSimulation();
+
         zmq::socket_t socketSimSub_;
         zmq::socket_t socketSimPub_;
         zmq::context_t context_test;
+        std::thread threadSimComHandler;
+        bool stopThreads = true;
 
         // used by sendEventToInterface
         std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface;
