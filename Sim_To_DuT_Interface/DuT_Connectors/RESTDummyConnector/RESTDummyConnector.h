@@ -42,7 +42,8 @@ namespace sim_interface::dut_connector::rest_dummy {
          * @param queueDuTToSim queue to write received SimEvents to
          * @param config Configuration of connector containing urls, port and supported operations
          */
-        explicit RESTDummyConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim, const RESTConnectorConfig &config);
+        explicit RESTDummyConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim,
+                                    const RESTConnectorConfig &config);
 
         /**
          * Deconstructor freeing curl resource

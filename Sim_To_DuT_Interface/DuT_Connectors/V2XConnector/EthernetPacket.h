@@ -43,7 +43,7 @@ namespace sim_interface::dut_connector::v2x {
          *
          * @param text_archive boost::archive string containing sourceMAC, destinationMAC, length of payload and payload
          */
-        explicit EthernetPacket(const std::string& text_archive);
+        explicit EthernetPacket(const std::string &text_archive);
 
         /**
          * Create an ethernet packet from the raw received data (extract source and destination MAC)
@@ -70,6 +70,7 @@ namespace sim_interface::dut_connector::v2x {
          * @return vector of bytes
          */
         std::vector<unsigned char> toBytes(unsigned short ethernetFrameType);
+
     private:
         /**
          * source MAC of ethernet header

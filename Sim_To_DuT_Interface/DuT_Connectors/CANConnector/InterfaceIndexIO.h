@@ -26,7 +26,7 @@
 /*******************************************************************************
  * CLASS DECLARATIONS
  ******************************************************************************/
-class InterfaceIndexIO{
+class InterfaceIndexIO {
 
 public:
 
@@ -49,7 +49,7 @@ public:
     *
     * @return The ifreq with the name
     */
-    void* data();
+    void *data();
 
     /**
     * Returns the resolved interface index.

@@ -31,7 +31,7 @@
 #include "EthernetPacket.h"
 
 namespace sim_interface::dut_connector::v2x {
-    EthernetPacket::EthernetPacket(const std::string& text_archive) {
+    EthernetPacket::EthernetPacket(const std::string &text_archive) {
         int payload_length;
         try {
             std::stringstream ss(text_archive);
@@ -45,7 +45,9 @@ namespace sim_interface::dut_connector::v2x {
                 payload.push_back(byte);
             }
         } catch (boost::archive::archive_exception &_) {
-            InterfaceLogger::logMessage("V2XConnector: EthernetPacket: Couldn't construct packet, malformed text_archive.", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage(
+                    "V2XConnector: EthernetPacket: Couldn't construct packet, malformed text_archive.",
+                    LOG_LEVEL::ERROR);
         }
     }
 
@@ -62,8 +64,7 @@ namespace sim_interface::dut_connector::v2x {
         ar << sourceMAC;
         ar << destinationMAC;
         ar << payload.size();
-        for (const auto& byte : payload)
-        {
+        for (const auto &byte: payload) {
             ar << byte;
         }
         return ss.str();
@@ -73,10 +74,10 @@ namespace sim_interface::dut_connector::v2x {
         std::vector<unsigned char> bytes;
         auto sourceMACBytes = getBytesOfHexEncodedMAC(sourceMAC);
         auto destinationMACBytes = getBytesOfHexEncodedMAC(destinationMAC);
-        for (unsigned char & byte : destinationMACBytes) {
+        for (unsigned char &byte: destinationMACBytes) {
             bytes.push_back(byte);
         }
-        for (unsigned char & byte : sourceMACBytes) {
+        for (unsigned char &byte: sourceMACBytes) {
             bytes.push_back(byte);
         }
         bytes.push_back((unsigned char) ethernetFrameType >> 8);
@@ -89,7 +90,7 @@ namespace sim_interface::dut_connector::v2x {
         if (rawData.size() < sizeof(ethhdr)) {
             return;
         }
-        auto header = (struct ethhdr *)(rawData.data());
+        auto header = (struct ethhdr *) (rawData.data());
         sourceMAC = getHexEncodedMAC(header->h_source);
         destinationMAC = getHexEncodedMAC(header->h_dest);
     }
@@ -98,8 +99,8 @@ namespace sim_interface::dut_connector::v2x {
         std::stringstream hex;
         hex << std::hex;
         for (int i = 0; i < ETH_ALEN; i++) {
-            hex << std::setw(2) << std::setfill('0') << (int)bytes[i];
-            if (ETH_ALEN - i >  1) {
+            hex << std::setw(2) << std::setfill('0') << (int) bytes[i];
+            if (ETH_ALEN - i > 1) {
                 hex << ':';
             }
         }
@@ -108,15 +109,16 @@ namespace sim_interface::dut_connector::v2x {
 
     std::vector<unsigned char> EthernetPacket::getBytesOfHexEncodedMAC(std::string hex) {
         if (hex.length() != ETH_ALEN * 2 + ETH_ALEN - 1) {
-            InterfaceLogger::logMessage("V2XConnector: EthernetPacket: Wrong length for hex string, required length is 2*ETH_ALEN + ETH_ALEN - 1", LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage(
+                    "V2XConnector: EthernetPacket: Wrong length for hex string, required length is 2*ETH_ALEN + ETH_ALEN - 1",
+                    LOG_LEVEL::ERROR);
             return {0, 0, 0, 0, 0, 0};
         }
         std::replace(hex.begin(), hex.end(), ':', ' ');
         std::istringstream hex_stream(hex);
         std::vector<unsigned char> bytes;
         unsigned int c;
-        while (hex_stream >> std::hex >> c)
-        {
+        while (hex_stream >> std::hex >> c) {
             bytes.push_back(c);
         }
         return bytes;

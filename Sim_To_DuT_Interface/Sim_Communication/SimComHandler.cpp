@@ -38,8 +38,10 @@
 
 namespace sim_interface {
     zmq::context_t context_sub(1);
-    SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig& config)
-            : queueSimToInterface(std::move(queueSimToInterface)),  socketSimPub_(context_sub,zmq::socket_type::pub), socketSimSub_(context_sub,zmq::socket_type::sub){
+
+    SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig &config)
+            : queueSimToInterface(std::move(queueSimToInterface)), socketSimPub_(context_sub, zmq::socket_type::pub),
+              socketSimSub_(context_sub, zmq::socket_type::sub) {
 
         // zmq Subscriber
         std::string socketSimAddressSub = config.socketSimAddressSub;
@@ -50,8 +52,8 @@ namespace sim_interface {
         zmq::context_t context_pub(1);
 
         // Create Sockets
-      //  socketSimSub_ = zmq::socket_t(context_sub, zmq::socket_type::sub);
-      //  socketSimPub_ = zmq::socket_t(context_pub, zmq::socket_type::pub);
+        //  socketSimSub_ = zmq::socket_t(context_sub, zmq::socket_type::sub);
+        //  socketSimPub_ = zmq::socket_t(context_pub, zmq::socket_type::pub);
 
         // Config Sockets
         socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
@@ -80,35 +82,34 @@ namespace sim_interface {
                 // TODO unbind
             }
 
-            const char *buf = static_cast<const char*>(reply.data());
+            const char *buf = static_cast<const char *>(reply.data());
             std::cout << "CHAR [" << buf << "]" << std::endl;
 
-            std::string input_data_( buf, reply.size() );
+            std::string input_data_(buf, reply.size());
             std::istringstream archive_stream(input_data_);
             boost::archive::text_iarchive archive(archive_stream);
-            std::map <std::string, boost::variant<int, double, std::string>> receiveMap;
+            std::map<std::string, boost::variant<int, double, std::string>> receiveMap;
 
-            try
-            {
+            try {
                 archive >> receiveMap;
-            } catch (boost::archive::archive_exception& ex) {
+            } catch (boost::archive::archive_exception &ex) {
                 std::cout << "Archive Exception during deserializing:" << std::endl;
                 std::cout << ex.what() << std::endl;
             } catch (int e) {
                 std::cout << "EXCEPTION " << e << std::endl;
             }
-            std::cout << "Value " << receiveMap["Speed"]<< std::endl;
+            std::cout << "Value " << receiveMap["Speed"] << std::endl;
             //  std::string test  = receiveMap["Speed"].which();
             std::vector<std::string> keyVector;
             std::vector<boost::variant<int, double, std::string>> valueVector;
-            for (auto const& element: receiveMap) {
+            for (auto const &element: receiveMap) {
                 keyVector.push_back(element.first);
                 valueVector.push_back(element.second);
                 std::string keyAsString = element.first;
 
-                auto valueAsAny =   element.second;
-                std::stringstream stringStreamValue ;
-                stringStreamValue <<  valueAsAny;
+                auto valueAsAny = element.second;
+                std::stringstream stringStreamValue;
+                stringStreamValue << valueAsAny;
 
                 std::cout << "value: " << stringStreamValue.str() << std::endl;
                 SimEvent event(keyAsString, stringStreamValue.str(), "Simulation");
@@ -122,16 +123,16 @@ namespace sim_interface {
         // TODO implementation of sending an event to the simulation
         std::cout << "Async Sending of Event..." << std::endl;
         std::cout << simEvent << "lol";
-            // Send it off to any subscribers
+        // Send it off to any subscribers
         std::cout << "Waiting to Send " << std::endl;
 
-       // std::map<std::string , boost::variant<int, double, std::string, std::time_t>> simEventMap;
-       //Not working with curreent time
-        std::map<std::string , boost::variant<int, double, std::string>> simEventMap;
+        // std::map<std::string , boost::variant<int, double, std::string, std::time_t>> simEventMap;
+        //Not working with curreent time
+        std::map<std::string, boost::variant<int, double, std::string>> simEventMap;
         simEventMap["Operation"] = simEvent.operation;
-        simEventMap["Value"]     = boost::apply_visitor(EventVisitor(), simEvent.value);
-        simEventMap["Origin"]    = simEvent.origin;
-        simEventMap["Current"]   = simEvent.current;
+        simEventMap["Value"] = boost::apply_visitor(EventVisitor(), simEvent.value);
+        simEventMap["Origin"] = simEvent.origin;
+        simEventMap["Current"] = simEvent.current;
         //serialize map
         std::ostringstream ss;
         boost::archive::text_oarchive archive(ss);

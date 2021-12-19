@@ -67,7 +67,7 @@ int main() {
 
     // Create DuT Devices
 
-    
+
     // Create the REST connector
     sim_interface::dut_connector::rest_dummy::RESTConnectorConfig config("http://localhost:9090",
                                                                          "http://172.17.0.1",
@@ -172,11 +172,11 @@ int main() {
 
     // Example sendOperation Config for the 0x275 GESCHWINDIGKEIT CAN frame
     struct bcm_timeval ival1Geschwindigkeit = {0};
-    ival1Geschwindigkeit.tv_sec  = 0;
+    ival1Geschwindigkeit.tv_sec = 0;
     ival1Geschwindigkeit.tv_usec = 0;
 
     struct bcm_timeval ival2Geschwindigkeit = {0};
-    ival2Geschwindigkeit.tv_sec  = 3;
+    ival2Geschwindigkeit.tv_sec = 3;
     ival2Geschwindigkeit.tv_usec = 0;
 
     sim_interface::dut_connector::can::CANConnectorSendOperation sendOperationGeschwindigkeit(
@@ -191,30 +191,30 @@ int main() {
 
     // Example sendOperation Config for the 0x273 GPS_LOCA CAN frame
     struct bcm_timeval ival1GPS_LOCA = {0};
-    ival1GPS_LOCA.tv_sec  = 0;
+    ival1GPS_LOCA.tv_sec = 0;
     ival1GPS_LOCA.tv_usec = 0;
 
-    struct bcm_timeval ival2GPS_LOCA= {0};
-    ival2GPS_LOCA.tv_sec  = 4;
+    struct bcm_timeval ival2GPS_LOCA = {0};
+    ival2GPS_LOCA.tv_sec = 4;
     ival2GPS_LOCA.tv_usec = 0;
 
     sim_interface::dut_connector::can::CANConnectorSendOperation sendOperationGPS_LOCA{
-        0x273,
-        false,
-        true,
-        false,
-        0,
-        ival1GPS_LOCA,
-        ival2GPS_LOCA
+            0x273,
+            false,
+            true,
+            false,
+            0,
+            ival1GPS_LOCA,
+            ival2GPS_LOCA
     };
 
     // Example sendOperation Config for the 0x274 GPS_LOCB CAN frame
     struct bcm_timeval ival1GPS_LOCB = {0};
-    ival1GPS_LOCB.tv_sec  = 0;
+    ival1GPS_LOCB.tv_sec = 0;
     ival1GPS_LOCB.tv_usec = 0;
 
-    struct bcm_timeval ival2GPS_LOCB= {0};
-    ival2GPS_LOCB.tv_sec  = 4;
+    struct bcm_timeval ival2GPS_LOCB = {0};
+    ival2GPS_LOCB.tv_sec = 4;
     ival2GPS_LOCB.tv_usec = 0;
 
     sim_interface::dut_connector::can::CANConnectorSendOperation sendOperationGPS_LOCB{
@@ -229,43 +229,43 @@ int main() {
 
     // Example sendOperation Config for the 0x279 LICHTER CAN frame
     struct bcm_timeval ival1Lichter = {0};
-    ival1Lichter.tv_sec  = 0;
+    ival1Lichter.tv_sec = 0;
     ival1Lichter.tv_usec = 0;
 
-    struct bcm_timeval ival2Lichter= {0};
-    ival2Lichter.tv_sec  = 4;
+    struct bcm_timeval ival2Lichter = {0};
+    ival2Lichter.tv_sec = 4;
     ival2Lichter.tv_usec = 0;
 
     sim_interface::dut_connector::can::CANConnectorSendOperation sendOperationLichter{
-        0x279,
-        false,
-        true,
-        false,
-        0,
-        ival1Lichter,
-        ival2Lichter
+            0x279,
+            false,
+            true,
+            false,
+            0,
+            ival1Lichter,
+            ival2Lichter
     };
 
     // CAN Connector Send Config
     std::map<std::string, sim_interface::dut_connector::can::CANConnectorSendOperation> operationToFrame = {
             {"GESCHWINDIGKEIT", sendOperationGeschwindigkeit},
-            {"GPS_LOCA", sendOperationGPS_LOCA},
-            {"GPS_LOCB", sendOperationGPS_LOCB},
-            {"LICHTER", sendOperationLichter}
+            {"GPS_LOCA",        sendOperationGPS_LOCA},
+            {"GPS_LOCB",        sendOperationGPS_LOCB},
+            {"LICHTER",         sendOperationLichter}
     };
 
     sim_interface::dut_connector::can::CANConnectorConfig canConfig(
             "vcan0",
             "BmwCodec",
             {
-                "Speed_Dynamics",
-                "YawRate_Dynamics",
-                "Acceleration_Dynamics",
-                "Longitude_Dynamics",
-                "Latitude_Dynamics",
-                "Position_Z-Coordinate_DUT",
-                "Heading_Dynamics"
-                },
+                    "Speed_Dynamics",
+                    "YawRate_Dynamics",
+                    "Acceleration_Dynamics",
+                    "Longitude_Dynamics",
+                    "Latitude_Dynamics",
+                    "Position_Z-Coordinate_DUT",
+                    "Heading_Dynamics"
+            },
             frameToOperation,
             operationToFrame,
             {},
@@ -281,7 +281,7 @@ int main() {
     //interface.getQueueSimToInterface()->push(sim_interface::SimEvent("Latitude_Dynamics",4.0,"TEST"));
 
     //+++++ End CAN Connector +++++
-    
+
 
     std::cout << interface << std::endl;
 

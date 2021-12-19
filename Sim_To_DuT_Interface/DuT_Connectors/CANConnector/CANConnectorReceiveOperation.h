@@ -27,9 +27,9 @@
 /*******************************************************************************
  * CLASS DECLARATIONS
  ******************************************************************************/
-namespace sim_interface::dut_connector::can{
+namespace sim_interface::dut_connector::can {
 
-    class CANConnectorReceiveOperation{
+    class CANConnectorReceiveOperation {
 
     public:
         // Functions members
@@ -47,14 +47,15 @@ namespace sim_interface::dut_connector::can{
                                      bool isCANFD,
                                      bool hasMask,
                                      int maskLength = 0,
-                                     __u8* maskData = nullptr);
+                                     __u8 *maskData = nullptr);
 
         // Data members
         std::string operation;            /**< The operation name.                                                       */
         bool isCANFD;                     /**< Flag for CANFD frames.                                                    */
         bool hasMask;                     /**< Flag if a mask should be used to filter for content changes in the frames.*/
         int maskLength;                   /**< The length of the mask data.                                              */
-        struct canfd_frame mask = {0};    /**< The mask that should be used to filter for content changes in the frames. */
+        struct canfd_frame mask = {
+                0};    /**< The mask that should be used to filter for content changes in the frames. */
 
     private:
         // Functions members

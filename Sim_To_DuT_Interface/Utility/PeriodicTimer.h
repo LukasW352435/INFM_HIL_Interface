@@ -37,6 +37,7 @@ namespace sim_interface {
                                std::function<void(const SimEvent &)> callback);
 
         void start();
+
         void stop();
 
     private:

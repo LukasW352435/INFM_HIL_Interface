@@ -20,9 +20,9 @@
 /*******************************************************************************
  * FUNCTION DEFINITIONS
  ******************************************************************************/
-namespace sim_interface::dut_connector::can{
+namespace sim_interface::dut_connector::can {
 
-    bool CodecUtilities::checkBigEndianness(){
+    bool CodecUtilities::checkBigEndianness() {
 
         // Note: If the project is upgraded from C++17 to C++20
         // one could have also used std::endian instead.
@@ -32,33 +32,33 @@ namespace sim_interface::dut_connector::can{
         uint16_t testNumberInHostOrder = 0x1122;
         uint16_t testNumberInBigEndian = htons(testNumberInHostOrder);
 
-        if(testNumberInHostOrder == testNumberInBigEndian){
+        if (testNumberInHostOrder == testNumberInBigEndian) {
             return true;
-        }else{
+        } else {
             return false;
         }
 
     }
 
-    int16_t CodecUtilities::convertEndianness(int16_t number){
+    int16_t CodecUtilities::convertEndianness(int16_t number) {
 
         uint8_t data[2] = {0};
         std::memcpy(&data, &number, sizeof(data));
 
         // Swap the first and the second byte.
-        return ( ((uint16_t) data[1] << 0) | ((uint16_t) data[0] << 8) );
+        return (((uint16_t) data[1] << 0) | ((uint16_t) data[0] << 8));
     }
 
-    uint16_t CodecUtilities::convertEndianness(uint16_t number){
+    uint16_t CodecUtilities::convertEndianness(uint16_t number) {
 
         uint8_t data[2] = {0};
         std::memcpy(&data, &number, sizeof(data));
 
         // Swap the first and the second byte.
-        return ( ((uint16_t) data[1] << 0) | ((uint16_t) data[0] << 8) );
+        return (((uint16_t) data[1] << 0) | ((uint16_t) data[0] << 8));
     }
 
-    int32_t CodecUtilities::convertEndianness(int32_t number){
+    int32_t CodecUtilities::convertEndianness(int32_t number) {
 
         uint8_t data[4] = {0};
         std::memcpy(&data, &number, sizeof(data));
@@ -66,10 +66,11 @@ namespace sim_interface::dut_connector::can{
         // Swap the:
         // - first and the fourth byte
         // - swap the second and the third byte
-        return (((uint32_t) data[3] << 0) | ((uint32_t) data[2] << 8) | ((uint32_t) data[1] << 16) | ((uint32_t) data[0] << 24));
+        return (((uint32_t) data[3] << 0) | ((uint32_t) data[2] << 8) | ((uint32_t) data[1] << 16) |
+                ((uint32_t) data[0] << 24));
     }
 
-    uint32_t CodecUtilities::convertEndianness(uint32_t number){
+    uint32_t CodecUtilities::convertEndianness(uint32_t number) {
 
         uint8_t data[4] = {0};
         std::memcpy(&data, &number, sizeof(data));
@@ -77,10 +78,11 @@ namespace sim_interface::dut_connector::can{
         // Swap the:
         // - first and the fourth byte
         // - swap the second and the third byte
-        return (((uint32_t) data[3] << 0) | ((uint32_t) data[2] << 8) | ((uint32_t) data[1] << 16) | ((uint32_t) data[0] << 24));
+        return (((uint32_t) data[3] << 0) | ((uint32_t) data[2] << 8) | ((uint32_t) data[1] << 16) |
+                ((uint32_t) data[0] << 24));
     }
 
-    uint64_t CodecUtilities::convertEndianness(uint64_t number){
+    uint64_t CodecUtilities::convertEndianness(uint64_t number) {
 
         uint8_t data[8] = {0};
         std::memcpy(&data, &number, sizeof(data));
@@ -90,8 +92,10 @@ namespace sim_interface::dut_connector::can{
         // - second and the seventh byte.
         // - third and the sixth byte
         // - fourth and the fifth byte
-        return (((uint64_t) data[7] << 0) | ((uint64_t) data[6] << 8) | ((uint64_t) data[5] << 16) | ((uint64_t) data[4] << 24) |
-                ((uint64_t) data[3] << 32) | ((uint64_t) data[2] << 40) | ((uint64_t) data[1] << 48) | ((uint64_t) data[0] << 56));
+        return (((uint64_t) data[7] << 0) | ((uint64_t) data[6] << 8) | ((uint64_t) data[5] << 16) |
+                ((uint64_t) data[4] << 24) |
+                ((uint64_t) data[3] << 32) | ((uint64_t) data[2] << 40) | ((uint64_t) data[1] << 48) |
+                ((uint64_t) data[0] << 56));
     }
 
 }

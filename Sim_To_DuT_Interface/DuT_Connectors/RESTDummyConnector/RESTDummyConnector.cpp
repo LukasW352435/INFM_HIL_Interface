@@ -77,9 +77,12 @@ namespace sim_interface::dut_connector::rest_dummy {
             curl_easy_cleanup(handle);
         }
         if (responseCode == 200) {
-            InterfaceLogger::logMessage("RESTDummyConnector: Successfully sent event " + e.operation + " to DuT", LOG_LEVEL::DEBUG);
+            InterfaceLogger::logMessage("RESTDummyConnector: Successfully sent event " + e.operation + " to DuT",
+                                        LOG_LEVEL::DEBUG);
         } else {
-            InterfaceLogger::logMessage("RESTDummyConnector: Error on sending event, HTTP-Code: " + std::to_string(responseCode), LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage(
+                    "RESTDummyConnector: Error on sending event, HTTP-Code: " + std::to_string(responseCode),
+                    LOG_LEVEL::ERROR);
         }
     }
 
@@ -113,7 +116,9 @@ namespace sim_interface::dut_connector::rest_dummy {
         } else if (responseCode == 208) {
             InterfaceLogger::logMessage("RESTDummyConnector: Receiving of events was already enabled", LOG_LEVEL::INFO);
         } else {
-            InterfaceLogger::logMessage("RESTDummyConnector: Error on enabling receive, HTTP-Code: " + std::to_string(responseCode), LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage(
+                    "RESTDummyConnector: Error on enabling receive, HTTP-Code: " + std::to_string(responseCode),
+                    LOG_LEVEL::ERROR);
         }
     }
 
@@ -136,11 +141,14 @@ namespace sim_interface::dut_connector::rest_dummy {
         if (responseCode == 200) {
             InterfaceLogger::logMessage("RESTDummyConnector: Receiving of events disabled", LOG_LEVEL::INFO);
         } else {
-            InterfaceLogger::logMessage("RESTDummyConnector: Error on disabling receive, HTTP-Code: " + std::to_string(responseCode), LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage(
+                    "RESTDummyConnector: Error on disabling receive, HTTP-Code: " + std::to_string(responseCode),
+                    LOG_LEVEL::ERROR);
         }
     }
 
     std::string RESTDummyConnector::EventToRESTMessage(const SimEvent &e) {
-        return R"({"key":")" + e.operation + R"(","status":")" + boost::apply_visitor(EventVisitor(), e.value) + R"("})";
+        return R"({"key":")" + e.operation + R"(","status":")" + boost::apply_visitor(EventVisitor(), e.value) +
+               R"("})";
     }
 }

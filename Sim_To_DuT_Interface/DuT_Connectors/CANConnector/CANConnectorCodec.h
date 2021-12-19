@@ -26,9 +26,9 @@
 /*******************************************************************************
  * CLASS DECLARATIONS
  ******************************************************************************/
-namespace sim_interface::dut_connector::can{
+namespace sim_interface::dut_connector::can {
 
-    class CANConnectorCodec{
+    class CANConnectorCodec {
 
     public:
         // Function members
