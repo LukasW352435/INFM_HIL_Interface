@@ -55,9 +55,6 @@
  *
 **/
 
-
-
-
 #include "../Events/SimEvent.h"
 #include "../SystemConfig.h"
 #include "../SimToDuTInterface.h"
@@ -192,8 +189,7 @@ namespace sim_interface {
         * Serialize the deserialized xml-config for testing
         * add the RestConnectorConfig Pointer to the Vector
         */
-        void
-        getConfig();
+        void getConfig();
 
 
 
@@ -219,6 +215,12 @@ namespace sim_interface {
 
         void run();
 
+        void unbind();
+
+        void disconnect();
+
+        void close();
+
 
     private:
         /**
@@ -237,6 +239,9 @@ namespace sim_interface {
         zmq::socket_t socketSimSub_;
         zmq::socket_t socketSimPub_;
         zmq::socket_t socketSimSubConfig_;
+        std::string socketSimAddressSub;
+        std::string socketSimAddressPub;
+        std::string socketSimAddressReceiverConfig;
         std::thread simComHandlerThread;
         bool stopThread = true;
 
