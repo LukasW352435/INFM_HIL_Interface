@@ -51,7 +51,9 @@
 #define MAXFRAMES 256
 
 /**
+ * <summary>
  * Struct for a BCM message with a single CAN frame.
+ * </summary>
  */
 struct bcmMsgSingleFrameCan {
     struct bcm_msg_head msg_head;
@@ -59,7 +61,9 @@ struct bcmMsgSingleFrameCan {
 };
 
 /**
+ * <summary>
  * Struct for a BCM message with a single CANFD frame.
+ * </summary>
  */
 struct bcmMsgSingleFrameCanFD {
     struct bcm_msg_head msg_head;
@@ -67,7 +71,9 @@ struct bcmMsgSingleFrameCanFD {
 };
 
 /**
+ * <summary>
  * Struct for a BCM message with multiple CAN frames.
+ * </summary>
  */
 struct bcmMsgMultipleFramesCan {
     struct bcm_msg_head msg_head;
@@ -75,7 +81,9 @@ struct bcmMsgMultipleFramesCan {
 };
 
 /**
+ * <summary>
  * Struct for a BCM message with multiple CANFD frames.
+ * </summary>
  */
 struct bcmMsgMultipleFramesCanFD {
     struct bcm_msg_head msg_head;
