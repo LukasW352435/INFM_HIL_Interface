@@ -46,7 +46,8 @@ namespace sim_interface::dut_connector::can {
         std::memcpy(&data, &number, sizeof(data));
 
         // Swap the first and the second byte.
-        return (((uint16_t) data[1] << 0) | ((uint16_t) data[0] << 8));
+        return (((uint16_t) data[1] << 0) |
+                ((uint16_t) data[0] << 8));
     }
 
     uint16_t CodecUtilities::convertEndianness(uint16_t number) {
@@ -66,7 +67,9 @@ namespace sim_interface::dut_connector::can {
         // Swap the:
         // - first and the fourth byte
         // - swap the second and the third byte
-        return (((uint32_t) data[3] << 0) | ((uint32_t) data[2] << 8) | ((uint32_t) data[1] << 16) |
+        return (((uint32_t) data[3] << 0) |
+                ((uint32_t) data[2] << 8) |
+                ((uint32_t) data[1] << 16) |
                 ((uint32_t) data[0] << 24));
     }
 
@@ -78,7 +81,9 @@ namespace sim_interface::dut_connector::can {
         // Swap the:
         // - first and the fourth byte
         // - swap the second and the third byte
-        return (((uint32_t) data[3] << 0) | ((uint32_t) data[2] << 8) | ((uint32_t) data[1] << 16) |
+        return (((uint32_t) data[3] << 0) |
+                ((uint32_t) data[2] << 8) |
+                ((uint32_t) data[1] << 16) |
                 ((uint32_t) data[0] << 24));
     }
 
@@ -92,9 +97,13 @@ namespace sim_interface::dut_connector::can {
         // - second and the seventh byte.
         // - third and the sixth byte
         // - fourth and the fifth byte
-        return (((uint64_t) data[7] << 0) | ((uint64_t) data[6] << 8) | ((uint64_t) data[5] << 16) |
+        return (((uint64_t) data[7] << 0) |
+                ((uint64_t) data[6] << 8) |
+                ((uint64_t) data[5] << 16) |
                 ((uint64_t) data[4] << 24) |
-                ((uint64_t) data[3] << 32) | ((uint64_t) data[2] << 40) | ((uint64_t) data[1] << 48) |
+                ((uint64_t) data[3] << 32) |
+                ((uint64_t) data[2] << 40) |
+                ((uint64_t) data[1] << 48) |
                 ((uint64_t) data[0] << 56));
     }
 
