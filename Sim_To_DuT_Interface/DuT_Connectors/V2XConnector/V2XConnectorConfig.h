@@ -47,7 +47,7 @@ namespace sim_interface::dut_connector::v2x {
          * @param ethernetFrameType two bytes to set the ethernet frame type with
          */
         explicit V2XConnectorConfig(std::string ifname, unsigned short ethernetFrameType)
-                : ConnectorConfig({"V2X"},"V2X", {}, false),
+                : ConnectorConfig({"V2X"}, {}, false),
                   ifname(std::move(ifname)), ethernetFrameType(ethernetFrameType) {
             if (this->ifname.empty()) {
                 throw std::invalid_argument("ifname cannot be empty");

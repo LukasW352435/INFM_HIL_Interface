@@ -144,8 +144,8 @@ namespace sim_interface {
                         interface->addConnector(restConnector);
                     }
 
-                    catch (...) {
-
+                    catch (std::exception &e) {
+                        InterfaceLogger::logMessage(e.what(), LOG_LEVEL::ERROR);
                     }
 
 
@@ -202,8 +202,8 @@ namespace sim_interface {
                         interface->addConnector(CANConnector);
                     }
 
-                    catch (...) {
-
+                    catch (std::exception &e) {
+                        InterfaceLogger::logMessage(e.what(), LOG_LEVEL::ERROR);
                     }
 
                     break;
@@ -231,8 +231,8 @@ namespace sim_interface {
                         interface->addConnector(V2XConnector);
                     }
 
-                    catch (...) {
-
+                    catch (std::exception &e) {
+                        InterfaceLogger::logMessage(e.what(), LOG_LEVEL::ERROR);
                     }
 
                     break;

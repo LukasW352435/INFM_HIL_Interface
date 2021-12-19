@@ -184,7 +184,7 @@ namespace boost::serialization {
         ar >> boost::serialization::make_nvp("periodicOperations", _periodicOperations);
         ar >> boost::serialization::make_nvp("periodicTimerEnabled", _periodicTimerEnabled);
 
-        ::new(instance)sim_interface::dut_connector::ConnectorConfig(_operations, "ConnectorConfig",
+        ::new(instance)sim_interface::dut_connector::ConnectorConfig(_operations,
                                                                      _periodicOperations,
                                                                      _periodicTimerEnabled);
     }

@@ -43,7 +43,7 @@ namespace sim_interface::dut_connector::rest_dummy {
                                      std::set<std::string> operations,
                                      std::map<std::string, int> periodicOperations = {},
                                      bool periodicTimerEnabled = false)
-                : ConnectorConfig(std::move(operations),"RESTConnectorConfig", std::move(periodicOperations), periodicTimerEnabled),
+                : ConnectorConfig(std::move(operations), std::move(periodicOperations), periodicTimerEnabled),
                   baseUrlDuT(std::move(baseUrlDuT)), baseCallbackUrl(std::move(baseCallbackUrl)), port(port) {
             if (this->baseUrlDuT.empty()) {
                 throw std::invalid_argument("baseUrlDuT cannot be empty");
