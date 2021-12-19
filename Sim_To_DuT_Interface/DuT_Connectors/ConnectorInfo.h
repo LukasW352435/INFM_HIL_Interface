@@ -30,7 +30,9 @@
 
 namespace sim_interface::dut_connector {
     /**
+     * <summary>
      * Some basic information about the connector device.
+     * </summary>
      */
     class ConnectorInfo {
     public:

@@ -33,6 +33,11 @@
 #include "../../Events/SimEvent.h"
 
 namespace sim_interface::dut_connector::rest_dummy {
+    /**
+     * <summary>
+     * restbed REST resource describing the methods and paths the endpoint can process
+     * </summary>
+     */
     class ReceiveApiResource : public restbed::Resource {
     public:
         /**
@@ -64,6 +69,11 @@ namespace sim_interface::dut_connector::rest_dummy {
         std::function<void(const SimEvent &)> eventToSimCallback;
     };
 
+    /**
+     * <summary>
+     * restbed REST endpoint offering methods and paths described in @see{ReceiveApiResource}
+     * </summary>
+     */
     class ReceiveEndpoint : public restbed::Service {
     public:
         /**

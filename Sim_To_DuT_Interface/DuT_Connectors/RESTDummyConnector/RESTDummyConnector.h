@@ -33,6 +33,11 @@
 #include <thread>
 
 namespace sim_interface::dut_connector::rest_dummy {
+    /**
+     * <summary>
+     * Connector to interface between this interface (and in extension the simulation) and the RESTDummyDuT
+     * </summary>
+     */
     class RESTDummyConnector : public DuTConnector {
 
     public:

@@ -37,6 +37,11 @@
 #include "RegisteredInterface.h"
 
 namespace dummy_dut::rest::impl {
+    /**
+     * <summary>
+     * Implementation of DefaultApi, providing the functionality described in the openAPI spec
+     * </summary>
+     */
     class DefaultApiImpl : dummy_dut::rest::api::DefaultApi {
     public:
         /**

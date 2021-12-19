@@ -40,7 +40,9 @@
 
 namespace sim_interface {
     /**
+     * <summary>
      * Event object used to communicate between simulation and DuTs.
+     * </summary>
      */
     class SimEvent {
     public:
