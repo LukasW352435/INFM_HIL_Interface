@@ -36,24 +36,27 @@
 /*******************************************************************************
  * FUNCTION DEFINITIONS
  ******************************************************************************/
-namespace sim_interface::dut_connector::can{
+namespace sim_interface::dut_connector::can {
 
-    CANConnectorCodec* CANConnectorCodecFactory::createCodec(const std::string &codecName){
+    CANConnectorCodec *CANConnectorCodecFactory::createCodec(const std::string &codecName) {
 
         // Check if the codec name is empty
-        if(codecName.empty()){
+        if (codecName.empty()) {
             InterfaceLogger::logMessage("CAN Connector: Codec name can not be empty", LOG_LEVEL::ERROR);
             throw std::invalid_argument("CAN Connector: Codec name can not be empty");
         }
 
         // Create the right codec based on the given codec name.
         // Add your new codec here.
-        if(CODEC_NAME_BMW == codecName){
+        if (CODEC_NAME_BMW == codecName) {
             return new BmwCodec();
-        }else{
+        } else {
             // Unknown CAN codec name
-            InterfaceLogger::logMessage("CAN Connector: Unknown CAN codec name <" + codecName + ">. Could not create the CAN codec", LOG_LEVEL::ERROR);
-            throw std::invalid_argument("CAN Connector: Unknown CAN codec name <" + codecName + ">. Could not create the CAN codec");
+            InterfaceLogger::logMessage(
+                    "CAN Connector: Unknown CAN codec name <" + codecName + ">. Could not create the CAN codec",
+                    LOG_LEVEL::ERROR);
+            throw std::invalid_argument(
+                    "CAN Connector: Unknown CAN codec name <" + codecName + ">. Could not create the CAN codec");
         }
 
     }

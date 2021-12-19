@@ -34,7 +34,8 @@ namespace sim_interface::dut_connector::rest_dummy {
     class RESTConnectorConfig : public ConnectorConfig {
     public:
         explicit RESTConnectorConfig(std::string baseUrlDuT, std::string baseCallbackUrl, int port,
-                                     std::set<std::string> operations, std::map<std::string, int> periodicOperations = {},
+                                     std::set<std::string> operations,
+                                     std::map<std::string, int> periodicOperations = {},
                                      bool periodicTimerEnabled = false)
                 : ConnectorConfig(std::move(operations), std::move(periodicOperations), periodicTimerEnabled),
                   baseUrlDuT(std::move(baseUrlDuT)), baseCallbackUrl(std::move(baseCallbackUrl)), port(port) {

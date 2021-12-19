@@ -27,9 +27,9 @@
 /*******************************************************************************
  * CLASS DECLARATIONS
  ******************************************************************************/
-namespace sim_interface::dut_connector::can{
+namespace sim_interface::dut_connector::can {
 
-    class CANConnectorReceiveOperation{
+    class CANConnectorReceiveOperation {
 
     public:
         // Functions members
@@ -47,7 +47,7 @@ namespace sim_interface::dut_connector::can{
                                      bool isCANFD,
                                      bool hasMask,
                                      int maskLength = 0,
-                                     __u8* maskData = nullptr);
+                                     __u8 *maskData = nullptr);
 
         // Data members
         std::string operation;            /**< The operation name.                                                       */

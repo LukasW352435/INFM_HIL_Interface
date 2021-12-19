@@ -51,7 +51,7 @@
 /**
  * Struct for a BCM message with a single CAN frame.
  */
-struct bcmMsgSingleFrameCan{
+struct bcmMsgSingleFrameCan {
     struct bcm_msg_head msg_head;
     struct can_frame canFrame[1];
 };
@@ -59,7 +59,7 @@ struct bcmMsgSingleFrameCan{
 /**
  * Struct for a BCM message with a single CANFD frame.
  */
-struct bcmMsgSingleFrameCanFD{
+struct bcmMsgSingleFrameCanFD {
     struct bcm_msg_head msg_head;
     struct canfd_frame canfdFrame[1];
 };
@@ -67,7 +67,7 @@ struct bcmMsgSingleFrameCanFD{
 /**
  * Struct for a BCM message with multiple CAN frames.
  */
-struct bcmMsgMultipleFramesCan{
+struct bcmMsgMultipleFramesCan {
     struct bcm_msg_head msg_head;
     struct can_frame canFrames[MAXFRAMES];
 };
@@ -75,7 +75,7 @@ struct bcmMsgMultipleFramesCan{
 /**
 * Struct for a BCM message with multiple CANFD frames.
 */
-struct bcmMsgMultipleFramesCanFD{
+struct bcmMsgMultipleFramesCanFD {
     struct bcm_msg_head msg_head;
     struct canfd_frame canfdFrames[MAXFRAMES];
 };
@@ -84,9 +84,9 @@ struct bcmMsgMultipleFramesCanFD{
 /*******************************************************************************
  * CLASS DECLARATIONS
  ******************************************************************************/
-namespace sim_interface::dut_connector::can{
+namespace sim_interface::dut_connector::can {
 
-    class CANConnector : public DuTConnector{
+    class CANConnector : public DuTConnector {
 
     public:
         // Functions members
@@ -148,7 +148,7 @@ namespace sim_interface::dut_connector::can{
         /**
         * Thread function for the io context loop.
         */
-        void ioContextThreadFunction(const boost::shared_ptr<boost::asio::io_context>& context);
+        void ioContextThreadFunction(const boost::shared_ptr<boost::asio::io_context> &context);
 
         /**
         * Receives on the BCM socket. The received data is stored in the rxBuffer.
@@ -165,7 +165,7 @@ namespace sim_interface::dut_connector::can{
         * @param nframes - The number of the received frames.
         * @param isCANFD - Flag for CANFD frames.
         */
-        void handleReceivedData(const bcm_msg_head* head, void* frames, uint32_t nframes, bool isCANFD);
+        void handleReceivedData(const bcm_msg_head *head, void *frames, uint32_t nframes, bool isCANFD);
 
         /**
         * Handles received RX_CHANGED BCM messages.
@@ -174,7 +174,7 @@ namespace sim_interface::dut_connector::can{
         * @param frame   - The received CAN or CANFD frame.
         * @param isCANFD - Flag for CANFD frames.
         */
-        void handleRxChanged(const bcm_msg_head* head, void* frames, bool isCANFD);
+        void handleRxChanged(const bcm_msg_head *head, void *frames, bool isCANFD);
 
         /**
         * Create a non cyclic transmission task for a single CAN/CANFD frame.
@@ -203,7 +203,9 @@ namespace sim_interface::dut_connector::can{
         * @param ival2   - Second interval.
         * @param isCANFD - Flag for a CANFD frames.
         */
-        void txSetupSingleFrame(struct canfd_frame frame, uint32_t count, struct bcm_timeval ival1, struct bcm_timeval ival2, bool isCANFD);
+        void
+        txSetupSingleFrame(struct canfd_frame frame, uint32_t count, struct bcm_timeval ival1, struct bcm_timeval ival2,
+                           bool isCANFD);
 
         /**
         * Create a cyclic transmission task for multiple CAN/CANFD frames.
@@ -222,7 +224,9 @@ namespace sim_interface::dut_connector::can{
         * @param ival2   - Second interval.
         * @param isCANFD - Flag for CANFD frames.
         */
-        void txSetupMultipleFrames(struct canfd_frame frames[], int nframes, uint32_t count[], struct bcm_timeval ival1[], struct bcm_timeval ival2[], bool isCANFD);
+        void
+        txSetupMultipleFrames(struct canfd_frame frames[], int nframes, uint32_t count[], struct bcm_timeval ival1[],
+                              struct bcm_timeval ival2[], bool isCANFD);
 
         /**
         * Create a cyclic transmission task for one or multiple CAN/CANFD frames.
@@ -240,7 +244,8 @@ namespace sim_interface::dut_connector::can{
         * @param ival2    - Second interval.
         * @param isCANFD  - Flag for CANFD frames.
         */
-        void txSetupSequence(struct canfd_frame frames[], int nframes, uint32_t count, struct bcm_timeval ival1, struct bcm_timeval ival2, bool isCANFD);
+        void txSetupSequence(struct canfd_frame frames[], int nframes, uint32_t count, struct bcm_timeval ival1,
+                             struct bcm_timeval ival2, bool isCANFD);
 
         /**
         * Updates a cyclic transmission task for a CAN/CANFD frame.
@@ -310,7 +315,8 @@ namespace sim_interface::dut_connector::can{
         // Data members
         boost::shared_ptr<boost::asio::io_context> ioContext;                           /**< The io_context used by the BCM socket.                 */
         boost::asio::generic::datagram_protocol::socket bcmSocket;                      /**< The BCM socket that is used to send and receive.       */
-        std::array<std::uint8_t, sizeof(struct bcmMsgMultipleFramesCanFD)> rxBuffer{0}; /**< Buffer that stores the received data.                  */
+        std::array<std::uint8_t, sizeof(struct bcmMsgMultipleFramesCanFD)> rxBuffer{
+                0}; /**< Buffer that stores the received data.                  */
         std::thread ioContextThread;                                                    /**< Thread for the io_context loop.                        */
         CANConnectorConfig config;                                                      /**< The config of the CAN connector.                       */
         CANConnectorCodec *codec;                                                       /**< The codec that is used for parsing.                    */

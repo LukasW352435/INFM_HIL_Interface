@@ -43,7 +43,11 @@ namespace sim_interface::dut_connector::v2x {
          * @param queueDuTToSim queue to write received SimEvents to
          * @param config Configuration of connector containing params (Context Params from Cube Board)
          */
-        explicit V2XConnector(std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim, const V2XConnectorConfig &config);
+        explicit V2XConnector(std::shared_ptr<SharedQueue < SimEvent>>
+
+        queueDuTToSim,
+        const V2XConnectorConfig &config
+        );
 
         /**
          * Deconstructor stopping ioService and waiting for thread to join

@@ -23,9 +23,9 @@
 /*******************************************************************************
  * CLASS DECLARATIONS
  ******************************************************************************/
-namespace sim_interface::dut_connector::can{
+namespace sim_interface::dut_connector::can {
 
-    class CANConnectorCodecFactory{
+    class CANConnectorCodecFactory {
 
     public:
         // Function members
@@ -37,7 +37,7 @@ namespace sim_interface::dut_connector::can{
         *
         * @return The CAN codec.
         */
-        static CANConnectorCodec* createCodec(const std::string &codecName);
+        static CANConnectorCodec *createCodec(const std::string &codecName);
 
         // Data members
 

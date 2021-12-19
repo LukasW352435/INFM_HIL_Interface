@@ -29,9 +29,9 @@
 /*******************************************************************************
  * CLASS DECLARATIONS
  ******************************************************************************/
-namespace sim_interface::dut_connector::can{
+namespace sim_interface::dut_connector::can {
 
-    class CANConnectorConfig : public ConnectorConfig{
+    class CANConnectorConfig : public ConnectorConfig {
 
     public:
         // Function members
@@ -64,7 +64,7 @@ namespace sim_interface::dut_connector::can{
          * This map is used to set up the RX filters of the BCM socket based on the receive operation data
          * that was defined in the XML configuration file.
          */
-        std::map<canid_t, CANConnectorReceiveOperation>  frameToOperation;
+        std::map<canid_t, CANConnectorReceiveOperation> frameToOperation;
 
         /**
          * This map is used to get the send operation data (like the CAN ID, interval information etc.) that

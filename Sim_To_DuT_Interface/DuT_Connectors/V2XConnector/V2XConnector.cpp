@@ -52,7 +52,7 @@ namespace sim_interface::dut_connector::v2x {
             receiveEndpoint = _socket.local_endpoint();
         } catch (std::exception &e) {
             InterfaceLogger::logMessage(fmt::format("V2XConnector: Exception on opening socket: {}", e.what()),
-                                  LOG_LEVEL::ERROR);
+                                        LOG_LEVEL::ERROR);
         }
         startReceive();
         sockRunner = std::thread([&]() {
@@ -95,15 +95,17 @@ namespace sim_interface::dut_connector::v2x {
     void V2XConnector::onReceive(const boost::system::error_code &ec, std::size_t read_bytes) {
         if (!ec) {
             if (read_bytes > 0) {
-                InterfaceLogger::logMessage(fmt::format("V2XConnector: received {} bytes", read_bytes), LOG_LEVEL::DEBUG);
+                InterfaceLogger::logMessage(fmt::format("V2XConnector: received {} bytes", read_bytes),
+                                            LOG_LEVEL::DEBUG);
                 std::vector<unsigned char> msg = std::vector(receiveBuffer.begin(), receiveBuffer.begin() + read_bytes);
 
                 receiveCallback(msg);
             }
             startReceive();
         } else {
-            InterfaceLogger::logMessage(fmt::format("V2XConnector: Got boost::system::error_code {}, stopping receive", ec),
-                                  LOG_LEVEL::ERROR);
+            InterfaceLogger::logMessage(
+                    fmt::format("V2XConnector: Got boost::system::error_code {}, stopping receive", ec),
+                    LOG_LEVEL::ERROR);
         }
     }
 

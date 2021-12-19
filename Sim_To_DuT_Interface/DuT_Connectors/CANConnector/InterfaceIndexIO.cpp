@@ -22,19 +22,19 @@
  * FUNCTION DEFINITIONS
  ******************************************************************************/
 
-InterfaceIndexIO::InterfaceIndexIO(std::string interfaceName) : ifr(){
+InterfaceIndexIO::InterfaceIndexIO(std::string interfaceName) : ifr() {
     std::strncpy(ifr.ifr_name, interfaceName.c_str(), IF_NAMESIZE);
 }
 
-int InterfaceIndexIO::name(){
+int InterfaceIndexIO::name() {
     return SIOCGIFINDEX;
 }
 
-void* InterfaceIndexIO::data(){
+void *InterfaceIndexIO::data() {
     return &ifr;
 }
 
-int InterfaceIndexIO::index() const{
+int InterfaceIndexIO::index() const {
     return ifr.ifr_ifindex;
 }
 

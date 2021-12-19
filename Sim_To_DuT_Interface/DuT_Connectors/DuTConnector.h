@@ -96,11 +96,10 @@ namespace sim_interface::dut_connector {
 
         void setupTimer(const SimEvent &simEvent);
 
-        void enablePeriodicSending(const std::string& operation, int periodMs);
+        void enablePeriodicSending(const std::string &operation, int periodMs);
 
         std::shared_ptr<boost::asio::io_service> io;
-        std::thread timerRunner;
-;
+        std::thread timerRunner;;
 
         std::set<std::string> processableOperations;
 

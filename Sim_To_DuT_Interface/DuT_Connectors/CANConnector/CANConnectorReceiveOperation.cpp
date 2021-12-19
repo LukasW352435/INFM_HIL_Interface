@@ -18,35 +18,37 @@
 /*******************************************************************************
  * FUNCTION DEFINITIONS
  ******************************************************************************/
-namespace sim_interface::dut_connector::can{
+namespace sim_interface::dut_connector::can {
 
     CANConnectorReceiveOperation::CANConnectorReceiveOperation(std::string operation,
                                                                bool isCANFD,
                                                                bool hasMask,
                                                                int maskLength,
-                                                               __u8 *maskData):
-                                                               operation(std::move(operation)),
-                                                               isCANFD(isCANFD),
-                                                               hasMask(hasMask),
-                                                               maskLength(maskLength){
+                                                               __u8 *maskData) :
+            operation(std::move(operation)),
+            isCANFD(isCANFD),
+            hasMask(hasMask),
+            maskLength(maskLength) {
 
         // Assert that:
-        if(this->hasMask){
+        if (this->hasMask) {
 
             // Note: We need to use CAN/CANFD_MAX_DLEN and not CAN/CANFD_MTU because the DLEN is
             // the max size of the data array and the MTU is the sizeof the struct as a whole.
-            if(this->isCANFD){
+            if (this->isCANFD) {
 
                 // - the mask length is greater than zero and not greater than the CANFD MTU
-                if(this->maskLength < 0 || CANFD_MAX_DLEN < this->maskLength){
-                    throw std::invalid_argument("CAN Connector Receive Operation: Mask must not be negative or exceed the CANFD frame length");
+                if (this->maskLength < 0 || CANFD_MAX_DLEN < this->maskLength) {
+                    throw std::invalid_argument(
+                            "CAN Connector Receive Operation: Mask must not be negative or exceed the CANFD frame length");
                 }
 
-            }else{
+            } else {
 
                 // - the mask length is greater than zero and not greater than the CAN MTU
-                if(this->maskLength < 0 || CAN_MAX_DLEN < this->maskLength ){
-                    throw std::invalid_argument("CAN Connector Receive Operation: Mask must not be negative or exceed the CAN frame length");
+                if (this->maskLength < 0 || CAN_MAX_DLEN < this->maskLength) {
+                    throw std::invalid_argument(
+                            "CAN Connector Receive Operation: Mask must not be negative or exceed the CAN frame length");
                 }
 
             }
@@ -54,11 +56,12 @@ namespace sim_interface::dut_connector::can{
         }
 
         // Check if we have a mask
-        if(this->hasMask){
+        if (this->hasMask) {
 
             // Assert that the mask data is not a null pointer
-            if(maskData == nullptr){
-                throw std::invalid_argument("CAN Connector Receive Operation: Mask must not be NULL for a receive operation that has a mask");
+            if (maskData == nullptr) {
+                throw std::invalid_argument(
+                        "CAN Connector Receive Operation: Mask must not be NULL for a receive operation that has a mask");
             }
 
             // Set the mask length and copy the mask data

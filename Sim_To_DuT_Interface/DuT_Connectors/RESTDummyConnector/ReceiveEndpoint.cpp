@@ -68,7 +68,8 @@ namespace sim_interface::dut_connector::rest_dummy {
 
                            eventToSimCallback(JsonToSimEvent(json));
 
-                           InterfaceLogger::logMessage("RESTDummyConnector: Successfully received event from DuT", LOG_LEVEL::DEBUG);
+                           InterfaceLogger::logMessage("RESTDummyConnector: Successfully received event from DuT",
+                                                       LOG_LEVEL::DEBUG);
                            session->close(200, "Event received", {{"Connection", "close"}});
                        });
     }

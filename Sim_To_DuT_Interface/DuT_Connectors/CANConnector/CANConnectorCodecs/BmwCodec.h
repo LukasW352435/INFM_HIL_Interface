@@ -78,9 +78,9 @@
 /*******************************************************************************
  * CLASS DECLARATIONS
  ******************************************************************************/
-namespace sim_interface::dut_connector::can{
+namespace sim_interface::dut_connector::can {
 
-    class BmwCodec : public CANConnectorCodec{
+    class BmwCodec : public CANConnectorCodec {
 
     public:
         // Function members
@@ -130,7 +130,7 @@ namespace sim_interface::dut_connector::can{
          *
          * @retur The payload for the CAN frame 0x273 GPS_LOCA and the sendOperation name.
          */
-        std::pair<std::vector<__u8>, std::string>  encodeGPS_LOCA(SimEvent event);
+        std::pair<std::vector<__u8>, std::string> encodeGPS_LOCA(SimEvent event);
 
         /**
          * Encodes the SimEvent values to a payload for the CAN frame 0x274 GPS_LOCB.
@@ -139,7 +139,7 @@ namespace sim_interface::dut_connector::can{
          *
          * @return The payload for the CAN frame 0x274 GPS_LOCB and determines the sendOperation name.
          */
-        std::pair<std::vector<__u8>, std::string>  encodeGPS_LOCB(SimEvent event);
+        std::pair<std::vector<__u8>, std::string> encodeGPS_LOCB(SimEvent event);
 
         /**
          * Encodes the SimEvent values to a payload for the CAN frame 0x279 LICHTER and the sendOperation name.
@@ -148,7 +148,7 @@ namespace sim_interface::dut_connector::can{
          *
          * @return The payload for the CAN frame 0x279 LICHTER and determines the sendOperation name.
          */
-        std::pair<std::vector<__u8>, std::string>  encodeLichter(SimEvent event);
+        std::pair<std::vector<__u8>, std::string> encodeLichter(SimEvent event);
 
         /**
          * Decodes the CAN frame 0x275 Geschwindigkeit to the corresponding simulation events.

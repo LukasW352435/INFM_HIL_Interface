@@ -23,9 +23,9 @@
 /*******************************************************************************
  * CLASS DECLARATIONS
  ******************************************************************************/
-namespace sim_interface::dut_connector::can{
+namespace sim_interface::dut_connector::can {
 
-    class CodecUtilities{
+    class CodecUtilities {
 
     public:
         // Function members
@@ -47,10 +47,14 @@ namespace sim_interface::dut_connector::can{
          *
          * @return The converted number.
          */
-        static  int16_t convertEndianness(int16_t number);
+        static int16_t convertEndianness(int16_t number);
+
         static uint16_t convertEndianness(uint16_t number);
-        static  int32_t convertEndianness(int32_t number);
+
+        static int32_t convertEndianness(int32_t number);
+
         static uint32_t convertEndianness(uint32_t number);
+
         static uint64_t convertEndianness(uint64_t number);
 
         // Data members

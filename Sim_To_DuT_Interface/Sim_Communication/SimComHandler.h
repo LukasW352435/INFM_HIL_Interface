@@ -56,7 +56,7 @@ namespace sim_interface {
          * @param queueSimToInterface A queue to communicate with the interface.
          * @param config System configuration.
          */
-        SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig& config);
+        SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig &config);
 
         /**
          * Destroys the handler and stops all threads.

@@ -67,7 +67,8 @@ namespace sim_interface::dut_connector {
         if (canHandleSimEvent(simEvent)) {
             InterfaceLogger::logMessage("DuTConnector: Handling event " + simEvent.operation, LOG_LEVEL::INFO);
             if (isPeriodicEnabled(simEvent)) {
-                InterfaceLogger::logMessage("DuTConnector: Enabling periodic timer for event " + simEvent.operation, LOG_LEVEL::INFO);
+                InterfaceLogger::logMessage("DuTConnector: Enabling periodic timer for event " + simEvent.operation,
+                                            LOG_LEVEL::INFO);
                 setupTimer(simEvent);
             }
             handleEventSingle(simEvent);

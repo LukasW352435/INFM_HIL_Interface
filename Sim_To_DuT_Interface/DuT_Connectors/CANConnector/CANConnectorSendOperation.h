@@ -26,9 +26,9 @@
 /*******************************************************************************
  * CLASS DECLARATIONS
  ******************************************************************************/
-namespace sim_interface::dut_connector::can{
+namespace sim_interface::dut_connector::can {
 
-    class CANConnectorSendOperation{
+    class CANConnectorSendOperation {
 
     public:
         // Functions members

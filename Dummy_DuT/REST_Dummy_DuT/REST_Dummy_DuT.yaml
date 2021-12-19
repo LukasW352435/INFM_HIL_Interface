@@ -7,7 +7,7 @@ info:
     url: https://www.gnu.org/licenses/gpl-2.0.html
   version: 1.0.0
 servers:
-- url: https://localhost:9090
+  - url: https://localhost:9090
 paths:
   /dashboard:
     get:
@@ -36,10 +36,10 @@ paths:
       responses:
         201:
           description: Message accepted
-          content: {}
+          content: { }
         400:
           description: Invalid message supplied
-          content: {}
+          content: { }
   /messages:
     get:
       summary: Open message stream to receive new messages continuously
@@ -58,7 +58,7 @@ paths:
               description: no-cache
           content:
             text/event-stream:
-              schema: 
+              schema:
                 type: string
   /send:
     put:
@@ -77,10 +77,10 @@ paths:
       responses:
         200:
           description: Message accepted
-          content: {}
+          content: { }
         400:
           description: Invalid message supplied
-          content: {}
+          content: { }
   /read:
     post:
       parameters:
@@ -96,13 +96,13 @@ paths:
       responses:
         200:
           description: Subscription registered
-          content: {}
+          content: { }
         208:
           description: Subscription already registered
-          content: {}
+          content: { }
         400:
           description: Not a valid client URL
-          content: {}
+          content: { }
     delete:
       parameters:
         - in: query
@@ -116,20 +116,20 @@ paths:
       responses:
         200:
           description: Unsubscription successful
-          content: {}
+          content: { }
         400:
           description: Not a valid client URL
-          content: {}
+          content: { }
         404:
           description: Client ID not found
-          content: {}
+          content: { }
 
 components:
   schemas:
     Message:
       required:
-      - name
-      - photoUrls
+        - name
+        - photoUrls
       type: object
       properties:
         key:

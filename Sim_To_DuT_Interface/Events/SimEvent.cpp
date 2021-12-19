@@ -40,11 +40,11 @@ namespace sim_interface {
         std::chrono::system_clock::time_point time_point = std::chrono::system_clock::now();
         std::chrono::system_clock::duration duration = time_point.time_since_epoch();
         int64_t timestamp = duration.count();
-        std:: time_t  time_t = std::chrono::system_clock::to_time_t (time_point);
-        std:: tm * tm = std::localtime (& time_t );
+        std::time_t time_t = std::chrono::system_clock::to_time_t(time_point);
+        std::tm *tm = std::localtime(&time_t);
 
         std::stringstream ss;
-        ss << std::put_time (tm , "%Y-%m-%d %X") << "." << std::to_string((timestamp / 1000) % 1000000);
+        ss << std::put_time(tm, "%Y-%m-%d %X") << "." << std::to_string((timestamp / 1000) % 1000000);
 
         current = ss.str();
     }
