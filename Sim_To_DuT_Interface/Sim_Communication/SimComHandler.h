@@ -56,43 +56,19 @@
 **/
 
 
-#include "../Utility/ConfigSerializer.h"
-#include "../DuT_Connectors/ConnectorConfig.h"
-#include "../DuT_Connectors/RESTDummyConnector/RESTConnectorConfig.h"
-#include "../DuT_Connectors/CANConnector/CANConnectorConfig.h"
+
+
 #include "../Events/SimEvent.h"
-#include "../Utility/SharedQueue.h"
 #include "../SystemConfig.h"
-
-#include <exception>
-#include <memory>
-#include <string>
-#include <thread>
-#include <utility>
-#include <vector>
-
+#include "../SimToDuTInterface.h"
 #include <zmq.hpp>
 
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/binary_iarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
 
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/xml_parser.hpp>
-#include <boost/property_tree/ptree_serialization.hpp>
-#include <boost/property_tree/ini_parser.hpp>
-
-#include <boost/serialization/serialization.hpp>
-#include <boost/serialization/map.hpp>
-#include <boost/serialization/variant.hpp>
-
-#include <boost/algorithm/string.hpp>
 
 
 namespace sim_interface {
+    class SimToDuTInterface;
+
     /**
      * Handler between interface and simulation.
      * Responsible for sending/receiving SimEvents to/from the simulation.
@@ -119,7 +95,7 @@ namespace sim_interface {
      	* Bind: Publisher sockets have to bind to the address
      	* Connect: Subscriber sockets have to connect
      	*/
-        SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig &config);
+        SimComHandler(SimToDuTInterface *interface, const SystemConfig &config);
 
         /**
          * Destroys the handler and stops all threads.
@@ -179,7 +155,7 @@ namespace sim_interface {
         * Send the Simulation Event to the Interface
         *
         */
-        void run();
+        void receive();
 
         /**
       	* Get the various ConnectorTypes from the config.xml
@@ -217,9 +193,7 @@ namespace sim_interface {
         * add the RestConnectorConfig Pointer to the Vector
         */
         void
-        getConfig(std::vector<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig *> *RESTConnectorVektor,
-                  std::vector<sim_interface::dut_connector::can::CANConnectorConfig *> *CanConnectorVektor,
-                  std::vector<sim_interface::dut_connector::v2x::V2XConnectorConfig *> *V2XConnectorVektor);
+        getConfig();
 
 
 
@@ -243,7 +217,7 @@ namespace sim_interface {
         */
         connectorType resolveConnectorTypeForSwitch(std::string connectorTypeS);
 
-        void run_thread();
+        void run();
 
 
     private:
@@ -264,11 +238,12 @@ namespace sim_interface {
         zmq::socket_t socketSimPub_;
         zmq::socket_t socketSimSubConfig_;
         std::thread simComHandlerThread;
+        bool stopThread = true;
 
         /**
         * @param *queueSimToInterface: used by sendEventToInterface
         */
-        std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface;
+        SimToDuTInterface *interface;
     };
 }
 

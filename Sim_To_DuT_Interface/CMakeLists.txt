@@ -20,7 +20,7 @@ add_executable(${PROJECT_NAME} main.cpp
         SystemConfig.h
         Utility/ConfigSerializer.h
         Utility/ConfigSerializerCanConnector.h
-        Utility/PeriodicTimer.cpp Utility/PeriodicTimer.h)
+        )
 
 
 if (CMAKE_CXX_COMPILER_VERSION GREATER_EQUAL 9)

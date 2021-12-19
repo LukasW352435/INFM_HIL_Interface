@@ -30,7 +30,7 @@ namespace sim_interface {
         queueSimToInterface = std::make_shared<SharedQueue<SimEvent>>();
     }
 
-    void SimToDuTInterface::addConnector(dut_connector::DuTConnector *duTConnector) {
+    void SimToDuTInterface::addConnector(std::shared_ptr<dut_connector::DuTConnector> duTConnector) {
         duTConnectors.push_back(duTConnector);
     }
 

@@ -25,6 +25,32 @@
  */
 
 #include "SimComHandler.h"
+#include "../Utility/ConfigSerializer.h"
+#include "../DuT_Connectors/RESTDummyConnector/RESTDummyConnector.h"
+#include "../DuT_Connectors/CANConnector/CANConnector.h"
+#include "../DuT_Connectors/V2XConnector/V2XConnector.h"
+
+
+#include <exception>
+
+#include <string>
+#include <thread>
+#include <vector>
+
+
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+
+
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+
+
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/serialization/variant.hpp>
+
+#include <boost/algorithm/string.hpp>
 
 
 namespace sim_interface {
@@ -36,8 +62,8 @@ namespace sim_interface {
    */
     zmq::context_t context_sub(1);
 
-    SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig &config)
-            : queueSimToInterface(std::move(queueSimToInterface)), socketSimPub_(context_sub, zmq::socket_type::pub),
+    SimComHandler::SimComHandler(SimToDuTInterface *interface, const SystemConfig &config)
+            : interface(interface), socketSimPub_(context_sub, zmq::socket_type::pub),
               socketSimSub_(context_sub, zmq::socket_type::sub),
               socketSimSubConfig_(context_sub, zmq::socket_type::sub) {
 
@@ -83,12 +109,8 @@ namespace sim_interface {
     }
 
 
-
     //   void SimComHandler::getConfig(sim_interface::SimToDuTInterface &interface)
-    void SimComHandler::getConfig(
-            std::vector<sim_interface::dut_connector::rest_dummy::RESTConnectorConfig *> *RESTConnectorVektor,
-            std::vector<sim_interface::dut_connector::can::CANConnectorConfig *> *CanConnectorVektor,
-            std::vector<sim_interface::dut_connector::v2x::V2XConnectorConfig *> *V2XConnectorVektor) {
+    void SimComHandler::getConfig() {
         zmq::message_t reply;
         try {
             std::cout << "Receiving...Config " << std::endl;
@@ -149,8 +171,9 @@ namespace sim_interface {
                     // Push into vector
 
 
-
-                    RESTConnectorVektor->push_back(restConnectorConfig);
+                    auto restConnector = std::make_shared<dut_connector::rest_dummy::RESTDummyConnector>(
+                            interface->getQueueDuTToSim(), *restConnectorConfig);
+                    interface->addConnector(restConnector);
 
 
                     break;
@@ -204,7 +227,9 @@ namespace sim_interface {
                     ConfigSerializer::deserialize(xmliStringStream, "conn", &canConnectorConfig);
 
 
-                    CanConnectorVektor->push_back(canConnectorConfig);
+                    auto CANConnector = std::make_shared<dut_connector::can::CANConnector>(
+                            interface->getQueueDuTToSim(), *canConnectorConfig);
+                    interface->addConnector(CANConnector);
                     break;
                 }
 
@@ -226,10 +251,11 @@ namespace sim_interface {
                     sim_interface::dut_connector::v2x::V2XConnectorConfig *V2XConnectorConfig;
 
                     ConfigSerializer::deserialize(xmliStringStream, "conn", &V2XConnectorConfig);
+                    auto V2XConnector = std::make_shared<dut_connector::v2x::V2XConnector>(
+                            interface->getQueueDuTToSim(), *V2XConnectorConfig);
+                    interface->addConnector(V2XConnector);
 
 
-
-                    V2XConnectorVektor->push_back(V2XConnectorConfig);
                     break;
                 }
                 default: {
@@ -240,15 +266,20 @@ namespace sim_interface {
 
             }
         }
-
+        std::stringstream logss;
+        logss << *interface;
+        InterfaceLogger::logMessage("Received configs, the following connectors were created:", LOG_LEVEL::INFO);
+        for (std::string line; std::getline(logss, line);) {
+            InterfaceLogger::logMessage(line, LOG_LEVEL::INFO);
+        }
 
     }
 
 
-    void SimComHandler::run() {
+    void SimComHandler::receive() {
         // TODO async receive events from the Simulation and send them to the interface
 
-        //while (1) {
+        while (stopThread) {
             zmq::message_t reply;
             try {
                 std::cout << "Receiving... " << std::endl;
@@ -290,7 +321,7 @@ namespace sim_interface {
                 SimEvent event(keyAsString, stringStreamValue.str(), "Simulation Traci");
                 sendEventToInterface(event);
             }
-        //}
+        }
     }
 
     void SimComHandler::sendEventToSim(const SimEvent &simEvent) {
@@ -321,15 +352,22 @@ namespace sim_interface {
 
     void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
         InterfaceLogger::logEvent(simEvent);
-        queueSimToInterface->push(simEvent);
+        interface->getQueueSimToInterface()->push(simEvent);
     }
 
     SimComHandler::~SimComHandler() {
+        stopThread = false;
+        simComHandlerThread.join();
+        //socketSimPub_.unbind(config.socketSimAddressPub);
+        //socketSimSub_.connect(socketSimAddressSub);
+        //socketSimSubConfig_.connect(socketSimAddressReciverConfig);
+
+
         // TODO end zmq, etc.
     }
 
-    void SimComHandler::run_thread() {
-        simComHandlerThread = std::thread(&sim_interface::SimComHandler::run, this);
+    void SimComHandler::run() {
+        simComHandlerThread = std::thread(&sim_interface::SimComHandler::receive, this);
 
     }
 
