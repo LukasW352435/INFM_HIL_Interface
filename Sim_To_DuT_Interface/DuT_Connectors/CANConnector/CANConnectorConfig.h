@@ -36,7 +36,6 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <stdexcept>
 
 namespace sim_interface::dut_connector::can {
 

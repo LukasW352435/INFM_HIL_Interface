@@ -32,7 +32,9 @@
 
 namespace sim_interface {
     /**
-     * Class containing the config for the SimComHandler, the SimToDuTInterface and the Logger.
+     * <summary>
+     * Contains the config for the SimComHandler, the SimToDuTInterface and the Logger.
+     * </summary>
      * All attributes in this class should have default values assigned.
      */
     class SystemConfig {

@@ -29,19 +29,30 @@
 #include <set>
 #include <map>
 #include <string>
-#include <cassert>
+#include <stdexcept>
 
 namespace sim_interface::dut_connector {
+    /**
+     * <summary>
+     * Configuration for a single DuTConnector
+     * </summary>
+     * Base class of the Configs for any connector.
+     * Supported operations and operations to be repeated with corresponding intervals,
+     * as well as if a software timer is needed can be configured.
+     */
     class ConnectorConfig {
     public:
         explicit ConnectorConfig(std::set<std::string> operations, std::map<std::string, int> periodicOperations = {},
                                  bool periodicTimerEnabled = false)
                 : operations(std::move(operations)), periodicOperations(std::move(periodicOperations)),
                   periodicTimerEnabled(periodicTimerEnabled) {
-            assert(!this->operations.empty()); // Set of operations cannot be empty
+            if (this->operations.empty()) {
+                throw std::invalid_argument("Set of operations cannot be empty");
+            }
             for (const auto &periodicOperation: this->periodicOperations) {
-                assert(this->operations.find(periodicOperation.first) !=
-                       this->operations.end()); // Periodic operation not found in operations
+                if (this->operations.find(periodicOperation.first) == this->operations.end()) {
+                  throw std::invalid_argument("Periodic operation not found in operations");
+                };
             }
         };
 

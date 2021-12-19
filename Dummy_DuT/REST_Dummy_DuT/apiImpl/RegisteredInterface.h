@@ -31,6 +31,11 @@
 #include <set>
 
 namespace dummy_dut::rest::impl {
+    /**
+     * <summary>
+     * Manages registered callback URLs to call for events
+     * </summary>
+     */
     class RegisteredInterface {
     public:
         /**
