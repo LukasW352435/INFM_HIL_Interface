@@ -34,6 +34,11 @@
 #include "V2XConnectorConfig.h"
 
 namespace sim_interface::dut_connector::v2x {
+    /**
+     * <summary>
+     * Connector to a V2X network interface, opens a raw socket and passes received packages to simulation
+     * </summary>
+     */
     class V2XConnector : public DuTConnector {
 
     public:

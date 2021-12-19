@@ -22,7 +22,7 @@
 namespace dummy_dut::rest::model {
 
 /// <summary>
-/// 
+/// Message to send to the dummy DuT
 /// </summary>
     class Message {
     public:

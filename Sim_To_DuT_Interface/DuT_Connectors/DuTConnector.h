@@ -39,7 +39,9 @@
 
 namespace sim_interface::dut_connector {
     /**
+     * <summary>
      * Connector implementing all kinds of DuT devices.
+     * </summary>
      * The different connectors should implement the protocol to communicate with a specific hardware DuT.
      * Used in the interface to send/receive events to/from the device.
      */

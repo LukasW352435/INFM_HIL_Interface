@@ -36,6 +36,11 @@ using namespace restbed;
 
 #define PORT 9090
 
+/**
+ * <summary>
+ * Helper struct to parse config line by line
+ * </summary>
+ */
 struct Line {
     std::string data;
 

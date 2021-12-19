@@ -31,7 +31,9 @@
 #include "boost/variant.hpp"
 
 /**
- * Class to convert a value, that is allowed to have different types, into a string value.
+ * <summary>
+ * Converts a value, that is allowed to have different types (int, double and string), into a string value.
+ * </summary>
  */
 class EventVisitor : public boost::static_visitor<std::string> {
 

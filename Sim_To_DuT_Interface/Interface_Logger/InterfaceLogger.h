@@ -46,6 +46,9 @@ namespace sim_interface {
     };
 
     /**
+     * <summary>
+     * Logger to log to file, console and as structured data csv
+     * </summary>
      * This logger is a tool with specialized functions to log and store messages for all elements of the
      * Sim_To_DuT_Interface. The logger and all of it's functions are static so it's not necessary to create instances
      * of the logger to write a message. Please notice that the logger has to be initialised in a first call by a valid

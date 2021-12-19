@@ -30,6 +30,11 @@
 #include "MessageWithTimestamp.h"
 
 namespace dummy_dut::rest::messages {
+    /**
+     * <summary>
+     * Manages all messages received from the interface
+     * </summary>
+     */
     class InterfaceMessages {
     public:
         /**

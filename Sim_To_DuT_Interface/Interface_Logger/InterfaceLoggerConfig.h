@@ -33,17 +33,19 @@
 
 namespace sim_interface {
 
-/**
- * Defines the level of logging
- */
+    /**
+     * Defines the level of logging
+     */
     enum LOG_LEVEL {
         NONE, DEBUG, INFO, WARNING, ERROR, CRITICAL
     };
 
-/**
- * The logger needs a configuration before it can start logging. This configuration has to store all required
- * information that the logger needs. Default settings are provided.
- */
+    /**
+     * <summary>
+     * The logger needs a configuration before it can start logging.
+     * </summary>
+     * This configuration has to store all required information that the logger needs. Default settings are provided.
+     */
     class LoggerConfig {
     public:
 

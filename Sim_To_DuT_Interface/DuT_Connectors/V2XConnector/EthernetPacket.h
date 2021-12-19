@@ -36,6 +36,11 @@
 #include <boost/variant.hpp>
 
 namespace sim_interface::dut_connector::v2x {
+    /**
+     * <summary>
+     * A single ethernet packet, wrapper to convert between raw bytes from socket and packet from simulation
+     * </summary>
+     */
     class EthernetPacket {
     public:
         /**
