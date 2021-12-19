@@ -67,8 +67,10 @@ namespace sim_interface {
     class SimToDuTInterface;
 
     /**
+     * <summary>
      * Handler between interface and simulation.
      * Responsible for sending/receiving SimEvents to/from the simulation.
+     * </summary>
      */
     class SimComHandler {
     public:

@@ -256,7 +256,7 @@ namespace sim_interface {
 
 
     void SimComHandler::receive() {
-        // TODO async receive events from the Simulation and send them to the interface
+
 
         while (stopThread) {
             zmq::message_t replySimData;
@@ -264,7 +264,7 @@ namespace sim_interface {
                 socketSimSub_.recv(replySimData, zmq::recv_flags::none);
                 InterfaceLogger::logMessage("Receiving data ", LOG_LEVEL::INFO);
 
-            } catch (zmq::error_t cantReceive) {
+            } catch (zmq::error_t &cantReceive) {
                 InterfaceLogger::logMessage(cantReceive.what(), LOG_LEVEL::ERROR);
                 // TODO unbind
             }
@@ -287,18 +287,9 @@ namespace sim_interface {
 
             }
 
-            std::vector<std::string> keyVector;
-            std::vector<boost::variant<int, double, std::string>> valueVector;
-            for (auto const &element: receiveMapSimData) {
-                keyVector.push_back(element.first);
-                valueVector.push_back(element.second);
-                std::string keyAsString = element.first;
 
-                auto valueAsAny = element.second;
-                std::stringstream stringStreamValue;
-                stringStreamValue << valueAsAny;
-                //TODO "Simulation Traci" würde man auch aus dem Archive bekommen vllt anpassen
-                SimEvent event(keyAsString, stringStreamValue.str(), "Simulation Traci");
+            for (auto const &element: receiveMapSimData) {
+                SimEvent event(element.first, element.second, "Simulation Traci");
                 sendEventToInterface(event);
             }
         }
@@ -306,7 +297,7 @@ namespace sim_interface {
 
     void SimComHandler::sendEventToSim(const SimEvent &simEvent) {
 
-        // TODO implementation of sending an event to the simulation
+
         std::stringstream logSimEvent;
         logSimEvent << simEvent;
 
