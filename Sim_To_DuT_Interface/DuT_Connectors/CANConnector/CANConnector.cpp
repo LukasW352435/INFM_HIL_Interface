@@ -1,26 +1,31 @@
-/*******************************************************************************
- \project   INFM_HIL_Interface
- \file      CANConnector.cpp
- \brief     The Connector enables the communication over a CAN/CANFD interface.
-            It builds upon the socketCAN BCM socket and boost::asio.
- \author    Matthias Bank
- \version   1.0.0
- \date      12.11.2021
- ******************************************************************************/
+/**
+ * CAN Connector.
+ * The Connector enables the communication over a CAN/CANFD interface.
+ *
+ * Copyright (C) 2021 Matthias Bank
+ *
+ * This file is part of "Sim To DuT Interface".
+ *
+ * "Sim To DuT Interface" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * "Sim To DuT Interface" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with "Sim To DuT Interface".  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Matthias Bank
+ * @version 1.0
+ */
 
-
-/*******************************************************************************
- * INCLUDES
- ******************************************************************************/
 // Project includes
 #include "CANConnector.h"
 
-// System includes
-
-
-/*******************************************************************************
- * FUNCTION DEFINITIONS
- ******************************************************************************/
 namespace sim_interface::dut_connector::can {
 
     CANConnector::CANConnector(
@@ -208,19 +213,16 @@ namespace sim_interface::dut_connector::can {
                                             size_t expectedBytes = 0;
 
                                             if (isCANFD) {
-                                                expectedBytes =
-                                                        head->nframes * sizeof(canfd_frame) + sizeof(bcm_msg_head);
+                                                expectedBytes = head->nframes * sizeof(canfd_frame) + sizeof(bcm_msg_head);
                                             } else {
-                                                expectedBytes =
-                                                        head->nframes * sizeof(can_frame) + sizeof(bcm_msg_head);
+                                                expectedBytes = head->nframes * sizeof(can_frame) + sizeof(bcm_msg_head);
                                             }
 
                                             // Check if we received the whole message
                                             if (receivedBytes == expectedBytes) {
 
                                                 // Get the pointer to the frames and call the next function to process the data
-                                                auto frames = reinterpret_cast<void *>(rxBuffer.data() +
-                                                                                       sizeof(bcm_msg_head));
+                                                auto frames = reinterpret_cast<void *>(rxBuffer.data() + sizeof(bcm_msg_head));
                                                 handleReceivedData(head, frames, head->nframes, isCANFD);
 
                                             } else {
@@ -270,8 +272,7 @@ namespace sim_interface::dut_connector::can {
 
         // Fill out the message
         if (isCANFD) {
-            std::shared_ptr<bcmMsgSingleFrameCanFD> msgCANFD = std::reinterpret_pointer_cast<bcmMsgSingleFrameCanFD>(
-                    msg);
+            std::shared_ptr<bcmMsgSingleFrameCanFD> msgCANFD = std::reinterpret_pointer_cast<bcmMsgSingleFrameCanFD>(msg);
 
             msgCANFD->msg_head.opcode = TX_SEND;
             msgCANFD->msg_head.flags = CAN_FD_FRAME;
@@ -353,8 +354,7 @@ namespace sim_interface::dut_connector::can {
 
         // Fill out the message
         if (isCANFD) {
-            std::shared_ptr<bcmMsgSingleFrameCanFD> msgCANFD = std::reinterpret_pointer_cast<bcmMsgSingleFrameCanFD>(
-                    msg);
+            std::shared_ptr<bcmMsgSingleFrameCanFD> msgCANFD = std::reinterpret_pointer_cast<bcmMsgSingleFrameCanFD>(msg);
 
             msgCANFD->msg_head.opcode = TX_SETUP;
             msgCANFD->msg_head.flags = CAN_FD_FRAME | SETTIMER | STARTTIMER;
@@ -439,8 +439,7 @@ namespace sim_interface::dut_connector::can {
 
         // Fill out the message
         if (isCANFD) {
-            std::shared_ptr<bcmMsgMultipleFramesCanFD> msgCANFD = std::reinterpret_pointer_cast<bcmMsgMultipleFramesCanFD>(
-                    msg);
+            std::shared_ptr<bcmMsgMultipleFramesCanFD> msgCANFD = std::reinterpret_pointer_cast<bcmMsgMultipleFramesCanFD>(msg);
 
             msgCANFD->msg_head.opcode = TX_SETUP;
             msgCANFD->msg_head.flags = CAN_FD_FRAME | SETTIMER | STARTTIMER;
@@ -453,8 +452,7 @@ namespace sim_interface::dut_connector::can {
             size_t arrSize = sizeof(struct canfd_frame) * nframes;
             std::memcpy(msgCANFD->canfdFrames, frames, arrSize);
         } else {
-            std::shared_ptr<bcmMsgMultipleFramesCan> msgCAN = std::reinterpret_pointer_cast<bcmMsgMultipleFramesCan>(
-                    msg);
+            std::shared_ptr<bcmMsgMultipleFramesCan> msgCAN = std::reinterpret_pointer_cast<bcmMsgMultipleFramesCan>(msg);
             auto firstCanFrame = (struct can_frame *) &frames[0];
 
             msgCAN->msg_head.opcode = TX_SETUP;
@@ -522,8 +520,7 @@ namespace sim_interface::dut_connector::can {
         // Fill out the message
         // Note: By combining the flags SETTIMER and STARTTIMER the BCM will start sending the messages immediately
         if (isCANFD) {
-            std::shared_ptr<bcmMsgSingleFrameCanFD> msgCANFD = std::reinterpret_pointer_cast<bcmMsgSingleFrameCanFD>(
-                    msg);
+            std::shared_ptr<bcmMsgSingleFrameCanFD> msgCANFD = std::reinterpret_pointer_cast<bcmMsgSingleFrameCanFD>(msg);
 
             msgCANFD->msg_head.opcode = TX_SETUP;
             msgCANFD->msg_head.flags = CAN_FD_FRAME;
@@ -692,8 +689,7 @@ namespace sim_interface::dut_connector::can {
 
         // Fill out the message
         if (isCANFD) {
-            std::shared_ptr<bcmMsgSingleFrameCanFD> msgCANFD = std::reinterpret_pointer_cast<bcmMsgSingleFrameCanFD>(
-                    msg);
+            std::shared_ptr<bcmMsgSingleFrameCanFD> msgCANFD = std::reinterpret_pointer_cast<bcmMsgSingleFrameCanFD>(msg);
 
             msgCANFD->msg_head.opcode = RX_SETUP;
             msgCANFD->msg_head.flags = CAN_FD_FRAME;
@@ -952,8 +948,3 @@ namespace sim_interface::dut_connector::can {
     }
 
 }
-
-
-/*******************************************************************************
- * END OF FILE
- ******************************************************************************/

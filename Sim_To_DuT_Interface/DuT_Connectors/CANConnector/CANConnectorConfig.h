@@ -1,18 +1,31 @@
-/*******************************************************************************
- \project   INFM_HIL_Interface
- \file      CANConnectorConfig.h
- \brief     The Config for the CANConnector.
- \author    Matthias Bank
- \version   1.0.0
- \date      12.11.2021
- ******************************************************************************/
+/**
+ * CAN Connector.
+ * The Connector enables the communication over a CAN/CANFD interface.
+ *
+ * Copyright (C) 2021 Matthias Bank
+ *
+ * This file is part of "Sim To DuT Interface".
+ *
+ * "Sim To DuT Interface" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * "Sim To DuT Interface" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with "Sim To DuT Interface". If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Matthias Bank
+ * @version 1.0
+ */
+
 #ifndef SIM_TO_DUT_INTERFACE_CANCONNECTORCONFIG_H
 #define SIM_TO_DUT_INTERFACE_CANCONNECTORCONFIG_H
 
-
-/*******************************************************************************
- * INCLUDES
- ******************************************************************************/
 // Project includes
 #include "../ConnectorConfig.h"
 #include "CANConnectorReceiveOperation.h"
@@ -25,16 +38,16 @@
 #include <string>
 #include <stdexcept>
 
-
-/*******************************************************************************
- * CLASS DECLARATIONS
- ******************************************************************************/
 namespace sim_interface::dut_connector::can {
 
+    /**
+    * <summary>
+    * The config for the CANConnector.
+    * </summary>
+    */
     class CANConnectorConfig : public ConnectorConfig {
 
     public:
-        // Function members
 
         /**
          * Constructor for the CAN Connector configuration.
@@ -56,9 +69,8 @@ namespace sim_interface::dut_connector::can {
                                     std::map<std::string, int> periodicOperations = {},
                                     bool periodicTimerEnabled = false);
 
-        // Data member
-        std::string interfaceName;                                         /**< The name of the interface that should be used.               */
-        std::string codecName;                                             /**< The name of the codec that should be used.                   */
+        std::string interfaceName; /**< The name of the interface that should be used. */
+        std::string codecName;     /**< The name of the codec that should be used.     */
 
         /**
          * This map is used to set up the RX filters of the BCM socket based on the receive operation data
@@ -72,18 +84,8 @@ namespace sim_interface::dut_connector::can {
          * therefore match with a sendOperation entry that is defined in the XML configuration file.
          */
         std::map<std::string, CANConnectorSendOperation> operationToFrame;
-
-    private:
-        // Function members
-
-        // Data member
-
     };
 
 }
 
-
 #endif //SIM_TO_DUT_INTERFACE_CANCONNECTORCONFIG_H
-/*******************************************************************************
- * END OF FILE
- ******************************************************************************/

@@ -1,19 +1,31 @@
-/*******************************************************************************
- \project   INFM_HIL_Interface
- \file      CANConnector.h
- \brief     The CANConnector enables the communication over a CAN interface.
-            It builds upon the socketCAN BCM socket and boost::asio.
- \author    Matthias Bank
- \version   1.0.0
- \date      12.11.2021
- ******************************************************************************/
+/**
+ * CAN Connector.
+ * The Connector enables the communication over a CAN/CANFD interface.
+ *
+ * Copyright (C) 2021 Matthias Bank
+ *
+ * This file is part of "Sim To DuT Interface".
+ *
+ * "Sim To DuT Interface" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * "Sim To DuT Interface" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with "Sim To DuT Interface". If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Matthias Bank
+ * @version 1.0
+ */
+
 #ifndef SIM_TO_DUT_INTERFACE_CANCONNECTOR_H
 #define SIM_TO_DUT_INTERFACE_CANCONNECTOR_H
 
-
-/*******************************************************************************
- * INCLUDES
- ******************************************************************************/
 // Project includes
 #include "../DuTConnector.h"
 #include "InterfaceIndexIO.h"
@@ -31,22 +43,12 @@
 #include <boost/make_shared.hpp>
 #include <boost/system/error_code.hpp>
 
-
-/*******************************************************************************
- * DEFINES
- ******************************************************************************/
-
 /**
  * Defines how many frames can be put in a bcmMsgMultipleFrames operation.
  * The socketCAN BCM can send up to 256 CAN frames in a sequence in the case
  * of a cyclic TX task configuration. See the socketCAN BCM documentation.
  */
 #define MAXFRAMES 256
-
-
-/*******************************************************************************
- * STRUCTS
- ******************************************************************************/
 
 /**
  * Struct for a BCM message with a single CAN frame.
@@ -80,16 +82,17 @@ struct bcmMsgMultipleFramesCanFD {
     struct canfd_frame canfdFrames[MAXFRAMES];
 };
 
-
-/*******************************************************************************
- * CLASS DECLARATIONS
- ******************************************************************************/
 namespace sim_interface::dut_connector::can {
 
+    /**
+     * <summary>
+     * The Connector enables the communication over a CAN/CANFD interface.
+     * It builds upon the socketCAN BCM socket and boost::asio.
+     * </summary>
+     */
     class CANConnector : public DuTConnector {
 
     public:
-        // Functions members
 
         /**
         * CAN Connector constructor.
@@ -121,10 +124,7 @@ namespace sim_interface::dut_connector::can {
         */
         void handleEventSingle(const SimEvent &event) override;
 
-        // Data members
-
     private:
-        // Function members
 
         /**
         * Creates the BCM socket that is used by the CAN Connector.
@@ -312,22 +312,15 @@ namespace sim_interface::dut_connector::can {
          */
         static std::string convertCanIdToHex(canid_t canID);
 
-        // Data members
         boost::shared_ptr<boost::asio::io_context> ioContext;                           /**< The io_context used by the BCM socket.                 */
         boost::asio::generic::datagram_protocol::socket bcmSocket;                      /**< The BCM socket that is used to send and receive.       */
-        std::array<std::uint8_t, sizeof(struct bcmMsgMultipleFramesCanFD)> rxBuffer{
-                0}; /**< Buffer that stores the received data.                  */
+        std::array<std::uint8_t, sizeof(struct bcmMsgMultipleFramesCanFD)> rxBuffer{0}; /**< Buffer that stores the received data.                  */
         std::thread ioContextThread;                                                    /**< Thread for the io_context loop.                        */
         CANConnectorConfig config;                                                      /**< The config of the CAN connector.                       */
         CANConnectorCodec *codec;                                                       /**< The codec that is used for parsing.                    */
         std::map<std::string, bool> isSetup;                                            /**< Map that keeps track which cyclic operation are setup. */
-
     };
 
 }
 
-
 #endif //SIM_TO_DUT_INTERFACE_CANCONNECTOR_H
-/*******************************************************************************
- * END OF FILE
- ******************************************************************************/
