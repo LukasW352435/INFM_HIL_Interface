@@ -21,6 +21,7 @@
  * @author Lukas Wagenlehner
  * @author Fabian Andre Genes
  * @author Thanaancheyan Thavapalan
+ * @author Michael Schmitz
  * @version 1.0
  */
 
