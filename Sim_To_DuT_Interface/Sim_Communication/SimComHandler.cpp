@@ -161,6 +161,7 @@ namespace sim_interface {
                         boost::property_tree::xml_parser::write_xml(canXMLStringStream, connector.second,
                                                                     xmlWriterSettings);
                         std::string canXMLString = canXMLStringStream.str();
+                        boost::algorithm::trim(canXMLString);
                         boost::algorithm::replace_all(canXMLString, R"(<?xml version="1.0" encoding="utf-8"?>)", "");
 
                         //Workaround because frameToOperation & OperationToframe need class_id_reference to work
