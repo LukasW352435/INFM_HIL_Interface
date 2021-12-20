@@ -28,6 +28,7 @@
 
 #include <string>
 #include <cassert>
+#include <stdexcept>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/nvp.hpp>
 
@@ -74,9 +75,15 @@ namespace sim_interface {
                 : enableDebugMode(std::move(enableDebugMode)), pathConsoleLog(std::move(pathConsoleLog)),
                   pathDataLog(std::move(pathDataLog)), fileBackupCount(std::move(fileBackupCount)),
                   fileLogLevel(std::move(fileLogLevel)), consoleLogLevel(std::move(consoleLogLevel)) {
-            assert (this->fileBackupCount > 0);
-            assert (!this->pathConsoleLog.empty());
-            assert (!this->pathDataLog.empty());
+            if (this->fileBackupCount <= 0) {
+                throw std::invalid_argument("FileBackupCount must be greater 0");
+            }
+            if (this->pathConsoleLog.empty()) {
+                throw std::invalid_argument("The path for consoleLog is not allowed to be empty! May use default configuration.");
+            }
+            if (this->pathConsoleLog.empty()) {
+                throw std::invalid_argument("The path for consoleLog is not allowed to be empty! May use default configuration.");
+            }
         }
 
         bool enableDebugMode = false;
