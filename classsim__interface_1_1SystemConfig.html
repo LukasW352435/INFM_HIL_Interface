@@ -77,7 +77,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Contains the config for the <a class="el" href="classsim__interface_1_1SimComHandler.html">SimComHandler</a>, the <a class="el" href="classsim__interface_1_1SimToDuTInterface.html" title="An interface between a simulation and multiple DuT devices.">SimToDuTInterface</a> and the Logger.  
+<p>Contains the config for the <a class="el" href="classsim__interface_1_1SimComHandler.html" title="Handler between interface and simulation. Responsible for sending/receiving SimEvents to/from the sim...">SimComHandler</a>, the <a class="el" href="classsim__interface_1_1SimToDuTInterface.html" title="An interface between a simulation and multiple DuT devices.">SimToDuTInterface</a> and the Logger.  
  <a href="classsim__interface_1_1SystemConfig.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="SystemConfig_8h_source.html">SystemConfig.h</a>&gt;</code></p>
@@ -102,6 +102,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a89afdecff21584ec38fe19a811301561"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6206357fe92d017661c4bff958d4834d"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SystemConfig.html#a6206357fe92d017661c4bff958d4834d">socketSimAddressPub</a> = &quot;tcp://*:7778&quot;</td></tr>
 <tr class="separator:a6206357fe92d017661c4bff958d4834d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2da35b8d4b80a8891400eb8cc1064ff"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SystemConfig.html#ac2da35b8d4b80a8891400eb8cc1064ff">socketSimAddressReciverConfig</a> = &quot;tcp://localhost:7779&quot;</td></tr>
+<tr class="separator:ac2da35b8d4b80a8891400eb8cc1064ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
@@ -110,7 +112,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>boost::serialization
 <tr class="separator:ac98d07dd8f7b70e16ccb9a01abf56b9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >Contains the config for the <a class="el" href="classsim__interface_1_1SimComHandler.html">SimComHandler</a>, the <a class="el" href="classsim__interface_1_1SimToDuTInterface.html" title="An interface between a simulation and multiple DuT devices.">SimToDuTInterface</a> and the Logger. </p>
+<div class="textblock"><p >Contains the config for the <a class="el" href="classsim__interface_1_1SimComHandler.html" title="Handler between interface and simulation. Responsible for sending/receiving SimEvents to/from the sim...">SimComHandler</a>, the <a class="el" href="classsim__interface_1_1SimToDuTInterface.html" title="An interface between a simulation and multiple DuT devices.">SimToDuTInterface</a> and the Logger. </p>
 <p >All attributes in this class should have default values assigned. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ade448e920e19a548f9046154ed07cc51" name="ade448e920e19a548f9046154ed07cc51"></a>
@@ -264,6 +266,21 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>boost::serialization
 
 </div>
 </div>
+<a id="ac2da35b8d4b80a8891400eb8cc1064ff" name="ac2da35b8d4b80a8891400eb8cc1064ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2da35b8d4b80a8891400eb8cc1064ff">&#9670;&nbsp;</a></span>socketSimAddressReciverConfig</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string sim_interface::SystemConfig::socketSimAddressReciverConfig = &quot;tcp://localhost:7779&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Address of the zmq Config Reciver. </p>
+
+</div>
+</div>
 <a id="a89afdecff21584ec38fe19a811301561" name="a89afdecff21584ec38fe19a811301561"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a89afdecff21584ec38fe19a811301561">&#9670;&nbsp;</a></span>socketSimAddressSub</h2>
 
@@ -285,7 +302,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>boost::serialization
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 20 2021 18:18:10 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+Generated on Mon Dec 20 2021 22:06:01 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
 </small></address>
 </body>
 </html>

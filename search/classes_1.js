@@ -7,6 +7,7 @@ var searchData=
   ['canconnectorreceiveoperation_4',['CANConnectorReceiveOperation',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorReceiveOperation.html',1,'sim_interface::dut_connector::can']]],
   ['canconnectorsendoperation_5',['CANConnectorSendOperation',['../classsim__interface_1_1dut__connector_1_1can_1_1CANConnectorSendOperation.html',1,'sim_interface::dut_connector::can']]],
   ['codecutilities_6',['CodecUtilities',['../classsim__interface_1_1dut__connector_1_1can_1_1CodecUtilities.html',1,'sim_interface::dut_connector::can']]],
-  ['connectorconfig_7',['ConnectorConfig',['../classsim__interface_1_1dut__connector_1_1ConnectorConfig.html',1,'sim_interface::dut_connector']]],
-  ['connectorinfo_8',['ConnectorInfo',['../classsim__interface_1_1dut__connector_1_1ConnectorInfo.html',1,'sim_interface::dut_connector']]]
+  ['configserializer_7',['ConfigSerializer',['../classsim__interface_1_1ConfigSerializer.html',1,'sim_interface']]],
+  ['connectorconfig_8',['ConnectorConfig',['../classsim__interface_1_1dut__connector_1_1ConnectorConfig.html',1,'sim_interface::dut_connector']]],
+  ['connectorinfo_9',['ConnectorInfo',['../classsim__interface_1_1dut__connector_1_1ConnectorInfo.html',1,'sim_interface::dut_connector']]]
 ];

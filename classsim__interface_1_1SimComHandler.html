@@ -68,30 +68,78 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classsim__interface_1_1SimComHandler-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">sim_interface::SimComHandler Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
+<p>Handler between interface and simulation. Responsible for sending/receiving SimEvents to/from the simulation.  
+ <a href="classsim__interface_1_1SimComHandler.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="SimComHandler_8h_source.html">SimComHandler.h</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a89835eda4c218efac743f93ea015dbab"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#a89835eda4c218efac743f93ea015dbab">connectorType</a> { <b>RESTDummyConnector</b>
+, <b>CANConnector</b>
+, <b>V2XConnector</b>
+, <b>Invalid_Connector</b>
+ }</td></tr>
+<tr class="separator:a89835eda4c218efac743f93ea015dbab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5633a44b1ff80ec792b0b0dedec29ec2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#a5633a44b1ff80ec792b0b0dedec29ec2">SimComHandler</a> (std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &gt; &gt; queueSimToInterface, const <a class="el" href="classsim__interface_1_1SystemConfig.html">SystemConfig</a> &amp;config)</td></tr>
-<tr class="separator:a5633a44b1ff80ec792b0b0dedec29ec2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bd615be2608daf0f08aee72bba7d46e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#a6bd615be2608daf0f08aee72bba7d46e">SimComHandler</a> (<a class="el" href="classsim__interface_1_1SimToDuTInterface.html">SimToDuTInterface</a> *interface, const <a class="el" href="classsim__interface_1_1SystemConfig.html">SystemConfig</a> &amp;config)</td></tr>
+<tr class="separator:a6bd615be2608daf0f08aee72bba7d46e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc0dc288964e1c31b4ac629ec6a6fb68"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#adc0dc288964e1c31b4ac629ec6a6fb68">~SimComHandler</a> ()</td></tr>
 <tr class="separator:adc0dc288964e1c31b4ac629ec6a6fb68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2064c6154aa11da9f9d0c815f45cd270"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#a2064c6154aa11da9f9d0c815f45cd270">sendEventToSim</a> (const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent)</td></tr>
 <tr class="separator:a2064c6154aa11da9f9d0c815f45cd270"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14769a0b81dea6d141261acc2405f333"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#a14769a0b81dea6d141261acc2405f333">receive</a> ()</td></tr>
+<tr class="separator:a14769a0b81dea6d141261acc2405f333"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe798afe1d329de098c0740feb3e0c89"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#abe798afe1d329de098c0740feb3e0c89">getConfig</a> ()</td></tr>
+<tr class="separator:abe798afe1d329de098c0740feb3e0c89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31eb3f0b64b6487c1fafda21f7d12c1d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsim__interface_1_1SimComHandler.html#a89835eda4c218efac743f93ea015dbab">connectorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#a31eb3f0b64b6487c1fafda21f7d12c1d">resolveConnectorTypeForSwitch</a> (std::string connectorTypeS)</td></tr>
+<tr class="separator:a31eb3f0b64b6487c1fafda21f7d12c1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e3045aec9762d50b256b8c27058f9ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#a9e3045aec9762d50b256b8c27058f9ab">run</a> ()</td></tr>
 <tr class="separator:a9e3045aec9762d50b256b8c27058f9ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed124bbab4208d794ab4208468164bf0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#aed124bbab4208d794ab4208468164bf0">unbindPublisher</a> ()</td></tr>
+<tr class="separator:aed124bbab4208d794ab4208468164bf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9779048b71d82cef9e3590ea6fd19954"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#a9779048b71d82cef9e3590ea6fd19954">disconnectSubscriber</a> ()</td></tr>
+<tr class="separator:a9779048b71d82cef9e3590ea6fd19954"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02de89ef0b01c07a80be3859201af652"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#a02de89ef0b01c07a80be3859201af652">disconnectReceiveConfig</a> ()</td></tr>
+<tr class="separator:a02de89ef0b01c07a80be3859201af652"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c95fd99165395bc2041a7055bc7b1fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html#a4c95fd99165395bc2041a7055bc7b1fa">close</a> ()</td></tr>
+<tr class="separator:a4c95fd99165395bc2041a7055bc7b1fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Handler between interface and simulation. Responsible for sending/receiving SimEvents to/from the simulation. </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a5633a44b1ff80ec792b0b0dedec29ec2" name="a5633a44b1ff80ec792b0b0dedec29ec2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5633a44b1ff80ec792b0b0dedec29ec2">&#9670;&nbsp;</a></span>SimComHandler()</h2>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a89835eda4c218efac743f93ea015dbab" name="a89835eda4c218efac743f93ea015dbab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89835eda4c218efac743f93ea015dbab">&#9670;&nbsp;</a></span>connectorType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classsim__interface_1_1SimComHandler.html#a89835eda4c218efac743f93ea015dbab">sim_interface::SimComHandler::connectorType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">connectorType</td><td>numeration for the various connectorType RESTDummyConnector CANConnector V2XConnector Invalid_Connector: If the configuration of a connector is invalid in the config.xml </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a6bd615be2608daf0f08aee72bba7d46e" name="a6bd615be2608daf0f08aee72bba7d46e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bd615be2608daf0f08aee72bba7d46e">&#9670;&nbsp;</a></span>SimComHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -99,8 +147,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">sim_interface::SimComHandler::SimComHandler </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classsim__interface_1_1SharedQueue.html">SharedQueue</a>&lt; <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &gt; &gt;&#160;</td>
-          <td class="paramname"><em>queueSimToInterface</em>, </td>
+          <td class="paramtype"><a class="el" href="classsim__interface_1_1SimToDuTInterface.html">SimToDuTInterface</a> *&#160;</td>
+          <td class="paramname"><em>interface</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -115,13 +163,23 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Create a new handler. </p><dl class="params"><dt>Parameters</dt><dd>
+<p >Constructor: Create a new handler. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">queueSimToInterface</td><td>A queue to communicate with the interface. </td></tr>
+    <tr><td class="paramname">interface</td><td>A pointer to communicate with the interface. </td></tr>
     <tr><td class="paramname">config</td><td>System configuration. </td></tr>
+    <tr><td class="paramname">socketSimPub_</td><td>Create socket for publishing messages to simulation </td></tr>
+    <tr><td class="paramname">socketSimSub_</td><td>Create socket for subscribing messages from simulation </td></tr>
+    <tr><td class="paramname">socketSimSubConfig_</td><td>Create socket for subscribing xml-configuration from simulation</td></tr>
   </table>
   </dd>
 </dl>
+<p>Configure sockets with the addresses from the config </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">context_recConfig</td><td>Defines the context of the zmq socket for the xml-Configuration Set the sockets to subscriber sockets and listen to any String</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Open connecting of the sockets: Start Logger for connecting the sockets Bind: Publisher sockets have to bind to the address Connect: Subscriber sockets have to connect </p>
 
 </div>
 </div>
@@ -139,11 +197,157 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Destroys the handler and stops all threads. </p>
+<p >Unbinds, disconnects and closes the sockets Stops all threads and destroys the handler </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4c95fd99165395bc2041a7055bc7b1fa" name="a4c95fd99165395bc2041a7055bc7b1fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c95fd99165395bc2041a7055bc7b1fa">&#9670;&nbsp;</a></span>close()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sim_interface::SimComHandler::close </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >close all sockets </p>
+
+</div>
+</div>
+<a id="a02de89ef0b01c07a80be3859201af652" name="a02de89ef0b01c07a80be3859201af652"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02de89ef0b01c07a80be3859201af652">&#9670;&nbsp;</a></span>disconnectReceiveConfig()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sim_interface::SimComHandler::disconnectReceiveConfig </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >disconnect the subscriber config socket --&gt; from simulation </p>
+
+</div>
+</div>
+<a id="a9779048b71d82cef9e3590ea6fd19954" name="a9779048b71d82cef9e3590ea6fd19954"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9779048b71d82cef9e3590ea6fd19954">&#9670;&nbsp;</a></span>disconnectSubscriber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sim_interface::SimComHandler::disconnectSubscriber </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >disconnect the subscriber socket --&gt; from simulation </p>
+
+</div>
+</div>
+<a id="abe798afe1d329de098c0740feb3e0c89" name="abe798afe1d329de098c0740feb3e0c89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe798afe1d329de098c0740feb3e0c89">&#9670;&nbsp;</a></span>getConfig()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sim_interface::SimComHandler::getConfig </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">replyConfig</td><td>zmq message, which contains serialized data from the xml-config Receive the serialized data from the xml-config with exception-handling If receiving is failed, unbind and disconnect the sockets Start logging </td></tr>
+    <tr><td class="paramname">bufConfig</td><td>Buffer with the serialized string from the xml-config </td></tr>
+    <tr><td class="paramname">tree</td><td>Property tree for deserialize the xml-config </td></tr>
+    <tr><td class="paramname">convertedSimConfigBuffer</td><td>output stringstream for converting the buffer </td></tr>
+    <tr><td class="paramname">SimConfigString</td><td>convert the output stringstream to a string With these parameters parsing the XML into the property tree. If parsing is failed, unbind and disconnect the sockets Start logging</td></tr>
+    <tr><td class="paramname">connectorTypes</td><td>create String for copmaring the names of the connectortypes </td></tr>
+    <tr><td class="paramname">xmlWriterSettings</td><td>preparing an xml writer with property tree</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>for each loop: run through each value type in a xml-file and get every value in connectors tags save the classtype of the xml attribute into the connectorTypes string for comparing compare the connector types with the enumeration</p>
+<p >The principle of the deserializing for the three connector are working very similar Exception handling and logging The principle will be explained with RESTDummyConnector: </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">restXMLStringStream</td><td>stringstream for writing the xml file writing the xml file with these parameters </td></tr>
+    <tr><td class="paramname">restXMLString</td><td>Convert the stringstream to a string replace not needed tags in the xml-file to make it shorter </td></tr>
+    <tr><td class="paramname">restConnectorConfig</td><td>Create Pointer from type RESTConnectorConfig </td></tr>
+    <tr><td class="paramname">xmliStringStream</td><td>Convert the string to a input stringstream for deserialization Deserialize the received RESTDummyConnector from xml-config Create RestConnector object and put it in the queue of the DuTToSim Add it to the interface</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Start logging: shows message which connectors were created </p>
+
+</div>
+</div>
+<a id="a14769a0b81dea6d141261acc2405f333" name="a14769a0b81dea6d141261acc2405f333"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14769a0b81dea6d141261acc2405f333">&#9670;&nbsp;</a></span>receive()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sim_interface::SimComHandler::receive </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Starts the handler to asynchronously receive incoming events. while loop: ends, if the thread was stopped </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">replySimData</td><td>zmq message, which contains serialized data from the simulation Receive the serialized simulation data e.g. Speed with exception-handling If receiving is failed, unbind and disconnect the sockets Start logging </td></tr>
+    <tr><td class="paramname">bufSimData</td><td>Buffer with the serialized string </td></tr>
+    <tr><td class="paramname">inputSimData</td><td>Convert the buffer into a string </td></tr>
+    <tr><td class="paramname">archiveStreamSimData</td><td>for writing the inputSimData </td></tr>
+    <tr><td class="paramname">archiveSimData</td><td>input text archive for writing the inputSimData stringstream </td></tr>
+    <tr><td class="paramname">receiveMapSimData</td><td>variable map with operations and value e.g. speed 13.05 writing the archive into the map with exception handling start logging, if writing failed for each loop: run through element from the receiveMapSimData create for each key and value an event Send the Simulation Event to the Interface </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a31eb3f0b64b6487c1fafda21f7d12c1d" name="a31eb3f0b64b6487c1fafda21f7d12c1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31eb3f0b64b6487c1fafda21f7d12c1d">&#9670;&nbsp;</a></span>resolveConnectorTypeForSwitch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classsim__interface_1_1SimComHandler.html#a89835eda4c218efac743f93ea015dbab">connectorType</a> sim_interface::SimComHandler::resolveConnectorTypeForSwitch </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>connectorTypeS</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >function for checking the various connector types in the config file </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">connectorTypeS</td><td>String for comparing the name of the connector types in the config.xml </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a9e3045aec9762d50b256b8c27058f9ab" name="a9e3045aec9762d50b256b8c27058f9ab"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9e3045aec9762d50b256b8c27058f9ab">&#9670;&nbsp;</a></span>run()</h2>
 
@@ -158,7 +362,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Starts the handler to asynchronously receive incoming events. </p>
+<p >starts the receive method in a own thread </p>
 
 </div>
 </div>
@@ -179,21 +383,44 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p >Asynchronous sending of events to simulation. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">logSimEvent</td><td>For Logging the SimEvents </td></tr>
     <tr><td class="paramname">simEvent</td><td>An event that should be sent to the simulation. </td></tr>
+    <tr><td class="paramname">simEventMap</td><td>A variable Map for events to the Simulation adding keys and values to the simEventMap </td></tr>
+    <tr><td class="paramname">simEventsStringStream</td><td>output stringstream for publishing </td></tr>
+    <tr><td class="paramname">archiveSimEvent</td><td>put the stringstream into the output text archive write the Map to the archive </td></tr>
+    <tr><td class="paramname">simEventData</td><td>Convert simEventsStringStream into a string </td></tr>
+    <tr><td class="paramname">msgToSend</td><td>preparing zmq:message type for publishing Send message via socket and start logger for event </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<a id="aed124bbab4208d794ab4208468164bf0" name="aed124bbab4208d794ab4208468164bf0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed124bbab4208d794ab4208468164bf0">&#9670;&nbsp;</a></span>unbindPublisher()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sim_interface::SimComHandler::unbindPublisher </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >unbind the publisher socket --&gt; to simulation </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>Sim_To_DuT_Interface/Sim_Communication/<a class="el" href="SimComHandler_8h_source.html">SimComHandler.h</a></li>
-<li>Sim_To_DuT_Interface/Sim_Communication/SimComHandler.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 20 2021 18:18:10 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+Generated on Mon Dec 20 2021 22:06:01 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
 </small></address>
 </body>
 </html>

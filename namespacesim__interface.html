@@ -79,6 +79,9 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1ConfigSerializer.html">ConfigSerializer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classsim__interface_1_1ConfigSerializer.html" title="ConfigSerializer: This class is for de-/ serializing the different connectorConfig types and overwrit...">ConfigSerializer</a>: This class is for de-/ serializing the different connectorConfig types and overwrites the boost:serialization methods  <a href="classsim__interface_1_1ConfigSerializer.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1InterfaceLogger.html">InterfaceLogger</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logger to log to file, console and as structured data csv  <a href="classsim__interface_1_1InterfaceLogger.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -92,6 +95,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A thread save shared queue to communicate between multiple threads. The queue is a FIFO queue.  <a href="classsim__interface_1_1SharedQueue.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimComHandler.html">SimComHandler</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler between interface and simulation. Responsible for sending/receiving SimEvents to/from the simulation.  <a href="classsim__interface_1_1SimComHandler.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Event object used to communicate between simulation and DuTs.  <a href="classsim__interface_1_1SimEvent.html#details">More...</a><br /></td></tr>
@@ -100,7 +104,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An interface between a simulation and multiple DuT devices.  <a href="classsim__interface_1_1SimToDuTInterface.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsim__interface_1_1SystemConfig.html">SystemConfig</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains the config for the <a class="el" href="classsim__interface_1_1SimComHandler.html">SimComHandler</a>, the <a class="el" href="classsim__interface_1_1SimToDuTInterface.html" title="An interface between a simulation and multiple DuT devices.">SimToDuTInterface</a> and the Logger.  <a href="classsim__interface_1_1SystemConfig.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains the config for the <a class="el" href="classsim__interface_1_1SimComHandler.html" title="Handler between interface and simulation. Responsible for sending/receiving SimEvents to/from the sim...">SimComHandler</a>, the <a class="el" href="classsim__interface_1_1SimToDuTInterface.html" title="An interface between a simulation and multiple DuT devices.">SimToDuTInterface</a> and the Logger.  <a href="classsim__interface_1_1SystemConfig.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
@@ -125,9 +129,6 @@ Enumerations</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:ad0bd89c0d88e670b8df74331d01049ad"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesim__interface.html#ad0bd89c0d88e670b8df74331d01049ad">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classsim__interface_1_1SimEvent.html">SimEvent</a> &amp;simEvent)</td></tr>
 <tr class="separator:ad0bd89c0d88e670b8df74331d01049ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebee326c0dbe798577425967beb2c1e5"><td class="memItemLeft" align="right" valign="top"><a id="aebee326c0dbe798577425967beb2c1e5" name="aebee326c0dbe798577425967beb2c1e5"></a>
-zmq::context_t&#160;</td><td class="memItemRight" valign="bottom"><b>context_sub</b> (1)</td></tr>
-<tr class="separator:aebee326c0dbe798577425967beb2c1e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7bf80017db78c299e4d2be31d55fde9"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesim__interface.html#aa7bf80017db78c299e4d2be31d55fde9">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classsim__interface_1_1SimToDuTInterface.html">SimToDuTInterface</a> &amp;interface)</td></tr>
 <tr class="separator:aa7bf80017db78c299e4d2be31d55fde9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -173,7 +174,25 @@ Lukas Wagenlehner </dd></dl>
 <p >"Sim To DuT Interface" is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
 <p >"Sim To DuT Interface" is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 <p >You should have received a copy of the GNU General Public License along with "Sim To DuT Interface". If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
-<dl class="section author"><dt>Author</dt><dd>Lukas Wagenlehner // TODO add all authors </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Lukas Wagenlehner </dd>
+<dd>
+Fabian Andre Genes </dd>
+<dd>
+Thanaancheyan Thavapalan </dd>
+<dd>
+Michael Schmitz </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>1.0</dd></dl>
+<p>Sim To DuT Interface</p>
+<p >Copyright (C) 2021 Michael Schmitz</p>
+<p >This file is part of "Sim To DuT Interface".</p>
+<p >"Sim To DuT Interface" is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+<p >"Sim To DuT Interface" is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+<p >You should have received a copy of the GNU General Public License along with "Sim To DuT Interface". If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
+<dl class="section author"><dt>Author</dt><dd>Michael Schmitz </dd>
+<dd>
+Fabian Andre Genes </dd>
+<dd>
+Thanaanncheyan Thavapalan </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>1.0</dd></dl>
 <p>HIL - Periodic Timer This an utility to create periodic timers for SimEvents</p>
 <p >Copyright (C) 2021 Michael Schmitz</p>
@@ -290,7 +309,7 @@ Lukas Wagenlehner </dd></dl>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 20 2021 18:18:10 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+Generated on Mon Dec 20 2021 22:06:01 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
 </small></address>
 </body>
 </html>

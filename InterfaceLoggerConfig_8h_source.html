@@ -117,7 +117,7 @@ $(function() {
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        <span class="keyword">friend</span> <span class="keyword">class </span>boost::serialization::access;</div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        <span class="keyword">template</span>&lt;<span class="keyword">class</span> Archive&gt;</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        <span class="keywordtype">void</span> serialize(Archive &amp;ar, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> version) {</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="namespaceboost_1_1serialization.html#ad53e63dec6bed3d0ccd0ae2bd6ecc825">serialize</a>(Archive &amp;ar, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> version) {</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>            ar &amp; BOOST_SERIALIZATION_NVP(enableDebugMode);</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>            ar &amp; BOOST_SERIALIZATION_NVP(pathConsoleLog);</div>
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            ar &amp; BOOST_SERIALIZATION_NVP(pathDataLog);</div>
@@ -133,12 +133,13 @@ $(function() {
 <div class="ttc" id="aclasssim__interface_1_1LoggerConfig_html"><div class="ttname"><a href="classsim__interface_1_1LoggerConfig.html">sim_interface::LoggerConfig</a></div><div class="ttdoc">The logger needs a configuration before it can start logging.</div><div class="ttdef"><b>Definition:</b> InterfaceLoggerConfig.h:50</div></div>
 <div class="ttc" id="aclasssim__interface_1_1LoggerConfig_html_a5437d1e6609d473c183a682763a1c659"><div class="ttname"><a href="classsim__interface_1_1LoggerConfig.html#a5437d1e6609d473c183a682763a1c659">sim_interface::LoggerConfig::LoggerConfig</a></div><div class="ttdeci">LoggerConfig(bool enableDebugMode, std::string pathConsoleLog, std::string pathDataLog, int fileBackupCount, LOG_LEVEL fileLogLevel, LOG_LEVEL consoleLogLevel)</div><div class="ttdef"><b>Definition:</b> InterfaceLoggerConfig.h:73</div></div>
 <div class="ttc" id="aclasssim__interface_1_1LoggerConfig_html_a7dd6e0e8854b84e4578e06ab53fc943a"><div class="ttname"><a href="classsim__interface_1_1LoggerConfig.html#a7dd6e0e8854b84e4578e06ab53fc943a">sim_interface::LoggerConfig::LoggerConfig</a></div><div class="ttdeci">LoggerConfig()=default</div></div>
+<div class="ttc" id="anamespaceboost_1_1serialization_html_ad53e63dec6bed3d0ccd0ae2bd6ecc825"><div class="ttname"><a href="namespaceboost_1_1serialization.html#ad53e63dec6bed3d0ccd0ae2bd6ecc825">boost::serialization::serialize</a></div><div class="ttdeci">void serialize(Archive &amp;ar, sim_interface::dut_connector::ConnectorConfig &amp;config, const unsigned int version)</div><div class="ttdef"><b>Definition:</b> ConfigSerializer.h:146</div></div>
 <div class="ttc" id="anamespacesim__interface_html"><div class="ttname"><a href="namespacesim__interface.html">sim_interface</a></div><div class="ttdef"><b>Definition:</b> CANConnector.cpp:29</div></div>
 <div class="ttc" id="anamespacesim__interface_html_aa3caa5cdaf1232238e417fc9ee7d5790"><div class="ttname"><a href="namespacesim__interface.html#aa3caa5cdaf1232238e417fc9ee7d5790">sim_interface::LOG_LEVEL</a></div><div class="ttdeci">LOG_LEVEL</div><div class="ttdef"><b>Definition:</b> InterfaceLoggerConfig.h:40</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 20 2021 18:18:10 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+Generated on Mon Dec 20 2021 22:06:01 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
 </small></address>
 </body>
 </html>
