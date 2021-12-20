@@ -51,10 +51,13 @@ namespace sim_interface::dut_connector {
             }
             for (const auto &periodicOperation: this->periodicOperations) {
                 if (this->operations.find(periodicOperation.first) == this->operations.end()) {
-                  throw std::invalid_argument("Periodic operation not found in operations");
+                    throw std::invalid_argument("Periodic operation not found in operations");
                 };
             }
         };
+
+        /** Default destructor */
+        virtual ~ConnectorConfig() = default;
 
         /** Set of processable operations */
         std::set<std::string> operations{};

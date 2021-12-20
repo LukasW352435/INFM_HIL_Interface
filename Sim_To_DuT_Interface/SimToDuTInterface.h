@@ -31,6 +31,9 @@
 #include <iterator>
 
 namespace sim_interface {
+    // Forward declaration to avoid looping
+    class SimComHandler;
+
     /**
      * <summary>
      * An interface between a simulation and multiple DuT devices.
@@ -52,7 +55,7 @@ namespace sim_interface {
          * Add DuT connectors to the interface.
          * @param duTConnector A DuT connector that has derived form the DuTConnector class.
          */
-        void addConnector(dut_connector::DuTConnector *duTConnector);
+        void addConnector(std::shared_ptr<dut_connector::DuTConnector> duTConnector);
 
         /**
          * Sets the handler that connects to the Simulation.
@@ -89,7 +92,7 @@ namespace sim_interface {
         std::shared_ptr<SharedQueue<SimEvent>> queueDuTToSim;
         std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface;
         SimComHandler *simComHandler = nullptr;
-        std::list<dut_connector::DuTConnector *> duTConnectors;
+        std::list<std::shared_ptr<dut_connector::DuTConnector>> duTConnectors;
         std::thread threadSimToInterface;
         std::thread threadDuTToSim;
         bool stopThreads = true;

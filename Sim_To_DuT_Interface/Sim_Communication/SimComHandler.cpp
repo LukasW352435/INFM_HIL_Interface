@@ -19,139 +19,360 @@
  * along with "Sim To DuT Interface".  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Lukas Wagenlehner
- * // TODO add all authors
+ * @author Fabian Andre Genes
+ * @author Thanaancheyan Thavapalan
+ * @author Michael Schmitz
  * @version 1.0
  */
 
 #include "SimComHandler.h"
+#include "../Utility/ConfigSerializer.h"
+#include "../DuT_Connectors/RESTDummyConnector/RESTDummyConnector.h"
+#include "../DuT_Connectors/CANConnector/CANConnector.h"
+#include "../DuT_Connectors/V2XConnector/V2XConnector.h"
 
-#include <utility>
-#include <zmq.hpp>
+
+#include <exception>
+#include <string>
+#include <thread>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/archive/binary_iarchive.hpp>
-
-#include <boost/archive/text_oarchive.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+#include <boost/serialization/serialization.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/variant.hpp>
+#include <boost/algorithm/string.hpp>
+
 
 namespace sim_interface {
+
+
+    /**
+   * Global Variable because: socket doesn't work, if created in constructor
+   * @param context_sub: Defines the context of the zmq socket
+   */
     zmq::context_t context_sub(1);
 
-    SimComHandler::SimComHandler(std::shared_ptr<SharedQueue<SimEvent>> queueSimToInterface, const SystemConfig &config)
-            : queueSimToInterface(std::move(queueSimToInterface)), socketSimPub_(context_sub, zmq::socket_type::pub),
-              socketSimSub_(context_sub, zmq::socket_type::sub) {
+    SimComHandler::SimComHandler(SimToDuTInterface *interface, const SystemConfig &config)
+            : interface(interface), socketSimPub_(context_sub, zmq::socket_type::pub),
+              socketSimSub_(context_sub, zmq::socket_type::sub),
+              socketSimSubConfig_(context_sub, zmq::socket_type::sub) {
 
         // zmq Subscriber
-        std::string socketSimAddressSub = config.socketSimAddressSub;
-        zmq::context_t context_sub(1);
-
+        socketSimAddressSub = config.socketSimAddressSub;
         // zmq Publisher
-        std::string socketSimAddressPub = config.socketSimAddressPub;
-        zmq::context_t context_pub(1);
-
-        // Create Sockets
-        //  socketSimSub_ = zmq::socket_t(context_sub, zmq::socket_type::sub);
-        //  socketSimPub_ = zmq::socket_t(context_pub, zmq::socket_type::pub);
-
+        socketSimAddressPub = config.socketSimAddressPub;
+        // zmq Reciver Config
+        socketSimAddressReceiverConfig = config.socketSimAddressReciverConfig;
+        zmq::context_t context_recConfig(1);
         // Config Sockets
-        socketSimSub_.setsockopt(ZMQ_SUBSCRIBE, "", 0);
+        zmq_setsockopt(socketSimSub_, ZMQ_SUBSCRIBE, "", 0);
+        zmq_setsockopt(socketSimSubConfig_, ZMQ_SUBSCRIBE, "", 0);
 
-        // Connect to publisher
-        std::cout << "Connecting to " << socketSimAddressSub << " . . ." << std::endl;
-        //  socket_sub.connect(socketSimAdress);
-
-        // Open the connection
-        std::cout << "Binding to " << socketSimAddressPub << " . . ." << std::endl;
+        //Open the connections
+        InterfaceLogger::logMessage("Connecting to subscriber (simulation data): " + socketSimAddressSub,
+                                    LOG_LEVEL::INFO);
+        InterfaceLogger::logMessage("Connecting to subscriber (config): " + socketSimAddressReceiverConfig,
+                                    LOG_LEVEL::INFO);
+        InterfaceLogger::logMessage("Binding to publisher (events interface): " + socketSimAddressPub, LOG_LEVEL::INFO);
         socketSimPub_.bind(socketSimAddressPub);
         socketSimSub_.connect(socketSimAddressSub);
+        socketSimSubConfig_.connect(socketSimAddressReceiverConfig);
+
     }
 
-    void SimComHandler::run() {
-        // TODO async receive events from the Simulation and send them to the interface
+    SimComHandler::connectorType SimComHandler::resolveConnectorTypeForSwitch(std::string connectorTypeS) {
+        if (connectorTypeS == "RESTDummyConnector") return RESTDummyConnector;
+        if (connectorTypeS == "CANConnector") return CANConnector;
+        if (connectorTypeS == "V2XConnector") return V2XConnector;
+        return Invalid_Connector;
 
-        while (1) {
-            zmq::message_t reply;
+    }
+
+    void SimComHandler::getConfig() {
+        zmq::message_t replyConfig;
+        try {
+            socketSimSubConfig_.recv(replyConfig, zmq::recv_flags::none);
+            InterfaceLogger::logMessage("Received Config: ", LOG_LEVEL::INFO);
+        } catch (zmq::error_t &cantReceive) {
+            InterfaceLogger::logMessage(cantReceive.what(), LOG_LEVEL::ERROR);
+            disconnectReceiveConfig();
+            disconnectSubscriber();
+            unbindPublisher();
+        }
+
+        const char *bufConfig = static_cast<const char *>(replyConfig.data());
+        boost::property_tree::ptree tree;
+        std::ostringstream convertedSimConfigBuffer;
+        convertedSimConfigBuffer << bufConfig;
+        std::string SimConfigString = convertedSimConfigBuffer.str();
+        std::stringstream stringStream(SimConfigString);
+
+        // Parse the XML into the property tree.
+        try {
+
+            boost::property_tree::read_xml(stringStream, tree);
+            InterfaceLogger::logMessage("XML-Config was in the correct format: ", LOG_LEVEL::INFO);
+        } catch (std::exception &e) {
+            InterfaceLogger::logMessage(e.what(), LOG_LEVEL::ERROR);
+            disconnectReceiveConfig();
+            disconnectSubscriber();
+            unbindPublisher();
+        }
+        std::string connectorTypes;
+        auto xmlWriterSettings = boost::property_tree::xml_writer_make_settings<std::string>(' ', 4);
+        for (boost::property_tree::ptree::value_type &connector: tree.get_child("connectors")) {
+            connectorTypes = connector.second.get<std::string>("<xmlattr>.classType");
+
+
+            switch (resolveConnectorTypeForSwitch(connectorTypes)) {
+                case RESTDummyConnector: {
+
+                    try {
+                        std::stringstream restXMLStringStream;
+                        boost::property_tree::xml_parser::write_xml(restXMLStringStream, connector.second,
+                                                                    xmlWriterSettings);
+                        std::string restXMLString = restXMLStringStream.str();
+
+                        boost::algorithm::replace_all(restXMLString, R"(<?xml version="1.0" encoding="utf-8"?>)", "");
+                        sim_interface::dut_connector::rest_dummy::RESTConnectorConfig *restConnectorConfig;
+                        std::istringstream restXMLIStringStream(restXMLString);
+                        ConfigSerializer::deserialize(restXMLIStringStream, "conn", &restConnectorConfig);
+
+                        auto restConnector = std::make_shared<dut_connector::rest_dummy::RESTDummyConnector>(
+                                interface->getQueueDuTToSim(), *restConnectorConfig);
+                        interface->addConnector(restConnector);
+                    }
+
+                    catch (std::exception &e) {
+                        InterfaceLogger::logMessage(e.what(), LOG_LEVEL::ERROR);
+                    }
+
+
+                    break;
+                }
+                case CANConnector: {
+
+                    try {
+
+                        std::stringstream canXMLStringStream;
+                        boost::property_tree::xml_parser::write_xml(canXMLStringStream, connector.second,
+                                                                    xmlWriterSettings);
+                        std::string canXMLString = canXMLStringStream.str();
+                        boost::algorithm::trim(canXMLString);
+                        boost::algorithm::replace_all(canXMLString, R"(<?xml version="1.0" encoding="utf-8"?>)", "");
+
+                        //Workaround because frameToOperation & OperationToframe need class_id_reference to work
+
+                        boost::algorithm::replace_all(canXMLString, R"(<frameToOperation>)",
+                                                      R"(<frameToOperation class_id="2">)");
+                        boost::algorithm::replace_all(canXMLString, R"(<operationToFrame>)",
+                                                      R"(<operationToFrame class_id="5">)");
+                        boost::algorithm::replace_all(canXMLString, R"(<itemOperationToFrame>)",
+                                                      R"(<itemOperationToFrame class_id_reference="6">)");
+
+                        boost::algorithm::replace_first(canXMLString,
+                                                        R"(<itemOperationToFrame class_id_reference="6">)",
+                                                        R"(<itemOperationToFrame class_id="6">)");
+
+                        boost::algorithm::replace_all(canXMLString, R"(<itemFrameToOperation>)",
+                                                      R"(<itemFrameToOperation class_id_reference="3">)");
+
+                        boost::algorithm::replace_first(canXMLString, R"(<itemFrameToOperation class_id_reference=3">)",
+                                                        R"(<itemFrameToOperation class_id="3">)");
+                        boost::algorithm::replace_first(canXMLString, R"(<ival1>)",
+                                                        R"(<ival1 class_id="8" tracking_level="0">)");
+                        boost::algorithm::replace_all(canXMLString, R"(<CANConnectorReceiveOperation>)",
+                                                      R"(<CANConnectorReceiveOperation class_id_reference="4">)");
+                        boost::algorithm::replace_first(canXMLString,
+                                                        R"(<CANConnectorReceiveOperation class_id_reference="6">)",
+                                                        R"(<CANConnectorReceiveOperation class_id="4">)");
+
+                        boost::algorithm::replace_all(canXMLString, R"(<CANConnectorSendOperation>)",
+                                                      R"(<CANConnectorSendOperation class_id_reference="7">)");
+                        boost::algorithm::replace_first(canXMLString,
+                                                        R"(<CANConnectorSendOperation class_id_reference="7">)",
+                                                        R"(<CANConnectorSendOperation class_id="7">)");
+
+                        std::istringstream canXMLIStringStream(canXMLString);
+                        sim_interface::dut_connector::can::CANConnectorConfig *canConnectorConfig;
+                        ConfigSerializer::deserialize(canXMLIStringStream, "conn", &canConnectorConfig);
+
+                        auto CANConnector = std::make_shared<dut_connector::can::CANConnector>(
+                                interface->getQueueDuTToSim(), *canConnectorConfig);
+                        interface->addConnector(CANConnector);
+                    }
+
+                    catch (std::exception &e) {
+                        InterfaceLogger::logMessage(e.what(), LOG_LEVEL::ERROR);
+                    }
+
+                    break;
+                }
+
+                case V2XConnector: {
+
+                    try {
+                        std::stringstream v2xXMLStringStream;
+                        boost::property_tree::xml_parser::write_xml(v2xXMLStringStream, connector.second,
+                                                                    xmlWriterSettings);
+                        std::string v2xXMLString = v2xXMLStringStream.str();
+
+                        boost::algorithm::replace_all(v2xXMLString, R"(<?xml version="1.0" encoding="utf-8"?>)", "");
+                        //Fix v2xXMLString with class_id
+                        boost::algorithm::replace_first(v2xXMLString, R"(<conn>)", R"(<conn class_id="0">)");
+
+                        std::istringstream v2xXMLIStringStream(v2xXMLString);
+                        sim_interface::dut_connector::v2x::V2XConnectorConfig *V2XConnectorConfig;
+                        ConfigSerializer::deserialize(v2xXMLIStringStream, "conn", &V2XConnectorConfig);
+
+                        auto V2XConnector = std::make_shared<dut_connector::v2x::V2XConnector>(
+                                interface->getQueueDuTToSim(), *V2XConnectorConfig);
+
+                        interface->addConnector(V2XConnector);
+                    }
+
+                    catch (std::exception &e) {
+                        InterfaceLogger::logMessage(e.what(), LOG_LEVEL::ERROR);
+                    }
+
+                    break;
+                }
+                default: {
+
+                    break;
+                }
+
+
+            }
+        }
+        std::stringstream logss;
+        logss << *interface;
+        InterfaceLogger::logMessage("Received configs, the following connectors were created:", LOG_LEVEL::INFO);
+        for (std::string line; std::getline(logss, line);) {
+            InterfaceLogger::logMessage(line, LOG_LEVEL::INFO);
+        }
+
+        std::string receivedString = "Config received";
+        socketSimPub_.send(zmq::message_t(receivedString), zmq::send_flags::dontwait);
+
+    }
+
+
+    void SimComHandler::receive() {
+
+
+        while (stopThread) {
+            zmq::message_t replySimData;
             try {
-                std::cout << "Receiving... " << std::endl;
-                socketSimSub_.recv(&reply);
+                socketSimSub_.recv(replySimData, zmq::recv_flags::none);
+                InterfaceLogger::logMessage("Receiving data ", LOG_LEVEL::INFO);
 
-            } catch (zmq::error_t cantReceive) {
-                std::cerr << "Socket can't receive: " << cantReceive.what() << std::endl;
-                // TODO unbind
+            } catch (zmq::error_t &cantReceive) {
+                InterfaceLogger::logMessage(cantReceive.what(), LOG_LEVEL::ERROR);
+                disconnectReceiveConfig();
+                disconnectSubscriber();
+                unbindPublisher();
             }
 
-            const char *buf = static_cast<const char *>(reply.data());
-            std::cout << "CHAR [" << buf << "]" << std::endl;
+            const char *bufSimData = static_cast<const char *>(replySimData.data());
 
-            std::string input_data_(buf, reply.size());
-            std::istringstream archive_stream(input_data_);
-            boost::archive::text_iarchive archive(archive_stream);
-            std::map<std::string, boost::variant<int, double, std::string>> receiveMap;
+            std::string inputSimData(bufSimData, replySimData.size());
+            std::istringstream archiveStreamSimData(inputSimData);
+            boost::archive::text_iarchive archiveSimData(archiveStreamSimData);
+            std::map<std::string, boost::variant<int, double, std::string>> receiveMapSimData;
 
             try {
-                archive >> receiveMap;
+                archiveSimData >> receiveMapSimData;
             } catch (boost::archive::archive_exception &ex) {
-                std::cout << "Archive Exception during deserializing:" << std::endl;
-                std::cout << ex.what() << std::endl;
+                InterfaceLogger::logMessage("Archive exception during deserializing: ", LOG_LEVEL::ERROR);
+                InterfaceLogger::logMessage(ex.what(), LOG_LEVEL::ERROR);
+
             } catch (int e) {
-                std::cout << "EXCEPTION " << e << std::endl;
+                InterfaceLogger::logMessage(" Exception:" + fmt::to_string(e), LOG_LEVEL::ERROR);
+
             }
-            std::cout << "Value " << receiveMap["Speed"] << std::endl;
-            //  std::string test  = receiveMap["Speed"].which();
-            std::vector<std::string> keyVector;
-            std::vector<boost::variant<int, double, std::string>> valueVector;
-            for (auto const &element: receiveMap) {
-                keyVector.push_back(element.first);
-                valueVector.push_back(element.second);
-                std::string keyAsString = element.first;
 
-                auto valueAsAny = element.second;
-                std::stringstream stringStreamValue;
-                stringStreamValue << valueAsAny;
 
-                std::cout << "value: " << stringStreamValue.str() << std::endl;
-                SimEvent event(keyAsString, stringStreamValue.str(), "Simulation");
+            for (auto const &element: receiveMapSimData) {
+                SimEvent event(element.first, element.second, "Simulation Traci");
                 sendEventToInterface(event);
             }
         }
     }
 
     void SimComHandler::sendEventToSim(const SimEvent &simEvent) {
-        //BOYS hier müssen wir hin
-        // TODO implementation of sending an event to the simulation
-        std::cout << "Async Sending of Event..." << std::endl;
-        std::cout << simEvent << "lol";
-        // Send it off to any subscribers
-        std::cout << "Waiting to Send " << std::endl;
 
-        // std::map<std::string , boost::variant<int, double, std::string, std::time_t>> simEventMap;
-        //Not working with curreent time
+
+        std::stringstream logSimEvent;
+        logSimEvent << simEvent;
+
         std::map<std::string, boost::variant<int, double, std::string>> simEventMap;
         simEventMap["Operation"] = simEvent.operation;
         simEventMap["Value"] = boost::apply_visitor(EventVisitor(), simEvent.value);
         simEventMap["Origin"] = simEvent.origin;
         simEventMap["Current"] = simEvent.current;
-        //serialize map
-        std::ostringstream ss;
-        boost::archive::text_oarchive archive(ss);
-        archive << simEventMap;
-        std::string outbound_data = ss.str();
-        // create buffer size for message
-        zmq::message_t msgToSend(outbound_data);
 
-        socketSimPub_.send(msgToSend);
+        //serialize map
+        std::ostringstream simEventsStringStream;
+        boost::archive::text_oarchive archiveSimEvent(simEventsStringStream);
+        archiveSimEvent << simEventMap;
+        std::string simEventData = simEventsStringStream.str();
+
+        zmq::message_t msgToSend(simEventData);
+        socketSimPub_.send(msgToSend, zmq::send_flags::none);
+        InterfaceLogger::logMessage("Async sending of events\n" + logSimEvent.str(), LOG_LEVEL::INFO);
     }
 
     void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
         InterfaceLogger::logEvent(simEvent);
-        queueSimToInterface->push(simEvent);
+        interface->getQueueSimToInterface()->push(simEvent);
+    }
+
+    void SimComHandler::unbindPublisher() {
+        socketSimPub_.unbind(socketSimAddressPub);
+        InterfaceLogger::logMessage("Unbinding to publisher (events interface): " + socketSimAddressPub,
+                                    LOG_LEVEL::INFO);
+    }
+
+    void SimComHandler::disconnectSubscriber() {
+        socketSimSub_.disconnect(socketSimAddressSub);
+        InterfaceLogger::logMessage("Disconnecting to subscriber (simulation data): " + socketSimAddressSub,
+                                    LOG_LEVEL::INFO);
+
+    }
+
+
+    void SimComHandler::disconnectReceiveConfig() {
+        socketSimSubConfig_.disconnect(socketSimAddressReceiverConfig);
+        InterfaceLogger::logMessage("Disconnecting to subscriber (config): " + socketSimAddressReceiverConfig,
+                                    LOG_LEVEL::INFO);
+
+    }
+
+
+    void SimComHandler::close() {
+        socketSimSub_.close();
+        socketSimPub_.close();
+        socketSimSubConfig_.close();
+    }
+
+    void SimComHandler::run() {
+        simComHandlerThread = std::thread(&sim_interface::SimComHandler::receive, this);
+
     }
 
     SimComHandler::~SimComHandler() {
-        // TODO end zmq, etc.
+        stopThread = false;
+        simComHandlerThread.join();
+        unbindPublisher();
+        disconnectSubscriber();
+        disconnectReceiveConfig();
+        close();
     }
+
+
 
 
 }

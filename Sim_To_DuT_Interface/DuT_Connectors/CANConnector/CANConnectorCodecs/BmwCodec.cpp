@@ -44,7 +44,7 @@ namespace sim_interface::dut_connector::can {
         cachedSimEventValues["Longitude_Dynamics"] = 0;
 
         // SimEvents for the 0x274 GPS_LOCB frame
-        cachedSimEventValues["Position_Z-Coordinate_DUT"] = 0;
+        cachedSimEventValues["Position_Z_Coordinate_DUT"] = 0;
         cachedSimEventValues["Heading_Dynamics"] = 0;
 
         // SimEvents for the  0x279 LICHTER frame
@@ -60,7 +60,7 @@ namespace sim_interface::dut_connector::can {
             result = encodeGeschwindigkeit(event);
         } else if (event.operation == "Latitude_Dynamics" || event.operation == "Longitude_Dynamics") {
             result = encodeGPS_LOCA(event);
-        } else if (event.operation == "Position_Z-Coordinate_DUT" || event.operation == "Heading_Dynamics") {
+        } else if (event.operation == "Position_Z_Coordinate_DUT" || event.operation == "Heading_Dynamics") {
             result = encodeGPS_LOCB(event);
         } else if (event.operation == "Signals_DUT") {
             result = encodeLichter(event);
@@ -203,7 +203,7 @@ namespace sim_interface::dut_connector::can {
         // Cash the value of the event
         cachedSimEventValues[event.operation] = boost::get<double>(event.value);
 
-        double realAltitude = cachedSimEventValues["Position_Z-Coordinate_DUT"];
+        double realAltitude = cachedSimEventValues["Position_Z_Coordinate_DUT"];
         double realHeading = cachedSimEventValues["Heading_Dynamics"];
         double realDvcoveh = 0;
 
@@ -381,7 +381,7 @@ namespace sim_interface::dut_connector::can {
         uint8_t realDvcoveh = rawDvcoveh * DVCOVEH_SCALING + DVCOVEH_OFFSET;
 
         // Create the SimEvents and add them to the vector that will be sent to the simulation
-        SimEvent altitude = SimEvent("Position_Z-Coordinate_DUT", static_cast<double>(realAltitude), "CanConnector");
+        SimEvent altitude = SimEvent("Position_Z_Coordinate_DUT", static_cast<double>(realAltitude), "CanConnector");
         SimEvent heading = SimEvent("Heading_Dynamics", static_cast<double>(realHeading), "CanConnector");
 
         events.push_back(altitude);

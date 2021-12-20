@@ -17,7 +17,10 @@ add_executable(${PROJECT_NAME} main.cpp
         Sim_Communication/SimComHandler.cpp Sim_Communication/SimComHandler.h
         Utility/SharedQueue.h
         Utility/PeriodicTimer.cpp Utility/PeriodicTimer.h
-        SystemConfig.h)
+        SystemConfig.h
+        Utility/ConfigSerializer.h
+        Utility/ConfigSerializerCanConnector.h
+        )
 
 
 if (CMAKE_CXX_COMPILER_VERSION GREATER_EQUAL 9)
