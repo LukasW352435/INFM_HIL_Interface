@@ -255,6 +255,9 @@ namespace sim_interface {
             InterfaceLogger::logMessage(line, LOG_LEVEL::INFO);
         }
 
+        std::string receivedString = "Config received";
+        socketSimPub_.send(zmq::message_t(receivedString), zmq::send_flags::dontwait);
+
     }
 
 
