@@ -72,8 +72,9 @@ namespace sim_interface {
         socketSimAddressReceiverConfig = config.socketSimAddressReciverConfig;
         zmq::context_t context_recConfig(1);
         // Config Sockets
-        socketSimSub_.set(zmq::sockopt::subscribe, "");
-        socketSimSubConfig_.set(zmq::sockopt::subscribe, "");
+        zmq_setsockopt(socketSimSub_, ZMQ_SUBSCRIBE, "", 0);
+        zmq_setsockopt(socketSimSubConfig_, ZMQ_SUBSCRIBE, "", 0);
+   
         //Open the connections
         InterfaceLogger::logMessage("Connecting to subscriber (simulation data): " + socketSimAddressSub,
                                     LOG_LEVEL::INFO);
