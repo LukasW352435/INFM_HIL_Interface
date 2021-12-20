@@ -48,7 +48,7 @@ namespace sim_interface {
 
         /**
      	* Constructor: Create a new handler.
-     	* @param *interface A pointer to communicate with the interface.
+     	* @param interface A pointer to communicate with the interface.
      	* @param config System configuration.
      	* @param socketSimPub_: Create socket for publishing messages to simulation
      	* @param socketSimSub_: Create socket for subscribing messages from simulation
@@ -94,9 +94,9 @@ namespace sim_interface {
          * Receive the serialized simulation data e.g. Speed with exception-handling
          * If receiving is failed, unbind and disconnect the sockets
          * Start logging
-         * @param *bufSimData: Buffer with the serialized string
+         * @param bufSimData: Buffer with the serialized string
          * @param inputSimData: Convert the buffer into a string
-         * @param *archiveStreamSimData: for writing the inputSimData
+         * @param archiveStreamSimData: for writing the inputSimData
          * @param archiveSimData: input text archive for writing the inputSimData stringstream
          * @param receiveMapSimData: variable map with operations and value e.g. speed 13.05
          * writing the archive into the map with exception handling
@@ -108,13 +108,13 @@ namespace sim_interface {
         void receive();
 
         /**
-      	* @param *replyConfig: zmq message, which contains serialized data from the xml-config
+      	* @param replyConfig: zmq message, which contains serialized data from the xml-config
       	* Receive the serialized data from the xml-config with exception-handling
     	* If receiving is failed, unbind and disconnect the sockets
         * Start logging
-     	* @param *bufConfig: Buffer with the serialized string from the xml-config
-     	* @param *tree: Property tree for deserialize the xml-config
-     	* @param *convertedSimConfigBuffer: output stringstream for converting the buffer
+     	* @param bufConfig: Buffer with the serialized string from the xml-config
+     	* @param tree: Property tree for deserialize the xml-config
+     	* @param convertedSimConfigBuffer: output stringstream for converting the buffer
      	* @param SimConfigString: convert the output stringstream to a string
      	* With these parameters parsing the XML into the property tree.
      	* If parsing is failed, unbind and disconnect the sockets
@@ -134,7 +134,7 @@ namespace sim_interface {
         * writing the xml file with these parameters
         * @param restXMLString: Convert the stringstream to a string
         * replace not needed tags in the xml-file to make it shorter
-        * @param *restConnectorConfig: Create Pointer from type RESTConnectorConfig
+        * @param restConnectorConfig: Create Pointer from type RESTConnectorConfig
         * @param xmliStringStream: Convert the string to a input stringstream for deserialization
         * Deserialize the received RESTDummyConnector from xml-config
         * Create RestConnector object and put it in the queue of the DuTToSim
@@ -145,7 +145,7 @@ namespace sim_interface {
         void getConfig();
 
         /**
-        * @param *connectorType: numeration for the various connectorType
+        * @param connectorType: numeration for the various connectorType
         * RESTDummyConnector
         * CANConnector
         * V2XConnector
@@ -160,7 +160,7 @@ namespace sim_interface {
 
         /**
         * function for checking the various connector types in the config file
-        * @param *connectorTypeS: String for comparing the name of the connector types in the config.xml
+        * @param connectorTypeS: String for comparing the name of the connector types in the config.xml
         */
         connectorType resolveConnectorTypeForSwitch(std::string connectorTypeS);
 
@@ -194,15 +194,15 @@ namespace sim_interface {
         /**
        * send an event to the interface
        * start logger on the current Simulation Event
-       * @param *simEvent: Pointer for SimulationEvent e.g. Speed
+       * @param simEvent: Pointer for SimulationEvent e.g. Speed
        */
         void sendEventToInterface(const SimEvent &simEvent);
 
         /**
         * Create zmq sockets for Publisher and Subscrribe
-        * @param *socketSimSub: Socket for Interface subscriber
-        * @param *socketSimPub: Socket for Interface publisher
-        * @param *socketSimSubConfig_: Socket for Interface subscriber for the configuration
+        * @param socketSimSub: Socket for Interface subscriber
+        * @param socketSimPub: Socket for Interface publisher
+        * @param socketSimSubConfig_: Socket for Interface subscriber for the configuration
         * @param socketSimAddressPub: String for the address socket for publisher to simulation
      	* @param socketSimAddressSub: String for the address socket for subsriber from simulation
      	* @param socketSimAddressReceiverConfig: String for the address socket for subscriber for xml-Configuration from simulation

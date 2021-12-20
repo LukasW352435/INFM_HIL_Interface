@@ -19,7 +19,7 @@
 #include <boost/concept_check.hpp>
 
 /**
-* ConfigSerializerCanConnector: This class is for de-/ serializing the CANConnectorConfig
+* ConfigSerializerCanConnector: These methods are for de-/ serializing the CANConnectorConfig
 * namespace boost::serialization: overwrite the boost:serialization methods
 */
 
@@ -30,8 +30,8 @@ namespace boost::serialization {
     * @param Archive: Templates for any class, so that the following methods can be used by them
     *
     * method: serialize
-    * @param &ar: address of an archive
-    * @param &config: address of a CANConnectorConfig object
+    * @param ar: address of an archive
+    * @param config: address of a CANConnectorConfig object
     * @param version: constant unsigned int --> unused
     *  --> method is empty
     */
@@ -41,8 +41,8 @@ namespace boost::serialization {
 
     /**
     * method: save_construct_data --> serialize CANConnectorConfig
-    * @param &ar: address of an archive to serialize
-    * @param *config: pointer of a CANConnectorConfig object to serialize
+    * @param ar: address of an archive to serialize
+    * @param config: pointer of a CANConnectorConfig object to serialize
     * @param version: constant unsigned int --> unused
     * serialize now the attributes of the CANConnectorConfig object:
     * @param interfaceName, codecName, operations, *frameToOperationPointer, *operationToFramePointer, periodicOperations, periodicTimerEnabled:
@@ -69,8 +69,8 @@ namespace boost::serialization {
 
     /**
     * method: load_construct_data --> deserialize CANConnectorConfig
-    * @param &ar: address of an archive to deserialize
-    * @param *instance: pointer of a CANConnectorConfig object to deserialize
+    * @param ar: address of an archive to deserialize
+    * @param instance: pointer of a CANConnectorConfig object to deserialize
     * @param file_version: constant unsigned int --> unused
     *
     * @param _interfaceName, _codecName, _operations, *_frameToOperationPointer, *_operationToFramePointer, _periodicOperations, _periodicTimerEnabled:
@@ -116,8 +116,8 @@ namespace boost::serialization {
     *
     * @param Archive: Templates for any class, so that the following methods can be used by them
     * method: serialize
-    * @param &ar: address of an archive
-    * @param &p: address of the pair with string and CANConnectorSendOperation
+    * @param ar: address of an archive
+    * @param p: address of the pair with string and CANConnectorSendOperation
     * @param unsigned --> unused
     *  --> method is empty
     */
@@ -131,15 +131,15 @@ namespace boost::serialization {
     /**
     * @param Archive: Templates for any class, so that the following methods can be used by them
     * method: save_construct_data --> serialize the map with string and CANConnectorSendOperation
-    * @param &ar: address of an archive to serialize
-    * @param *config: address of the map with string and CANConnectorSendOperation to serialize
+    * @param ar: address of an archive to serialize
+    * @param config: address of the map with string and CANConnectorSendOperation to serialize
     * @param unsigned --> unused
     *
     * @param count: contains the length of the config pointer(size of the map)
     * serialize count
     *
     *  for each loop: run through each address in the config pointer (map)
-    *  @param *pointer: const auto *pointer = make a pointer to a pair with the map and cast it
+    *  @param pointer: const auto *pointer = make a pointer to a pair with the map and cast it
     *  serialize every element in the map
     */
     template<class Archive>
@@ -161,11 +161,11 @@ namespace boost::serialization {
 
     /**
    * method: load_construct_data --> deserialize the map with string and CANConnectorSendOperation
-   * @param &ar: address of an archive to deserialize
-   * @param *config: address of the map with string and CANConnectorSendOperation to deserialize
+   * @param ar: address of an archive to deserialize
+   * @param config: address of the map with string and CANConnectorSendOperation to deserialize
    * @param unsigned: unsigned int --> unused
    *
-   * @param *_pair, _count, _map:
+   * @param _pair, _count, _map:
    * create helping attributes for deserializing
    * deserialize count
    * for loop:
@@ -197,8 +197,8 @@ namespace boost::serialization {
     *
     * @param Archive: Templates for any class, so that the following methods can be used by them
     * method: serialize
-    * @param &ar: address of an archive
-    * @param &p: address of the pair with string and CANConnectorSendOperation
+    * @param ar: address of an archive
+    * @param p: address of the pair with string and CANConnectorSendOperation
     * @param unsigned --> unused
     *  --> method is empty
     */
@@ -211,10 +211,10 @@ namespace boost::serialization {
 
     /**
     * method: save_construct_data --> serialize the pair with string and CANConnectorSendOperation
-    * @param &ar: address of an archive to serialize
-    * @param *pair: address of the pair with string and CANConnectorSendOperation to serialize
+    * @param ar: address of an archive to serialize
+    * @param pair: address of the pair with string and CANConnectorSendOperation to serialize
     * @param file_version --> unused
-    * @param *pointer: *pointer form type CANConnectorSendOperation and save the second values of CANConnectorSendOperation via pair
+    * @param pointer: *pointer form type CANConnectorSendOperation and save the second values of CANConnectorSendOperation via pair
     * serialize operation and CANConnectorSendOperation
     */
 
@@ -230,8 +230,8 @@ namespace boost::serialization {
 
     /**
     * method: load_construct_data --> deserialize the map with string and CANConnectorSendOperation
-    * @param &ar: address of an archive to deserialize
-    * @param *pair: address of the pair with string and CANConnectorSendOperation to deserialize
+    * @param ar: address of an archive to deserialize
+    * @param pair: address of the pair with string and CANConnectorSendOperation to deserialize
     * @param file_version: unsigned int --> unused
     *
     * @param _key, *_value:
@@ -260,8 +260,8 @@ namespace boost::serialization {
     * @param Archive: Templates for any class, so that the following methods can be used by them
     *
     * method: serialize
-    * @param &ar: address of an archive
-    * @param &config: address of a CANConnectorSendOperation object
+    * @param ar: address of an archive
+    * @param config: address of a CANConnectorSendOperation object
     * @param unsigned: unsigned --> unused
     *  --> method is empty
     */
@@ -273,8 +273,8 @@ namespace boost::serialization {
 
     /**
     * method: save_construct_data --> serialize CANConnectorSendOperation
-    * @param &ar: address of an archive to serialize
-    * @param *instance: pointer of a CANConnectorSendOperation object to serialize
+    * @param ar: address of an archive to serialize
+    * @param instance: pointer of a CANConnectorSendOperation object to serialize
     * @param version: constant unsigned int --> unused
     *
     * serialize now the attributes of the CANConnectorSendOperation object:
@@ -298,8 +298,8 @@ namespace boost::serialization {
 
     /**
     * method: serialize
-    * @param &ar: address of an archive
-    * @param &config: address of bcm_timeval for seconds and microseconds
+    * @param ar: address of an archive
+    * @param config: address of bcm_timeval for seconds and microseconds
     * @param version: const unsigned int --> unused
     * serialize now the seconds and microseconds of bcm_timeval
     */
@@ -313,8 +313,8 @@ namespace boost::serialization {
 
     /**
     * method: load_construct_data --> deserialize CANConnectorSendOperation
-    * @param &ar: address of an archive to deserialize
-    * @param *instance: pointer of a CANConnectorSendOperation object to deserialize
+    * @param ar: address of an archive to deserialize
+    * @param instance: pointer of a CANConnectorSendOperation object to deserialize
     * @param file_version: constant unsigned int --> unused
     *
     * @param _canID, _isCANFD, _isCyclic, _announce, _countIval1, _ival1, _ival2:
@@ -376,8 +376,8 @@ namespace boost::serialization {
     *
     * @param Archive: Templates for any class, so that the following methods can be used by them
     * method: serialize
-    * @param &ar: address of an archive
-    * @param &config: address of a CANConnectorReceiveOperation object
+    * @param ar: address of an archive
+    * @param config: address of a CANConnectorReceiveOperation object
     * @param version: const unsigned int--> unused
     *  --> method is empty
     */
@@ -389,8 +389,8 @@ namespace boost::serialization {
 
     /**
     * method: save_construct_data --> serialize CANConnectorReceiveOperation
-    * @param &ar: address of an archive to deserialize
-    * @param *instance: pointer of a CANConnectorReceiveOperation object to serialize
+    * @param ar: address of an archive to deserialize
+    * @param instance: pointer of a CANConnectorReceiveOperation object to serialize
     * @param version: constant unsigned int --> unused
     * serialize now the attributes of the CANConnectorReceiveOperation object:
     * @param operation, isCANFD, hasMask, maskLength, mask:
@@ -412,8 +412,8 @@ namespace boost::serialization {
 
     /**
     * method: load_construct_data --> deserialize CANConnectorReceiveOperation
-    * @param &ar: address of an archive to deserialize
-    * @param *instance: pointer of a CANConnectorReceiveOperation object to deserialize
+    * @param ar: address of an archive to deserialize
+    * @param instance: pointer of a CANConnectorReceiveOperation object to deserialize
     * @param file_version: constant unsigned int --> unused
     *
     * @param _operation, _isCANFD, _hasMask, _maskLength, _mask:
@@ -450,8 +450,8 @@ namespace boost::serialization {
     * @param Archive: Templates for any class, so that the following methods can be used by them
     *
     * method: serialize
-    * @param &ar: address of an archive
-    * @param &config: address of the map with canid_t and CANConnectorReceiveOperation
+    * @param ar: address of an archive
+    * @param config: address of the map with canid_t and CANConnectorReceiveOperation
     * @param unsigned --> unused
     *  --> method is empty
     */
@@ -464,13 +464,13 @@ namespace boost::serialization {
 
     /**
     * method: save_construct_data --> serialize the map with canid_t and CANConnectorReceiveOperation
-    * @param &ar: address of an archive to serialize
-    * @param *config: pointer of the map with canid_t and CANConnectorReceiveOperation to serialize
+    * @param ar: address of an archive to serialize
+    * @param config: pointer of the map with canid_t and CANConnectorReceiveOperation to serialize
     * @param unsigned --> unused
     * @param count: contains the length of the config pointer(size of the map)
     * serialize count
     * for each loop: run through each address in the config pointer (map)
-    *  @param *pointer: const auto *pointer = make a pointer to a pair with the map and cast it
+    *  @param pointer: const auto *pointer = make a pointer to a pair with the map and cast it
     *  serialize every element in the map
     */
 
@@ -494,11 +494,11 @@ namespace boost::serialization {
 
     /**
     * method: load_construct_data --> deserialize the map with canid_t and CANConnectorReceiveOperation
-    * @param &ar: address of an archive to deserialize
-    * @param *config: pointer of the map with canid_t and CANConnectorReceiveOperation to deserialize
+    * @param ar: address of an archive to deserialize
+    * @param config: pointer of the map with canid_t and CANConnectorReceiveOperation to deserialize
     * @param unsigned: unsigned int --> unused
     *
-    * @param *_pair, _count, _map:
+    * @param _pair, _count, _map:
     * create helping attributes for deserializing
     * deserialize count
     * for loop:
@@ -532,8 +532,8 @@ namespace boost::serialization {
     * Implementation the boost serialization for the pair with canid_t and CANConnectorReceiveOperation
     *
     * method: serialize
-    * @param &ar: address of an archive
-    * @param &p: address of the pair with canid_t and CANConnectorReceiveOperation
+    * @param ar: address of an archive
+    * @param p: address of the pair with canid_t and CANConnectorReceiveOperation
     * @param unsigned --> unused
     *  --> method is empty
     */
@@ -546,10 +546,10 @@ namespace boost::serialization {
 
     /**
     * method: save_construct_data --> serialize the pair with canid_t and CANConnectorReceiveOperation
-    * @param &ar: address of an archive to serialize
-    * @param *pair: address of the pair with canid_t and CANConnectorSendOperation to serialize
+    * @param ar: address of an archive to serialize
+    * @param pair: address of the pair with canid_t and CANConnectorSendOperation to serialize
     * @param file_version --> unused
-    * @param *pointer: *pointer form type CANConnectorReceiveOperation and save CANConnectorReceiveOperation via *pair
+    * @param pointer: *pointer form type CANConnectorReceiveOperation and save CANConnectorReceiveOperation via *pair
     *
     * serialize operation and CANConnectorSendOperation
     */
@@ -566,8 +566,8 @@ namespace boost::serialization {
 
     /**
     * method: load_construct_data --> deserialize the pair with canid_t and CANConnectorReceiveOperation
-    * @param &ar: address of an archive to deserialize
-    * @param *pair: address of the pair with canid_t and CANConnectorReceiveOperation to deserialize
+    * @param ar: address of an archive to deserialize
+    * @param pair: address of the pair with canid_t and CANConnectorReceiveOperation to deserialize
     * @param file_version: unsigned int --> unused
     *
     * @param _key, *_value:

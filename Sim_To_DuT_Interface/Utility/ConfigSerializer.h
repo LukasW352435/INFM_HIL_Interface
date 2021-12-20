@@ -53,8 +53,10 @@
 namespace sim_interface {
 
     /**
+    * <summary>
     * ConfigSerializer: This class is for de-/ serializing the different connectorConfig types
     * and overwrites the boost:serialization methods
+    * </summary>
     */
 
     class ConfigSerializer {
@@ -62,9 +64,9 @@ namespace sim_interface {
         /**
         * @param T: Templates for any type, so that the following methods can be used by them
         * method:deserialize
-        * @param &ifs: address of an input stringstream
-        * @param &objName: address of name of a object
-        * @param *obj: pointer of any type of object
+        * @param ifs: address of an input stringstream
+        * @param objName: address of name of a object
+        * @param obj: pointer of any type of object
         *
         * if: when the input string stream is available
         * exception handling: catching archive exception and start InterfaceLogger:
@@ -97,9 +99,9 @@ namespace sim_interface {
         /**
         * @param T: Templates for any type, so that the following methods can be used by them
         * method:serialize
-        * @param &objName: address of a string --> name of the object
-        * @param &file: address of a string --> file
-        * @param *obj: pointer of any type of object
+        * @param objName: address of a string --> name of the object
+        * @param file: address of a string --> file
+        * @param obj: pointer of any type of object
         *
         * @param ofs: create an output file stream
         * if: when the output file stream is available
@@ -134,8 +136,8 @@ namespace boost::serialization {
     * Implementation the boost serialization for ConnectorConfig
     * @param Archive: Templates for any class, so that the following methods can be used by them
     * method: serialize
-    * @param &ar: address of an archive
-    * @param &config: address of a ConnectorConfig object
+    * @param ar: address of an archive
+    * @param config: address of a ConnectorConfig object
     * @param version: constant unsigned int --> unused
     *  --> method is empty
     */
@@ -145,8 +147,8 @@ namespace boost::serialization {
 
     /**
     * method: save_construct_data --> serialize ConnectorConfig
-    * @param &ar: address of an archive to serialize
-    * @param *config: pointer of a ConnectorConfig object to serialized
+    * @param ar: address of an archive to serialize
+    * @param config: pointer of a ConnectorConfig object to serialized
     * @param version: constant unsigned int --> unused
     *
     * serialize now the attributes of the ConnectorConfig object:
@@ -164,8 +166,8 @@ namespace boost::serialization {
 
     /**
     * method: load_construct_data --> deserialize ConnectorConfig
-    * @param &ar: address of an archive to deserialize
-    * @param *instance: pointer of a ConnectorConfig object to deserialized
+    * @param ar: address of an archive to deserialize
+    * @param instance: pointer of a ConnectorConfig object to deserialized
     * @param file_version: constant unsigned int --> unused
     *
     * @param _operations, _periodicOperations, _periodicTimerEnabled:
@@ -195,8 +197,8 @@ namespace boost::serialization {
     *
     * @param Archive: Templates for any class, so that the following methods can be used by them
     * method: serialize
-    * @param &ar: address of an archive
-    * @param &config: address of a RESTConnectorConfig object
+    * @param ar: address of an archive
+    * @param config: address of a RESTConnectorConfig object
     * @param version: constant unsigned int --> unused
     *  --> method is empty
     */
@@ -208,8 +210,8 @@ namespace boost::serialization {
 
     /**
     * method: save_construct_data --> serialize RESTConnectorConfig
-    * @param &ar: address of an archive to serialize
-    * @param *config: pointer of a RESTConnectorConfig object to serialize
+    * @param ar: address of an archive to serialize
+    * @param config: pointer of a RESTConnectorConfig object to serialize
     * @param version: constant unsigned int --> unused
     *
     * serialize now the attributes of the RESTConnectorConfig object:
@@ -231,8 +233,8 @@ namespace boost::serialization {
 
     /**
     * method: load_construct_data --> deserialize RESTConnectorConfig
-    * @param &ar: address of an archive to deserialize
-    * @param *instance: pointer of a RESTConnectorConfig object to sdeerialize
+    * @param ar: address of an archive to deserialize
+    * @param instance: pointer of a RESTConnectorConfig object to sdeerialize
     * @param file_version: constant unsigned int --> unused
     *
     * @param _baseUrlDuT, _baseCallbackUrl, _port, _operations, _periodicOperations, _periodicTimerEnabled:
@@ -270,8 +272,8 @@ namespace boost::serialization {
     *
     * @param Archive: Templates for any class, so that the following methods can be used by them
     * method: serialize
-    * @param &ar: address of an archive
-    * @param &config: address of a V2XConnectorConfig object
+    * @param ar: address of an archive
+    * @param config: address of a V2XConnectorConfig object
     * @param version: constant unsigned int --> unused
     *  --> method is empty
     */
@@ -282,8 +284,8 @@ namespace boost::serialization {
 
     /**
     * method: save_construct_data --> serialize V2XConnectorConfig
-    * @param &ar: address of an archive to serialize
-    * @param *config: pointer of a V2XConnectorConfig object to serialize
+    * @param ar: address of an archive to serialize
+    * @param config: pointer of a V2XConnectorConfig object to serialize
     * @param version: constant unsigned int --> unused
     *
     * serialize now the attributes of the V2XConnectorConfig object:
@@ -303,8 +305,8 @@ namespace boost::serialization {
 
     /**
      * method: load_construct_data --> deserialize V2XConnectorConfig
-     * @param &ar: address of an archive to deserialize
-     * @param *instance: pointer of a V2XConnectorConfig object to deserialize
+     * @param ar: address of an archive to deserialize
+     * @param instance: pointer of a V2XConnectorConfig object to deserialize
      * @param file_version: constant unsigned int --> unused
      *
      * @param _ifname, _ethernetFrameType:

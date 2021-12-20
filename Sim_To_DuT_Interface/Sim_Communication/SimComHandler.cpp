@@ -35,17 +35,13 @@
 #include <exception>
 #include <string>
 #include <thread>
-//boost archive: in-/output archive for text, binary and xml for reading and writing files
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
-//boost property_tree: for reading a xml-file correctly
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
-//boost serialization: for de-/serialization various data structs
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/variant.hpp>
-//boost algorithm: for handling strings
 #include <boost/algorithm/string.hpp>
 
 

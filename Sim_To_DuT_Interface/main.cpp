@@ -40,7 +40,7 @@
 
 /**
 * main-method:
-* Create an object from SystemConfig for configure the interface e.g. ports of the sockets
+* Create an object from SystemConfig for configuring the interface e.g. ports of the sockets
 * get path from SystemConfig.xml and load configurations
 *
 * Create logger object and start logger
