@@ -74,7 +74,7 @@ namespace sim_interface {
         // Config Sockets
         zmq_setsockopt(socketSimSub_, ZMQ_SUBSCRIBE, "", 0);
         zmq_setsockopt(socketSimSubConfig_, ZMQ_SUBSCRIBE, "", 0);
-   
+
         //Open the connections
         InterfaceLogger::logMessage("Connecting to subscriber (simulation data): " + socketSimAddressSub,
                                     LOG_LEVEL::INFO);
