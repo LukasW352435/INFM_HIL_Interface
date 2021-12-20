@@ -35,18 +35,17 @@
 #include <exception>
 #include <string>
 #include <thread>
-#include <vector>
-
+//boost archive: in-/output archive for text, binary and xml for reading and writing files
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
-
+//boost property_tree: for reading a xml-file correctly
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
-
+//boost serialization: for de-/serialization various data structs
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/variant.hpp>
-
+//boost algorithm: for handling strings
 #include <boost/algorithm/string.hpp>
 
 
@@ -102,8 +101,9 @@ namespace sim_interface {
             InterfaceLogger::logMessage("Received Config: ", LOG_LEVEL::INFO);
         } catch (zmq::error_t &cantReceive) {
             InterfaceLogger::logMessage(cantReceive.what(), LOG_LEVEL::ERROR);
-            unbind();
-            disconnect();
+            disconnectReceiveConfig();
+            disconnectSubscriber();
+            unbindPublisher();
         }
 
         const char *bufConfig = static_cast<const char *>(replyConfig.data());
@@ -120,8 +120,9 @@ namespace sim_interface {
             InterfaceLogger::logMessage("XML-Config was in the correct format: ", LOG_LEVEL::INFO);
         } catch (std::exception &e) {
             InterfaceLogger::logMessage(e.what(), LOG_LEVEL::ERROR);
-            unbind();
-            disconnect();
+            disconnectReceiveConfig();
+            disconnectSubscriber();
+            unbindPublisher();
         }
         std::string connectorTypes;
         auto xmlWriterSettings = boost::property_tree::xml_writer_make_settings<std::string>(' ', 4);
@@ -274,8 +275,9 @@ namespace sim_interface {
 
             } catch (zmq::error_t &cantReceive) {
                 InterfaceLogger::logMessage(cantReceive.what(), LOG_LEVEL::ERROR);
-                unbind();
-                disconnect();
+                disconnectReceiveConfig();
+                disconnectSubscriber();
+                unbindPublisher();
             }
 
             const char *bufSimData = static_cast<const char *>(replySimData.data());
@@ -332,22 +334,27 @@ namespace sim_interface {
         interface->getQueueSimToInterface()->push(simEvent);
     }
 
-
-    void SimComHandler::unbind() {
+    void SimComHandler::unbindPublisher() {
         socketSimPub_.unbind(socketSimAddressPub);
         InterfaceLogger::logMessage("Unbinding to publisher (events interface): " + socketSimAddressPub,
                                     LOG_LEVEL::INFO);
     }
 
-    void SimComHandler::disconnect() {
+    void SimComHandler::disconnectSubscriber() {
         socketSimSub_.disconnect(socketSimAddressSub);
-        socketSimSubConfig_.disconnect(socketSimAddressReceiverConfig);
         InterfaceLogger::logMessage("Disconnecting to subscriber (simulation data): " + socketSimAddressSub,
                                     LOG_LEVEL::INFO);
+
+    }
+
+
+    void SimComHandler::disconnectReceiveConfig() {
+        socketSimSubConfig_.disconnect(socketSimAddressReceiverConfig);
         InterfaceLogger::logMessage("Disconnecting to subscriber (config): " + socketSimAddressReceiverConfig,
                                     LOG_LEVEL::INFO);
 
     }
+
 
     void SimComHandler::close() {
         socketSimSub_.close();
@@ -363,8 +370,9 @@ namespace sim_interface {
     SimComHandler::~SimComHandler() {
         stopThread = false;
         simComHandlerThread.join();
-        unbind();
-        disconnect();
+        unbindPublisher();
+        disconnectSubscriber();
+        disconnectReceiveConfig();
         close();
     }
 

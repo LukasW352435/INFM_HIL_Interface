@@ -38,6 +38,21 @@
 #include <iostream>
 #include <memory>
 
+/**
+* main-method:
+* Create an object from SystemConfig for configure the interface e.g. ports of the sockets
+* get path from SystemConfig.xml and load configurations
+*
+* Create logger object and start logger
+* Create interface object
+*
+* Create SimComHandler object and set object to interface
+* Get serialized xml-config file from simulation
+*
+* Start SimComHandler to receive simulation data
+* Start Interface to receive/send events from/to interface
+* End application
+*/
 
 int main() {
 
