@@ -64,6 +64,7 @@
 
 
 namespace sim_interface {
+    // Forward declaration to avoid looping
     class SimToDuTInterface;
 
     /**

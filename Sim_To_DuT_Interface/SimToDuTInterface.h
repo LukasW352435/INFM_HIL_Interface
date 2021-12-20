@@ -31,7 +31,7 @@
 #include <iterator>
 
 namespace sim_interface {
-
+    // Forward declaration to avoid looping
     class SimComHandler;
 
     /**
