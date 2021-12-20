@@ -97,6 +97,17 @@ namespace sim_interface::dut_connector::rest_dummy {
          * Stop the receiving HTTP endpoint
          */
         void disableReceiveFromDuT();
+
+        /**
+         * Ignore all input received in response to curl calls
+         *
+         * @param ptr data delivered to curl
+         * @param size always 1
+         * @param nmemb size of data
+         * @param userdata optional additional data
+         * @return
+         */
+        static size_t nop_curl_write(char *ptr, size_t size, size_t nmemb, void *userdata);
     };
 }
 
