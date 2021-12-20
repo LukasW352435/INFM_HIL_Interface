@@ -65,6 +65,7 @@ namespace sim_interface::dut_connector::rest_dummy {
         long responseCode = 500;
         if (handle) {
             curl_easy_setopt(handle, CURLOPT_URL, sendCallbackDuT.data());
+            curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, &RESTDummyConnector::nop_curl_write);
             curl_easy_setopt(handle, CURLOPT_USERAGENT, "RESTDummyConnector");
             auto payload = EventToRESTMessage(e);
             curl_easy_setopt(handle, CURLOPT_POSTFIELDS, payload.data());
@@ -103,6 +104,7 @@ namespace sim_interface::dut_connector::rest_dummy {
             std::string queryParam = curl_easy_escape(handle, callbackConnectorQueryParam.data(), 0);
             std::string url = readCallbackDuT + queryParam;
             curl_easy_setopt(handle, CURLOPT_URL, url.data());
+            curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, &RESTDummyConnector::nop_curl_write);
             curl_easy_setopt(handle, CURLOPT_USERAGENT, "RESTDummyConnector");
             curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, "POST");
             curl_easy_setopt(handle, CURLOPT_TIMEOUT, 5);
@@ -130,6 +132,7 @@ namespace sim_interface::dut_connector::rest_dummy {
         if (handle) {
             std::string queryParam = curl_easy_escape(handle, callbackConnectorQueryParam.data(), 0);
             curl_easy_setopt(handle, CURLOPT_URL, (readCallbackDuT + queryParam).data());
+            curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, &RESTDummyConnector::nop_curl_write);
             curl_easy_setopt(handle, CURLOPT_USERAGENT, "RESTDummyConnector");
             curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, "DELETE");
             curl_easy_setopt(handle, CURLOPT_TIMEOUT, 5);
@@ -150,5 +153,9 @@ namespace sim_interface::dut_connector::rest_dummy {
     std::string RESTDummyConnector::EventToRESTMessage(const SimEvent &e) {
         return R"({"key":")" + e.operation + R"(","status":")" + boost::apply_visitor(EventVisitor(), e.value) +
                R"("})";
+    }
+
+    size_t RESTDummyConnector::nop_curl_write(char *ptr, size_t size, size_t nmemb, void *userdata) {
+        return nmemb;
     }
 }
