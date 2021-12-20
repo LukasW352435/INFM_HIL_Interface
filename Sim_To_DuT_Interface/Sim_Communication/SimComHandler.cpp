@@ -322,7 +322,7 @@ namespace sim_interface {
 
         zmq::message_t msgToSend(simEventData);
         socketSimPub_.send(msgToSend, zmq::send_flags::none);
-        InterfaceLogger::logMessage("Async sending of events" + logSimEvent.str(), LOG_LEVEL::INFO);
+        InterfaceLogger::logMessage("Async sending of events\n" + logSimEvent.str(), LOG_LEVEL::INFO);
     }
 
     void SimComHandler::sendEventToInterface(const SimEvent &simEvent) {
