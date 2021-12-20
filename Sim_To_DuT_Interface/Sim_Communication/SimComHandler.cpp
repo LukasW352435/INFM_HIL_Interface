@@ -100,7 +100,8 @@ namespace sim_interface {
             InterfaceLogger::logMessage("Received Config: ", LOG_LEVEL::INFO);
         } catch (zmq::error_t &cantReceive) {
             InterfaceLogger::logMessage(cantReceive.what(), LOG_LEVEL::ERROR);
-            // TODO unbind
+            unbind();
+            disconnect();
         }
 
         const char *bufConfig = static_cast<const char *>(replyConfig.data());
@@ -117,7 +118,8 @@ namespace sim_interface {
             InterfaceLogger::logMessage("XML-Config was in the correct format: ", LOG_LEVEL::INFO);
         } catch (std::exception &e) {
             InterfaceLogger::logMessage(e.what(), LOG_LEVEL::ERROR);
-            // TODO (unbind) start Again (and break)
+            unbind();
+            disconnect();
         }
         std::string connectorTypes;
         auto xmlWriterSettings = boost::property_tree::xml_writer_make_settings<std::string>(' ', 4);
@@ -266,7 +268,8 @@ namespace sim_interface {
 
             } catch (zmq::error_t &cantReceive) {
                 InterfaceLogger::logMessage(cantReceive.what(), LOG_LEVEL::ERROR);
-                // TODO unbind
+                unbind();
+                disconnect();
             }
 
             const char *bufSimData = static_cast<const char *>(replySimData.data());
