@@ -128,12 +128,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">connectorType</td><td>numeration for the various connectorType RESTDummyConnector CANConnector V2XConnector Invalid_Connector: If the configuration of a connector is invalid in the config.xml </td></tr>
-  </table>
-  </dd>
-</dl>
+<p >connectorType: numeration for the various connectorType RESTDummyConnector CANConnector V2XConnector Invalid_Connector: If the configuration of a connector is invalid in the config.xml </p>
 
 </div>
 </div>
@@ -166,20 +161,12 @@ Public Member Functions</h2></td></tr>
 <p >Constructor: Create a new handler. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">interface</td><td>A pointer to communicate with the interface. </td></tr>
-    <tr><td class="paramname">config</td><td>System configuration. </td></tr>
-    <tr><td class="paramname">socketSimPub_</td><td>Create socket for publishing messages to simulation </td></tr>
-    <tr><td class="paramname">socketSimSub_</td><td>Create socket for subscribing messages from simulation </td></tr>
-    <tr><td class="paramname">socketSimSubConfig_</td><td>Create socket for subscribing xml-configuration from simulation</td></tr>
+    <tr><td class="paramname">config</td><td>System configuration. socketSimPub_: Create socket for publishing messages to simulation socketSimSub_: Create socket for subscribing messages from simulation socketSimSubConfig_: Create socket for subscribing xml-configuration from simulation</td></tr>
   </table>
   </dd>
 </dl>
-<p>Configure sockets with the addresses from the config </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">context_recConfig</td><td>Defines the context of the zmq socket for the xml-Configuration Set the sockets to subscriber sockets and listen to any String</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Open connecting of the sockets: Start Logger for connecting the sockets Bind: Publisher sockets have to bind to the address Connect: Subscriber sockets have to connect </p>
+<p>Configure sockets with the addresses from the config context_recConfig: Defines the context of the zmq socket for the xml-Configuration Set the sockets to subscriber sockets and listen to any String</p>
+<p >Open connecting of the sockets: Start Logger for connecting the sockets Bind: Publisher sockets have to bind to the address Connect: Subscriber sockets have to connect </p>
 
 </div>
 </div>
@@ -270,29 +257,11 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">replyConfig</td><td>zmq message, which contains serialized data from the xml-config Receive the serialized data from the xml-config with exception-handling If receiving is failed, unbind and disconnect the sockets Start logging </td></tr>
-    <tr><td class="paramname">bufConfig</td><td>Buffer with the serialized string from the xml-config </td></tr>
-    <tr><td class="paramname">tree</td><td>Property tree for deserialize the xml-config </td></tr>
-    <tr><td class="paramname">convertedSimConfigBuffer</td><td>output stringstream for converting the buffer </td></tr>
-    <tr><td class="paramname">SimConfigString</td><td>convert the output stringstream to a string With these parameters parsing the XML into the property tree. If parsing is failed, unbind and disconnect the sockets Start logging</td></tr>
-    <tr><td class="paramname">connectorTypes</td><td>create String for copmaring the names of the connectortypes </td></tr>
-    <tr><td class="paramname">xmlWriterSettings</td><td>preparing an xml writer with property tree</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>for each loop: run through each value type in a xml-file and get every value in connectors tags save the classtype of the xml attribute into the connectorTypes string for comparing compare the connector types with the enumeration</p>
-<p >The principle of the deserializing for the three connector are working very similar Exception handling and logging The principle will be explained with RESTDummyConnector: </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">restXMLStringStream</td><td>stringstream for writing the xml file writing the xml file with these parameters </td></tr>
-    <tr><td class="paramname">restXMLString</td><td>Convert the stringstream to a string replace not needed tags in the xml-file to make it shorter </td></tr>
-    <tr><td class="paramname">restConnectorConfig</td><td>Create Pointer from type RESTConnectorConfig </td></tr>
-    <tr><td class="paramname">xmliStringStream</td><td>Convert the string to a input stringstream for deserialization Deserialize the received RESTDummyConnector from xml-config Create RestConnector object and put it in the queue of the DuTToSim Add it to the interface</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Start logging: shows message which connectors were created </p>
+<p >replyConfig: zmq message, which contains serialized data from the xml-config Receive the serialized data from the xml-config with exception-handling If receiving is failed, unbind and disconnect the sockets Start logging bufConfig: Buffer with the serialized string from the xml-config tree: Property tree for deserialize the xml-config convertedSimConfigBuffer: output stringstream for converting the buffer SimConfigString: convert the output stringstream to a string With these parameters parsing the XML into the property tree. If parsing is failed, unbind and disconnect the sockets Start logging</p>
+<p >connectorTypes: create String for copmaring the names of the connectortypes xmlWriterSettings: preparing an xml writer with property tree</p>
+<p >for each loop: run through each value type in a xml-file and get every value in connectors tags save the classtype of the xml attribute into the connectorTypes string for comparing compare the connector types with the enumeration</p>
+<p >The principle of the deserializing for the three connector are working very similar Exception handling and logging The principle will be explained with RESTDummyConnector: restXMLStringStream: stringstream for writing the xml file writing the xml file with these parameters restXMLString: Convert the stringstream to a string replace not needed tags in the xml-file to make it shorter restConnectorConfig: Create Pointer from type RESTConnectorConfig xmliStringStream: Convert the string to a input stringstream for deserialization Deserialize the received RESTDummyConnector from xml-config Create RestConnector object and put it in the queue of the DuTToSim Add it to the interface</p>
+<p >Start logging: shows message which connectors were created </p>
 
 </div>
 </div>
@@ -310,17 +279,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Starts the handler to asynchronously receive incoming events. while loop: ends, if the thread was stopped </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">replySimData</td><td>zmq message, which contains serialized data from the simulation Receive the serialized simulation data e.g. Speed with exception-handling If receiving is failed, unbind and disconnect the sockets Start logging </td></tr>
-    <tr><td class="paramname">bufSimData</td><td>Buffer with the serialized string </td></tr>
-    <tr><td class="paramname">inputSimData</td><td>Convert the buffer into a string </td></tr>
-    <tr><td class="paramname">archiveStreamSimData</td><td>for writing the inputSimData </td></tr>
-    <tr><td class="paramname">archiveSimData</td><td>input text archive for writing the inputSimData stringstream </td></tr>
-    <tr><td class="paramname">receiveMapSimData</td><td>variable map with operations and value e.g. speed 13.05 writing the archive into the map with exception handling start logging, if writing failed for each loop: run through element from the receiveMapSimData create for each key and value an event Send the Simulation Event to the Interface </td></tr>
-  </table>
-  </dd>
-</dl>
+<p >Starts the handler to asynchronously receive incoming events. while loop: ends, if the thread was stopped replySimData: zmq message, which contains serialized data from the simulation Receive the serialized simulation data e.g. Speed with exception-handling If receiving is failed, unbind and disconnect the sockets Start logging bufSimData: Buffer with the serialized string inputSimData: Convert the buffer into a string archiveStreamSimData: for writing the inputSimData archiveSimData: input text archive for writing the inputSimData stringstream receiveMapSimData: variable map with operations and value e.g. speed 13.05 writing the archive into the map with exception handling start logging, if writing failed for each loop: run through element from the receiveMapSimData create for each key and value an event Send the Simulation Event to the Interface </p>
 
 </div>
 </div>
@@ -383,13 +342,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p >Asynchronous sending of events to simulation. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">logSimEvent</td><td>For Logging the SimEvents </td></tr>
-    <tr><td class="paramname">simEvent</td><td>An event that should be sent to the simulation. </td></tr>
-    <tr><td class="paramname">simEventMap</td><td>A variable Map for events to the Simulation adding keys and values to the simEventMap </td></tr>
-    <tr><td class="paramname">simEventsStringStream</td><td>output stringstream for publishing </td></tr>
-    <tr><td class="paramname">archiveSimEvent</td><td>put the stringstream into the output text archive write the Map to the archive </td></tr>
-    <tr><td class="paramname">simEventData</td><td>Convert simEventsStringStream into a string </td></tr>
-    <tr><td class="paramname">msgToSend</td><td>preparing zmq:message type for publishing Send message via socket and start logger for event </td></tr>
+    <tr><td class="paramname">simEvent</td><td>An event that should be sent to the simulation. logSimEvent: For Logging the SimEvents simEventMap: A variable Map for events to the Simulation adding keys and values to the simEventMap simEventsStringStream: output stringstream for publishing archiveSimEvent: put the stringstream into the output text archive write the Map to the archive simEventData: Convert simEventsStringStream into a string msgToSend: preparing zmq:message type for publishing Send message via socket and start logger for event </td></tr>
   </table>
   </dd>
 </dl>
@@ -420,7 +373,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 21 2021 17:18:14 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+Generated on Tue Dec 21 2021 17:32:59 for INFM HIL Interface by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
 </small></address>
 </body>
 </html>
