@@ -80,6 +80,8 @@ namespace sim_interface::dut_connector::rest_dummy {
         if (responseCode == 200) {
             InterfaceLogger::logMessage("RESTDummyConnector: Successfully sent event " + e.operation + " to DuT",
                                         LOG_LEVEL::DEBUG);
+        } else if (responseCode == 0) {
+            InterfaceLogger::logMessage("RESTDummyConnector: Cannot reach dummy DuT", LOG_LEVEL::ERROR);
         } else {
             InterfaceLogger::logMessage(
                     "RESTDummyConnector: Error on sending event, HTTP-Code: " + std::to_string(responseCode),
@@ -117,6 +119,8 @@ namespace sim_interface::dut_connector::rest_dummy {
             InterfaceLogger::logMessage("RESTDummyConnector: Receiving of events enabled", LOG_LEVEL::INFO);
         } else if (responseCode == 208) {
             InterfaceLogger::logMessage("RESTDummyConnector: Receiving of events was already enabled", LOG_LEVEL::INFO);
+        } else if (responseCode == 0) {
+            InterfaceLogger::logMessage("RESTDummyConnector: Cannot reach dummy DuT", LOG_LEVEL::ERROR);
         } else {
             InterfaceLogger::logMessage(
                     "RESTDummyConnector: Error on enabling receive, HTTP-Code: " + std::to_string(responseCode),
@@ -143,6 +147,8 @@ namespace sim_interface::dut_connector::rest_dummy {
         }
         if (responseCode == 200) {
             InterfaceLogger::logMessage("RESTDummyConnector: Receiving of events disabled", LOG_LEVEL::INFO);
+        } else if (responseCode == 0) {
+            InterfaceLogger::logMessage("RESTDummyConnector: Cannot reach dummy DuT", LOG_LEVEL::ERROR);
         } else {
             InterfaceLogger::logMessage(
                     "RESTDummyConnector: Error on disabling receive, HTTP-Code: " + std::to_string(responseCode),
