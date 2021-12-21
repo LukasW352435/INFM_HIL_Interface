@@ -405,8 +405,22 @@ namespace boost::serialization {
         ar & boost::serialization::make_nvp("operation", config->operation);
         ar & boost::serialization::make_nvp("isCANFD", config->isCANFD);
         ar & boost::serialization::make_nvp("hasMask", config->hasMask);
-        ar & boost::serialization::make_nvp("maskLength", config->maskLength);
-        ar & boost::serialization::make_nvp("mask", config->mask.data);
+
+        std::stringstream hex;
+        hex << "0x";
+        hex << std::hex;
+        int _maskLength = CAN_MAX_DLEN;
+
+        if (config->isCANFD) {
+            _maskLength = CANFD_MAX_DLEN;
+        }
+        for (int i = 0; i < _maskLength; i++) {
+
+            hex << std::setw(2) << std::setfill('0') << (int) config->mask.data[i];
+        }
+
+        std::string stringHexValue = hex.str();
+        ar & boost::serialization::make_nvp("mask", stringHexValue);
 
     }
 
@@ -430,18 +444,32 @@ namespace boost::serialization {
         std::string _operation;
         bool _isCANFD;
         bool _hasMask;
-        int _maskLength;
-        __u8 _mask[CANFD_MAX_DLEN];
+        int _maskLength = CAN_MAX_DLEN;
+
+        std::string hexMask;
 
         ar & boost::serialization::make_nvp("operation", _operation);
         ar & boost::serialization::make_nvp("isCANFD", _isCANFD);
         ar & boost::serialization::make_nvp("hasMask", _hasMask);
-        ar & boost::serialization::make_nvp("maskLength", _maskLength);
-        ar & boost::serialization::make_nvp("mask", _mask);
+        ar & boost::serialization::make_nvp("mask", hexMask);
+
+        __u8 _maskCANLength[CAN_MAX_DLEN] = {0};
+        __u8 _maskCANFDLength[CANFD_MAX_DLEN] = {0};
+        __u8 *_mask = _maskCANLength;
+
+        if (_isCANFD) {
+            _maskLength = CANFD_MAX_DLEN;
+            _mask = _maskCANFDLength;
+        }
+        // Parse every two chars into one byte
+        for (unsigned int i = 0; i < _maskLength && i < hexMask.length() - 2; i += 2) {
+            std::string byteString = hexMask.substr(i + 2, 2);
+            __u8 byte = (__u8) strtol(byteString.c_str(), NULL, 16);
+            _mask[i / 2] = byte;
+        }
 
         ::new(instance)sim_interface::dut_connector::can::CANConnectorReceiveOperation(_operation, _isCANFD,
-                                                                                       _hasMask, _maskLength,
-                                                                                       _mask
+                                                                                       _hasMask, _maskLength, _mask
         );
     }
 
