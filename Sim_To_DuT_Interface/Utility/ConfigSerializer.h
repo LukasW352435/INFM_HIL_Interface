@@ -62,7 +62,7 @@ namespace sim_interface {
     class ConfigSerializer {
     public:
         /**
-        * @param T: Templates for any type, so that the following methods can be used by them
+        * T: Templates for any type, so that the following methods can be used by them
         * method:deserialize
         * @param ifs: address of an input stringstream
         * @param objName: address of name of a object
@@ -70,8 +70,8 @@ namespace sim_interface {
         *
         * if: when the input string stream is available
         * exception handling: catching archive exception and start InterfaceLogger:
-        *  @param iss: create an input stringstream
-        *  @param ia: create an xml input archive with the input stringstream and no header
+        *  iss: create an input stringstream
+        *  ia: create an xml input archive with the input stringstream and no header
         *  deserialize the object
         *  catch the exception if the deserialisation failed and start logging
         *  else: start logging:
@@ -97,15 +97,15 @@ namespace sim_interface {
         }
 
         /**
-        * @param T: Templates for any type, so that the following methods can be used by them
+        * T: Templates for any type, so that the following methods can be used by them
         * method:serialize
         * @param objName: address of a string --> name of the object
         * @param file: address of a string --> file
         * @param obj: pointer of any type of object
         *
-        * @param ofs: create an output file stream
+        * ofs: create an output file stream
         * if: when the output file stream is available
-        *  @param oa: create an xml output archive with the output stringstream and no header
+        *  oa: create an xml output archive with the output stringstream and no header
         *  serialize now the object in the outputarchive and close file
         *  else: start logging
         */
